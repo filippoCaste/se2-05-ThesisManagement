@@ -1,4 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import theme from "./theme.jsx";
+import { ThemeProvider } from "@mui/material/styles";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage.jsx";
@@ -14,6 +16,7 @@ function App() {
   const [message, setMessage] = useState("");
   const [isLoggedIn, setLoggedIn] = useState(null);
   const [user, setUser] = useState(new User());
+  const [openSelectionsMobile, setOpenSelectionsMobile] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -64,19 +67,25 @@ function App() {
   };
 
   return (
+      <ThemeProvider theme={theme}>
     <BrowserRouter>
+
       <AppNavBar
         user={user}
         logOut={handleLogout}
-      ></AppNavBar>
+        openSelectionsMobile={openSelectionsMobile}
+        setOpenSelectionsMobile={setOpenSelectionsMobile}
+      />
       <CustomSnackBar message={message}></CustomSnackBar>
       <Routes>
-        <Route index path="/" element={<MainPage />} />
+        <Route index path="/" element={<MainPage openSelectionsMobile={openSelectionsMobile} />} />
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/login" element={<LoginPage login={handleLogin} />} />
         <Route path="/signup" element={<SignUpPage signup={registerUser} />} />
       </Routes>
+
     </BrowserRouter>
+          </ThemeProvider>
   );
 }
 
