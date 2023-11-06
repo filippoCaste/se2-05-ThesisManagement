@@ -193,7 +193,7 @@ export default function PrimarySearchAppBar(props) {
   );
 
   return (
-    <Box position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, overflow:"auto", top:0, left:0}}>
+    <Box position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, overflow:"auto", top:0, left:0, height:"15vh"}}>
       <AppBar sx={{backgroundColor:"#003049"}}>
         <Toolbar  >
           <IconButton
@@ -201,19 +201,19 @@ export default function PrimarySearchAppBar(props) {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            sx={{ mr: 2, display:{sm:'inline',md: 'none'} }}
+            sx={{ mr: 2, display:{xs:'inline',md: 'none'} }}
             onClick={()=>setOpenSelectionsMobile(!openSelectionsMobile)}
           >
             <MenuIcon />
           </IconButton>
-          <Box sx={{display:{sm:'none', md:'inline'}, width:{sm:"0vh",md:"auto"},mx:"1vh",my:"1vh", height:{sm:"0vh",md:"auto"}, maxWidth:{sm:"0px",md:"100px"},maxHeight:{sm:"0px",md:"100px"} }}>
+          <Box sx={{display:{xs:'none', md:'inline'}, width:{xs:"0vh",md:"auto"},mx:"1vh",my:"1vh", height:{xs:"0vh",md:"inherit"}, maxWidth:{xs:"0vh",md:"100px"},maxHeight:{xs:"0px",md:"inherit"} }}>
           <Image src={headerBackground} />
           </Box>
           <Typography
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { sm:'none',md: 'inline' } }}
+            sx={{ display: { xs:'none',md: 'inline' } }}
           >
             Thesis Proposals
           </Typography>
@@ -228,7 +228,7 @@ export default function PrimarySearchAppBar(props) {
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { sm: 'none', md: 'flex' } }}>
+          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
@@ -250,7 +250,7 @@ export default function PrimarySearchAppBar(props) {
               <AccountCircle />
             </IconButton>
           </Box>
-          <Box sx={{ display: { sm: 'flex', md: 'none' } }}>
+          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
               aria-label="show more"

@@ -38,7 +38,7 @@ export default function ResponsiveDrawer(props) {
           [`& .MuiDrawer-paper`]: { width: {sm:"100vw",md: drawerWidth}, boxSizing: 'border-box' },
         }}
       >
-        <Box sx={{ overflow: 'auto', mt:"20vh", mx:"2vh" }}>
+        <Box sx={{ overflow: 'auto', mt:"15vh", mx:"2vh" }}>
         
         <ListItemButton onClick={handleClickSort}>
           <Typography variant="h7" fontWeight={'bold'} >Sort by:</Typography> 
