@@ -46,8 +46,15 @@
       "<rootDir>/setupTests.js"
     ],
     "collectCoverage": true,
-    "collectCoverageFrom": ["src/**/*.js"],
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
     "coverageDirectory": "coverage",
-    "coverageReporters": ["json", "lcov", "text-summary", "text"]
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text-summary",
+      "text"
+    ]
   }
 }
