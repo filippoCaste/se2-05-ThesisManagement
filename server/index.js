@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import { router as userRoutes } from "./src/routes/user.route.js";
 import { router as sessionRoutes } from "./src/routes/session.route.js";
+import { router as proposalRoutes } from "./src/routes/proposal.route.js";
 import passport from "passport";
 import session from "express-session";
 import morgan from "morgan";
@@ -41,7 +42,7 @@ app.use(passport.authenticate("session"));
 
 app.use("/api/session", sessionRoutes);
 app.use("/api/users", userRoutes);
-
+app.use("/api/proposals", proposalRoutes);
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}!`);
