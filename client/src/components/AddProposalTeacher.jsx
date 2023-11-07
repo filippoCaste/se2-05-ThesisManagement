@@ -74,10 +74,7 @@ function AddProposalTeacher(props)
   const [level,setLevel]=useState('bo');
   const [groups,setGroups]=useState('Ingegneria Informatica');
   const [cds,setCds]=useState('bo');
- 
-  //Expiration time: date start and date end
-  const [dateStart,setDateStart]=useState("dd/mm/yyyy");
-  const [dateEnd,setDateEnd]=useState("dd/mm/yyyy");
+  const [expiration_date,setExpirationDate]=useState("dd/mm/yyyy");
   
          
   //HANDLER SUBMIT
@@ -96,7 +93,7 @@ function AddProposalTeacher(props)
        let corretto=true;
 
        if( (title=='')||(description=='')||(required_knowledge=='')||(supervisor=='')
-            ||(notes=='')||(dateStart=="dd/mm/yyyy")||(dateEnd=="dd/mm/yyyy")
+            ||(notes=='')||(expiration_date=="dd/mm/yyyy")
             ||(type=='')||(level=='')||(groups=='')||(cds=='') 
             || (co_supervisors.length==0)   || (keywords.length==0) ) 
        {
@@ -105,7 +102,7 @@ function AddProposalTeacher(props)
            corretto=false;
        }
 
-       if(((isValidDate(dateStart)==false)||(isValidDate(dateEnd)==false))&&(corretto==true))
+       if(((isValidDate(expiration_date)==false))&&(corretto==true))
        {
           setOpenError(true);
           setErrorMess("ATTENTION: FORMAT DD/MM/YYYY")
@@ -122,8 +119,7 @@ function AddProposalTeacher(props)
                   supervisor: supervisor,
                   notes: notes,
                   keywords: keywords,
-                  date_start: dateStart,
-                  date_end: dateEnd,
+                  expiration_date: expiration_date,
                   type: type,
                   level: level,
                   groups: groups,
@@ -136,6 +132,7 @@ function AddProposalTeacher(props)
             setSuccessSubmit(true)
 
             // API CHE AGGIUNGE LA NUOVA PROPOSTA DI TESI
+            
 
          }
          
@@ -228,17 +225,11 @@ function AddProposalTeacher(props)
         <TextField label="Cds" name="cds" variant="filled" fullWidth
         value={cds}  onChange={ev=>setCds(ev.target.value)}/>  <br />  <br /> 
 
-        <Box display="flex" >
+        
+        <TextField label="Expiration Date  (dd/mm/yyyy)" value={expiration_date}  fullWidth
+          onChange={ev=>setExpirationDate(ev.target.value)} 
+          InputLabelProps={{ shrink: true, }} /> <br />  <br /> 
 
-          <TextField label="From ... (dd/mm/yyyy)" value={dateStart}
-           onChange={ev=>setDateStart(ev.target.value)} 
-           InputLabelProps={{ shrink: true, }} />
-
-          <TextField label="To ... (dd/mm/yyyy)"  value={dateEnd}
-           onChange={ev=>setDateEnd(ev.target.value)} 
-           InputLabelProps={{ shrink: true, }} />
-
-        </Box> <br />  
 
        <TextField label="Type" name="type" variant="filled"  fullWidth
         value={type}  onChange={ev=>setType(ev.target.value)}/>  <br /> <br />
