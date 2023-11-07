@@ -58,8 +58,19 @@
       "<rootDir>/setupTests.js"
     ],
     "collectCoverage": true,
-    "collectCoverageFrom": ["src/**/*.jsx"],
+    "collectCoverageFrom": [
+      "src/**/*.jsx"
+    ],
     "coverageDirectory": "coverage",
-    "coverageReporters": ["json", "lcov", "text-summary", "text"]
-  }
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text-summary",
+      "text"
+    ]
+  },
+  "main": "setupTests.js",
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

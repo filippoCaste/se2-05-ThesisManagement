@@ -12,6 +12,9 @@ import CustomSnackBar from "./components/CustomSnackbar.jsx";
 import User from "./models/User.js";
 import userAPI from "./services/users.api.js";
 
+import TeacherPage from "./components/TeacherPage.jsx";
+import AddProposalTeacher from "./components/AddProposalTeacher.jsx";
+
 function App() {
   const [message, setMessage] = useState("");
   const [isLoggedIn, setLoggedIn] = useState(null);
@@ -82,6 +85,11 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/login" element={<LoginPage login={handleLogin} />} />
         <Route path="/signup" element={<SignUpPage signup={registerUser} />} />
+
+        <Route path="/teacher" element={<TeacherPage />}  />
+        <Route path="/teacher/addProposal" element={<AddProposalTeacher />}  />
+        
+
       </Routes>
 
     </BrowserRouter>
