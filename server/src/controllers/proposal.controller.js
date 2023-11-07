@@ -29,10 +29,12 @@ export const getLevels = async (req, res, next) => {
 
 export const postProposal = async (req, res) => {
   try {
-    if (!req.body.title || !req.body.type || !req.body.description || !req.body.level || !req.body.expiration_date || !req.body.notes || !req.body.cod_degree || !req.body.supervisor_id || !req.body.cod_group ) {
+    if (!req.body.title || !req.body.type || !req.body.description || !req.body.level || !req.body.expiration_date || !req.body.notes || !req.body.cod_degree  || req.body.cod_degree.length === 0 || !req.body.supervisor_id || !req.body.cod_group ) {
       res.status(400).json({error: "Missing fields"})
     } else {
-      await postNewProposal(req.body.title, req.body.type, req.body.description, req.body.level, req.body.expiration_date, req.body.notes, req.body.cod_degree, req.body.supervisor_id, req.body.cod_group);
+      for (let cod_degree in req.body.cod_degree) {
+        await postNewProposal(req.body.title, req.body.type, req.body.description, req.body.level, req.body.expiration_date, req.body.notes, cod_degree, req.body.supervisor_id, req.body.cod_group);
+      }
       return res.send(200);
     }
   } catch (err) {

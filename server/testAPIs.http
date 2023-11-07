@@ -10,7 +10,7 @@ content-type: application/json
     "expiration_date": "2024-05-30",
     "notes": "No additional notes",
     "supervisor_id": "312312",
-    "cod_degree": "04",
+    "cod_degree": ["04", "1", "2"],
     "cod_group": "03"
 }
 
