@@ -22,6 +22,22 @@ In the `index.js` file there are the following endpoints. The logic is separated
   - request body content: json object with username, email and password
   - response: 201 Created (success) with user object or 401 Unauthorized (failure) with error message
 
+`/api/proposals`:
+
+- POST `/`
+  - request body content: all the fields for the proposal:
+    - `title, type, description, level, expiration_date, notes, cod_degree, supervisor_id, cod_group`
+  - response: 200 OK (success) or error message
+- GET `/`
+  - request body content: none
+  - response: 200 OK (success) with user object or 401 Unauthorized (failure) with error message
+
+`/api/degrees`:
+
+- GET `/`
+  - request body content: none
+  - response: 200 OK (success) with degree object or error message
+
 ## Database Tables
 
 ### Tables
