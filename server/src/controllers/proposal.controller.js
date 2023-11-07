@@ -1,4 +1,4 @@
-import { getKeyWordsFromDB, getProposalsFromDB } from '../services/proposal.services.js';
+import { getKeyWordsFromDB, getProposalsFromDB, postNewProposal } from '../services/proposal.services.js';
 import { LevelsEnum } from '../models/LevelsEnum.js';
 
 export const getProposals = async (req, res, next) => {
@@ -26,3 +26,12 @@ export const getLevels = async (req, res, next) => {
     return next(err);
   }
 };
+
+export const postProposal = async (req, res) => {
+  try {
+    await postNewProposal(req.body.title, req.body.type, req.body.description, req.body.level, req.body.expiration_date, req.body.notes, req.body.cod_degree, req.body.supervisor_id, req.body.cod_group);
+    return res.send(200);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+}

@@ -1,0 +1,18 @@
+###
+POST http://localhost:3001/api/proposals HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Test Proposal",
+    "type":"gfeds",
+    "description": "This is a test proposal.",
+    "level": 3,
+    "expiration_date": "2024-05-30",
+    "notes": "No additional notes",
+    "supervisor_id": "312312",
+    "cod_degree": "04",
+    "cod_group": "03"
+}
+
+###
+GET http://localhost:3001/api/degrees HTTP/1.1

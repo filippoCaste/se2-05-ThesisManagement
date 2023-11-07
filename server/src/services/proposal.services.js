@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { db } from '../config/db.js';
 
 export const getProposalsFromDB = () => {
@@ -23,3 +24,18 @@ export const getKeyWordsFromDB = () => {
     });
   });
 };
+
+export const postNewProposal = (title, type, description, level, expiration_date, notes, cod_degree, supervisor_id, cod_group) => {
+  return new Promise((resolve, reject) => {
+    const sql = "INSERT INTO Proposals(title, type, description, level, expiration_date, notes, cod_degree, supervisor_id, cod_group) VALUES (?,?,?,?,?,?,?,?,?)";
+    const date = dayjs(expiration_date).format();
+    console.log("the date is " + date);
+    db.run(sql, [title, type, description, level, date, notes, cod_degree, supervisor_id, cod_group], (err) => {
+      if(err) {
+        reject(err)
+      } else {
+        resolve(true);
+      }
+    })
+  })
+}
