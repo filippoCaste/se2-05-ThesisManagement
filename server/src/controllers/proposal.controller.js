@@ -29,8 +29,12 @@ export const getLevels = async (req, res, next) => {
 
 export const postProposal = async (req, res) => {
   try {
-    await postNewProposal(req.body.title, req.body.type, req.body.description, req.body.level, req.body.expiration_date, req.body.notes, req.body.cod_degree, req.body.supervisor_id, req.body.cod_group);
-    return res.send(200);
+    if (!req.body.title || !req.body.type || !req.body.description || !req.body.level || !req.body.expiration_date || !req.body.notes || !req.body.cod_degree || !req.body.supervisor_id || !req.body.cod_group ) {
+      res.status(400).json({error: "Missing fields"})
+    } else {
+      await postNewProposal(req.body.title, req.body.type, req.body.description, req.body.level, req.body.expiration_date, req.body.notes, req.body.cod_degree, req.body.supervisor_id, req.body.cod_group);
+      return res.send(200);
+    }
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
