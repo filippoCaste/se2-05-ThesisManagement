@@ -26,7 +26,7 @@ In the `index.js` file there are the following endpoints. The logic is separated
 
 - POST `/`
   - request body content: all the fields for the proposal:
-    - `title, type, description, level, expiration_date, notes, cod_degree, supervisor_id, cod_group`
+    - `title, type, description, level, expiration_date, notes, [cod_degree], supervisor_id, cod_group`
   - response: 200 OK (success) or error message
 - GET `/`
   - request body content: none
