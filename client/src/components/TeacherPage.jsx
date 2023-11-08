@@ -10,15 +10,19 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Typography from '@mui/material/Typography';
 
 
+import API_Proposal from '../services/proposals.api'
+import API_Degrees from '../services/degrees.api'
+
 function TeacherPage(props)
 {
     const navigate = useNavigate();
 
+ 
     return(
        <> 
           <Typography variant="h5"> PROFESSOR PAGE  </Typography> <br />   <br />  <br />  <br /> 
     
-          <Button variant="contained" color="primary"
+          <Button variant="contained" color="primary" 
             onClick={()=>navigate("/teacher/addProposal")} > INSERT NEW THESIS PROPOSAL </Button>  <br/> <br/>
 
           <Button variant="contained" color="primary"> SEE ALL MY THESIS PROPOSAL </Button>  <br />

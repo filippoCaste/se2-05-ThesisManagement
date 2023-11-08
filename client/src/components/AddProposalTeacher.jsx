@@ -13,6 +13,14 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Typography from '@mui/material/Typography';
 
+import { FormControl, InputLabel, Select, MenuItem, makeStyles,  Input } from '@mui/material';
+
+
+import API_Proposal from '../services/proposals.api'
+import API_Degrees from '../services/degrees.api'
+import API_Keywords from '../services/keywords.api'
+import API_Teachers from '../services/teachers.api'
+
 
 function isValidDate(dateString) {
   // La regex per il formato "dd/mm/yyyy"
@@ -58,23 +66,89 @@ function isValidDate(dateString) {
   return true; // La data è valida
 }
 
+function formatDate(inputDate) {
+  // Divide la stringa della data in giorno, mese e anno
+  var parts = inputDate.split('/');
+  if (parts.length !== 3) {
+    // La stringa della data non è nel formato corretto
+    return null;
+  }
+
+  // Estrai giorno, mese e anno
+  var day = parts[0];
+  var month = parts[1];
+  var year = parts[2];
+
+  // Formatta la data nel formato "yyyy-mm-dd"
+  var formattedDate = year + '-' + month + '-' + day;
+
+  return formattedDate;
+}
+
 
 
 function AddProposalTeacher(props)
 {
   const navigate= useNavigate();
 
+  const [errorMsgAPI, setErrorMsgAPI] = useState('');
+
+  function handleError(err) 
+  {
+    let errMsgAPI = 'ERRORE SCONOSCIUTO';
+    if (err.errors) 
+    {
+      if (err.errors[0])
+        if (err.errors[0].msg)
+          errMsgAPI = err.errors[0].msg;
+    } 
+    else if (err.error) 
+    {
+      errMsgAPI = err.error;
+    }
+    setErrorMsgAPI(errMsgAPI);
+  }
+
+  const [teachersList, SetTeachersList]=useState('');
+  const [degreesList, SetDegreesList]=useState('');
+  const [selectedDegree, setSelectedDegree] = useState('');
+
+  const listaProfessoriIDEsempio= [10,20,30];
+  const [selectedSupervisor, setSelectedSupervisor] = useState('');
+
+
+  // USE EFFECT /////////////////////////////////////////////
+
+  useEffect(()=>{
+    API_Degrees.getAllDegrees()
+    .then((d) => SetDegreesList(d))
+    .catch((err) => handleError(err));
+
+    API_Teachers.getAllTeachers()
+    .then((t) => SetTeachersList(t))
+    .catch((err) => handleError(err));
+
+
+  },[])
+
+  ///////////////////////////////////////////////////////////
+
+
+
   //Proposal Fields (By Slide 8)
   const [title,setTitle]=useState('Tesi sui processori');
-  const [description,setDescription]=useState('blabla');
+  const [description,setDescription]=useState('description');
   const [required_knowledge,setRequired_knowledge]=useState('esame di architetture');
-  const [supervisor,setSupervisor]=useState('Marco Torchiano');
   const [notes,setNotes]=useState('blabla');
-  const [type,setType]=useState('bo');
-  const [level,setLevel]=useState('bo');
-  const [groups,setGroups]=useState('Ingegneria Informatica');
-  const [cds,setCds]=useState('bo');
-  const [expiration_date,setExpirationDate]=useState("dd/mm/yyyy");
+  const [type,setType]=useState('tipo');
+  const [level,setLevel]=useState(1);
+
+  
+  // IN REALTA' IL GRUPPO SARA' PRESO DIRETTAMENTE DAL PROFESSORE DALLA TABELLA TEACHER
+  const [groups,setGroups]=useState('Ingegneria Informatica'); 
+  
+  
+  const [expiration_date,setExpirationDate]=useState("08/11/2023");
   
          
   //HANDLER SUBMIT
@@ -85,6 +159,9 @@ function AddProposalTeacher(props)
     if(invioForm==true)
     {
        
+        let list_co_supervisors= Array.from(selectedOptions);
+
+
         setInvioForm(false); // Istruzioni provvisori aggiunte perchè quando si preme su add del campo di testo 
                              // co supervisors venive anche inviato il form
                              // soluzione provvisoria, da correggere meglio
@@ -92,10 +169,10 @@ function AddProposalTeacher(props)
        ////////controllo input ////////////////////////
        let corretto=true;
 
-       if( (title=='')||(description=='')||(required_knowledge=='')||(supervisor=='')
+       if( (title=='')||(description=='')||(required_knowledge=='')||(selectedSupervisor=='')
             ||(notes=='')||(expiration_date=="dd/mm/yyyy")
-            ||(type=='')||(level=='')||(groups=='')||(cds=='') 
-            || (co_supervisors.length==0)   || (keywords.length==0) ) 
+            ||(type=='')||(level=='')||(groups=='')||(selectedDegree=='') 
+            || (keywords.length==0) || (list_co_supervisors.length==0) ) 
        {
            setOpenError(true);
            setErrorMess("ATTENTION: FIELD EMPTY");
@@ -112,28 +189,57 @@ function AddProposalTeacher(props)
          ////////SE INPUT CORRETTO //////////////////////////////////
          if(corretto==true)
          {
-              const new_proposal={
+
+          let formatted_expiration = formatDate(expiration_date);
+
+              let nuovo_oggetto=
+              {
                   title: title,
                   description: description,
                   required_knowledge: required_knowledge,
-                  supervisor: supervisor,
+                  supervisor_id: selectedSupervisor, //selectedSupervisor.supervisor_id
+                  co_supervisors: list_co_supervisors, 
                   notes: notes,
                   keywords: keywords,
-                  expiration_date: expiration_date,
+                  expiration_date: formatted_expiration,
                   type: type,
                   level: level,
-                  groups: groups,
-                  cds: cds,
-                  co_supervisors: co_supervisors
+                  cod_group: groups,  
+                  cod_degree: selectedDegree.cod_degree,
+                  
+                  //co_supervisors: co_supervisors
               }
             console.log("NEW PROPOSAL");
-            console.log(new_proposal);
-
+            console.log(nuovo_oggetto);
             setSuccessSubmit(true)
 
-            // API CHE AGGIUNGE LA NUOVA PROPOSTA DI TESI
-            
+            //APPUNTI
+            // cod_group non è una casella di testo ma è un valore fisso preso dal teacher loggato
+            //  dalla tabella TEACHER ( id, suername, name, email, cod_group, cod_department)
+           
+            //POST PROPOSAL
+            API_Proposal.postProposal
+            (
+              nuovo_oggetto.title, nuovo_oggetto.type, nuovo_oggetto.description,
+              nuovo_oggetto.level, nuovo_oggetto.expiration_date, nuovo_oggetto.notes,
+              nuovo_oggetto.cod_degree, nuovo_oggetto.supervisor_id, nuovo_oggetto.cod_group
+              )
+              .then()
+              .catch(err=>handleError(err));
+              
+            //POST KEYWORDS SU TABELLA Keywords
+            /*
+            //MANCA IMPLEMENTAZIONE LATO SERVER DB
+            let list_keywords=  nuovo_oggetto.keywords;
+              list_keywords.forEach((keyword)=>{
+                API_Keywords.postKeywords(keyword,"KEYWORD").then().catch(err=>handleError(err));
+              })
 
+            
+            //POST proposal_id - keywords_id su tabella ProposalKeywords
+            //API_Proposal.postProposalKeywords(proposal_id, keyword_id)  for each keyword_id call this API
+            
+              */
          }
          
 
@@ -148,18 +254,7 @@ function AddProposalTeacher(props)
 
 
    //  CO-SUPERVISORS /////////////////////////////////
-   const [inputCoSup, setInputCoSup] = useState('');
-   const [co_supervisors, setCo_supervisors] = useState([]);
- 
-   const handleInputCoSup = (event) => {
-     setInputCoSup(event.target.value);
-   };
- 
-   const handleAddCoSup = () => {
-     if (inputCoSup.trim() !== '') {
-       setCo_supervisors([...co_supervisors, inputCoSup]);
-     }
-   };
+  
  
     //  KEYWORDS /////////////////////////////////
     const [inputKeywords, setInputKeywords] = useState('');
@@ -178,6 +273,17 @@ function AddProposalTeacher(props)
 
    const [invioForm,setInvioForm]=useState(false);
 
+  
+  //CO SUPERVISORS A TENDINA
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [options, setOptions] = useState(listaProfessoriIDEsempio);
+
+  const handleChange = (event) => {
+    setSelectedOptions(event.target.value);
+  };
+
+
+ 
 
    return (
     <>
@@ -195,7 +301,7 @@ function AddProposalTeacher(props)
     <form onSubmit={handleSubmit}>
     <Grid container spacing={2}>
         <Grid item xs={6}>
- 
+
           <TextField label="Title" name="title" variant="filled" fullWidth
           value={title}  onChange={ev=>setTitle(ev.target.value)}/>  <br /> <br /> 
 
@@ -205,26 +311,67 @@ function AddProposalTeacher(props)
            <TextField label="Required Knowledge" name="required_knowledge" variant="filled" fullWidth 
           value={required_knowledge}  onChange={ev=>setRequired_knowledge(ev.target.value)}/>  <br /> <br />
 
-           <TextField label="Supervisor" name="supervisor" variant="outlined"  fullWidth
-           value={supervisor}  onChange={ev=>setSupervisor(ev.target.value)}/>  <br /> <br />
+
+        <FormControl fullWidth>
+            <InputLabel id="supervisor-label"> Select a Supervisor</InputLabel>
+            < Select 
+                labelId="word-label" 
+                id="supervisor-select" 
+                value={selectedSupervisor}   
+                onChange={(event) => {setSelectedSupervisor(event.target.value); }}
+            >
+              {   
+                  listaProfessoriIDEsempio.map((p_id, index) => 
+                (<MenuItem key={index} value={p_id}> {p_id} </MenuItem> ))
+              }
+            </Select>
+      </FormControl> 
+          <br />  <br /> 
+
 
            <TextField label="Notes" name="notes" variant="filled" fullWidth
            value={notes}  onChange={ev=>setNotes(ev.target.value)}/>  <br /> <br />
 
-           
-           <TextField label="Add Co-Supervisors" variant="outlined" fullWidth
-            value={inputCoSup} onChange={handleInputCoSup} /> <button onClick={handleAddCoSup}>Add</button>
-      
-            <ul> {co_supervisors.map((value, index) => ( <li key={index}> Co-supervisor: {value}</li> ))} </ul>
+<div>
+      <FormControl fullWidth>
+        <InputLabel id="options-label">Select Co-Supervisors</InputLabel>
+        <Select
+          labelId="options-label"
+          id="options-select"
+          multiple
+          value={selectedOptions}
+          onChange={handleChange}
+          input={<Input id="select-multiple" />}
+        >
+          {options.map((option, index) => (
+            <MenuItem key={index} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
-
+    </div>
+  
         </Grid>
 
         <Grid item xs={6}>
 
-        <TextField label="Cds" name="cds" variant="filled" fullWidth
-        value={cds}  onChange={ev=>setCds(ev.target.value)}/>  <br />  <br /> 
-
+        <FormControl fullWidth>
+        <InputLabel id="degree-label"> Select a Degree</InputLabel>
+        < Select 
+            labelId="word-label" 
+            id="degree-select" 
+            value={selectedDegree}   
+            onChange={(event) => {setSelectedDegree(event.target.value); }}
+        >
+          {   
+              Array.from(degreesList).map((degree, index) => 
+             (<MenuItem key={index} value={degree}> {degree.title_degree} </MenuItem> ))
+          }
+        </Select>
+      </FormControl>  <br />  <br /> 
+        
         
         <TextField label="Expiration Date  (dd/mm/yyyy)" value={expiration_date}  fullWidth
           onChange={ev=>setExpirationDate(ev.target.value)} 
@@ -237,14 +384,15 @@ function AddProposalTeacher(props)
        <TextField label="Level" name="level" variant="outlined"  fullWidth 
         value={level}  onChange={ev=>setLevel(ev.target.value)}/>  <br /> <br />
 
-       <TextField label="Groups" name="groups" variant="filled"  fullWidth
+       <TextField label="Group" name="groups" variant="filled"  fullWidth
         value={groups}  onChange={ev=>setGroups(ev.target.value)}/>  <br /> <br />
 
     
        <TextField label="Add Keywords" variant="outlined" fullWidth
-         value={inputKeywords} onChange={handleInputKeywords} /> <button onClick={handleAddkeywords}>Add</button>
+         value={inputKeywords} onChange={handleInputKeywords} /> 
+         <button onClick={handleAddkeywords}>Add</button>
       
-       <ul> {keywords.map((value, index) => ( <li key={index}> Keyword: {value} </li> ))} </ul>
+       <ul> {keywords.map((value, index) => ( <li key={index}> Keyword: {value} </li> ))} </ul> 
 
 
 

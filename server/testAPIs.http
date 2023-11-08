@@ -3,7 +3,7 @@ POST http://localhost:3001/api/proposals HTTP/1.1
 content-type: application/json
 
 {
-    "title": "Test Proposal",
+    "title": "Test Proposal 10000",
     "type":"gfeds",
     "description": "This is a test proposal.",
     "level": 3,
