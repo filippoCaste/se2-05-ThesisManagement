@@ -3,7 +3,11 @@ import express from "express";
 import { router as userRoutes } from "./src/routes/user.route.js";
 import { router as sessionRoutes } from "./src/routes/session.route.js";
 import { router as proposalRoutes } from "./src/routes/proposal.route.js";
-import { router as degreeRoutes } from "./src/routes/degree.route.js"
+import { router as degreeRoutes } from "./src/routes/degree.route.js";
+import { router as teacherRoutes } from "./src/routes/teacher.route.js";
+import { router as groupRoutes } from "./src/routes/group.route.js";
+
+
 import passport from "passport";
 import session from "express-session";
 import morgan from "morgan";
@@ -45,6 +49,8 @@ app.use("/api/session", sessionRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/proposals", proposalRoutes);
 app.use("/api/degrees", degreeRoutes);
+app.use("/api/teachers", teacherRoutes);
+app.use("/api/groups", groupRoutes);
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}!`);
