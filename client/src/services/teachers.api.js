@@ -20,13 +20,21 @@ const getAllTeachers = async () => {
 
 const getTeacherById = async (teacherId) => {
     try {
-        const tst = parseInt(teacherId);
+
+        const tst=parseInt(teacherId);
+
         if(isNaN(tst)) {
             throw new Error('Invalid request');
         }
-        const response = await fetch(SERVER_URL + "/api/teachers/${teacherId}", {
+        
+        //const response = await fetch(SERVER_URL + "/api/teachers/${teacherId}", {
+        //    method: "GET",
+        //});
+
+        const response = await fetch(SERVER_URL + `/api/teachers/${teacherId}`, {
             method: "GET",
-        });
+          });
+
         if (response.ok) {
             const teacher = await response.json();
             return teacher;

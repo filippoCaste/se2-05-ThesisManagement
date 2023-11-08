@@ -13,13 +13,15 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Typography from '@mui/material/Typography';
 
-import { FormControl, InputLabel, Select, MenuItem, makeStyles,  Input } from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem, Input } from '@mui/material';
 
 
 import API_Proposal from '../services/proposals.api'
 import API_Degrees from '../services/degrees.api'
 import API_Keywords from '../services/keywords.api'
 import API_Teachers from '../services/teachers.api'
+import API_Group from '../services/groups.api'
+import API_Users from '../services/users.api'
 
 
 function isValidDate(dateString) {
@@ -109,7 +111,10 @@ function AddProposalTeacher(props)
     setErrorMsgAPI(errMsgAPI);
   }
 
+  const [teacherLoggato, SetTeacherLoggato]=useState(''); //fatto poi meglio tramite ID di sessione
   const [teachersList, SetTeachersList]=useState('');
+  const [usersList, SetUsersList]=useState('');
+
   const [degreesList, SetDegreesList]=useState('');
   const [selectedDegree, setSelectedDegree] = useState('');
 
@@ -128,6 +133,14 @@ function AddProposalTeacher(props)
     .then((t) => SetTeachersList(t))
     .catch((err) => handleError(err));
 
+    API_Teachers.getTeacherById(7)
+    .then((t)=>SetTeacherLoggato(t))
+    .catch((err)=>handleError(err));
+
+
+    API_Users.getAllUsers()
+    .then((t)=>SetUsersList(t))
+    .catch((err) => handleError(err));
 
   },[])
 
@@ -136,6 +149,9 @@ function AddProposalTeacher(props)
 
 
   //Proposal Fields (By Slide 8)
+
+  //ID TEACHER FALSO, VERRA PRESO DAL COOKIE DI SESSIONE DOPO L'ACCESSO
+  
   const [title,setTitle]=useState('Tesi sui processori');
   const [description,setDescription]=useState('description');
   const [required_knowledge,setRequired_knowledge]=useState('esame di architetture');
@@ -143,9 +159,6 @@ function AddProposalTeacher(props)
   const [type,setType]=useState('tipo');
   const [level,setLevel]=useState(1);
 
-  
-  // IN REALTA' IL GRUPPO SARA' PRESO DIRETTAMENTE DAL PROFESSORE DALLA TABELLA TEACHER
-  const [groups,setGroups]=useState('Ingegneria Informatica'); 
   
   
   const [expiration_date,setExpirationDate]=useState("08/11/2023");
@@ -159,8 +172,9 @@ function AddProposalTeacher(props)
     if(invioForm==true)
     {
        
-        let list_co_supervisors= Array.from(selectedOptions);
+        let list_co_supervisors_id= Array.from(selectedCo_Supervisors);
 
+        
 
         setInvioForm(false); // Istruzioni provvisori aggiunte perchè quando si preme su add del campo di testo 
                              // co supervisors venive anche inviato il form
@@ -171,8 +185,8 @@ function AddProposalTeacher(props)
 
        if( (title=='')||(description=='')||(required_knowledge=='')||(selectedSupervisor=='')
             ||(notes=='')||(expiration_date=="dd/mm/yyyy")
-            ||(type=='')||(level=='')||(groups=='')||(selectedDegree=='') 
-            || (keywords.length==0) || (list_co_supervisors.length==0) ) 
+            ||(type=='')||(level=='')||(selectedDegree=='') 
+            || (keywords.length==0) || (list_co_supervisors_id.length==0) ) 
        {
            setOpenError(true);
            setErrorMess("ATTENTION: FIELD EMPTY");
@@ -197,27 +211,26 @@ function AddProposalTeacher(props)
                   title: title,
                   description: description,
                   required_knowledge: required_knowledge,
-                  supervisor_id: selectedSupervisor, //selectedSupervisor.supervisor_id
-                  co_supervisors: list_co_supervisors, 
+                  supervisor_id: selectedSupervisor.id, 
+                  list_co_supervisors_id: list_co_supervisors_id, 
                   notes: notes,
                   keywords: keywords,
                   expiration_date: formatted_expiration,
                   type: type,
                   level: level,
-                  cod_group: groups,  
+                  cod_group: teacherLoggato.teacher_cod_group,  
                   cod_degree: selectedDegree.cod_degree,
                   
-                  //co_supervisors: co_supervisors
+                  
               }
+            
             console.log("NEW PROPOSAL");
             console.log(nuovo_oggetto);
             setSuccessSubmit(true)
 
-            //APPUNTI
-            // cod_group non è una casella di testo ma è un valore fisso preso dal teacher loggato
-            //  dalla tabella TEACHER ( id, suername, name, email, cod_group, cod_department)
            
             //POST PROPOSAL
+            /*
             API_Proposal.postProposal
             (
               nuovo_oggetto.title, nuovo_oggetto.type, nuovo_oggetto.description,
@@ -252,9 +265,6 @@ function AddProposalTeacher(props)
    const [errorMess, setErrorMess] = useState('');
    
 
-
-   //  CO-SUPERVISORS /////////////////////////////////
-  
  
     //  KEYWORDS /////////////////////////////////
     const [inputKeywords, setInputKeywords] = useState('');
@@ -275,22 +285,17 @@ function AddProposalTeacher(props)
 
   
   //CO SUPERVISORS A TENDINA
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const [options, setOptions] = useState(listaProfessoriIDEsempio);
+  const [selectedCo_Supervisors, setSelectedCo_Supervisors] = useState([]);
 
-  const handleChange = (event) => {
-    setSelectedOptions(event.target.value);
-  };
-
-
- 
 
    return (
     <>
       
     <br /> <br /><br /><br /> <br /> <br />
 
-    <Typography variant="h5"> INSERT A NEW PROPOSAL OF THESIS   </Typography>
+    <Typography variant="h5"> INSERT A NEW PROPOSAL OF THESIS      </Typography>
+    <Typography variant="h7"> GROUP NAME    : {teacherLoggato.group_name}   </Typography> <br />
+    <Typography variant="h7"> COD DEPARTMENT: {teacherLoggato.cod_department}         </Typography>
     
     {openError? <Alert severity="warning" onClose={()=>setOpenError(false)}> <AlertTitle> {errorMess} </AlertTitle> </Alert> : false}
 
@@ -321,8 +326,8 @@ function AddProposalTeacher(props)
                 onChange={(event) => {setSelectedSupervisor(event.target.value); }}
             >
               {   
-                  listaProfessoriIDEsempio.map((p_id, index) => 
-                (<MenuItem key={index} value={p_id}> {p_id} </MenuItem> ))
+                  Array.from(usersList).filter(u=>u.role=="teacher").map((teacher, index) => 
+                (<MenuItem key={index} value={teacher}> {teacher.email} </MenuItem> ))
               }
             </Select>
       </FormControl> 
@@ -339,13 +344,13 @@ function AddProposalTeacher(props)
           labelId="options-label"
           id="options-select"
           multiple
-          value={selectedOptions}
-          onChange={handleChange}
+          value={selectedCo_Supervisors}
+          onChange={(event) => {setSelectedCo_Supervisors(event.target.value)}}
           input={<Input id="select-multiple" />}
         >
-          {options.map((option, index) => (
-            <MenuItem key={index} value={option}>
-              {option}
+          {Array.from(usersList).filter(u=>u.role=="teacher").map((teacher, index) => (
+            <MenuItem key={index} value={teacher.id}>
+              {teacher.email}
             </MenuItem>
           ))}
         </Select>
@@ -383,9 +388,6 @@ function AddProposalTeacher(props)
 
        <TextField label="Level" name="level" variant="outlined"  fullWidth 
         value={level}  onChange={ev=>setLevel(ev.target.value)}/>  <br /> <br />
-
-       <TextField label="Group" name="groups" variant="filled"  fullWidth
-        value={groups}  onChange={ev=>setGroups(ev.target.value)}/>  <br /> <br />
 
     
        <TextField label="Add Keywords" variant="outlined" fullWidth
