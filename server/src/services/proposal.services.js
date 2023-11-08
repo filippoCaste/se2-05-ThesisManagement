@@ -2,7 +2,6 @@ import { db } from '../config/db.js';
 
 export const getProposalsFromDB = (level_ids, keyword_ids, supervisor_id, start_date, end_date) => {
   return new Promise((resolve, reject) => {
-
     const sql = `
       WITH ProposalKeywordsDetail AS (SELECT proposal_id, keyword_id, name AS keyword_name, type AS keyword_type
         FROM ProposalKeywords JOIN Keywords ON Keywords.id=ProposalKeywords.keyword_id)
@@ -16,7 +15,8 @@ export const getProposalsFromDB = (level_ids, keyword_ids, supervisor_id, start_
       if (err) {
         return reject(err);
       }
-      const result = rows.reduce(function (rv, x) {
+      const result = rows.reduce((rv, x) => {
+        // eslint-disable-next-line no-param-reassign
         (rv[x.id] = rv[x.id] || []).push(x);
         return rv;
       }, {});
