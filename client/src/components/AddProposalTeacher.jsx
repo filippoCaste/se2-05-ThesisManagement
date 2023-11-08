@@ -224,21 +224,19 @@ function AddProposalTeacher(props)
                   
               }
             
-            console.log("NEW PROPOSAL");
-            console.log(nuovo_oggetto);
-            setSuccessSubmit(true)
 
-           
             //POST PROPOSAL
-            /*
+            let list_cod_degree=[nuovo_oggetto.cod_degree];
+
             API_Proposal.postProposal
             (
               nuovo_oggetto.title, nuovo_oggetto.type, nuovo_oggetto.description,
               nuovo_oggetto.level, nuovo_oggetto.expiration_date, nuovo_oggetto.notes,
-              nuovo_oggetto.cod_degree, nuovo_oggetto.supervisor_id, nuovo_oggetto.cod_group
+              list_cod_degree, nuovo_oggetto.supervisor_id, nuovo_oggetto.cod_group
               )
-              .then()
+              .then(()=> setSuccessSubmit(true))
               .catch(err=>handleError(err));
+              
               
             //POST KEYWORDS SU TABELLA Keywords
             /*
