@@ -10,8 +10,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
+import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-
+import ClockCustomized from './ClockCustomized';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import headerBackground from "../../public/img/imageedit_3_5228036516.jpg";
@@ -61,13 +62,20 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar(props) {
-  const {openSelectionsMobile, setOpenSelectionsMobile} = props;
-
+  const {openSelectionsMobile, setOpenSelectionsMobile,currentDataAndTime, setCurrentDataAndTime} = props;
+  const [openClock, setOpenClock] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+    const handleClockOpen = () => {
+    setOpenClock(true);
+  };
+
+  const handleClockClose = () => {
+    setOpenClock(false);
+  };
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -76,7 +84,6 @@ export default function PrimarySearchAppBar(props) {
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
-
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
@@ -229,6 +236,12 @@ export default function PrimarySearchAppBar(props) {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+              <IconButton
+              color="inherit">
+                <ClockCustomized currentDataAndTime={currentDataAndTime} setCurrentDataAndTime={setCurrentDataAndTime} open={openClock}
+                onOpen={handleClockOpen}
+                onClose={handleClockClose}/>
+            </IconButton>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"

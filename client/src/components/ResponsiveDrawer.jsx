@@ -18,7 +18,7 @@ const drawerWidth = "30vw";
 
 
 export default function ResponsiveDrawer(props) {
-  const {openSelectionsMobile} = props;
+  const {openSelectionsMobile, currentDataAndTime} = props;
   const [openFilter, setOpenFilter] = React.useState(true);
   const [openSort, setOpenSort] = React.useState(true);
 
@@ -60,7 +60,7 @@ export default function ResponsiveDrawer(props) {
          <Collapse in={openFilter} timeout="auto" unmountOnExit>  
           <Divider />
           <List component="div" disablePadding>
-            <FilterComponent/>
+            <FilterComponent currentDataAndTime={currentDataAndTime}/>
           </List>
           </Collapse>
 
