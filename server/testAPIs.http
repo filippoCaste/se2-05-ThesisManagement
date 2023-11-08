@@ -1,0 +1,35 @@
+###     PROPOSALS
+POST http://localhost:3001/api/proposals HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Sw eng proposal",
+    "type":"something innovative",
+    "description": "This is an innovative proposal.",
+    "level": 5,
+    "expiration_date": "2024-08-30",
+    "notes": "No additional notes",
+    "supervisor_id": "6",
+    "cod_degree": ["2", "4"],
+    "cod_group": "1"
+}
+
+###
+
+GET http://localhost:3001/api/proposals HTTP/1.1
+
+###     DEGREES
+GET http://localhost:3001/api/degrees HTTP/1.1
+
+
+###     TEACHERS
+GET http://localhost:3001/api/teachers HTTP/1.1
+
+
+###
+GET http://localhost:3001/api/teachers/7 HTTP/1.1
+
+###     GROUPS 
+GET http://localhost:3001/api/groups HTTP/1.1
+
+###     

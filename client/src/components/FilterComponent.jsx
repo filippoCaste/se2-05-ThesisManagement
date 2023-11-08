@@ -7,7 +7,8 @@ import ChipsArray from "./ChipsCustomized"; // Make sure to import ChipsArray or
 import SupervisorMenu from "./SupervisorMenu"; // Make sure to import SupervisorMenu or your custom components
 import Box from "@mui/material/Box";
 
-export default function FilterComponent() {
+export default function FilterComponent(props) {
+  const {currentDataAndTime} = props;
   const level = [
     { key: 0, label: "Beginner" },
     { key: 1, label: "Intermediate" },
@@ -37,7 +38,8 @@ export default function FilterComponent() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             label="From..."
-            disablePast
+
+            minDate={currentDataAndTime}
             format="DD/MM/YYYY"
             slotProps={{
               textField: {
@@ -47,7 +49,8 @@ export default function FilterComponent() {
           />
           <DatePicker
             label="To..."
-            disablePast
+
+            minDate={currentDataAndTime}
             format="DD/MM/YYYY"
             slotProps={{
               textField: {

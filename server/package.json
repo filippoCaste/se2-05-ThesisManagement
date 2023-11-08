@@ -1,7 +1,6 @@
 {
   "name": "server",
   "version": "0.1.0",
-  "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -56,5 +55,6 @@
       "text-summary",
       "text"
     ]
-  }
+  },
+  "description": ""
 }

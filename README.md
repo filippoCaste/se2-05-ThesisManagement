@@ -22,6 +22,79 @@ In the `index.js` file there are the following endpoints. The logic is separated
   - request body content: json object with username, email and password
   - response: 201 Created (success) with user object or 401 Unauthorized (failure) with error message
 
+`/api/proposals`:
+
+- POST `/`
+  - request body content: all the fields for the proposal:
+    - `title, type, description, level, expiration_date, notes, [cod_degree], supervisor_id, cod_group`
+  - response: 200 OK (success) or error message
+- GET `/`
+  - request body content: none
+  - response: 200 OK (success) with user object or 401 Unauthorized (failure) with error message
+```json
+[
+  {
+    "id": 5,
+    "title": "Test Proposal 10000",
+    "type": "gfeds",
+    "description": "This is a test proposal.",
+    "level": 3,
+    "expiration_date": "2024-05-30T00:00:00+02:00",
+    "notes": "No additional notes",
+    "cod_degree": "0",
+    "cod_group": 3
+  }, ]
+```
+
+`/api/degrees`:
+
+- GET `/`
+  - request body content: none
+  - response: 200 OK (success) with degree object or error message
+```json
+[ {
+    "cod_degree": 1,
+    "title_degree": "AUTOMOTIVE ENGINEERING (INGEGNERIA DELL'AUTOVEICOLO)"
+  }, ]
+```
+
+`/api/groups`:
+
+- GET `/`
+  - request body content: none
+  - response: 200 OK (success) with object or error message
+```json
+  [ {
+    "cod_group": 0,
+    "cod_department": "ICM",
+    "title_group": "Softeng"
+  }, ]
+```
+
+`/api/teachers`:
+- GET `/`
+  - request body content: none
+  - response: 200 OK (success) with teachers or error message
+```json
+  [ {
+    "cod_teacher": 7,
+    "cod_group": 0
+  }, ]
+```
+- GET `/:id`
+  - request body content: none
+  - response: 200 OK (success) with the teacher with the corresponding `id` or error message
+```json
+{
+  "teacher_id": 7,
+  "teacher_cod_group": 0,
+  "group_name": "Softeng",
+  "cod_department": "ICM"
+}
+```
+
+
+
 ## Database Tables
 
 ### Tables
