@@ -11,7 +11,7 @@ import AppNavBar from "./components/AppBar.jsx";
 import CustomSnackBar from "./components/CustomSnackbar.jsx";
 import User from "./models/User.js";
 import userAPI from "./services/users.api.js";
-
+import dayjs from 'dayjs';
 import TeacherPage from "./components/TeacherPage.jsx";
 import AddProposalTeacher from "./components/AddProposalTeacher.jsx";
 
@@ -20,7 +20,7 @@ function App() {
   const [isLoggedIn, setLoggedIn] = useState(null);
   const [user, setUser] = useState(new User());
   const [openSelectionsMobile, setOpenSelectionsMobile] = useState(false);
-
+  const [currentDataAndTime, setCurrentDataAndTime] =useState(dayjs());
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -72,16 +72,17 @@ function App() {
   return (
       <ThemeProvider theme={theme}>
     <BrowserRouter>
-
       <AppNavBar
         user={user}
         logOut={handleLogout}
         openSelectionsMobile={openSelectionsMobile}
         setOpenSelectionsMobile={setOpenSelectionsMobile}
+        currentDataAndTime={currentDataAndTime}
+        setCurrentDataAndTime={setCurrentDataAndTime}
       />
       <CustomSnackBar message={message}></CustomSnackBar>
       <Routes>
-        <Route index path="/" element={<MainPage openSelectionsMobile={openSelectionsMobile} />} />
+        <Route index path="/" element={<MainPage openSelectionsMobile={openSelectionsMobile} currentDataAndTime={currentDataAndTime} />} />
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/login" element={<LoginPage login={handleLogin} />} />
         <Route path="/signup" element={<SignUpPage signup={registerUser} />} />

@@ -6,14 +6,14 @@ import Box from '@mui/material/Box';
 import MainDashboard from "../components/MainDashboard.jsx";
 
 function MainPage(props) {
-  const {openSelectionsMobile} = props;
+  const {openSelectionsMobile, currentDataAndTime} = props;
   //
    
   return (
    
    <Box sx={{ display:"inline-flex"}} mt={"15vh"} mx={"6vh"}>
-    <ResponsiveDrawer openSelectionsMobile={openSelectionsMobile}/>
-    <MainDashboard/>     
+    <ResponsiveDrawer openSelectionsMobile={openSelectionsMobile} currentDataAndTime={currentDataAndTime}/>
+    <MainDashboard currentDataAndTime/>     
     </Box>
    );
 }
