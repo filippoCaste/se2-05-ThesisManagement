@@ -12,6 +12,7 @@
     "jest-watch": "jest --watch --passWithNoTests"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.2.3",
     "@babel/preset-env": "^7.23.2",
     "@babel/preset-react": "^7.22.15",
     "@emotion/react": "^11.11.1",

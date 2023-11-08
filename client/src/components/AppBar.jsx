@@ -20,6 +20,7 @@ import Logout from '@mui/icons-material/Logout';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Image from "mui-image";
 import Box from '@mui/material/Box';
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -88,16 +89,13 @@ export default function PrimarySearchAppBar(props) {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
-  const handleLogout = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  }
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
   const menuId = 'primary-search-account-menu';
+  const { logout } = useAuth0();
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -145,7 +143,7 @@ export default function PrimarySearchAppBar(props) {
         </Typography>
         <Typography>Titolo(Codice)</Typography>
       </Box>
-      <MenuItem onClick={handleLogout} sx={{mt:"1vw"}}>
+      <MenuItem onClick={()=>logout({ logoutParams: { returnTo: window.location.origin } })} sx={{mt:"1vw"}}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
@@ -199,6 +197,7 @@ export default function PrimarySearchAppBar(props) {
     </Menu>
   );
 
+  const { loginWithRedirect } = useAuth0();
   return (
     <Box position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, overflow:"auto", top:0, left:0, height:"15vh"}}>
       <AppBar sx={{backgroundColor:"#003049"}}>
@@ -257,7 +256,7 @@ export default function PrimarySearchAppBar(props) {
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
+              onClick={() => loginWithRedirect()}
               color="inherit"
             >
               <AccountCircle />
