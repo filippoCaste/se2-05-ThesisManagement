@@ -3,17 +3,22 @@ POST http://localhost:3001/api/proposals HTTP/1.1
 content-type: application/json
 
 {
-    "title": "Sw eng proposal",
-    "type":"something innovative",
+    "title": "Thesis proposal IV",
+    "type":"Innovation that inspires",
     "description": "This is an innovative proposal.",
-    "level": 5,
-    "expiration_date": "2024-08-30",
+    "level": 4,
+    "expiration_date": "2024-02-30",
     "notes": "No additional notes",
-    "supervisor_id": "6",
-    "cod_degree": ["2", "4"],
-    "cod_group": "1"
+    "required_knowledge": "Student must know the principle of design of mobile applications.",
+    "cod_degree": ["2"],
+    "cod_group": "1",
+    "supervisors_obj": {
+        "supervisor_id": 10000,
+        "co_supervisor_id": 10001
+    }
 }
-
+         
+         #"external_supervisor_id": ""
 ###
 
 GET http://localhost:3001/api/proposals HTTP/1.1
