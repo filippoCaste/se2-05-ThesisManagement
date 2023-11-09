@@ -1,4 +1,4 @@
-import User from "../models/User";
+import { User } from "../models/User";
 
 const SERVER_URL = "http://localhost:3001";
 

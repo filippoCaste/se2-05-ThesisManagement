@@ -10,7 +10,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     domain="thesis-management-05.eu.auth0.com"
     clientId="aLJmcMkDJkpc8Rql8EfxLVl4ND9aUyWp"
     authorizationParams={{
-      redirect_uri: "http://localhost:5173/student",
+      redirect_uri: "http://localhost:5173/",
     }}
   >
         <App />

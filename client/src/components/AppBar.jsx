@@ -20,6 +20,7 @@ import Logout from '@mui/icons-material/Logout';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Image from "mui-image";
 import Box from '@mui/material/Box';
+import { UserContext } from '../Contexts';
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Search = styled('div')(({ theme }) => ({
@@ -70,11 +71,12 @@ export default function PrimarySearchAppBar(props) {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const {
-    user,
     isAuthenticated,
     loginWithRedirect,
     logout,
   } = useAuth0();
+
+  const { user } = React.useContext(UserContext);
 
     const handleClockOpen = () => {
     setOpenClock(true);
@@ -102,7 +104,6 @@ export default function PrimarySearchAppBar(props) {
 
   const handleLoginOrMobileMenuOpen = (event) => {
     if(isAuthenticated){
-      console.log(user);
       handleMobileMenuOpen(event);
     }
     else
@@ -132,32 +133,19 @@ export default function PrimarySearchAppBar(props) {
         <Typography mr={"0.5vw"} fontWeight="bold" >
           ID:
         </Typography>
-        <Typography >
-          {user? user.email : "Sono io"}</Typography>
+        <Typography >{user? user.id : ""}</Typography>
       </Box>
       <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography mr={"0.5vw"} fontWeight="bold" >
           Surname:
         </Typography>
-        <Typography >Ciccio Caio</Typography>
+        <Typography >{user? user.surname : ""}</Typography>
       </Box>
       <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography mr={"0.5vw"} fontWeight="bold" >
           Name:
         </Typography>
-        <Typography>Ciccio Caio</Typography>
-      </Box>
-      <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
-        <Typography fontWeight="bold" mr={"0.5vw"} >
-          Enrollment Year:
-        </Typography>
-        <Typography>Ciccio Caio</Typography>
-      </Box>
-      <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
-        <Typography fontWeight="bold" mr={"0.5vw"} >
-          Title Degree:
-        </Typography>
-        <Typography>Titolo(Codice)</Typography>
+        <Typography>{user? user.name : ""}</Typography>
       </Box>
       <MenuItem onClick={()=>logout({ logoutParams: { returnTo: window.location.origin } })} sx={{mt:"1vw"}}>
           <ListItemIcon>
