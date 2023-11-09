@@ -14,12 +14,15 @@ export const getTeachers = async (req, res) => {
 export const getTeacherId = async(req, res) => {
     try {
         const id = parseInt(req.params.id)
-        console.log(id)
         if(isNaN(id)) {
             throw new Error('Missing request body parameter');
         }
         const teacher = await getTeacherById(id);
-        return res.json(teacher);
+        if (teacher) {
+            return res.json(teacher);
+        } else {
+            res.status(404).json({ error: "User not found" })
+        }
     } catch(err) {
         return res.status(500).json({ error: err.message });
     }

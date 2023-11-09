@@ -9,8 +9,12 @@ export const getAllTeachers = () => {
             }
             const teachers = rows.map((e) => {
                 const obj = {
-                    cod_teacher: e.id,
-                    cod_group: e.cod_group
+                    teacher_id: e.id,
+                    name: e.name,
+                    surname: e.surname,
+                    email: e.email,
+                    cod_group: e.cod_group,
+                    cod_department: e.cod_department
                 }
                 return obj;
             });
@@ -27,13 +31,17 @@ export const getTeacherById = (teacher_id) => {
             if(err) {
                 reject(err);
             }
-            const teacher = {
-                teacher_id: row.id,
-                teacher_cod_group: row.cod_group,
-                group_name: row.title_group,
-                cod_department: row.cod_department
-            };
-            resolve(teacher);
+            if(row) {
+                const teacher = {
+                    teacher_id: row.id,
+                    teacher_cod_group: row.cod_group,
+                    group_name: row.title_group,
+                    cod_department: row.cod_department
+                };
+                resolve(teacher);
+            } else {
+                resolve(undefined)
+            }
         });
     });
 }

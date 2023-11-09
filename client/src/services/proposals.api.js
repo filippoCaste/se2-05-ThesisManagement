@@ -1,10 +1,16 @@
 "use strict"
 const SERVER_URL = "http://localhost:3001";
 
-const postProposal = async (title, type, description, level, expiration_date, notes, cod_degree, supervisor_id, cod_group) => {
-    try {
+const postProposal = async (title, type, description, level, expiration_date, notes, required_knowledge,cod_degree,cod_group, supervisors_obj, keywords) => {
+    
+        try {
+ 
+        const data = 
+        {
+            title, type, description, level, expiration_date, notes, required_knowledge,
+            cod_degree,cod_group, supervisors_obj, keywords
+        };
 
-        const data = {title, type, description, level,expiration_date, notes, cod_degree,supervisor_id,cod_group};
 
         const response = await fetch(SERVER_URL + "/api/proposals", {
             method: "POST",

@@ -29,13 +29,29 @@ export const getLevels = async (req, res, next) => {
 
 export const postProposal = async (req, res) => {
   try {
-    if (!req.body.title || !req.body.type || !req.body.description || !req.body.level || !req.body.expiration_date || !req.body.notes || !req.body.cod_degree  || req.body.cod_degree.length === 0 || !req.body.supervisor_id || !req.body.cod_group ) {
+    const title = req.body.title;
+    const type = req.body.type;
+    const description = req.body.description;
+    let level = req.body.level;
+    let cod_group = req.body.cod_group;
+    try {
+      level = parseInt(level);
+      cod_group = parseInt(cod_group)
+    } catch (err) {
+      res.status(400).json({ error: "Uncorrect parameters" })
+    }
+    const expiration_date = req.body.expiration_date;
+    const notes = req.body.notes;
+
+    if (!title || !type || !description || !expiration_date || 
+          !notes || !req.body.cod_degree || req.body.cod_degree.length === 0 || !req.body.supervisors_obj.supervisor_id) {
       res.status(400).json({error: "Missing fields"})
     } else {
+      console.log(req.body)
       for (let cod_degree in req.body.cod_degree) {
-        await postNewProposal(req.body.title, req.body.type, req.body.description, req.body.level, req.body.expiration_date, req.body.notes, cod_degree, req.body.supervisor_id, req.body.cod_group);
+        await postNewProposal(title.trim(), type.trim(), description.trim(), level, expiration_date.trim(), notes.trim(), cod_degree, cod_group, req.body.required_knowledge, req.body.supervisors_obj, req.body.keywords);
       }
-      return res.send(200);
+      return res.sendStatus(200);
     }
   } catch (err) {
     return res.status(500).json({ error: err.message });
