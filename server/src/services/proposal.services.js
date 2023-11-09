@@ -1,62 +1,123 @@
-import { db } from '../config/db.js';
+import { db } from "../config/db.js";
+import { Proposal } from "../models/Proposal.js";
+import { Teacher } from "../models/Teacher.js";
 
-export const getProposalsFromDB = (level_ids, keyword_ids, supervisor_id, start_date, end_date) => {
+export const getProposalsFromDB = (
+  cod_degree,
+  level_ids,
+  keyword_ids,
+  supervisor_id,
+  start_date,
+  end_date
+) => {
   return new Promise((resolve, reject) => {
+    var levels = "";
+    var keywords = "";
+    var supervisor = "";
+    if (level_ids && level_ids.length > 0) {
+      levels = ` AND level IN (${level_ids.map(() => "?").join(",")})`;
+    }
+    if (keyword_ids && keyword_ids.length > 0) {
+      keywords = ` AND pk.keyword_id IN (${keyword_ids
+        .map(() => "?")
+        .join(",")})`;
+    }
+    if (supervisor_id) {
+      supervisor = ` AND s.supervisor_id=?`;
+    }
+    // consider cases where there is only start_date or end_date or both
+    var date = "";
+    if (start_date && end_date) {
+      date = ` AND (expiration_date BETWEEN ? AND ?)`;
+    } else if (start_date) {
+      date = ` AND expiration_date >= '${start_date}'`;
+    } else if (end_date) {
+      date = ` AND expiration_date <= '${end_date}''`;
+    }
+
     const sql = `
-      WITH ProposalKeywordsDetail AS (SELECT proposal_id, keyword_id, name AS keyword_name, type AS keyword_type
-        FROM ProposalKeywords JOIN Keywords ON Keywords.id=ProposalKeywords.keyword_id)
-      
-      SELECT * FROM Proposals LEFT JOIN ProposalKeywordsDetail ON Proposals.id = ProposalKeywordsDetail.proposal_id 
-        WHERE (level IN (${level_ids.map(() => '?').join(',')}) ${!level_ids || level_ids.length === 0 ? 'OR 1=1' : ''}) 
-        AND (keyword_id IN (${keyword_ids.map(() => '?').join(',')}) ${!keyword_ids || keyword_ids.length === 0 ? 'OR 1=1' : ''})
-        AND (supervisor_id=? ${!supervisor_id ? 'OR 1=1' : ''});   
+    SELECT p.id,
+        p.title,
+        p.description,
+        p.expiration_date,
+        p.cod_degree,
+        p.level,
+        p.notes,
+        p.cod_group,
+        p.required_knowledge,
+        s.supervisor_id,
+        s.co_supervisor_id,
+        s.external_supervisor,
+        group_concat(k.type) as keyword_types,
+        group_concat(k.name) as keyword_names
+      FROM Proposals p
+      LEFT JOIN ProposalKeywords pk ON p.id = pk.proposal_id
+      LEFT JOIN Keywords k ON k.id = pk.keyword_id
+      LEFT JOIN Supervisors s ON s.proposal_id = p.id
+      WHERE p.expiration_date >= date('now')
+        AND p.cod_degree = ?
+        ${levels}
+        ${keywords}
+        ${supervisor}
+        ${date}
+      GROUP BY p.id
+      ORDER BY expiration_date ASC;
     `;
-    db.all(sql, [...level_ids, ...keyword_ids, supervisor_id], (err, rows) => {
-      if (err) {
-        return reject(err);
+    db.all(
+      sql,
+      [
+        cod_degree,
+        ...level_ids,
+        ...keyword_ids,
+        supervisor_id,
+      ],
+      async (err, rows) => {
+        if (err) {
+          return reject(err);
+        }
+        const returnObj = [];
+        for (const row of rows) {
+          const supervisorsInfo = await getExtraInfoFromProposal(row);
+          const proposal = Proposal.fromProposalsResult(row);
+          const serializedProposal = proposal.serialize();
+          serializedProposal.supervisorsInfo = supervisorsInfo;
+          returnObj.push(serializedProposal);
+        }
+        return resolve(returnObj);
       }
-      const result = rows.reduce((rv, x) => {
-        // eslint-disable-next-line no-param-reassign
-        (rv[x.id] = rv[x.id] || []).push(x);
-        return rv;
-      }, {});
-      // console.log(result);
-      const res2 = [];
-
-      Object.keys(result).forEach((id) => {
-        const keywords = [];
-
-        result[id].forEach((items) => {
-          if (items.keyword_id) {
-            keywords.push({
-              keyword_id: items.keyword_id,
-              keyword_name: items.keyword_name,
-              keyword_type: items.keyword_type,
-            });
-          }
-        });
-
-        res2.push({
-          id: result[id][0].id,
-          title: result[id][0].title,
-          type: result[id][0].type,
-          description: result[id][0].description,
-          level: result[id][0].level,
-          expiration_date: result[id][0].expiration,
-          notes: result[id][0].notes,
-          cod_degree: result[id][0].id,
-          supervisor_id: result[id][0].id,
-          cod_group: result[id][0].id,
-          keywords,
-        });
-      });
-
-      return resolve(res2);
-    });
+    );
   });
 };
 
-export const getKeyWordsFromDB = () => {
+export const getExtraInfoFromProposal = (proposal) => {
+  return new Promise((resolve, reject) => {
+    const supervisors = [];
+    const sql = `
+    SELECT id, name, email, cod_department, cod_group
+    FROM Teachers
+    WHERE id IN (?, ?, ?)
+  `;
+    db.all(
+      sql,
+      [
+        proposal.supervisor_id,
+        proposal.co_supervisor_id,
+        proposal.external_supervisor,
+      ],
+      (err, rows) => {
+        if (err) {
+          return reject(err);
+        }
+        for (const row of rows) {
+          supervisors.push(Teacher.fromTeachersResult(row));
+        }
+        resolve(supervisors);
+      }
+    );
+  });
+};
+
+export const getKeyWordsFromDB = (proposal_id) => {
   return new Promise((resolve, reject) => {
     const sql = 'SELECT id, name FROM Keywords WHERE type="KEYWORD"';
     db.all(sql, (err, rows) => {
