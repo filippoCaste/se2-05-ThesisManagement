@@ -31,13 +31,17 @@ export const getTeacherById = (teacher_id) => {
             if(err) {
                 reject(err);
             }
-            const teacher = {
-                teacher_id: row.id,
-                teacher_cod_group: row.cod_group,
-                group_name: row.title_group,
-                cod_department: row.cod_department
-            };
-            resolve(teacher);
+            if(row) {
+                const teacher = {
+                    teacher_id: row.id,
+                    teacher_cod_group: row.cod_group,
+                    group_name: row.title_group,
+                    cod_department: row.cod_department
+                };
+                resolve(teacher);
+            } else {
+                resolve(undefined)
+            }
         });
     });
 }

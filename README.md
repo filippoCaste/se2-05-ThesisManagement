@@ -109,7 +109,9 @@ In the `index.js` file there are the following endpoints. The logic is separated
 ```
 - GET `/:id`
   - request body content: none
-  - response: 200 OK (success) with the teacher with the corresponding `id` or error message
+  - response: 
+    - 200 OK (success) with the *teacher* with the corresponding `id` or error message
+    - 404 if the user is not found
 ```json
 {
   "teacher_id": 10000,
@@ -119,7 +121,25 @@ In the `index.js` file there are the following endpoints. The logic is separated
 }
 ```
 
+`/api/students`:
 
+- GET `/:id`
+  - request body content: none
+  - response: 
+    - 200 OK (success) with the *student* with the corresponding `id` or error message
+    - 404 if the user is not found
+```json
+{
+  "student_id": 400000,
+  "name": "Mario",
+  "surname": "Rossi",
+  "gender": "M",
+  "nationality": "italian",
+  "email": "mario.rossi@studenti.polito.it",
+  "cod_degree": 5,
+  "enrollment_year": 2022
+}
+```
 
 ## Database Tables
 
