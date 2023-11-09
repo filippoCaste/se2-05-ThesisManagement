@@ -118,8 +118,9 @@ function AddProposalTeacher(props)
   const [degreesList, SetDegreesList]=useState('');
   const [selectedDegree, setSelectedDegree] = useState('');
 
-  const listaProfessoriIDEsempio= [10,20,30];
   const [selectedSupervisor, setSelectedSupervisor] = useState('');
+
+  const [keywordsList, SetKeywordsList]=useState(''); //prese dal DB
 
 
   // USE EFFECT /////////////////////////////////////////////
@@ -133,14 +134,14 @@ function AddProposalTeacher(props)
     .then((t) => SetTeachersList(t))
     .catch((err) => handleError(err));
 
-    API_Teachers.getTeacherById(7)
+    API_Keywords.getAllKeywords()
+    .then((k) => SetKeywordsList(k))
+    .catch((err) => handleError(err));
+
+
+    API_Teachers.getTeacherById(10000)
     .then((t)=>SetTeacherLoggato(t))
     .catch((err)=>handleError(err));
-
-
-    API_Users.getAllUsers()
-    .then((t)=>SetUsersList(t))
-    .catch((err) => handleError(err));
 
   },[])
 
@@ -158,12 +159,9 @@ function AddProposalTeacher(props)
   const [notes,setNotes]=useState('blabla');
   const [type,setType]=useState('tipo');
   const [level,setLevel]=useState(1);
-
-  
-  
   const [expiration_date,setExpirationDate]=useState("08/11/2023");
   
-         
+       
   //HANDLER SUBMIT
   function handleSubmit(event) 
   {
@@ -172,9 +170,9 @@ function AddProposalTeacher(props)
     if(invioForm==true)
     {
        
-        let list_co_supervisors_id= Array.from(selectedCo_Supervisors);
-
-        
+        //let list_co_supervisors_id= Array.from(selectedCo_Supervisors);
+        let list_keywords= Array.from(selectedKeywords);
+ 
 
         setInvioForm(false); // Istruzioni provvisori aggiunte perchè quando si preme su add del campo di testo 
                              // co supervisors venive anche inviato il form
@@ -183,10 +181,12 @@ function AddProposalTeacher(props)
        ////////controllo input ////////////////////////
        let corretto=true;
 
+
+       //metti condizione lunghezza co supervisors scelte == 0
        if( (title=='')||(description=='')||(required_knowledge=='')||(selectedSupervisor=='')
-            ||(notes=='')||(expiration_date=="dd/mm/yyyy")
+            ||(notes=='')||(expiration_date=="dd/mm/yyyy") ||(selectedCoSupervisor == '')
             ||(type=='')||(level=='')||(selectedDegree=='') 
-            || (keywords.length==0) || (list_co_supervisors_id.length==0) ) 
+            || (list_keywords.length==0) ) 
        {
            setOpenError(true);
            setErrorMess("ATTENTION: FIELD EMPTY");
@@ -208,49 +208,37 @@ function AddProposalTeacher(props)
 
               let nuovo_oggetto=
               {
-                  title: title,
+                  title:   title,
                   description: description,
                   required_knowledge: required_knowledge,
-                  supervisor_id: selectedSupervisor.id, 
-                  list_co_supervisors_id: list_co_supervisors_id, 
+                  supervisor_id: selectedSupervisor.teacher_id, 
+                  co_supervisor_id: selectedCoSupervisor.teacher_id,
                   notes: notes,
-                  keywords: keywords,
+                  list_keywords: list_keywords,          //contiene solo name
                   expiration_date: formatted_expiration,
                   type: type,
                   level: level,
                   cod_group: teacherLoggato.teacher_cod_group,  
                   cod_degree: selectedDegree.cod_degree,
-                  
-                  
               }
             
-
+            
             //POST PROPOSAL
             let list_cod_degree=[nuovo_oggetto.cod_degree];
+            let supervisors_obj={"supervisor_id":  nuovo_oggetto.supervisor_id, 
+             "co_supervisor_id":  nuovo_oggetto.co_supervisor_id};
 
             API_Proposal.postProposal
-            (
-              nuovo_oggetto.title, nuovo_oggetto.type, nuovo_oggetto.description,
-              nuovo_oggetto.level, nuovo_oggetto.expiration_date, nuovo_oggetto.notes,
-              list_cod_degree, nuovo_oggetto.supervisor_id, nuovo_oggetto.cod_group
-              )
-              .then(()=> setSuccessSubmit(true))
-              .catch(err=>handleError(err));
+            ( 
+                nuovo_oggetto.title, nuovo_oggetto.type, nuovo_oggetto.description,
+                nuovo_oggetto.level, nuovo_oggetto.expiration_date, nuovo_oggetto.notes,
+                nuovo_oggetto.required_knowledge,  list_cod_degree, nuovo_oggetto.cod_group,
+                supervisors_obj, nuovo_oggetto.list_keywords
+            )
+            .then(()=> setSuccessSubmit(true))
+            .catch(err=>handleError(err));
               
               
-            //POST KEYWORDS SU TABELLA Keywords
-            /*
-            //MANCA IMPLEMENTAZIONE LATO SERVER DB
-            let list_keywords=  nuovo_oggetto.keywords;
-              list_keywords.forEach((keyword)=>{
-                API_Keywords.postKeywords(keyword,"KEYWORD").then().catch(err=>handleError(err));
-              })
-
-            
-            //POST proposal_id - keywords_id su tabella ProposalKeywords
-            //API_Proposal.postProposalKeywords(proposal_id, keyword_id)  for each keyword_id call this API
-            
-              */
          }
          
 
@@ -262,29 +250,15 @@ function AddProposalTeacher(props)
    const [openSuccessSubmit, setSuccessSubmit] = useState(false);
    const [errorMess, setErrorMess] = useState('');
    
-
  
-    //  KEYWORDS /////////////////////////////////
-    const [inputKeywords, setInputKeywords] = useState('');
-    const [keywords, setKeywords] = useState([]);
-
-    const handleInputKeywords = (event) => {
-    setInputKeywords(event.target.value);
-    };
-
-    const handleAddkeywords = () => {
-        if (inputKeywords.trim() !== '') {
-            setKeywords([...keywords, inputKeywords]);
-        }
-    };
-
-
-   const [invioForm,setInvioForm]=useState(false);
-
-  
+    //KEYWORDS A TENDINA
+  const [selectedKeywords, setSelectedKeywords] = useState([]);
+     
   //CO SUPERVISORS A TENDINA
-  const [selectedCo_Supervisors, setSelectedCo_Supervisors] = useState([]);
+  const [selectedCoSupervisor, SetSelectedCoSupervisor] = useState('');
 
+
+  const [invioForm,setInvioForm]=useState(false);
 
    return (
     <>
@@ -324,7 +298,7 @@ function AddProposalTeacher(props)
                 onChange={(event) => {setSelectedSupervisor(event.target.value); }}
             >
               {   
-                  Array.from(usersList).filter(u=>u.role=="teacher").map((teacher, index) => 
+                  Array.from(teachersList).map((teacher, index) => 
                 (<MenuItem key={index} value={teacher}> {teacher.email} </MenuItem> ))
               }
             </Select>
@@ -335,26 +309,22 @@ function AddProposalTeacher(props)
            <TextField label="Notes" name="notes" variant="filled" fullWidth
            value={notes}  onChange={ev=>setNotes(ev.target.value)}/>  <br /> <br />
 
-<div>
-      <FormControl fullWidth>
-        <InputLabel id="options-label">Select Co-Supervisors</InputLabel>
-        <Select
-          labelId="options-label"
-          id="options-select"
-          multiple
-          value={selectedCo_Supervisors}
-          onChange={(event) => {setSelectedCo_Supervisors(event.target.value)}}
-          input={<Input id="select-multiple" />}
-        >
-          {Array.from(usersList).filter(u=>u.role=="teacher").map((teacher, index) => (
-            <MenuItem key={index} value={teacher.id}>
-              {teacher.email}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+          <FormControl fullWidth>
+                  <InputLabel id="supervisor-label"> Select a Co-Supervisor</InputLabel>
+                  < Select 
+                      labelId="word-label" 
+                      id="supervisor-select" 
+                      value={selectedCoSupervisor}   
+                      onChange={(event) => {SetSelectedCoSupervisor(event.target.value); }}
+                  >
+                    {   
+                        Array.from(teachersList).map((teacher, index) => 
+                      (<MenuItem key={index} value={teacher}> {teacher.email} </MenuItem> ))
+                    }
+                  </Select>
+            </FormControl> 
+                <br />  <br /> 
 
-    </div>
   
         </Grid>
 
@@ -388,11 +358,23 @@ function AddProposalTeacher(props)
         value={level}  onChange={ev=>setLevel(ev.target.value)}/>  <br /> <br />
 
     
-       <TextField label="Add Keywords" variant="outlined" fullWidth
-         value={inputKeywords} onChange={handleInputKeywords} /> 
-         <button onClick={handleAddkeywords}>Add</button>
-      
-       <ul> {keywords.map((value, index) => ( <li key={index}> Keyword: {value} </li> ))} </ul> 
+      <FormControl fullWidth>
+        <InputLabel id="keywords-label">Select keywords</InputLabel>
+        <Select
+          labelId="keywords-label"
+          id="keywords-select"
+          multiple
+          value={selectedKeywords}
+          onChange={(event) => {setSelectedKeywords(event.target.value)}}
+          input={<Input id="select-multiple" />}
+        >
+          {Array.from(keywordsList).map((k, index) => (
+            <MenuItem key={index} value={k.name}>
+              {k.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
 
 

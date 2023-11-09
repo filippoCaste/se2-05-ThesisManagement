@@ -27,10 +27,6 @@ const getTeacherById = async (teacherId) => {
             throw new Error('Invalid request');
         }
         
-        //const response = await fetch(SERVER_URL + "/api/teachers/${teacherId}", {
-        //    method: "GET",
-        //});
-
         const response = await fetch(SERVER_URL + `/api/teachers/${teacherId}`, {
             method: "GET",
           });
