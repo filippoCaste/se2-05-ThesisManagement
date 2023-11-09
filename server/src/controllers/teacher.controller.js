@@ -14,7 +14,6 @@ export const getTeachers = async (req, res) => {
 export const getTeacherId = async(req, res) => {
     try {
         const id = parseInt(req.params.id)
-        console.log(id)
         if(isNaN(id)) {
             throw new Error('Missing request body parameter');
         }
