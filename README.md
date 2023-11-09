@@ -141,6 +141,18 @@ In the `index.js` file there are the following endpoints. The logic is separated
 }
 ```
 
+`/api/keywords`:
+
+- GET `/`
+  - request body content: none
+  - response: 200 OK (success) with teachers or error message
+```json
+  [ {
+    "id": 1,
+    "name": "AI"
+  }, ]
+```
+
 ## Database Tables
 
 ### Tables
