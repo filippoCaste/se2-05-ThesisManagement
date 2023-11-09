@@ -9,8 +9,12 @@ export const getAllTeachers = () => {
             }
             const teachers = rows.map((e) => {
                 const obj = {
-                    cod_teacher: e.id,
-                    cod_group: e.cod_group
+                    teacher_id: e.id,
+                    name: e.name,
+                    surname: e.surname,
+                    email: e.email,
+                    cod_group: e.cod_group,
+                    cod_department: e.cod_department
                 }
                 return obj;
             });

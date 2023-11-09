@@ -35,11 +35,11 @@ export const getKeyWordsFromDB = () => {
  * @param {*} notes 
  * @param {*} cod_degree 
  * @param {*} cod_group 
- * @param {*} required_knowledge 
- * @param {*} supervisor_obj containing fields: supervisor_id, co_supervisor_id, external_supervisor
+ * @param {*} required_knowledge - a string
+ * @param {*} supervisor_obj - an object containing fields: supervisor_id, co_supervisor_id, external_supervisor
  * @returns 
  */
-export const postNewProposal = (title, type, description, level, expiration_date, notes, cod_degree, cod_group, required_knowledge, supervisor_obj) => {
+export const postNewProposal = (title, type, description, level, expiration_date, notes, cod_degree, cod_group, required_knowledge, supervisor_obj, keywords) => {
   return new Promise((resolve, reject) => {
     try {
       db.serialize(function () {
@@ -48,14 +48,33 @@ export const postNewProposal = (title, type, description, level, expiration_date
         sqlProp.run(title, type, description, level, date, notes, cod_degree, cod_group, required_knowledge);
         sqlProp.finalize();
 
+        const sqlKeyw = db.prepare("INSERT INTO ProposalKeywords(proposal_id, keyword_id) VALUES (?,?)");
+        const sqlGetKeyw = db.prepare("SELECT id FROM Keywords WHERE name = ?");
+
         const sqlSuper = db.prepare("INSERT INTO Supervisors(proposal_id, supervisor_id, co_supervisor_id, external_supervisor) VALUES(?,?,?,?);");
         const sqlLast = db.prepare("SELECT id FROM Proposals ORDER BY id DESC LIMIT 1");
         sqlLast.get( function(err, row) {
           if (err) {
             reject(err);
           }
-          sqlSuper.run(row.id, supervisor_obj.supervisor_id, supervisor_obj.co_supervisor_id || null, supervisor_obj.external_supervisor_id || null)
+          const propId = row.id;
+          sqlSuper.run(propId, supervisor_obj.supervisor_id, supervisor_obj.co_supervisor_id || null, supervisor_obj.external_supervisor_id || null)
           sqlSuper.finalize();
+
+          for (let kw of keywords) {
+            sqlGetKeyw.get( kw, (err, row) => {
+              if (err) {
+                reject(err);
+              } else {
+                if (row.id) {
+                  sqlKeyw.run(propId, row.id);
+                  sqlKeyw.finalize();
+                }
+              }
+            })
+            sqlGetKeyw.finalize();
+          }
+
           return true;
         })
         sqlLast.finalize();

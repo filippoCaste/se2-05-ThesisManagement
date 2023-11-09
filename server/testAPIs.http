@@ -15,7 +15,10 @@ content-type: application/json
     "supervisors_obj": {
         "supervisor_id": 10000,
         "co_supervisor_id": 10001
-    }
+    },
+    "keywords": [
+        "AI", "Machine Learning"
+    ]
 }
          
          #"external_supervisor_id": ""
@@ -32,7 +35,7 @@ GET http://localhost:3001/api/teachers HTTP/1.1
 
 
 ###
-GET http://localhost:3001/api/teachers/7 HTTP/1.1
+GET http://localhost:3001/api/teachers/10000 HTTP/1.1
 
 ###     GROUPS 
 GET http://localhost:3001/api/groups HTTP/1.1

@@ -26,23 +26,45 @@ In the `index.js` file there are the following endpoints. The logic is separated
 
 - POST `/`
   - request body content: all the fields for the proposal:
-    - `title, type, description, level, expiration_date, notes, [cod_degree], supervisor_id, cod_group`
   - response: 200 OK (success) or error message
+```json
+{
+    "title": "Thesis proposal IV",
+    "type":"Innovation that inspires",
+    "description": "This is an innovative proposal.",
+    "level": 4,
+    "expiration_date": "2024-02-30",
+    "notes": "No additional notes",
+    "required_knowledge": "Student must know the principle of design of mobile applications.",
+    "cod_degree": ["2"],
+    "cod_group": "1",
+    "supervisors_obj": {
+        "supervisor_id": 10000,
+        "co_supervisor_id": 10001
+    },
+    "keywords": [
+        "AI", "Machine Learning"
+    ]
+}
+```
+
 - GET `/`
   - request body content: none
   - response: 200 OK (success) with user object or 401 Unauthorized (failure) with error message
 ```json
 [
-  {
-    "id": 5,
-    "title": "Test Proposal 10000",
-    "type": "gfeds",
-    "description": "This is a test proposal.",
-    "level": 3,
-    "expiration_date": "2024-05-30T00:00:00+02:00",
+    {
+    "id": 1,
+    "title": "Sw eng proposal",
+    "type": "something innovative",
+    "description": "This is an innovative proposal.",
+    "level": 5,
+    "expiration_date": "2024-08-30T00:00:00+02:00",
     "notes": "No additional notes",
     "cod_degree": "0",
-    "cod_group": 3
+    "cod_group": 1,
+    "required_knowledge": null,
+    "status": "posted"
   }, ]
 ```
 
@@ -76,9 +98,13 @@ In the `index.js` file there are the following endpoints. The logic is separated
   - request body content: none
   - response: 200 OK (success) with teachers or error message
 ```json
-  [ {
-    "cod_teacher": 7,
-    "cod_group": 0
+  [   {
+    "teacher_id": 10000,
+    "name": "Marco",
+    "surname": "Torchiano",
+    "email": "torchiano@polito.it",
+    "cod_group": 7,
+    "cod_department": "DAUIN"
   }, ]
 ```
 - GET `/:id`
@@ -86,8 +112,8 @@ In the `index.js` file there are the following endpoints. The logic is separated
   - response: 200 OK (success) with the teacher with the corresponding `id` or error message
 ```json
 {
-  "teacher_id": 7,
-  "teacher_cod_group": 0,
+  "teacher_id": 10000,
+  "teacher_cod_group": 7,
   "group_name": "Softeng",
   "cod_department": "ICM"
 }
