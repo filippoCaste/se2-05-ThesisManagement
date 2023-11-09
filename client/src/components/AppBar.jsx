@@ -69,6 +69,12 @@ export default function PrimarySearchAppBar(props) {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const {
+    user,
+    isAuthenticated,
+    loginWithRedirect,
+    logout,
+  } = useAuth0();
 
     const handleClockOpen = () => {
     setOpenClock(true);
@@ -94,8 +100,17 @@ export default function PrimarySearchAppBar(props) {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleLoginOrMobileMenuOpen = (event) => {
+    if(isAuthenticated){
+      console.log(user);
+      handleMobileMenuOpen(event);
+    }
+    else
+      loginWithRedirect();
+      
+  };
+
   const menuId = 'primary-search-account-menu';
-  const { logout } = useAuth0();
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -117,7 +132,8 @@ export default function PrimarySearchAppBar(props) {
         <Typography mr={"0.5vw"} fontWeight="bold" >
           ID:
         </Typography>
-        <Typography >Ciccio Caio</Typography>
+        <Typography >
+          {user? user.email : "Sono io"}</Typography>
       </Box>
       <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography mr={"0.5vw"} fontWeight="bold" >
@@ -197,7 +213,7 @@ export default function PrimarySearchAppBar(props) {
     </Menu>
   );
 
-  const { loginWithRedirect } = useAuth0();
+
   return (
     <Box position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, overflow:"auto", top:0, left:0, height:"15vh"}}>
       <AppBar sx={{backgroundColor:"#003049"}}>
@@ -256,7 +272,7 @@ export default function PrimarySearchAppBar(props) {
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={() => loginWithRedirect()}
+              onClick={handleLoginOrMobileMenuOpen}
               color="inherit"
             >
               <AccountCircle />
@@ -268,7 +284,7 @@ export default function PrimarySearchAppBar(props) {
               aria-label="show more"
               aria-controls={mobileMenuId}
               aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
+              onClick={handleLoginOrMobileMenuOpen}
               color="inherit"
             >
               <MoreIcon />
