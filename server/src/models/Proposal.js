@@ -9,7 +9,9 @@ export class Proposal {
     supervisor_id,
     notes,
     cod_group,
-    required_knowledge
+    required_knowledge,
+    keyword_names,
+    keyword_types
   ) {
     this.id = id;
     this.title = title;
@@ -21,6 +23,8 @@ export class Proposal {
     this.supervisor_id = supervisor_id;
     this.cod_group = cod_group;
     this.required_knowledge = required_knowledge;
+    this.keyword_names = keyword_names;
+    this.keyword_types = keyword_types;
   }
 
   // Used to send the Proposals object to the client
@@ -36,6 +40,8 @@ export class Proposal {
       notes: this.notes,
       cod_group: this.cod_group,
       required_knowledge: this.required_knowledge,
+      keyword_names: this.keyword_names,
+      keyword_types: this.keyword_types,
     };
   };
 
@@ -51,7 +57,9 @@ export class Proposal {
       json.supervisor_id,
       json.notes,
       json.cod_group,
-      json.required_knowledge
+      json.required_knowledge,
+      json.keyword_names,
+      json.keyword_types
     );
   };
 
@@ -66,7 +74,9 @@ export class Proposal {
       result.supervisor_id,
       result.notes,
       result.cod_group,
-      result.required_knowledge
+      result.required_knowledge,
+      result.keyword_names,
+      result.keyword_types
     );
   }
 }
