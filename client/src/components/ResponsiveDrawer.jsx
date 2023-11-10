@@ -41,7 +41,11 @@ export default function ResponsiveDrawer(props) {
         variant="permanent"
         sx={{
           width: drawerWidth,
-          display: !openSelectionsMobile ? "block" : "none", 
+          display: {
+            sm: openSelectionsMobile ? "block" : "none",
+            md: "block"
+          },
+
           flexShrink: 0,
           [`& .MuiDrawer-paper`]: { width: {sm:"100vw",md: drawerWidth}, boxSizing: 'border-box' },
         }}
