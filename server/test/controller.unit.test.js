@@ -4,8 +4,8 @@ import request from 'supertest';
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
-const server = require('../index');
-
+import { app } from '../index';
+const server = app;
 chai.use(chaiHttp);
 
 let httpServer;
@@ -43,8 +43,8 @@ describe('GET /api/degrees', () => {
                     done(err);
                 } else {
                     res.statusCode.should.be.equal(200);
-                    res.body.should.have.property('cod_degree');
-                    res.body.should.have.property('title_degree');
+                    res.body[0].should.have.property('cod_degree');
+                    res.body[0].should.have.property('title_degree');
                     done();
                 }
             });
@@ -60,9 +60,9 @@ describe('GET /api/groups', () => {
                     done(err);
                 } else {
                     res.statusCode.should.be.equal(200);
-                    res.body.should.have.property("cod_group");
-                    res.body.should.have.property("cod_department");
-                    res.body.should.have.property("title_group");
+                    res.body[0].should.have.property("cod_group");
+                    res.body[0].should.have.property("cod_department");
+                    res.body[0].should.have.property("title_group");
                     done();
                 }
             });
@@ -72,14 +72,14 @@ describe('GET /api/groups', () => {
 describe('GET /api/keywords', () => {
     it('it should GET all the keywords in the database', (done) => {
         chai.request(httpServer)
-            .get('/')
+            .get('/api/keywords')
             .end((err, res) => {
                 if (err) {
                     done(err);
                 } else {
                     res.statusCode.should.be.equal(200);
-                    res.body.should.have.property("id");
-                    res.body.should.have.property("name");
+                    res.body[0].should.have.property("id");
+                    res.body[0].should.have.property("name");
                     done();
                 }
             });
