@@ -170,10 +170,6 @@ function AddProposalTeacher(props)
     if(invioForm==true)
     {
        
-        //let list_co_supervisors_id= Array.from(selectedCo_Supervisors);
-        let list_keywords= Array.from(selectedKeywords);
- 
-
         setInvioForm(false); // Istruzioni provvisori aggiunte perchè quando si preme su add del campo di testo 
                              // co supervisors venive anche inviato il form
                              // soluzione provvisoria, da correggere meglio
@@ -184,9 +180,9 @@ function AddProposalTeacher(props)
 
        //metti condizione lunghezza co supervisors scelte == 0
        if( (title=='')||(description=='')||(required_knowledge=='')||(selectedSupervisor=='')
-            ||(notes=='')||(expiration_date=="dd/mm/yyyy") ||(selectedCoSupervisor == '')
+            ||(notes=='')||(expiration_date=="dd/mm/yyyy")
             ||(type=='')||(level=='')||(selectedDegree=='') 
-            || (list_keywords.length==0) ) 
+            || (selectedKeywords.length==0) || ( selectedCoSup.length==0) ) 
        {
            setOpenError(true);
            setErrorMess("ATTENTION: FIELD EMPTY");
@@ -212,9 +208,9 @@ function AddProposalTeacher(props)
                   description: description,
                   required_knowledge: required_knowledge,
                   supervisor_id: selectedSupervisor.teacher_id, 
-                  co_supervisor_id: selectedCoSupervisor.teacher_id,
+                  co_supervisors:  selectedCoSup,
                   notes: notes,
-                  list_keywords: list_keywords,          //contiene solo name
+                  keywords: selectedKeywords,          //contiene solo name
                   expiration_date: formatted_expiration,
                   type: type,
                   level: level,
@@ -226,17 +222,17 @@ function AddProposalTeacher(props)
             //POST PROPOSAL
             let list_cod_degree=[nuovo_oggetto.cod_degree];
             let supervisors_obj={"supervisor_id":  nuovo_oggetto.supervisor_id, 
-             "co_supervisor_id":  nuovo_oggetto.co_supervisor_id};
+             "co_supervisors":  nuovo_oggetto.co_supervisors};
 
             API_Proposal.postProposal
             ( 
                 nuovo_oggetto.title, nuovo_oggetto.type, nuovo_oggetto.description,
                 nuovo_oggetto.level, nuovo_oggetto.expiration_date, nuovo_oggetto.notes,
                 nuovo_oggetto.required_knowledge,  list_cod_degree, nuovo_oggetto.cod_group,
-                supervisors_obj, nuovo_oggetto.list_keywords
+                supervisors_obj, nuovo_oggetto.keywords
             )
             .then(()=> setSuccessSubmit(true))
-            .catch(err=>handleError(err));
+            .catch(err=>handleError(err));  
               
               
          }
@@ -255,8 +251,7 @@ function AddProposalTeacher(props)
   const [selectedKeywords, setSelectedKeywords] = useState([]);
      
   //CO SUPERVISORS A TENDINA
-  const [selectedCoSupervisor, SetSelectedCoSupervisor] = useState('');
-
+  const [selectedCoSup, setSelectedCoSup] = useState([]);
 
   const [invioForm,setInvioForm]=useState(false);
 
@@ -309,21 +304,27 @@ function AddProposalTeacher(props)
            <TextField label="Notes" name="notes" variant="filled" fullWidth
            value={notes}  onChange={ev=>setNotes(ev.target.value)}/>  <br /> <br />
 
-          <FormControl fullWidth>
-                  <InputLabel id="supervisor-label"> Select a Co-Supervisor</InputLabel>
-                  < Select 
-                      labelId="word-label" 
-                      id="supervisor-select" 
-                      value={selectedCoSupervisor}   
-                      onChange={(event) => {SetSelectedCoSupervisor(event.target.value); }}
-                  >
-                    {   
-                        Array.from(teachersList).map((teacher, index) => 
-                      (<MenuItem key={index} value={teacher}> {teacher.email} </MenuItem> ))
-                    }
-                  </Select>
-            </FormControl> 
-                <br />  <br /> 
+           <FormControl fullWidth>
+              <InputLabel id="cosup-label">Select Co - Supervisors</InputLabel>
+              <Select
+                labelId="cosup-label"
+                id="cosup-select"
+                multiple
+                value={selectedCoSup}
+                onChange={(event) => {setSelectedCoSup(event.target.value)}}
+                input={<Input id="select-multiple" />}
+              >
+                {Array.from(teachersList).map((teacher, index) => (
+                  <MenuItem key={index} value={teacher.teacher_id}>
+                    {teacher.email}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+          
+          
+           <br />  <br /> 
 
   
         </Grid>
