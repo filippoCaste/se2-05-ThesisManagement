@@ -21,7 +21,7 @@ function LoginPage(props) {
       username: data.get("username"),
       password: data.get("password"),
     });
-    console.log(success)
+
     if (success) navigate("/");
   };
 

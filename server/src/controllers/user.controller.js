@@ -1,8 +1,5 @@
 import passport from "passport";
-import {
-  createUser,
-  getAllUsersFromDB,
-} from "../services/user.services.js";
+import { createUser, getAllUsersFromDB } from "../services/user.services.js";
 import { strategy } from "../config/configs.js";
 
 passport.use(strategy);
@@ -14,10 +11,9 @@ export const createUserAndLogin = async (req, res) => {
       if (err) {
         return next(err);
       }
-      res.status(201).json({username: user.username});
+      res.status(201).json({ username: user.username });
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error: error.message });
   }
 };

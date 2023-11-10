@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import theme from "./theme.jsx";
+import dayjs from 'dayjs';
 import { ThemeProvider } from "@mui/material/styles";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -11,33 +12,37 @@ import AppNavBar from "./components/AppBar.jsx";
 import CustomSnackBar from "./components/CustomSnackbar.jsx";
 import User from "./models/User.js";
 import userAPI from "./services/users.api.js";
+import proposalAPI from "./services/proposals.api.js";
 
 function App() {
   const [message, setMessage] = useState("");
   const [isLoggedIn, setLoggedIn] = useState(null);
   const [user, setUser] = useState(new User());
   const [openSelectionsMobile, setOpenSelectionsMobile] = useState(false);
+ const [proposals,setProposals] = useState([]);
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const user = await userAPI.getUserInfo(); // we have the user info here
-        if (!user) return;
-        setLoggedIn(true);
-        setUser(user);
-        setMessage({ text: `Welcome, ${user.username}!`, type: "success" });
+    useEffect(() => {
+    const resultProposals = async () => {
+      try{
+        const codDegree = 1; //DEBUGGING
+        const startDate = dayjs().format("YYYY-MM-DD");
+        const resultsResponse = await proposalAPI.getProposals(codDegree);
+
+        if(resultsResponse)
+        setProposals(resultsResponse);
+   
       } catch (error) {
-        setLoggedIn(false);
+          setProposals([]);
       }
     };
+    resultProposals().catch(console.error);
+  },[])
 
-    checkAuth();
-  }, []);
 
   const handleLogin = async (credentials) => {
     try {
       const user = await userAPI.logIn(credentials);
-      console.log(user);
+
       setUser(user);
       setLoggedIn(true);
       setMessage({ text: `Welcome, ${user.username}!`, type: "success" });
@@ -54,7 +59,7 @@ function App() {
       setLoggedIn(true);
       setMessage({ text: `Welcome, ${user.username}!`, type: "success" });
     } catch (err) {
-      console.log(err);
+
       setMessage({ text: "erro", type: "error" });
     }
   };
@@ -78,7 +83,7 @@ function App() {
       />
       <CustomSnackBar message={message}></CustomSnackBar>
       <Routes>
-        <Route index path="/" element={<MainPage openSelectionsMobile={openSelectionsMobile} />} />
+        <Route index path="/" element={<MainPage openSelectionsMobile={openSelectionsMobile} proposals={proposals} setProposals={setProposals}/>} />
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/login" element={<LoginPage login={handleLogin} />} />
         <Route path="/signup" element={<SignUpPage signup={registerUser} />} />

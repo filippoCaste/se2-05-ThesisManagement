@@ -13,12 +13,12 @@ import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Box from '@mui/material/Box';
-const drawerWidth = "30vw";
+
 
 
 
 export default function ResponsiveDrawer(props) {
-  const {openSelectionsMobile} = props;
+  const {openSelectionsMobile, drawerWidth, setLevel, setExpirationDate, setKeywords, setSupervisorid} = props;
   const [openFilter, setOpenFilter] = React.useState(true);
   const [openSort, setOpenSort] = React.useState(true);
 
@@ -28,6 +28,14 @@ export default function ResponsiveDrawer(props) {
   const handleClickSort = () => {
     setOpenSort(!openSort);
   };
+  const handleResetFilters = () => {
+    // Reset all filters here
+    setLevel([]);
+    setKeywords([]);
+    setExpirationDate();
+    setSupervisorid(null); // Assuming setSupervisorid is a function to set Supervisor ID
+  };
+
   return (
       <Drawer
         variant="permanent"
@@ -60,12 +68,12 @@ export default function ResponsiveDrawer(props) {
          <Collapse in={openFilter} timeout="auto" unmountOnExit>  
           <Divider />
           <List component="div" disablePadding>
-            <FilterComponent/>
+            <FilterComponent setLevel={setLevel} setExpirationDate={setExpirationDate} setKeywords={setKeywords} setSupervisorid={setSupervisorid}/>
           </List>
           </Collapse>
 
         
-        <Link position="absolute" bottom="5vh" right="5vh" href="#" color="inherit" underline="none">Reset all</Link>  
+        <Link position="absolute" bottom="5vh" right="5vh" href="#" color="inherit" underline="none" onClick={handleResetFilters}>Reset all</Link>  
         </Box>
         
       </Drawer>
