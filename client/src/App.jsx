@@ -19,7 +19,12 @@ function App() {
   const [isLoggedIn, setLoggedIn] = useState(null);
   const [user, setUser] = useState(new User());
   const [openSelectionsMobile, setOpenSelectionsMobile] = useState(false);
- const [proposals,setProposals] = useState([]);
+  const [proposals,setProposals] = useState([]);
+  const [level,setLevel] = useState([]);
+  const [expirationDate,setExpirationDate] = useState(null);
+  const [keywords,setKeywords] = useState([]);
+  const [supervisorid,setSupervisorid] = useState(null);
+  const [filteredProposals,setFilteredProposals] = useState([]);
 
     useEffect(() => {
     const resultProposals = async () => {
@@ -37,6 +42,36 @@ function App() {
     };
     resultProposals().catch(console.error);
   },[])
+
+
+  useEffect(() => {
+    const filterProposals = () => {
+      const filtered = proposals.filter((proposal) => {
+        if (level.length !== 0 && !level.some(item => item.label === proposal.level)) {
+          return false;
+        }
+
+        if (expirationDate !== null && proposal.expirationDate < expirationDate) {
+          return false;
+        }
+
+        if (supervisorid !== null && !proposal.supervisorsInfo.some(supervisor => supervisor === id) ) {
+          return false;
+        }
+
+       // if (keywords !== null &&  proposal.keywords.contain(keywords)) {
+       //   return false;
+       // }
+
+        return true;
+      });
+
+      setFilteredProposals(filtered);
+    };
+
+    filterProposals();
+  }, [proposals, level.length, expirationDate, keywords.length, supervisorid]);
+
 
 
   const handleLogin = async (credentials) => {
@@ -80,10 +115,11 @@ function App() {
         logOut={handleLogout}
         openSelectionsMobile={openSelectionsMobile}
         setOpenSelectionsMobile={setOpenSelectionsMobile}
+        proposals={filteredProposals}
       />
       <CustomSnackBar message={message}></CustomSnackBar>
       <Routes>
-        <Route index path="/" element={<MainPage openSelectionsMobile={openSelectionsMobile} proposals={proposals} setProposals={setProposals}/>} />
+        <Route index path="/" element={<MainPage openSelectionsMobile={openSelectionsMobile} proposals={filteredProposals} setLevel={setLevel} setExpirationDate={setExpirationDate} setKeywords={setKeywords} setSupervisorid={setSupervisorid}/>} />
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/login" element={<LoginPage login={handleLogin} />} />
         <Route path="/signup" element={<SignUpPage signup={registerUser} />} />

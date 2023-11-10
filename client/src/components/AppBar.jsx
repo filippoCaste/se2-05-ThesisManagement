@@ -1,71 +1,19 @@
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import headerBackground from "../../public/img/imageedit_3_5228036516.jpg";
 import Logout from '@mui/icons-material/Logout';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import Image from "mui-image";
-import Box from '@mui/material/Box';
-
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-    },
-  },
-}));
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import { Autocomplete, AppBar, Toolbar, IconButton, Typography, Badge, MenuItem, Menu , TextField, ListItemIcon, Box} from '@mui/material';
 
 export default function PrimarySearchAppBar(props) {
-  const {openSelectionsMobile, setOpenSelectionsMobile} = props;
+  const {openSelectionsMobile, setOpenSelectionsMobile, proposals} = props;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+  console.log(proposals)
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -218,15 +166,22 @@ export default function PrimarySearchAppBar(props) {
             Thesis Proposals
           </Typography>
           <Box sx={{ flexGrow: 0.5 }} />
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Title of thesis"
-              inputProps={{ 'aria-label': 'Title of thesis' }}
-            />
-          </Search>
+          <Autocomplete 
+          id="combo-box-demo"
+          options={proposals.map((proposal) => proposal.title)}
+          sx={{
+            width: 300,
+            ".MuiAutocomplete-inputRoot": {
+              backgroundColor: 'white',
+            },
+            ".MuiInputLabel-root": {
+              backgroundColor: 'white', // Set the background color for the label
+            },
+          }}
+          renderInput={(params) => <TextField {...params} label="Thesis title" />}
+        />
+
+
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton
