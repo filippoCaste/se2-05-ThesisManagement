@@ -58,8 +58,12 @@ export const postNewProposal = (title, type, description, level, expiration_date
             reject(err);
           }
           const propId = row.id;
-          sqlSuper.run(propId, supervisor_obj.supervisor_id, supervisor_obj.co_supervisor_id || null, supervisor_obj.external_supervisor_id || null)
-          sqlSuper.finalize();
+          if (supervisor_obj.co_supervisors && supervisor_obj.co_supervisors.length>0) {
+            for (let id of supervisor_obj.co_supervisors) {
+              sqlSuper.run(propId, supervisor_obj.supervisor_id, id || null, supervisor_obj.external_supervisor_id || null)
+            }
+            sqlSuper.finalize();
+          }
 
           for (let kw of keywords) {
             sqlGetKeyw.get( kw, (err, row) => {
