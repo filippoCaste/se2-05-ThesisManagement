@@ -1,13 +1,4 @@
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
@@ -17,8 +8,9 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import headerBackground from "../../public/img/imageedit_3_5228036516.jpg";
 import Logout from '@mui/icons-material/Logout';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import Image from "mui-image";
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import { Autocomplete, AppBar, Toolbar, IconButton, Typography, Badge, MenuItem, Menu , TextField, ListItemIcon, Box} from '@mui/material';
 import Box from '@mui/material/Box';
 import { UserContext } from '../Contexts';
 import { useAuth0 } from "@auth0/auth0-react";
@@ -64,7 +56,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar(props) {
-  const {openSelectionsMobile, setOpenSelectionsMobile,currentDataAndTime, setCurrentDataAndTime} = props;
+  const {openSelectionsMobile, setOpenSelectionsMobile,currentDataAndTime, setCurrentDataAndTime, proposals} = props;
   const [openClock, setOpenClock] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -228,15 +220,22 @@ export default function PrimarySearchAppBar(props) {
             Thesis Proposals
           </Typography>
           <Box sx={{ flexGrow: 0.5 }} />
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Title of thesis"
-              inputProps={{ 'aria-label': 'Title of thesis' }}
-            />
-          </Search>
+          <Autocomplete 
+          id="combo-box-demo"
+          options={proposals.map((proposal) => proposal.title)}
+          sx={{
+            width: 300,
+            ".MuiAutocomplete-inputRoot": {
+              backgroundColor: 'white',
+            },
+            ".MuiInputLabel-root": {
+              backgroundColor: 'white', // Set the background color for the label
+            },
+          }}
+          renderInput={(params) => <TextField {...params} label="Thesis title" />}
+        />
+
+
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <IconButton

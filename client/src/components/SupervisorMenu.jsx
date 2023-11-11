@@ -11,7 +11,9 @@ const supervisors = [
   'Malnati',
 ];
 
-export default function SimpleListMenu() {
+export default function SimpleListMenu(props) {
+  const {setSupervisorid} = props;
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedSupervisor, setSelectedSupervisor] = React.useState();
   const open = Boolean(anchorEl);
@@ -22,6 +24,7 @@ export default function SimpleListMenu() {
 
   const handleMenuItemClick = (event, supervisor) => {
     setSelectedSupervisor(supervisor);
+    setSupervisorid(supervisor)
     setAnchorEl(null);
   };
 
