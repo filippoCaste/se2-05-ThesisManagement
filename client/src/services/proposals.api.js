@@ -1,4 +1,5 @@
 "use strict"
+import Proposal from "../models/Proposal";
 const SERVER_URL = "http://localhost:3001";
 
 const postProposal = async (title, type, description, level, expiration_date, notes, required_knowledge,cod_degree,cod_group, supervisors_obj, keywords) => {
@@ -61,11 +62,6 @@ const proposalsAPI = {
     postProposalKeywords,
     
 };
-
-export default proposalsAPI;
-import Proposal from "../models/Proposal";
-
-const SERVER_URL = "http://localhost:3001";
 
 const getProposals = async (cod_degree, start_date, end_date) => {
   try {
