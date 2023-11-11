@@ -10,7 +10,7 @@ export const getStudentById = (studentId) => {
             }
             if(row) {
                 const student = {
-                    student_id: row.id,
+                    id: row.id,
                     name: row.name,
                     surname: row.surname,
                     gender: row.gender,

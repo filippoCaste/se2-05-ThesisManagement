@@ -34,13 +34,13 @@ export const getTeacherById = (teacher_id) => {
             }
             if(row) {
                 const teacher = {
-                    teacher_id: row.id,
-                    name: row.name,
+                    id: row.id,
                     surname: row.surname,
+                    name: row.name,
                     email: row.email,
-                    teacher_cod_group: row.cod_group,
-                    group_name: row.title_group,
-                    cod_department: row.cod_department
+                    cod_group: row.cod_group,
+                    cod_department: row.cod_department,
+                    group_name: row.title_group
                 };
                 resolve(teacher);
             } else {

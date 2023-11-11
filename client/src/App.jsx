@@ -9,7 +9,6 @@ import NotFoundPage from "./pages/NotFoundPage.jsx";
 import AppNavBar from "./components/AppBar.jsx";
 import CustomSnackBar from "./components/CustomSnackbar.jsx";
 import { UserContext } from './Contexts';
-import { User } from "./models/User";
 import TeacherPage from "./components/TeacherPage.jsx";
 import AddProposalTeacher from "./components/AddProposalTeacher.jsx";
 import InitialPage from "./pages/InitialPage.jsx";
@@ -17,7 +16,7 @@ import proposalAPI from "./services/proposals.api.js";
 
 function App() {
   const [message, setMessage] = useState("");
-  const [user, setUser] = useState(new User());
+  const [userData, setUserData] = useState(null);
   const [openSelectionsMobile, setOpenSelectionsMobile] = useState(false);
   const [proposals,setProposals] = useState([]);
   const [level,setLevel] = useState([]);
@@ -73,46 +72,11 @@ function App() {
     filterProposals();
   }, [proposals, level.length, expirationDate, keywords.length, supervisorid]);
 
-
-
-  const handleLogin = async (credentials) => {
-    try {
-      const user = await userAPI.logIn(credentials);
-
-      setUser(user);
-      setLoggedIn(true);
-      setMessage({ text: `Welcome, ${user.username}!`, type: "success" });
-      return true;
-    } catch (err) {
-      setMessage({ text: err, type: "error" });
-      return false;
-    }
-  };
-
-  const registerUser = async (credentials) => {
-    try {
-      const user = await userAPI.registerUser(credentials);
-      setLoggedIn(true);
-      setMessage({ text: `Welcome, ${user.username}!`, type: "success" });
-    } catch (err) {
-
-      setMessage({ text: "erro", type: "error" });
-    }
-  };
-
-  const handleLogout = async () => {
-    await userAPI.logOut();
-    setLoggedIn(false);
-    setUser(new User());
-    setMessage({ text: "Logged out", type: "success" });
-  };
-
   return (
       <ThemeProvider theme={theme}>
         <BrowserRouter>
-          <UserContext.Provider value={{ user, setUser }}>
+          <UserContext.Provider value={{ userData, setUserData }}>
             <AppNavBar
-              user={user}
               openSelectionsMobile={openSelectionsMobile}
               setOpenSelectionsMobile={setOpenSelectionsMobile}
               currentDataAndTime={currentDataAndTime}
@@ -121,9 +85,9 @@ function App() {
       />
             <CustomSnackBar message={message}></CustomSnackBar>
             <Routes>
-              <Route index path="/" element={<InitialPage proposals={filteredProposals} setLevel={setLevel} setExpirationDate={setExpirationDate} setKeywords={setKeywords} setSupervisorid={setSupervisorid}/>} />
+              <Route index path="/" element={<InitialPage />} />
               <Route path="*" element={<NotFoundPage />} />
-              <Route path="/student" element={<MainPage openSelectionsMobile={openSelectionsMobile} currentDataAndTime={currentDataAndTime} />} />
+              <Route path="/student" element={<MainPage openSelectionsMobile={openSelectionsMobile} proposals={filteredProposals} setLevel={setLevel} setExpirationDate={setExpirationDate} setKeywords={setKeywords} setSupervisorid={setSupervisorid}/>} />
               <Route path="/teacher" element={<TeacherPage />}  />
               <Route path="/teacher/addProposal" element={<AddProposalTeacher />}  />
               

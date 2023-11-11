@@ -12,7 +12,6 @@ const postProposal = async (title, type, description, level, expiration_date, no
             cod_degree,cod_group, supervisors_obj, keywords
         };
 
-
         const response = await fetch(SERVER_URL + "/api/proposals", {
             method: "POST",
             headers: {
@@ -57,14 +56,9 @@ const postProposalKeywords = async (proposal_id, keyword_id) => {
 
 };
 
-const proposalsAPI = {
-    postProposal,
-    postProposalKeywords,
-    
-};
-
 const getProposals = async (cod_degree, start_date, end_date) => {
   try {
+    console.log(cod_degree + " " + start_date + " " + end_date);
     // Construct the URL with query parameters
     let url = `${SERVER_URL}/api/proposals`;
     // Query parameters based on your server-side routes
@@ -135,6 +129,8 @@ const proposalAPI = {
   getProposals,
   getKeywords,
   getLevels,
+  postProposal,
+  postProposalKeywords
 };
 
 export default proposalAPI;

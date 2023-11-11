@@ -1,6 +1,7 @@
 import {
   getKeyWordsFromDB,
   getProposalsFromDB,
+  postNewProposal
 } from "../services/proposal.services.js";
 import { LevelsEnum } from "../models/LevelsEnum.js";
 import { isValidDateFormat } from "../utils/utils.js";

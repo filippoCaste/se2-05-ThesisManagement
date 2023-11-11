@@ -1,9 +1,9 @@
 export class User {
-  constructor(id, surname, name, email) {
-    this.id = id;
-    this.surname = surname;
-    this.name = name;
-    this.email = email;
+  constructor(data) {
+    this.id = data.id;
+    this.surname = data.surname;
+    this.name = data.name;
+    this.email = data.email;
   }
 
   serialize = () => {
@@ -21,12 +21,12 @@ export class User {
 }
 
 export class Student extends User {
-  constructor(id, surname, name, email, gender, nationality, cod_degree, enrollment_year) {
-    super(id, surname, name, email);
-    this.gender = gender;
-    this.nationality = nationality;
-    this.cod_degree = cod_degree;
-    this.enrollment_year = enrollment_year;
+  constructor(data) {
+    super(data);
+    this.gender = data.gender;
+    this.nationality = data.nationality;
+    this.cod_degree = data.cod_degree;
+    this.enrollment_year = data.enrollment_year;
   }
 
   serialize = () => {
@@ -54,10 +54,11 @@ export class Student extends User {
 }
 
 export class Professor extends User {
-  constructor(id, surname, name, email, cod_group, cod_department) {
-    super(id, surname, name, email);
-    this.cod_group = cod_group;
-    this.cod_department = cod_department;
+  constructor(data) {
+    super(data);
+    this.cod_group = data.cod_group;
+    this.cod_department = data.cod_department;
+    this.group_name = data.group_name;
   }
 
   serialize = () => {
@@ -65,6 +66,7 @@ export class Professor extends User {
       ...super.serialize(),
       cod_group: this.cod_group,
       cod_department: this.cod_department,
+      group_name: this.group_name,
     };
   };
 
@@ -75,7 +77,8 @@ export class Professor extends User {
       json.name,
       json.email,
       json.cod_group,
-      json.cod_department
+      json.cod_department,
+      json.group_name
     );
   };
 }

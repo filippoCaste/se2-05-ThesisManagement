@@ -68,9 +68,9 @@ export default function PrimarySearchAppBar(props) {
     logout,
   } = useAuth0();
 
-  const { user } = React.useContext(UserContext);
-
-    const handleClockOpen = () => {
+  const { userData } = React.useContext(UserContext);
+  
+  const handleClockOpen = () => {
     setOpenClock(true);
   };
 
@@ -125,19 +125,19 @@ export default function PrimarySearchAppBar(props) {
         <Typography mr={"0.5vw"} fontWeight="bold" >
           ID:
         </Typography>
-        <Typography >{user? user.id : ""}</Typography>
+        <Typography >{userData? userData.id : ""}</Typography>
       </Box>
       <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography mr={"0.5vw"} fontWeight="bold" >
           Surname:
         </Typography>
-        <Typography >{user? user.surname : ""}</Typography>
+        <Typography >{userData? userData.surname : ""}</Typography>
       </Box>
       <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography mr={"0.5vw"} fontWeight="bold" >
           Name:
         </Typography>
-        <Typography>{user? user.name : ""}</Typography>
+        <Typography>{userData? userData.name : ""}</Typography>
       </Box>
       <MenuItem onClick={()=>logout({ logoutParams: { returnTo: window.location.origin } })} sx={{mt:"1vw"}}>
           <ListItemIcon>
@@ -220,6 +220,7 @@ export default function PrimarySearchAppBar(props) {
             Thesis Proposals
           </Typography>
           <Box sx={{ flexGrow: 0.5 }} />
+        {isAuthenticated && 
           <Autocomplete 
           id="combo-box-demo"
           options={proposals.map((proposal) => proposal.title)}
@@ -234,7 +235,7 @@ export default function PrimarySearchAppBar(props) {
           }}
           renderInput={(params) => <TextField {...params} label="Thesis title" />}
         />
-
+        }
 
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
