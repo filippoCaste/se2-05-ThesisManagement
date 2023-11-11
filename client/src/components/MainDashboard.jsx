@@ -13,7 +13,6 @@ function MainDashboard(props) {
     setSelectedItem(datum);
     setOpenDialog(true);
   };
-  console.log(proposals)
   
   return (
     <>

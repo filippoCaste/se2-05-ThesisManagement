@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import theme from "./theme.jsx";
 import dayjs from 'dayjs';
 import { ThemeProvider } from "@mui/material/styles";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
@@ -10,7 +10,6 @@ import AppNavBar from "./components/AppBar.jsx";
 import CustomSnackBar from "./components/CustomSnackbar.jsx";
 import { UserContext } from './Contexts';
 import { User } from "./models/User";
-import dayjs from 'dayjs';
 import TeacherPage from "./components/TeacherPage.jsx";
 import AddProposalTeacher from "./components/AddProposalTeacher.jsx";
 import InitialPage from "./pages/InitialPage.jsx";
@@ -26,6 +25,7 @@ function App() {
   const [keywords,setKeywords] = useState([]);
   const [supervisorid,setSupervisorid] = useState(null);
   const [filteredProposals,setFilteredProposals] = useState([]);
+  const [currentDataAndTime, setCurrentDataAndTime] =useState(dayjs());  
 
     useEffect(() => {
     const resultProposals = async () => {

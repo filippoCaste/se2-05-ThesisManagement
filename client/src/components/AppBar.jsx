@@ -2,6 +2,8 @@ import * as React from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
+import { styled, alpha } from '@mui/material/styles';
+import InputBase from '@mui/material/InputBase';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import ClockCustomized from './ClockCustomized';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -9,9 +11,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import headerBackground from "../../public/img/imageedit_3_5228036516.jpg";
 import Logout from '@mui/icons-material/Logout';
 import Image from "mui-image";
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import { Autocomplete, AppBar, Toolbar, IconButton, Typography, Badge, MenuItem, Menu , TextField, ListItemIcon, Box} from '@mui/material';
-import Box from '@mui/material/Box';
 import { UserContext } from '../Contexts';
 import { useAuth0 } from "@auth0/auth0-react";
 

@@ -8,7 +8,7 @@ import SupervisorMenu from "./SupervisorMenu"; // Assuming SupervisorMenu is a c
 import Box from "@mui/material/Box";
 
 export default function FilterComponent(props) {
-  const { setLevel, setExpirationDate, setKeywords, setSupervisorid } = props;
+  const { setLevel, setExpirationDate, setKeywords, setSupervisorid, currentDataAndTime } = props;
   const [selectedLevel, setSelectedLevel] = useState([]);
   const [selectedKeywords, setSelectedKeywords] = useState([]);
   const [selectedDates, setSelectedDates] = useState([null, null]);
