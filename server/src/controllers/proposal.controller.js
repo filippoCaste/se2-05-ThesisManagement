@@ -72,28 +72,37 @@ export const getLevels = async (req, res, next) => {
 
 export const postProposal = async (req, res) => {
   try {
-    const title = req.body.title.trim();
-    const type = req.body.type.trim();
-    const description = req.body.description.trim();
+    const title = req.body.title;
+    const type = req.body.type;
+    const description = req.body.description;
     let level = req.body.level;
     let cod_group = req.body.cod_group;
     let cod_degree = req.body.cod_degree;
     try {
       level = parseInt(level);
       cod_group = parseInt(cod_group);
-      cod_degree = parseInt(cod_degree);
+      if (Number.isNaN(level) || Number.isNaN(cod_group) || 
+              level.toString() != req.body.level || cod_group.toString() != req.body.cod_group) {
+        return res.status(400).json({ error: "Uncorrect fields" })
+      }
+      for(let c of cod_degree) {
+        let val = parseInt(c);
+        if (Number.isNaN(val) || val.toString() != c) {
+          return res.status(400).json({ error: "Uncorrect fields" })
+        }
+      }
     } catch (err) {
-      res.status(400).json({ error: "Uncorrect parameters" })
+      throw new Error("Errors converting to integer")
     }
-    const expiration_date = req.body.expiration_date.trim();
-    const notes = req.body.notes.trim();
+    const expiration_date = req.body.expiration_date;
+    const notes = req.body.notes;
 
     if (!title || !type || !description || !expiration_date || 
           !notes || !cod_degree || !req.body.supervisors_obj.supervisor_id) {
-      res.status(400).json({error: "Missing fields"})
+      return res.status(400).json({error: "Missing fields"})
     } else {
-      console.log(req.body)
-      for (let cod_degree in req.body.cod_degree) {
+      // console.log(req.body)
+      for (let cod_degree of req.body.cod_degree) {
         await postNewProposal(title.trim(), type.trim(), description.trim(), level, expiration_date.trim(), notes.trim(), cod_degree, cod_group, req.body.required_knowledge, req.body.supervisors_obj, req.body.keywords);
       }
       return res.sendStatus(200);

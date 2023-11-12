@@ -86,4 +86,180 @@ describe('GET /api/keywords', () => {
     })
 })
 
+describe('POST /api/proposals', () => {
+    it('it should post a new proposal in the database', (done) => {
+        chai.request(httpServer)
+            .post('/api/proposals')
+            .send({
+                "title": "DevOps proposal",
+                "type": "Innovation that inspires",
+                "description": "This is a DevOps proposal.",
+                "level": 4,
+                "expiration_date": "2023-12-22",
+                "notes": "No additional notes",
+                "required_knowledge": "Student must know the principle of software development.",
+                "cod_degree": ["2"],
+                "cod_group": "1",
+                "supervisors_obj": {
+                    "supervisor_id": 10000,
+                    "co_supervisors": [
+                        10001,
+                        10002
+                    ]
+                },
+                "keywords": [
+                    "Javascript"
+                ]
+            })
+            .end((err, res) => {
+                if (err) {
+                    done(err);
+                } else {
+                    res.statusCode.should.be.equal(200);
+                    done();
+                }
+            });
+    })
+
+    it('it should fail to post a proposal on the database for missing fields', (done) => {
+        chai.request(httpServer)
+            .post('/api/proposals')
+            .send({
+                "title": "DevOps proposal",
+                "type": "Innovation that inspires",
+                "level": 4,
+                "expiration_date": "2023-12-22",
+                "notes": "No additional notes",
+                "required_knowledge": "Student must know the principle of software development.",
+                "cod_degree": ["2"],
+                "cod_group": "1",
+                "supervisors_obj": {
+                    "supervisor_id": 10000,
+                    "co_supervisors": [
+                        10001,
+                        10002
+                    ]
+                },
+                "keywords": [
+                    "Javascript"
+                ]
+            })
+            .end((err, res) => {
+                if (err) {
+                    done(err);
+                } else {
+                    res.statusCode.should.be.equal(400);
+                    res.body.error.should.be.equal("Missing fields")
+                    done();
+                }
+            });
+    })
+
+    it('it should fail to post a proposal on the database for uncorrect fields', (done) => {
+        chai.request(httpServer)
+            .post('/api/proposals')
+            .send({
+                "title": "DevOps proposal",
+                "type": "Innovation that inspires",
+                "description": "This is a DevOps proposal.",
+                "level": "this is not a number",
+                "expiration_date": "2023-12-22",
+                "notes": "No additional notes",
+                "required_knowledge": "Student must know the principle of software development.",
+                "cod_degree": ["2"],
+                "cod_group": "1",
+                "supervisors_obj": {
+                    "supervisor_id": 10000,
+                    "co_supervisors": [
+                        10001,
+                        10002
+                    ]
+                },
+                "keywords": [
+                    "Javascript"
+                ]
+})
+            .end((err, res) => {
+                if (err) {
+                    done(err);
+                } else {
+                    res.statusCode.should.be.equal(400);
+                    res.body.error.should.be.equal("Uncorrect fields")
+                    done();
+                }
+            });
+    })
+
+    it('it should fail to post a proposal on the database for uncorrect fields', (done) => {
+        chai.request(httpServer)
+            .post('/api/proposals')
+            .send({
+                "title": "DevOps proposal",
+                "type": "Innovation that inspires",
+                "description": "This is a DevOps proposal.",
+                "level": 2,
+                "expiration_date": "2023-12-22",
+                "notes": "No additional notes",
+                "required_knowledge": "Student must know the principle of software development.",
+                "cod_degree": ["2"],
+                "cod_group": "1aaaaaaaaaa",
+                "supervisors_obj": {
+                    "supervisor_id": 10000,
+                    "co_supervisors": [
+                        10001,
+                        10002
+                    ]
+                },
+                "keywords": [
+                    "Javascript"
+                ]
+            })
+            .end((err, res) => {
+                if (err) {
+                    done(err);
+                } else {
+                    res.statusCode.should.be.equal(400);
+                    res.body.error.should.be.equal("Uncorrect fields")
+                    done();
+                }
+            });
+    })
+
+    it('it should fail to post a proposal on the database for uncorrect fields', (done) => {
+        chai.request(httpServer)
+            .post('/api/proposals')
+            .send({
+                "title": "DevOps proposal",
+                "type": "Innovation that inspires",
+                "description": "This is a DevOps proposal.",
+                "level": 2,
+                "expiration_date": "2023-12-22",
+                "notes": "No additional notes",
+                "required_knowledge": "Student must know the principle of software development.",
+                "cod_degree": ["2", "aaa"],
+                "cod_group": "1",
+                "supervisors_obj": {
+                    "supervisor_id": 10000,
+                    "co_supervisors": [
+                        10001,
+                        10002
+                    ]
+                },
+                "keywords": [
+                    "Javascript"
+                ]
+            })
+            .end((err, res) => {
+                if (err) {
+                    done(err);
+                } else {
+                    res.statusCode.should.be.equal(400);
+                    res.body.error.should.be.equal("Uncorrect fields")
+                    done();
+                }
+            });
+    })
+
+
+})
 
