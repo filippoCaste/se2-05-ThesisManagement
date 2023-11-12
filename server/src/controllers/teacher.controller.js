@@ -15,7 +15,7 @@ export const getTeacherId = async(req, res) => {
     try {
         const id = parseInt(req.params.id)
         if(isNaN(id)) {
-            throw new Error('Missing request body parameter');
+            return res.status(400).json({ error: "Uncorrect id" })
         }
         const teacher = await getTeacherById(id);
         if (teacher) {

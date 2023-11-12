@@ -117,10 +117,13 @@
     - 404 if the user is not found
 ```json
 {
-  "teacher_id": 10000,
-  "teacher_cod_group": 7,
-  "group_name": "Softeng",
-  "cod_department": "ICM"
+  "id": 10000,
+  "surname": "Torchiano",
+  "name": "Marco",
+  "email": "torchiano@polito.it",
+  "cod_group": 7,
+  "cod_department": "ICM",
+  "group_name": "Softeng"
 }
 ```
 

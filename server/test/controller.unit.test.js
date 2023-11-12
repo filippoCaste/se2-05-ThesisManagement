@@ -259,7 +259,110 @@ describe('POST /api/proposals', () => {
                 }
             });
     })
+})
+
+describe('GET /api/teachers/:id', () => {
+    it('it should GET the teacher in the database with the specified id', (done) => {
+        chai.request(httpServer)
+            .get('/api/teachers/10000')
+            .end((err, res) => {
+                if (err) {
+                    done(err);
+                } else {
+                    res.statusCode.should.be.equal(200);
+                    res.body.should.have.property("id");
+                    res.body.should.have.property("name");
+                    res.body.should.have.property("surname");
+                    res.body.should.have.property("email");
+                    res.body.should.have.property("cod_group");
+                    res.body.should.have.property("group_name");
+                    res.body.should.have.property("cod_department");
+
+                    done();
+                }
+            });
+    })
+
+    it('it should FAIL for uncorrect id', (done) => {
+        chai.request(httpServer)
+            .get('/api/teachers/1')
+            .end((err, res) => {
+                if (err) {
+                    done(err);
+                } else {
+                    res.statusCode.should.be.equal(404);
+                    res.body.error.should.be.equal("User not found")
+                    done();
+                }
+            });
+    })
+
+    it('it should FAIL for uncorrect parameter', (done) => {
+        chai.request(httpServer)
+            .get('/api/teachers/myself')
+            .end((err, res) => {
+                if (err) {
+                    done(err);
+                } else {
+                    res.statusCode.should.be.equal(400);
+                    res.body.error.should.be.equal("Uncorrect id")
+                    done();
+                }
+            });
+    })
 
 
 })
 
+describe('GET /api/students/:id', () => {
+    it('it should GET the student in the database with the specified id', (done) => {
+        chai.request(httpServer)
+            .get('/api/students/400000')
+            .end((err, res) => {
+                if (err) {
+                    done(err);
+                } else {
+                    res.statusCode.should.be.equal(200);
+                    res.body.should.have.property("id");
+                    res.body.should.have.property("name");
+                    res.body.should.have.property("surname");
+                    res.body.should.have.property("email");
+                    res.body.should.have.property("gender");
+                    res.body.should.have.property("nationality");
+                    res.body.should.have.property("cod_degree");
+                    res.body.should.have.property("enrollment_year");
+
+                    done();
+                }
+            });
+    })
+
+    it('it should FAIL for uncorrect id', (done) => {
+        chai.request(httpServer)
+            .get('/api/students/1')
+            .end((err, res) => {
+                if (err) {
+                    done(err);
+                } else {
+                    res.statusCode.should.be.equal(404);
+                    res.body.error.should.be.equal("User not found")
+                    done();
+                }
+            });
+    })
+
+    it('it should FAIL for uncorrect parameter', (done) => {
+        chai.request(httpServer)
+            .get('/api/students/myself')
+            .end((err, res) => {
+                if (err) {
+                    done(err);
+                } else {
+                    res.statusCode.should.be.equal(400);
+                    res.body.error.should.be.equal("Uncorrect id")
+                    done();
+                }
+            });
+    })
+
+})
