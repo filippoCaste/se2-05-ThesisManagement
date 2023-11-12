@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -6,54 +6,51 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import ChipsArray from "./ChipsCustomized";
 import SupervisorMenu from "./SupervisorMenu"; // Assuming SupervisorMenu is a custom component you'll implement
 import Box from "@mui/material/Box";
+import teachersAPI from '../services/teachers.api.js';
+import levelAPI from "../services/levels.api.js";
+import keywordsAPI from "../services/keywords.api.js";
+
 
 export default function FilterComponent(props) {
-  const { setLevel, setExpirationDate, setKeywords, setSupervisorid, currentDataAndTime } = props;
-  const [selectedLevel, setSelectedLevel] = useState([]);
-  const [selectedKeywords, setSelectedKeywords] = useState([]);
-  const [selectedDates, setSelectedDates] = useState([null, null]);
+  const {  setSelectedLevels,
+  selectedExpirationDate,
+  selectedLevels,
+  setSelectedExpirationDate,
+  selectedStartExpirationDate,
+  setSelectedStartExpirationDate,
+  setSelectedKeywords,
+  setSelectedSupervisorId,
+  selectedSupervisorId,
+  selectedKeywords,
+  currentDataAndTime } = props;
 
-  const level = [
-    { key: 0, label: "1" },
-    { key: 1, label: "2" },
-    { key: 2, label: "3" },
-    { key: 3, label: "4" },
-    { key: 4, label: "5" },
-  ];
 
-  const keywords = [
-    { key: 0, label: "React" },
-    { key: 1, label: "Java" },
-    { key: 2, label: "AI" },
-    { key: 3, label: "JavaScript" },
-    { key: 4, label: "Python" },
-    { key: 5, label: "CSS" },
-    { key: 6, label: "HTML" },
-    { key: 7, label: "Node.js" },
-    { key: 8, label: "Machine Learning" },
-  ];
+  const [availableLevels,setAvailableLevels] = useState([]);
+  const [availableKeywords,setAvailableKeywords] = useState([]);
+  const [availableSupervisors,setAvailableSupervisors] = useState([]);
 
-  const handleLevelChange = (selectedItems) => {
-    setSelectedLevel(selectedItems);
-    setLevel(selectedItems);
-  };
+    useEffect(() => {
+    
+    const retrieveFilterOptions = async() =>{
+      const levels = await levelAPI.getLevels();
+      const keywords = await keywordsAPI.getAllKeywords();
+      const supervisors = await teachersAPI.getAllTeachers();
+      setAvailableKeywords(keywords);
+      setAvailableLevels(levels);
+      setAvailableSupervisors(supervisors);
+    }
 
-  const handleKeywordsChange = (selectedItems) => {
-    setSelectedKeywords(selectedItems);
-    setKeywords(selectedItems);
-  };
+    retrieveFilterOptions();
 
-  const handleDatesChange = (newDates) => {
-    setSelectedDates(newDates);
-    setExpirationDate(newDates);
-  };
+  }, []);
+
 
   return (
     <Box>
       <Typography variant="h7" fontWeight={"bold"}>
         Level:
       </Typography>
-      <ChipsArray array={level} onChange={handleLevelChange} selectedItems={selectedLevel} />
+      <ChipsArray array={availableLevels} setSelectedArray={setSelectedLevels} selectedArray={selectedLevels} />
       
       <Typography variant="h7" fontWeight={"bold"}>
         Expiration Date:
@@ -65,8 +62,8 @@ export default function FilterComponent(props) {
 
             minDate={currentDataAndTime}
             format="DD/MM/YYYY"
-            value={selectedDates[0]}
-            onChange={(date) => handleDatesChange([date, selectedDates[1]])}
+            value={selectedStartExpirationDate}
+            onChange={(date) => setSelectedStartExpirationDate(date)}
             slotProps={{
               textField: {
                 helperText: "DD/MM/YYYY",
@@ -78,8 +75,8 @@ export default function FilterComponent(props) {
 
             minDate={currentDataAndTime}
             format="DD/MM/YYYY"
-            value={selectedDates[1]}
-            onChange={(date) => handleDatesChange([selectedDates[0], date])}
+            value={selectedExpirationDate}
+            onChange={(date) => setSelectedExpirationDate(date)}
             slotProps={{
               textField: {
                 helperText: "DD/MM/YYYY",
@@ -93,14 +90,15 @@ export default function FilterComponent(props) {
         <Typography variant="h7" fontWeight={"bold"}>
           Keywords:
         </Typography>
-        <ChipsArray array={keywords} onChange={handleKeywordsChange} selectedItems={selectedKeywords} />
+       {<ChipsArray array={availableKeywords} setSelectedArray={setSelectedKeywords} selectedArray={selectedKeywords} />
+       }
       </Box>
       
       <Box sx={{ mt: "2vh" }}>
         <Typography variant="h7" fontWeight={"bold"}>
           Supervisor:
         </Typography>
-        <SupervisorMenu setSupervisorid={setSupervisorid} />
+        <SupervisorMenu setSupervisorid={setSelectedSupervisorId} supervisors={availableSupervisors} supervisorid={selectedSupervisorId} />
       </Box>
     </Box>
   );

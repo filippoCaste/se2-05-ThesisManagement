@@ -1,7 +1,5 @@
 import * as React from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -11,57 +9,16 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import headerBackground from "../../public/img/imageedit_3_5228036516.jpg";
 import Logout from '@mui/icons-material/Logout';
 import Image from "mui-image";
-import { Autocomplete, AppBar, Toolbar, IconButton, Typography, Badge, MenuItem, Menu , TextField, ListItemIcon, Box} from '@mui/material';
+import { AppBar, Toolbar, IconButton, Typography, Badge, MenuItem, Menu , TextField, ListItemIcon, Box} from '@mui/material';
 import { UserContext } from '../Contexts';
 import { useAuth0 } from "@auth0/auth0-react";
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-    },
-  },
-}));
 
 export default function PrimarySearchAppBar(props) {
   const {openSelectionsMobile, setOpenSelectionsMobile,currentDataAndTime, setCurrentDataAndTime, proposals} = props;
   const [openClock, setOpenClock] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const [anchorElA, setAnchorElA] = React.useState(null);
+  const [mobileMoreAnchorElA, setMobileMoreanchorElA] = React.useState(null);
   const {
     isAuthenticated,
     loginWithRedirect,
@@ -79,19 +36,19 @@ export default function PrimarySearchAppBar(props) {
   };
 
   const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorElA(event.currentTarget);
   };
 
   const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
+    setMobileMoreanchorElA(null);
   };
   const handleMenuClose = () => {
-    setAnchorEl(null);
+    setAnchorElA(null);
     handleMobileMenuClose();
   };
 
   const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
+    setMobileMoreanchorElA(event.currentTarget);
   };
 
   const handleLoginOrMobileMenuOpen = (event) => {
@@ -106,7 +63,7 @@ export default function PrimarySearchAppBar(props) {
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
-      anchorEl={anchorEl}
+      anchorEl={anchorElA}
       anchorOrigin={{
         vertical: 'top',
         horizontal: 'right',
@@ -117,7 +74,7 @@ export default function PrimarySearchAppBar(props) {
         vertical: 'top',
         horizontal: 'right',
       }}
-      open={isMenuOpen}
+      open={Boolean(anchorElA)}
       onClose={handleMenuClose}
       sx={{elevation:3}}
     >
@@ -139,7 +96,7 @@ export default function PrimarySearchAppBar(props) {
         </Typography>
         <Typography>{userData? userData.name : ""}</Typography>
       </Box>
-      <MenuItem onClick={()=>logout({ logoutParams: { returnTo: window.location.origin } })} sx={{mt:"1vw"}}>
+      <MenuItem id="logout" onClick={()=>logout({ logoutParams: { returnTo: window.location.origin } })} sx={{mt:"1vw"}}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
@@ -152,7 +109,7 @@ export default function PrimarySearchAppBar(props) {
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
-      anchorEl={mobileMoreAnchorEl}
+      anchorEl={setMobileMoreanchorElA}
       anchorOrigin={{
         vertical: 'top',
         horizontal: 'right',
@@ -163,10 +120,10 @@ export default function PrimarySearchAppBar(props) {
         vertical: 'top',
         horizontal: 'right',
       }}
-      open={isMobileMenuOpen}
+      open={Boolean(mobileMoreAnchorElA)}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      <MenuItem id="notifications">
         <IconButton
           size="large"
           aria-label="show 17 new notifications"
@@ -178,7 +135,7 @@ export default function PrimarySearchAppBar(props) {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem id="profile" onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -219,23 +176,6 @@ export default function PrimarySearchAppBar(props) {
           >
             Thesis Proposals
           </Typography>
-          <Box sx={{ flexGrow: 0.5 }} />
-        {isAuthenticated && 
-          <Autocomplete 
-          id="combo-box-demo"
-          options={proposals.map((proposal) => proposal.title)}
-          sx={{
-            width: 300,
-            ".MuiAutocomplete-inputRoot": {
-              backgroundColor: 'white',
-            },
-            ".MuiInputLabel-root": {
-              backgroundColor: 'white', // Set the background color for the label
-            },
-          }}
-          renderInput={(params) => <TextField {...params} label="Thesis title" />}
-        />
-        }
 
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>

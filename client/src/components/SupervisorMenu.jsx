@@ -5,17 +5,12 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 
-const supervisors = [
-  'Cabodi',
-  'Quer',
-  'Malnati',
-];
+
 
 export default function SimpleListMenu(props) {
-  const {setSupervisorid} = props;
+  const {supervisorId, setSupervisorid, supervisors} = props;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [selectedSupervisor, setSelectedSupervisor] = React.useState();
   const open = Boolean(anchorEl);
 
   const handleClickListItem = (event) => {
@@ -23,8 +18,7 @@ export default function SimpleListMenu(props) {
   };
 
   const handleMenuItemClick = (event, supervisor) => {
-    setSelectedSupervisor(supervisor);
-    setSupervisorid(supervisor)
+    setSupervisorid(supervisor.teacher_id)
     setAnchorEl(null);
   };
 
@@ -33,25 +27,31 @@ export default function SimpleListMenu(props) {
   };
 
   return (
-    <div>
+    <>
       <List
         component="nav"
         aria-label="Supervisors"
         sx={{ bgcolor: 'background.paper' }}
       >
-        <ListItem
-          button
-          id="supervisor-button"
-          aria-haspopup="listbox"
-          aria-controls="supervisor-menu"
-          aria-label="Select supervisor"
-          aria-expanded={open ? 'true' : undefined}
-          onClick={handleClickListItem}
-        >
-          <ListItemText
-            primary={selectedSupervisor ? selectedSupervisor : "Select a supervisor"}
-          />
-        </ListItem>
+<ListItem
+  button
+  id="supervisor-button"
+  aria-haspopup="listbox"
+  aria-controls="supervisor-menu"
+  aria-label="Select supervisor"
+  aria-expanded={open ? 'true' : undefined}
+  onClick={handleClickListItem}
+>
+  <ListItemText
+    primary={
+      supervisorId
+        ? supervisors.find((supervisor) => supervisor.teacher_id === supervisorId)
+          ? supervisors.find((supervisor) => supervisor.teacher_id === supervisorId).name + " " + supervisors.find((supervisor) => supervisor.teacher_id === supervisorId).surname
+          : "Select a supervisor"
+        : "Select a supervisor"
+    }
+  />
+</ListItem>
       </List>
       <Menu
         id="supervisor-menu"
@@ -65,13 +65,13 @@ export default function SimpleListMenu(props) {
       >
         {supervisors.map((supervisor) => (
           <MenuItem
-            key={supervisor}
+            key={supervisor.teacher_id}
             onClick={(event) => handleMenuItemClick(event, supervisor)}
           >
-            {supervisor}
+            {supervisor.name + " " + supervisor.surname}
           </MenuItem>
         ))}
       </Menu>
-    </div>
+    </>
   );
 }

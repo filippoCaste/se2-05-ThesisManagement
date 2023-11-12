@@ -1,11 +1,11 @@
 import * as React from 'react';
-
+import { useEffect } from 'react';
 import Drawer from '@mui/material/Drawer';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import Link from '@mui/material/Link';
 import FilterComponent from './FilterComponent.jsx';
-import SortComponent from './SortComponent.jsx';
+
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
@@ -15,25 +15,36 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import Box from '@mui/material/Box';
 
 
-
-
 export default function ResponsiveDrawer(props) {
-  const {openSelectionsMobile, drawerWidth, setLevel, setExpirationDate, setKeywords, setSupervisorid} = props;
+  const {
+    openSelectionsMobile,
+    drawerWidth,
+    setSelectedLevels,
+    setSelectedExpirationDate,
+    selectedKeywords,
+    setSelectedKeywords,
+    setSelectedSupervisorId,
+    selectedExpirationDate,
+    selectedLevels,
+    selectedSupervisorId,    
+    currentDataAndTime,
+    selectedStartExpirationDate,
+    setSelectedStartExpirationDate,
+  } = props;
   const [openFilter, setOpenFilter] = React.useState(true);
-  const [openSort, setOpenSort] = React.useState(true);
+
 
   const handleClickFilter = () => {
     setOpenFilter(!openFilter);
   };
-  const handleClickSort = () => {
-    setOpenSort(!openSort);
-  };
+
   const handleResetFilters = () => {
     // Reset all filters here
-    setLevel([]);
-    setKeywords([]);
-    setExpirationDate();
-    setSupervisorid(null); // Assuming setSupervisorid is a function to set Supervisor ID
+    setSelectedLevels([]);
+    setSelectedKeywords([]);
+    setSelectedExpirationDate(null);
+    setSelectedSupervisorId(null); // Assuming setSupervisorid is a function to set Supervisor ID
+
   };
 
   return (
@@ -51,18 +62,6 @@ export default function ResponsiveDrawer(props) {
         }}
       >
         <Box sx={{ overflow: 'auto', mt:"15vh", mx:"2vh" }}>
-        
-        <ListItemButton onClick={handleClickSort}>
-          <Typography variant="h7" fontWeight={'bold'} >Sort by:</Typography> 
-          <ListItemText  />
-          {openSort ? <ExpandLess /> : <ExpandMore />}
-         </ListItemButton>
-         <Collapse in={openSort} timeout="auto" unmountOnExit>  
-          <Divider />
-          <List component="div" disablePadding>
-            <SortComponent/>
-          </List>
-          </Collapse>
 
         <ListItemButton onClick={handleClickFilter}>
           <Typography variant="h7" fontWeight={'bold'} >Filter by:</Typography> 
@@ -72,7 +71,19 @@ export default function ResponsiveDrawer(props) {
          <Collapse in={openFilter} timeout="auto" unmountOnExit>  
           <Divider />
           <List component="div" disablePadding>
-            <FilterComponent setLevel={setLevel} setExpirationDate={setExpirationDate} setKeywords={setKeywords} setSupervisorid={setSupervisorid}/>
+          <FilterComponent
+            setSelectedLevels={setSelectedLevels}
+            selectedExpirationDate={selectedExpirationDate}
+            selectedLevels={selectedLevels}
+            setSelectedExpirationDate={setSelectedExpirationDate}
+            setSelectedKeywords={setSelectedKeywords}
+            setSelectedSupervisorId={setSelectedSupervisorId}
+            selectedSupervisorId={selectedSupervisorId}
+            selectedKeywords={selectedKeywords}
+            currentDataAndTime={currentDataAndTime}
+            selectedStartExpirationDate={selectedStartExpirationDate}
+            setSelectedStartExpirationDate={setSelectedStartExpirationDate}
+          />
           </List>
           </Collapse>
 
