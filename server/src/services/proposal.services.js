@@ -193,20 +193,5 @@ export const postNewProposal = (title, type, description, level, expiration_date
     } catch(err) {
       reject(err)
     }
-    // const sql = "BEGIN TRANSACTION; " +
-    // "SELECT last_insert_rowid() AS proposal_id_last;" +
-    // "INSERT INTO Supervisors(proposal_id, supervisor_id, co_supervisor_id, external_supervisor)" +
-    // "VALUES(proposal_id_last,?,?,?);" +
-    // "COMMIT TRANSACTION;"
-
-    // const date = dayjs(expiration_date).format();
-    // db.run(sql, [title, type, description, level, date, notes, cod_degree, cod_group, required_knowledge, supervisor_obj.supervisor_id, 
-    //                 supervisor_obj.co_supervisor_id, supervisor_obj.external_supervisor_id], (err) => {
-    //   if(err) {
-    //     reject(err)
-    //   } else {
-    //     resolve(true);
-    //   }
-    // })
   })
 }
