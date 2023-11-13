@@ -74,11 +74,34 @@ const getAllProposals = async () => {
 
 };
 
+
+const getProposalsByTeacherId = async (teacherId) => {
+    try {
+        const response = await fetch(SERVER_URL + `/api/proposals/teachers/${teacherId}`, {
+            method: "GET",
+        });
+        if (response.ok) {
+            const proposals = await response.json();
+            return proposals;
+        } else {
+            const message = await response.text();
+            throw new Error("Application error: " + message);
+        }
+    } catch (error) {
+        throw new Error("Network Error: " + error.message);
+    }
+
+};
+
+
+
+
 const proposalsAPI = {
     postProposal,
     postProposalKeywords,
-    getAllProposals
-    
+    getAllProposals,
+    getProposalsByTeacherId
+
 };
 
 export default proposalsAPI;

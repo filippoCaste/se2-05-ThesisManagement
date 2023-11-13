@@ -158,7 +158,6 @@ function AddProposalTeacher(props)
   const [required_knowledge,setRequired_knowledge]=useState('esame di architetture');
   const [notes,setNotes]=useState('blabla');
   const [type,setType]=useState('tipo');
-  const [level,setLevel]=useState(1);
   const [expiration_date,setExpirationDate]=useState("08/11/2023");
   
        
@@ -181,7 +180,7 @@ function AddProposalTeacher(props)
        //metti condizione lunghezza co supervisors scelte == 0
        if( (title=='')||(description=='')||(required_knowledge=='')||(selectedSupervisor=='')
             ||(notes=='')||(expiration_date=="dd/mm/yyyy")
-            ||(type=='')||(level=='')||(selectedDegree=='') 
+            ||(type=='')||(selectedLevel=='')||(selectedDegree=='') 
             || (selectedKeywords.length==0) || ( selectedCoSup.length==0) ) 
        {
            setOpenError(true);
@@ -202,21 +201,32 @@ function AddProposalTeacher(props)
 
           let formatted_expiration = formatDate(expiration_date);
 
-              let nuovo_oggetto=
-              {
-                  title:   title,
-                  description: description,
-                  required_knowledge: required_knowledge,
-                  supervisor_id: selectedSupervisor.teacher_id, 
-                  co_supervisors:  selectedCoSup,
-                  notes: notes,
-                  keywords: selectedKeywords,          //contiene solo name
-                  expiration_date: formatted_expiration,
-                  type: type,
-                  level: level,
-                  cod_group: teacherLoggato.teacher_cod_group,  
-                  cod_degree: selectedDegree.cod_degree,
-              }
+          //converto level 1: Bachelor of Science
+          //converto level 2: Master of Science
+          let livello_convertito;
+         
+          if(selectedLevel=='Bachelor of Science')
+              livello_convertito= 1;
+
+          if(selectedLevel=='Master of Science')
+              livello_convertito= 2;
+         
+              
+          let nuovo_oggetto=
+          {
+              title:   title,
+              description: description,
+              required_knowledge: required_knowledge,
+              supervisor_id: selectedSupervisor.teacher_id, 
+              co_supervisors:  selectedCoSup,
+              notes: notes,
+              keywords: selectedKeywords,          //contiene solo name
+              expiration_date: formatted_expiration,
+              type: type,
+              level: livello_convertito,
+              cod_group: teacherLoggato.teacher_cod_group,  
+              cod_degree: selectedDegree.cod_degree,
+          }
             
             
             //POST PROPOSAL
@@ -252,6 +262,11 @@ function AddProposalTeacher(props)
      
   //CO SUPERVISORS A TENDINA
   const [selectedCoSup, setSelectedCoSup] = useState([]);
+
+  //LEVELS A TENDINA
+  const [selectedLevel, setSelectedLevel] = useState('');
+  const levels = ['Bachelor of Science', 'Master of Science'];
+  
 
   const [invioForm,setInvioForm]=useState(false);
 
@@ -355,8 +370,25 @@ function AddProposalTeacher(props)
        <TextField label="Type" name="type" variant="filled"  fullWidth
         value={type}  onChange={ev=>setType(ev.target.value)}/>  <br /> <br />
 
-       <TextField label="Level" name="level" variant="outlined"  fullWidth 
-        value={level}  onChange={ev=>setLevel(ev.target.value)}/>  <br /> <br />
+        <FormControl fullWidth>
+            <InputLabel id="level-label">Select Level</InputLabel>
+            <Select
+              labelId="level-label"
+              id="level-select"
+              value={selectedLevel}
+              label="Select Level"
+              onChange={(event) => {
+                setSelectedLevel(event.target.value);
+              }}
+            >
+              {levels.map((level, index) => (
+                <MenuItem key={index} value={level}>
+                  {level}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>   <br /> <br />
+
 
     
       <FormControl fullWidth>
