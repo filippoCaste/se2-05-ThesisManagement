@@ -105,3 +105,36 @@ export const postNewProposal = (title, type, description, level, expiration_date
     // })
   })
 }
+
+export const getProposalsByTeacherId = (teacherId) => {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * " +
+                " FROM Proposals p, Groups g, Degrees d" +
+                " WHERE p.id IN(SELECT proposal_id FROM Supervisors WHERE supervisor_id = ? OR co_supervisor_id = ?) AND " +
+                "g.cod_group = p.cod_group AND d.cod_degree = p.cod_degree ";
+    db.all(sql, [teacherId, teacherId], (err, rows) => {
+      if (err) {
+        return reject(err);
+      }
+      const proposals = rows.map((e) => {
+        const obj = {
+          id: e.id,
+          title: e.title,
+          description: e.description,
+          type: e.type,
+          level: e.level,
+          expiration_date: e.expiration_date,
+          notes: e.notes,
+          cod_degree: e.cod_degree,
+          cod_group: e.cod_group,
+          required_knowledge: e.required_knowledge,
+          status: e.status,
+          title_degree: e.title_degree,
+          title_group: e.title_group,
+        }
+        return obj;
+      });
+      resolve(proposals);
+    });
+  });
+}

@@ -71,6 +71,32 @@
   }, ]
 ```
 
+- GET `/teachers/:id`
+  - request body content: none
+  - response: 
+    - 200 OK (success) with array of thesis proposals object 
+    - 400 Bad Request if the id is of unknown teachers
+    - 401 Unauthorized (failure) with error message
+```json
+[
+  {
+    "id": 15,
+    "title": "Thesis proposal IV",
+    "description": "This is an innovative proposal.",
+    "type": "Innovation that inspires",
+    "level": 4,
+    "expiration_date": "2024-03-01T00:00:00+01:00",
+    "notes": "No additional notes",
+    "cod_degree": 2,
+    "cod_group": 1,
+    "required_knowledge": "Student must know the principle of design of mobile applications.",
+    "status": "posted",
+    "title_degree": "COMMUNICATIONS ENGINEERING",
+    "title_group": "Elite"
+  },
+]
+```
+
 ### `/api/degrees`:
 
 - GET `/`

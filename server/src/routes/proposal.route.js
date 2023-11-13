@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getProposals, getKeywords, getLevels, postProposal } from '../controllers/proposal.controller.js';
+import { getProposals, getKeywords, getLevels, postProposal, getProposalTeacherId } from '../controllers/proposal.controller.js';
 
 const router = Router();
 
@@ -10,5 +10,7 @@ router.post('/', postProposal);
 router.get('/keywords', getKeywords);
 
 router.get('/levels', getLevels);
+
+router.get('/teachers/:id', getProposalTeacherId)
 
 export { router };
