@@ -12,20 +12,20 @@ export const getProposals = async (req, res, next) => {
     const end_expiration_date = req.query.end_date;
 
     if (!cod_degree) {
-      return res.status(400).json({ message: "cod_degree is required" });
+      return res.status(400).json({ error: "Request should contain a cod_degree" });
     }
     if (start_expiration_date && isValidDateFormat(start_expiration_date) === false) {
       return res
         .status(400)
         .json({
-          message: "Invalid start_expiration_date, format should be YYYY-MM-dd",
+          error: "Invalid start_expiration_date, format should be YYYY-MM-dd",
         });
     }
     if (end_expiration_date && isValidDateFormat(end_expiration_date) === false) {
       return res
         .status(400)
         .json({
-          message: "Invalid end_expiration_date, format should be YYYY-MM-dd",
+          error: "Invalid end_expiration_date, format should be YYYY-MM-dd",
         });
     }
 
@@ -46,25 +46,25 @@ export const getProposals = async (req, res, next) => {
       start_expiration_date,
       end_expiration_date
     );
-    return res.json(proposals);
+    return res.status(200).json(proposals);
   } catch (err) {
-    return next(err);
+    res.status(500).json({ error: err.message });
   }
 };
 
 export const getKeywords = async (req, res, next) => {
   try {
     const keywords = await getKeyWordsFromDB();
-    return res.json(keywords);
+    return res.status(200).json(keywords);
   } catch (err) {
-    return next(err);
+    res.status(500).json({ error: err.message });
   }
 };
 
 export const getLevels = async (req, res, next) => {
   try {
-    return res.json(LevelsEnum);
+    return res.status(200).json(LevelsEnum);
   } catch (err) {
-    return next(err);
+    res.status(500).json({ error: err.message });
   }
 };
