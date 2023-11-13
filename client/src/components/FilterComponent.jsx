@@ -98,7 +98,11 @@ export default function FilterComponent(props) {
         <Typography variant="h7" fontWeight={"bold"}>
           Supervisor:
         </Typography>
-        <SupervisorMenu setSupervisorid={setSelectedSupervisorId} supervisors={availableSupervisors} supervisorid={selectedSupervisorId} />
+        <SupervisorMenu
+          setSupervisorid={setSelectedSupervisorId}
+          supervisors={availableSupervisors}
+          supervisorId={selectedSupervisorId}
+        />
       </Box>
     </Box>
   );
