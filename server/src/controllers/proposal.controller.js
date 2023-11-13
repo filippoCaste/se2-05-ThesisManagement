@@ -46,25 +46,25 @@ export const getProposals = async (req, res, next) => {
       start_expiration_date,
       end_expiration_date
     );
-    return res.json(proposals);
+    return res.status(200).json(proposals);
   } catch (err) {
-    return next(err);
+    res.status(500).json({ error: err.message });
   }
 };
 
 export const getKeywords = async (req, res, next) => {
   try {
     const keywords = await getKeyWordsFromDB();
-    return res.json(keywords);
+    return res.status(200).json(keywords);
   } catch (err) {
-    return next(err);
+    res.status(500).json({ error: err.message });
   }
 };
 
 export const getLevels = async (req, res, next) => {
   try {
-    return res.json(LevelsEnum);
+    return res.status(200).json(LevelsEnum);
   } catch (err) {
-    return next(err);
+    res.status(500).json({ error: err.message });
   }
 };
