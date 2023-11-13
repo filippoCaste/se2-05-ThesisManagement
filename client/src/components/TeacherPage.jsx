@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,6 +8,9 @@ import Link from '@mui/material/Link';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Typography from '@mui/material/Typography';
+import { UserContext } from '../Contexts';
+import {jwtDecode} from 'jwt-decode';
+import { Professor } from '../models/User';
 
 
 import API_Proposal from '../services/proposals.api'
@@ -16,6 +19,16 @@ import API_Degrees from '../services/degrees.api'
 function TeacherPage(props)
 {
     const navigate = useNavigate();
+    const { userData, setUserData} = useContext(UserContext);
+
+   useEffect(() => {
+      const token = window.location.search.split('=')[1];
+
+      const decodeToken = jwtDecode(token);
+
+      setUserData(new Professor(decodeToken));
+      
+   }, []);
 
  
     return(
@@ -27,7 +40,6 @@ function TeacherPage(props)
 
           <Button variant="contained" color="primary"> SEE ALL MY THESIS PROPOSAL </Button>  <br />
 
-       
        </>
 
 

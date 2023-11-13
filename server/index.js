@@ -9,10 +9,33 @@ import { router as groupRoutes } from "./src/routes/group.route.js";
 import { router as studentRoutes } from "./src/routes/student.route.js";
 import { router as keywordRoutes } from "./src/routes/keyword.route.js";
 import { router as levelRoutes } from "./src/routes/level.route.js";
+import { getTeacherById } from './src/services/teacher.services.js';
 import passport from "passport";
 import session from "express-session";
 import morgan from "morgan";
-import { strategy } from "./src/config/configs.js";
+import auth0Strategy from "passport-auth0";
+import jwt from "jsonwebtoken";
+
+passport.use(new auth0Strategy({
+  domain: 'thesis-management-05.eu.auth0.com',
+  clientID: 'aLJmcMkDJkpc8Rql8EfxLVl4ND9aUyWp',
+  clientSecret: 'ZNqGAzme8S6TBGJ_rMB3NfcAJgZnCikGWRB0nCkswCwjWQ7oacFDh3D_gHVYmaOj',
+  callbackURL: 'http://localhost:3001/login/callback',
+  scope: 'openid profile email',
+  credentials: true
+},
+  function (accessToken, refreshToken, extraParams, profile, done) {
+      return done(null, profile.nickname);
+  }
+));
+
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(async function (user, done) {
+          done(null, user);
+});
 
 const app = express();
 const port = 3001;
@@ -26,16 +49,6 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-passport.use(strategy);
-
-passport.serializeUser(function (user, callback) {
-  callback(null, user);
-});
-
-passport.deserializeUser(function (user, callback) {
-  return callback(null, user);
-});
-
 app.use(
   session({
     secret: "session-secret",
@@ -44,7 +57,52 @@ app.use(
     cookie: { _expires: 60000000, maxAge: 60000000 },
   })
 );
-app.use(passport.authenticate("session"));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get('/login', (req, res, next) => {
+  passport.authenticate('auth0', function (err, user, info) {
+      if (err) return next(err);
+      if (!user) return res.redirect('/login');
+      req.logIn(user, function (err) {
+          if (err) { return next(err); }
+          return res.redirect('/');
+      });
+  }
+  )(req, res, next);
+});
+
+app.get('/login/callback', (req, res, next) => {
+  passport.authenticate('auth0', function (err, user, info) {
+      if (err) return next(err);
+      if (!user) return res.redirect('/login');
+      req.logIn(user, async function (err) {
+          if (err) { return next(err); }
+
+          const userData = await getTeacherById(user.substring(1, user.length));
+
+          if (userData === undefined)
+              return next(err);
+
+          const token = jwt.sign(userData, "my_secret_key");
+
+          const redirectURL = "http://localhost:5173/teacher?token=" + token;
+          return res.redirect(redirectURL);
+      });
+  }
+  )(req, res, next);
+}
+);
+
+app.get('/logout', (req, res) => {
+  req.logOut(res, function (err) {
+      if (err) { return next(err); }
+
+      const redirectURL = "http://localhost:5173/";
+      return res.redirect(redirectURL);
+  });
+});
 
 app.use("/api/session", sessionRoutes);
 app.use("/api/users", userRoutes);

@@ -28,14 +28,14 @@ function App() {
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <UserContext.Provider value={{ userData, setUserData }}>
+            <CustomSnackBar message={message}></CustomSnackBar>
             <AppNavBar
               openSelectionsMobile={openSelectionsMobile}
               setOpenSelectionsMobile={setOpenSelectionsMobile}
               currentDataAndTime={currentDataAndTime}
               setCurrentDataAndTime={setCurrentDataAndTime}
 
-      />
-            <CustomSnackBar message={message}></CustomSnackBar>
+            />
             <Routes>
               <Route index path="/" element={<InitialPage />} />
               <Route path="*" element={<NotFoundPage />} />

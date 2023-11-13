@@ -11,7 +11,6 @@ import Logout from '@mui/icons-material/Logout';
 import Image from "mui-image";
 import { AppBar, Toolbar, IconButton, Typography, Badge, MenuItem, Menu , TextField, ListItemIcon, Box} from '@mui/material';
 import { UserContext } from '../Contexts';
-import { useAuth0 } from "@auth0/auth0-react";
 
 
 export default function PrimarySearchAppBar(props) {
@@ -19,11 +18,6 @@ export default function PrimarySearchAppBar(props) {
   const [openClock, setOpenClock] = React.useState(false);
   const [anchorElA, setAnchorElA] = React.useState(null);
   const [mobileMoreAnchorElA, setMobileMoreanchorElA] = React.useState(null);
-  const {
-    isAuthenticated,
-    loginWithRedirect,
-    logout,
-  } = useAuth0();
 
   const { userData } = React.useContext(UserContext);
   
@@ -49,15 +43,6 @@ export default function PrimarySearchAppBar(props) {
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreanchorElA(event.currentTarget);
-  };
-
-  const handleLoginOrMobileMenuOpen = (event) => {
-    if(isAuthenticated){
-      handleMobileMenuOpen(event);
-    }
-    else
-      loginWithRedirect();
-      
   };
 
   const menuId = 'primary-search-account-menu';
@@ -96,11 +81,13 @@ export default function PrimarySearchAppBar(props) {
         </Typography>
         <Typography>{userData? userData.name : ""}</Typography>
       </Box>
-      <MenuItem id="logout" onClick={()=>logout({ logoutParams: { returnTo: window.location.origin } })} sx={{mt:"1vw"}}>
+      <MenuItem id="logout" sx={{mt:"1vw"}}>
+          <IconButton href="http://localhost:3001/logout">
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
           Logout
+          </IconButton>
         </MenuItem>
      
     </Menu>
@@ -194,17 +181,28 @@ export default function PrimarySearchAppBar(props) {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-            <IconButton
+            {!userData ? (<IconButton
               size="large"
               edge="end"
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleLoginOrMobileMenuOpen}
+              href="http://localhost:3001/login"
               color="inherit"
             >
               <AccountCircle />
-            </IconButton>
+            </IconButton>): (<IconButton
+              size="large"
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>) }
+            
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -212,7 +210,7 @@ export default function PrimarySearchAppBar(props) {
               aria-label="show more"
               aria-controls={mobileMenuId}
               aria-haspopup="true"
-              onClick={handleLoginOrMobileMenuOpen}
+              onClick={handleMobileMenuOpen}
               color="inherit"
             >
               <MoreIcon />

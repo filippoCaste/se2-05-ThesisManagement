@@ -4,6 +4,7 @@ export class User {
     this.surname = data.surname;
     this.name = data.name;
     this.email = data.email;
+    this.token = data.token;
   }
 
   serialize = () => {
@@ -12,11 +13,12 @@ export class User {
       surname: this.surname,
       name: this.name,
       email: this.email,
+      token: this.token,
     };
   };
 
   static fromJson = (json) => {
-    return new User(json.id, json.surname, json.name, json.email);
+    return new User(json.id, json.surname, json.name, json.email, json.token);
   };
 }
 
