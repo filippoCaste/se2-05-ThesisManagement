@@ -31,7 +31,7 @@ GET http://localhost:3001/api/proposals HTTP/1.1
 
 ###
 
-GET http://localhost:3001/api/proposals/teachers/10004440 HTTP/1.1
+GET http://localhost:3001/api/proposals/teachers/10000 HTTP/1.1
 
 ###     DEGREES
 GET http://localhost:3001/api/degrees HTTP/1.1

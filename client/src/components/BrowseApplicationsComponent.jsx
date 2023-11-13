@@ -63,6 +63,19 @@ function RigaProposal(props)
                           {id: 400001, name: "John",  surname: "Doe"} 
                         ];
 
+    // converto livello in stringa
+    // livello 1: Bachelor of Science
+    // livello 2: Master of Science
+    let livello_convertito= proposal.level;
+
+    if(proposal.level==1)
+        livello_convertito= 'Bachelor of Science';
+    if(proposal.level==2)
+        livello_convertito= 'Master of Science';
+      
+                        
+    
+
 
     return(
         <>
@@ -72,9 +85,15 @@ function RigaProposal(props)
            <TableCell style={{ fontSize: '18px' }}>   {proposal.title}             </TableCell>
            <TableCell style={{ fontSize: '18px' }}>   {proposal.type}              </TableCell>
            <TableCell style={{ fontSize: '18px' }}>   {proposal.description}       </TableCell>
-           <TableCell style={{ fontSize: '18px' }}>   {proposal.level}             </TableCell>
+           <TableCell style={{ fontSize: '18px' }}>   {livello_convertito}         </TableCell>
            <TableCell style={{ fontSize: '18px' }}>   {proposal.notes}             </TableCell>
            <TableCell style={{ fontSize: '18px' }}>   {expirationDateFormattata}   </TableCell>
+           <TableCell style={{ fontSize: '18px' }}>   {proposal.required_knowledge}   </TableCell>
+           <TableCell style={{ fontSize: '18px' }}>   {proposal.title_degree}   </TableCell>
+           <TableCell style={{ fontSize: '18px' }}>   {proposal.title_group}   </TableCell>
+           <TableCell style={{ fontSize: '18px' }}>   {proposal.cod_degree}   </TableCell>
+           <TableCell style={{ fontSize: '18px' }}>   {proposal.cod_group}   </TableCell>
+           
         </ TableRow>
 
             <TableRow>
@@ -100,10 +119,6 @@ function RigaProposal(props)
                                     <TableCell style={{ fontSize: '18px' }}>   {student.id}   </TableCell>
                                     <TableCell style={{ fontSize: '18px' }}>   {student.name}   </TableCell>
                                     <TableCell style={{ fontSize: '18px' }}>   {student.surname}   </TableCell>
-
-                                    <TableCell>  <Button  variant="contained" style={{ backgroundColor: 'green', color: 'white' }}> ACCEPT </Button>  </ TableCell>
-                                    <TableCell>  <Button  variant="contained" color="error"> REJECT </Button>  </ TableCell>
-                                    
                                 </TableRow>
                             ))}
                        </TableBody>
@@ -115,11 +130,12 @@ function RigaProposal(props)
             </TableRow>
         </React.Fragment>
         
-        <br />
+        <br /> 
         <TableRow> 
 
 
-        </TableRow>
+        </TableRow>  
+        <br /> 
 
 
         </>
@@ -156,16 +172,17 @@ function BrowseApplicationsComponent(props)
     const [listProposals, setListProposals]=useState('');
 
     // USE EFFECT /////////////////////////////////////////////
+
+    //Facciamo finta che il Teacher Loggatto abbia id 10000
     
     useEffect(()=>{
-        API_Proposal.getAllProposals()
+        API_Proposal.getProposalsByTeacherId(10000)    
         .then((p)=>setListProposals(p))
         .catch((err) => handleError(err));
     },[]);
     
 
-    // Nell esempio facciamo finta che il Teacher Loggatto con di 10000
-    // abbiamo creato tutte le proposte che ci sono sul DB
+  
 
 
     return(
@@ -186,12 +203,18 @@ function BrowseApplicationsComponent(props)
                         <TableCell> <Typography fontWeight="bold"> LEVEL </Typography> </TableCell>
                         <TableCell> <Typography fontWeight="bold"> NOTES </Typography> </TableCell>
                         <TableCell> <Typography fontWeight="bold"> EXPIRATION DATE </Typography> </TableCell>
+                        <TableCell> <Typography fontWeight="bold"> REQUIRED KNOWLEDGE </Typography> </TableCell>
+                        <TableCell> <Typography fontWeight="bold"> TITLE DEGREE </Typography> </TableCell>
+                        <TableCell> <Typography fontWeight="bold"> TITLE GROUP </Typography> </TableCell>
+                        <TableCell> <Typography fontWeight="bold"> COD DEGREE </Typography> </TableCell>
+                        <TableCell> <Typography fontWeight="bold"> COD GROUP </Typography> </TableCell>
+                   
                     </TableRow>
                 </TableHead>
                 
                 <TableBody>
                 {   
-                     Array.from(listProposals).map((proposal,index)=>{
+                     Array.from(listProposals).filter(p=>p.status=="posted").map((proposal,index)=>{
                       return <RigaProposal proposal={proposal} number_proposal={listProposals.length}  key={index} />}) 
                 }
                 </TableBody>
