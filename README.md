@@ -185,6 +185,27 @@
   }, ]
 ```
 
+### `/api/applications`:
+
+- GET `/proposal/:id`
+  - request body content: none
+  - response: 200 OK (success) with the list of applications or error message
+
+```json
+[
+  {
+    "student_id": 400000,
+    "submission_date": "2023-10-12",
+    "student_name": "Mario",
+    "student_surname": "Rossi",
+    "student_email": "mario.rossi@studenti.polito.it",
+    "student_nationality": "italian",
+    "student_enrollment_year": 2022,
+    "student_title_degree": "COMPUTER ENGINEERING"
+  },
+]
+```
+
 ## Database Tables
 
 ### Tables
@@ -270,6 +291,7 @@ Sure, here's the documentation for the given database:
 - status: TEXT (DEFAULT 'posted')
 
 #### `Applications`
+- application_id: INTEGER (AI)
 - proposal_id: INTEGER (NOT NULL)
 - student_id: INTEGER (NOT NULL)
 - status: TEXT (DEFAULT 'sent')

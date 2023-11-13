@@ -8,6 +8,7 @@ import { router as teacherRoutes } from "./src/routes/teacher.route.js";
 import { router as groupRoutes } from "./src/routes/group.route.js";
 import { router as studentRoutes } from "./src/routes/student.route.js";
 import { router as keywordRoutes } from "./src/routes/keyword.route.js";
+import { router as applicationRoutes } from "./src/routes/application.route.js";
 
 
 import passport from "passport";
@@ -55,6 +56,7 @@ app.use("/api/teachers", teacherRoutes);
 app.use("/api/groups", groupRoutes);
 app.use("/api/students", studentRoutes);
 app.use("/api/keywords", keywordRoutes);
+app.use("/api/applications", applicationRoutes);
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}!`);
