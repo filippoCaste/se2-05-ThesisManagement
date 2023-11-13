@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,18 +12,16 @@ import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Typography from '@mui/material/Typography';
-import { UserContext } from '../Contexts';
 
 import { FormControl, InputLabel, Select, MenuItem, Input } from '@mui/material';
 
 
-import proposalAPI from '../services/proposals.api'
+import API_Proposal from '../services/proposals.api'
 import API_Degrees from '../services/degrees.api'
 import API_Keywords from '../services/keywords.api'
 import API_Teachers from '../services/teachers.api'
 import API_Group from '../services/groups.api'
 import API_Users from '../services/users.api'
-import proposalsAPI from '../services/degrees.api';
 
 
 function isValidDate(dateString) {
@@ -113,7 +111,7 @@ function AddProposalTeacher(props)
     setErrorMsgAPI(errMsgAPI);
   }
 
-  const { userData } = useContext(UserContext);
+  const [teacherLoggato, SetTeacherLoggato]=useState(''); //fatto poi meglio tramite ID di sessione
   const [teachersList, SetTeachersList]=useState('');
   const [usersList, SetUsersList]=useState('');
 
@@ -139,6 +137,11 @@ function AddProposalTeacher(props)
     API_Keywords.getAllKeywords()
     .then((k) => SetKeywordsList(k))
     .catch((err) => handleError(err));
+
+
+    API_Teachers.getTeacherById(10000)
+    .then((t)=>SetTeacherLoggato(t))
+    .catch((err)=>handleError(err));
 
   },[])
 
@@ -211,7 +214,7 @@ function AddProposalTeacher(props)
                   expiration_date: formatted_expiration,
                   type: type,
                   level: level,
-                  cod_group: userData.cod_group,  
+                  cod_group: teacherLoggato.teacher_cod_group,  
                   cod_degree: selectedDegree.cod_degree,
               }
             
@@ -221,7 +224,7 @@ function AddProposalTeacher(props)
             let supervisors_obj={"supervisor_id":  nuovo_oggetto.supervisor_id, 
              "co_supervisors":  nuovo_oggetto.co_supervisors};
 
-            proposalAPI.postProposal
+            API_Proposal.postProposal
             ( 
                 nuovo_oggetto.title, nuovo_oggetto.type, nuovo_oggetto.description,
                 nuovo_oggetto.level, nuovo_oggetto.expiration_date, nuovo_oggetto.notes,
@@ -258,8 +261,8 @@ function AddProposalTeacher(props)
     <br /> <br /><br /><br /> <br /> <br />
 
     <Typography variant="h5"> INSERT A NEW PROPOSAL OF THESIS      </Typography>
-    <Typography variant="h7"> GROUP NAME    : {userData.group_name}   </Typography> <br />
-    <Typography variant="h7"> COD DEPARTMENT: {userData.cod_department}         </Typography>
+    <Typography variant="h7"> GROUP NAME    : {teacherLoggato.group_name}   </Typography> <br />
+    <Typography variant="h7"> COD DEPARTMENT: {teacherLoggato.cod_department}         </Typography>
     
     {openError? <Alert severity="warning" onClose={()=>setOpenError(false)}> <AlertTitle> {errorMess} </AlertTitle> </Alert> : false}
 

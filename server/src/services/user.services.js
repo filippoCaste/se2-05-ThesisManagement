@@ -9,6 +9,7 @@ export const createUser = (user) => {
     const salt = crypto.randomBytes(16).toString("hex");
     crypto.scrypt(user.password, salt, 32, function (err, hashedPassword) {
       if (err) {
+        console.log(err);
         reject(err);
       }
       if (!hashedPassword) reject("Error hashing password");
@@ -23,6 +24,7 @@ export const createUser = (user) => {
         ],
         function (err) {
           if (err) {
+            console.log(err);
             reject(err);
           } else {
             const returnedUser = {

@@ -1,57 +1,41 @@
 import React from 'react';
 import { CardActionArea, CardContent, Typography, Card, Box } from '@mui/material';
 import ChipsCustomized from './ChipsCustomized';
-import dayjs from 'dayjs';
+
 function CardCustomized(props) {
-  const { proposal, onClick } = props;
-  const mainSupervisor = proposal?.supervisorsInfo?.find(supervisor => supervisor.id === proposal.supervisor_id);
-  const coSupervisors = proposal?.supervisorsInfo?.filter(supervisor => supervisor.id !== proposal.supervisor_id);
+  const { data, onClick } = props;
 
   const handleClick = () => {
-    onClick(proposal);
+    onClick(data);
   };
 
   return (
-    <Card variant="outlined" sx={{ height: "35vh"}}>
-      <CardActionArea onClick={handleClick}sx={{ height: "100%"}}>
+    <Card variant="outlined" sx={{ minHeight: "40vh", maxHeight: "40vh" }}>
+      <CardActionArea onClick={handleClick}>
         <CardContent>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
             <Typography sx={{ fontWeight: 'bold', mr: '4px' }}>LvL:</Typography>
-            <Typography>{proposal?.level}</Typography>
+            <Typography>{data?.level}</Typography>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
             <Typography sx={{ fontWeight: 'bold', mr: '4px' }}>Exp. date:</Typography>
-            <Typography>{dayjs(proposal?.expiration_date).format("YYYY-MM-DD")} </Typography>
+            <Typography>{data?.expirationDate} </Typography>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center'}}>
+          <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
             <Typography sx={{ mr: '10px', fontWeight: "bold" }}>Title:</Typography>
-            <Typography variant='h6' sx={{ fontWeight: "bold" }}>{proposal?.title}</Typography>
+            <Typography variant='h6' sx={{ fontWeight: "bold" }}>{data?.title}</Typography>
           </Box>
 
-          <Box sx={{ display: 'inline-flex',flexWrap: 'wrap', alignItems: 'center' }}>
-           {mainSupervisor && (
-              <>
-                  <Typography sx={{ fontWeight: "bold",mr: '10px' }}>Supervisor:</Typography>
-                  <Typography >{mainSupervisor.name} ({mainSupervisor.email})</Typography> 
-              </>
-            )}
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography sx={{ fontWeight: 'light', color: 'primary.main' }}>
+              {data?.supervisor} (sup) • {data?.coSupervisor} (co-sup)
+            </Typography>
+          </Box>
 
-            {/* Display co-supervisors */}
-            {coSupervisors?.map((supervisor, index) => (
-                <>
-               <Box sx={{ display: 'flex', alignItems: 'center'}}>
-                <Typography sx={{ mr: '10px', fontWeight: "bold" }}>coSupervisors:</Typography>
-                <Typography >{supervisor.name} ({supervisor.email})</Typography>
-              </Box>
-
-                </>
-            ))}
-              </Box>
-
-          <ChipsCustomized array={[]} />
+          <ChipsCustomized array={data?.keywords} />
           <Typography sx={{ mr: '10px', fontWeight: "bold" }}>Overview:</Typography>
           <Typography sx={{ fontWeight: 'light', color: 'primary.main', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
-            {proposal?.description}
+            {data?.description}
           </Typography>
 
         </CardContent>

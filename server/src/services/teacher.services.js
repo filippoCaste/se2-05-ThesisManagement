@@ -26,21 +26,17 @@ export const getAllTeachers = () => {
 export const getTeacherById = (teacher_id) => {
 
     return new Promise((resolve, reject) => {
-        const sql = "SELECT T.id as id, T.name as name, T.surname as surname, T.email as email, T.cod_group as cod_group, G.title_group as title_group, G.cod_department as cod_department " +
-        "FROM Teachers T, Groups G WHERE T.id = ? AND T.cod_group = G.cod_group";
+        const sql = "SELECT T.id as id, T.cod_group as cod_group, G.title_group as title_group, G.cod_department as cod_department FROM Teachers T, Groups G WHERE T.id = ? AND T.cod_group = G.cod_group";
         db.get(sql, [teacher_id], (err,row) => {
             if(err) {
                 reject(err);
             }
             if(row) {
                 const teacher = {
-                    id: row.id,
-                    surname: row.surname,
-                    name: row.name,
-                    email: row.email,
-                    cod_group: row.cod_group,
-                    cod_department: row.cod_department,
-                    group_name: row.title_group
+                    teacher_id: row.id,
+                    teacher_cod_group: row.cod_group,
+                    group_name: row.title_group,
+                    cod_department: row.cod_department
                 };
                 resolve(teacher);
             } else {

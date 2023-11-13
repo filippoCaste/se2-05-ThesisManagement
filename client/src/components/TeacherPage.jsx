@@ -25,7 +25,9 @@ function TeacherPage(props)
           <Button variant="contained" color="primary" 
             onClick={()=>navigate("/teacher/addProposal")} > INSERT NEW THESIS PROPOSAL </Button>  <br/> <br/>
 
-          <Button variant="contained" color="primary"> SEE ALL MY THESIS PROPOSAL </Button>  <br />
+         <Button variant="contained" color="primary" 
+            onClick={()=>navigate("/teacher/browseApplications")} > BROWSE APPLICATIONS </Button>  <br/> <br/>
+
 
        
        </>
