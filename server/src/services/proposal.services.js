@@ -65,12 +65,7 @@ export const getProposalsFromDB = (
     `;
     db.all(
       sql,
-      [
-        cod_degree,
-        ...level_ids,
-        ...keyword_ids,
-        supervisor_id,
-      ],
+      [cod_degree, ...level_ids, ...keyword_ids, supervisor_id],
       async (err, rows) => {
         if (err) {
           return reject(err);
@@ -125,6 +120,33 @@ export const getKeyWordsFromDB = (proposal_id) => {
         return reject(err);
       }
       return resolve(rows);
+    });
+  });
+};
+
+export const getProposalInfoByID = (proposal_id) => {
+  return new Promise((resolve, reject) => {
+    const proposalSearchSQL = `SELECT id,
+          title, 
+          description, 
+          expiration_date, 
+          cod_degree, 
+          level, 
+          notes, 
+          cod_group, 
+          required_knowledge 
+      FROM Proposals 
+      WHERE id = ?;`;
+    db.all(proposalSearchSQL, [proposal_id], (err, rows) => {
+      if (err) {
+        return reject(err);
+      }
+      if (rows.length === 0) {
+        return reject({
+          scheduledError: new Error(`Proposal with id ${proposal_id} not found`),
+        });
+      }
+      resolve(Proposal.fromProposalsResult(rows[0]));
     });
   });
 };
