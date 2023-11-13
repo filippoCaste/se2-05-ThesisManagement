@@ -12,28 +12,40 @@ export const getProposalsFromDB = (
   end_date
 ) => {
   return new Promise((resolve, reject) => {
+    const params = [];
     var levels = "";
     var keywords = "";
     var supervisor = "";
+    var cod_degree_condition = "";
     if (level_ids && level_ids.length > 0) {
       levels = ` AND level IN (${level_ids.map(() => "?").join(",")})`;
+      params.push(...level_ids);
     }
     if (keyword_ids && keyword_ids.length > 0) {
       keywords = ` AND pk.keyword_id IN (${keyword_ids
         .map(() => "?")
         .join(",")})`;
+      params.push(...keyword_ids);
     }
     if (supervisor_id) {
       supervisor = ` AND s.supervisor_id=?`;
+      params.push(supervisor_id);
+    }
+    if (cod_degree) {
+      cod_degree_condition = 'AND p.cod_degree = ?';
+      params.push(cod_degree);
     }
     // consider cases where there is only start_date or end_date or both
     var date = "";
     if (start_date && end_date) {
-      date = ` AND (expiration_date BETWEEN ? AND ?)`;
+      date = ` AND (p.expiration_date BETWEEN ? AND ?)`;
+      params.push(start_date, end_date);
     } else if (start_date) {
-      date = ` AND expiration_date >= '${start_date}'`;
+      date = ` AND p.expiration_date >= ?`;
+      params.push(start_date);
     } else if (end_date) {
-      date = ` AND expiration_date <= '${end_date}''`;
+      date = ` AND p.expiration_date <= ?`;
+      params.push(end_date);
     }
 
     const sql = `
@@ -51,27 +63,21 @@ export const getProposalsFromDB = (
         s.external_supervisor,
         group_concat(k.type) as keyword_types,
         group_concat(k.name) as keyword_names
-      FROM Proposals p
-      LEFT JOIN ProposalKeywords pk ON p.id = pk.proposal_id
-      LEFT JOIN Keywords k ON k.id = pk.keyword_id
-      LEFT JOIN Supervisors s ON s.proposal_id = p.id
+      FROM Proposals AS p
+      LEFT JOIN ProposalKeywords AS pk ON p.id = pk.proposal_id
+      LEFT JOIN Keywords AS k ON k.id = pk.keyword_id
+      LEFT JOIN Supervisors AS s ON s.proposal_id = p.id
       WHERE p.expiration_date >= date('now')
-        AND p.cod_degree = ?
         ${levels}
         ${keywords}
         ${supervisor}
+        ${cod_degree_condition}
         ${date}
       GROUP BY p.id
       ORDER BY expiration_date ASC;
     `;
     db.all(
-      sql,
-      [
-        cod_degree,
-        ...level_ids,
-        ...keyword_ids,
-        supervisor_id,
-      ],
+      sql, params,
       async (err, rows) => {
         if (err) {
           return reject(err);
@@ -158,12 +164,12 @@ export const postNewProposal = (title, type, description, level, expiration_date
 
         const sqlSuper = db.prepare("INSERT INTO Supervisors(proposal_id, supervisor_id, co_supervisor_id, external_supervisor) VALUES(?,?,?,?);");
         const sqlLast = db.prepare("SELECT id FROM Proposals ORDER BY id DESC LIMIT 1");
-        sqlLast.get( function(err, row) {
+        sqlLast.get(function (err, row) {
           if (err) {
             reject(err);
           }
           const propId = row.id;
-          if (supervisor_obj.co_supervisors && supervisor_obj.co_supervisors.length>0) {
+          if (supervisor_obj.co_supervisors && supervisor_obj.co_supervisors.length > 0) {
             for (let id of supervisor_obj.co_supervisors) {
               sqlSuper.run(propId, supervisor_obj.supervisor_id, id || null, supervisor_obj.external_supervisor_id || null)
             }
@@ -171,7 +177,7 @@ export const postNewProposal = (title, type, description, level, expiration_date
           }
 
           for (let kw of keywords) {
-            sqlGetKeyw.get( kw, (err, row) => {
+            sqlGetKeyw.get(kw, (err, row) => {
               if (err) {
                 reject(err);
               } else {
@@ -190,7 +196,7 @@ export const postNewProposal = (title, type, description, level, expiration_date
 
       })
       resolve(true);
-    } catch(err) {
+    } catch (err) {
       reject(err)
     }
   })

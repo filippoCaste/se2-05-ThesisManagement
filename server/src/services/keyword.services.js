@@ -9,6 +9,7 @@ export const getAllKeywords = () => {
             }
             const keywords = rows.map((e) => {
                 const obj = {
+                    id: e.id,
                     name: e.name,
                     type: e.type
                 }
