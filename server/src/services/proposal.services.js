@@ -15,6 +15,7 @@ export const getProposalsFromDB = (
     var levels = "";
     var keywords = "";
     var supervisor = "";
+    var cod_degree_condition = "";
     if (level_ids && level_ids.length > 0) {
       levels = ` AND level IN (${level_ids.map(() => "?").join(",")})`;
     }
@@ -25,6 +26,9 @@ export const getProposalsFromDB = (
     }
     if (supervisor_id) {
       supervisor = ` AND s.supervisor_id=?`;
+    }
+    if (cod_degree) {
+      cod_degree_condition = 'AND p.cod_degree = ?';
     }
     // consider cases where there is only start_date or end_date or both
     var date = "";
@@ -56,7 +60,7 @@ export const getProposalsFromDB = (
       LEFT JOIN Keywords k ON k.id = pk.keyword_id
       LEFT JOIN Supervisors s ON s.proposal_id = p.id
       WHERE p.expiration_date >= date('now')
-        AND p.cod_degree = ?
+        ${cod_degree_condition}
         ${levels}
         ${keywords}
         ${supervisor}
@@ -158,12 +162,12 @@ export const postNewProposal = (title, type, description, level, expiration_date
 
         const sqlSuper = db.prepare("INSERT INTO Supervisors(proposal_id, supervisor_id, co_supervisor_id, external_supervisor) VALUES(?,?,?,?);");
         const sqlLast = db.prepare("SELECT id FROM Proposals ORDER BY id DESC LIMIT 1");
-        sqlLast.get( function(err, row) {
+        sqlLast.get(function (err, row) {
           if (err) {
             reject(err);
           }
           const propId = row.id;
-          if (supervisor_obj.co_supervisors && supervisor_obj.co_supervisors.length>0) {
+          if (supervisor_obj.co_supervisors && supervisor_obj.co_supervisors.length > 0) {
             for (let id of supervisor_obj.co_supervisors) {
               sqlSuper.run(propId, supervisor_obj.supervisor_id, id || null, supervisor_obj.external_supervisor_id || null)
             }
@@ -171,7 +175,7 @@ export const postNewProposal = (title, type, description, level, expiration_date
           }
 
           for (let kw of keywords) {
-            sqlGetKeyw.get( kw, (err, row) => {
+            sqlGetKeyw.get(kw, (err, row) => {
               if (err) {
                 reject(err);
               } else {
@@ -190,7 +194,7 @@ export const postNewProposal = (title, type, description, level, expiration_date
 
       })
       resolve(true);
-    } catch(err) {
+    } catch (err) {
       reject(err)
     }
   })

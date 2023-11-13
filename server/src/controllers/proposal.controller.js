@@ -1,6 +1,5 @@
 import {
-  getKeyWordsFromDB,
-  getProposalsByTeacherId,
+  // getProposalsByTeacherId,
   getProposalsFromDB,
   postNewProposal,
 } from "../services/proposal.services.js";
@@ -13,9 +12,6 @@ export const getProposals = async (req, res, next) => {
     const start_expiration_date = req.query.start_date;
     const end_expiration_date = req.query.end_date;
 
-    if (!cod_degree) {
-      return res.status(400).json({ message: "cod_degree is required" });
-    }
     if (
       start_expiration_date &&
       isValidDateFormat(start_expiration_date) === false
