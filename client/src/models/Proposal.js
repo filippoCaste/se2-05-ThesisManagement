@@ -36,7 +36,8 @@ export default class Proposal {
     notes,
     cod_group,
     required_knowledge,
-    supervisorsInfo // Array of supervisor information
+    supervisorsInfo, // Array of supervisor information
+    keyword_names
   ) {
     this.id = id;
     this.title = title;
@@ -49,6 +50,7 @@ export default class Proposal {
     this.cod_group = cod_group;
     this.required_knowledge = required_knowledge;
     this.supervisorsInfo = supervisorsInfo.map(Supervisor.fromJson); // Map supervisor info to Supervisor objects
+    this.keyword_names = keyword_names;
   }
 
   serialize = () => {
@@ -66,6 +68,7 @@ export default class Proposal {
       supervisorsInfo: this.supervisorsInfo.map((supervisor) =>
         supervisor.serialize()
       ), // Serialize supervisor info
+      keyword_names: this.keyword_names
     };
   };
 
@@ -82,7 +85,8 @@ export default class Proposal {
       json.notes,
       json.cod_group,
       json.required_knowledge,
-      json.supervisorsInfo // Pass array of supervisor info directly
+      json.supervisorsInfo, // Pass array of supervisor info directly
+      json.keyword_names
     );
   };
 
@@ -98,7 +102,8 @@ export default class Proposal {
       result.notes,
       result.cod_group,
       result.required_knowledge,
-      result.supervisorsInfo // Pass array of supervisor info directly
+      result.supervisorsInfo, // Pass array of supervisor info directly
+      result.keyword_names
     );
   };
 }
