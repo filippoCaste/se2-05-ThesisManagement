@@ -1,5 +1,12 @@
-import { getProposals, getKeywords } from "../../src/controllers/proposal.controller";
-import { getKeyWordsFromDB, getProposalsFromDB } from "../../src/services/proposal.services";
+import {
+  getProposals,
+  getKeywords,
+  getLevels,
+} from "../../src/controllers/proposal.controller";
+import {
+  getKeyWordsFromDB,
+  getProposalsFromDB,
+} from "../../src/services/proposal.services";
 
 jest.mock("../../src/services/proposal.services", () => ({
   getProposalsFromDB: jest.fn(),
@@ -87,7 +94,9 @@ describe("getProposals", () => {
     };
     const next = jest.fn();
 
-    getProposalsFromDB.mockImplementation(() => { throw new Error("test")})
+    getProposalsFromDB.mockImplementation(() => {
+      throw new Error("test");
+    });
 
     await getProposals(req, res, next);
 
@@ -108,7 +117,9 @@ describe("getProposals", () => {
     };
     const next = jest.fn();
 
-    getProposalsFromDB.mockImplementation(() => { return { proposals: []}})
+    getProposalsFromDB.mockImplementation(() => {
+      return { proposals: [] };
+    });
 
     await getProposals(req, res, next);
 
@@ -134,7 +145,9 @@ describe("getKeywords", () => {
     };
     const next = jest.fn();
 
-    getKeyWordsFromDB.mockImplementation(() => { throw new Error("test")})
+    getKeyWordsFromDB.mockImplementation(() => {
+      throw new Error("test");
+    });
 
     await getKeywords(req, res, next);
 
@@ -151,11 +164,33 @@ describe("getKeywords", () => {
     };
     const next = jest.fn();
 
-    getKeyWordsFromDB.mockImplementation(() => { return [{"id": 1, "name": "AI"}]})
+    getKeyWordsFromDB.mockImplementation(() => {
+      return [{ id: 1, name: "AI" }];
+    });
 
     await getKeywords(req, res, next);
 
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith([{"id": 1, "name": "AI"}]);
+    expect(res.json).toHaveBeenCalledWith([{ id: 1, name: "AI" }]);
+  });
+});
+
+describe("getLevels", () => {
+  test("should return 200 with levels object", async () => {
+    const req = {};
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    const next = jest.fn();
+
+    await getLevels(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      "beginner": 1,
+      "intermediate": 2,
+      "advanced": 3,
+    });
   });
 });
