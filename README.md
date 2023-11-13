@@ -32,7 +32,7 @@
     "title": "DevOps proposal",
     "type":"Innovation that inspires",
     "description": "This is a DevOps proposal.",
-    "level": 4,
+    "level": 1,
     "expiration_date": "2023-12-22",
     "notes": "No additional notes",
     "required_knowledge": "Student must know the principle of software development.",
