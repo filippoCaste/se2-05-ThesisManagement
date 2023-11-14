@@ -26,6 +26,7 @@ import API_Keywords from '../services/keywords.api'
 import API_Teachers from '../services/teachers.api'
 import API_Group from '../services/groups.api'
 import API_Users from '../services/users.api'
+import API_Applications from '../services/applications.api'
 
 
 function convertiData(dataString) 
@@ -58,10 +59,16 @@ function RigaProposal(props)
     };
 
     //LISTA DEGLI STUDENTI CHE HANNO FATTO RICHIESTA PER QUESTA PROPOSTA MOSTRATA SULLA RIGA
-    const studentList = [
-                          {id: 400000, name: "Mario", surname: "Rossi"}, 
-                          {id: 400001, name: "John",  surname: "Doe"} 
-                        ];
+    const [studentList, setStudentList] = useState([]);
+
+    
+    useEffect(()=>
+    {
+            API_Applications.getApplicationStudentsByProposalId(proposal.id)
+            .then((s)=>setStudentList(s))
+            .catch((err) => console.error("Error fetching applications:", err));
+
+    }, [proposal.id]);
 
     // converto livello in stringa
     // livello 1: Bachelor of Science
@@ -73,15 +80,12 @@ function RigaProposal(props)
     if(proposal.level==2)
         livello_convertito= 'Master of Science';
       
-                        
     
-
 
     return(
         <>
         <React.Fragment key={proposal.id}>
          <TableRow style={{ boxShadow: '2px 2px 5px #888888'}} >
-           <TableCell style={{ fontSize: '18px' }}>   {proposal.id}                </ TableCell>
            <TableCell style={{ fontSize: '18px' }}>   {proposal.title}             </TableCell>
            <TableCell style={{ fontSize: '18px' }}>   {proposal.type}              </TableCell>
            <TableCell style={{ fontSize: '18px' }}>   {proposal.description}       </TableCell>
@@ -96,6 +100,7 @@ function RigaProposal(props)
            
         </ TableRow>
 
+        {studentList.length > 0 ? (
             <TableRow>
                 <TableCell colSpan={2}>
                   <Button  variant="contained"   onClick={() => handleButtonClick(proposal.id)}>
@@ -109,16 +114,28 @@ function RigaProposal(props)
                          <TableRow>
                             <TableCell > <Typography fontWeight="bold"> ID </Typography> </TableCell>
                             <TableCell > <Typography fontWeight="bold"> NAME </Typography> </TableCell>
-                            <TableCell > <Typography fontWeight="bold"> SURNAME </Typography> </TableCell>                  
+                            <TableCell > <Typography fontWeight="bold"> SURNAME </Typography> </TableCell>       
+                            <TableCell > <Typography fontWeight="bold"> EMAIL </Typography> </TableCell>  
+                            <TableCell > <Typography fontWeight="bold"> SUBMISSION DATE </Typography> </TableCell>  
+                            <TableCell > <Typography fontWeight="bold"> TITLE DEGREE </Typography> </TableCell>  
+                            <TableCell > <Typography fontWeight="bold"> ENROLLMENT YEAR </Typography> </TableCell>  
+                            <TableCell > <Typography fontWeight="bold"> NATIONALITY </Typography> </TableCell>  
+                            
                         </TableRow>
                        </TableHead>
 
                        <TableBody>
                             {studentList.map((student, studentIndex) => (
                                 <TableRow key={studentIndex}>
-                                    <TableCell style={{ fontSize: '18px' }}>   {student.id}   </TableCell>
-                                    <TableCell style={{ fontSize: '18px' }}>   {student.name}   </TableCell>
-                                    <TableCell style={{ fontSize: '18px' }}>   {student.surname}   </TableCell>
+                                    <TableCell style={{ fontSize: '18px' }}>   {student.student_id}   </TableCell>
+                                    <TableCell style={{ fontSize: '18px' }}>   {student.student_name}   </TableCell>
+                                    <TableCell style={{ fontSize: '18px' }}>   {student.student_surname}   </TableCell>
+                                    <TableCell style={{ fontSize: '18px' }}>   {student.student_email}   </TableCell>
+                                    <TableCell style={{ fontSize: '18px' }}>   {student.submission_date}   </TableCell>
+                                    <TableCell style={{ fontSize: '18px' }}>   {student.student_title_degree}   </TableCell>
+                                    <TableCell style={{ fontSize: '18px' }}>   {student.student_enrollment_year}   </TableCell>
+                                    <TableCell style={{ fontSize: '18px' }}>   {student.student_nationality}   </TableCell>
+                                             
                                 </TableRow>
                             ))}
                        </TableBody>
@@ -128,6 +145,17 @@ function RigaProposal(props)
                    </Collapse>
                 </TableCell>
             </TableRow>
+         ) 
+         : 
+         (
+            <TableRow> 
+                <TableCell colSpan={8}> 
+                    <Typography variant="h5">   No student has applied for this thesis </Typography> 
+                </TableCell>
+            
+            </TableRow>
+        )}
+         
         </React.Fragment>
         
         <br /> 
@@ -182,8 +210,6 @@ function BrowseApplicationsComponent(props)
     },[]);
     
 
-  
-
 
     return(
         <>
@@ -196,7 +222,6 @@ function BrowseApplicationsComponent(props)
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell> <Typography fontWeight="bold"> ID </Typography> </TableCell>
                         <TableCell> <Typography fontWeight="bold"> TITLE </Typography> </TableCell>
                         <TableCell> <Typography fontWeight="bold"> TYPE </Typography> </TableCell>
                         <TableCell> <Typography fontWeight="bold"> DESCRIPTION </Typography> </TableCell>
