@@ -9,20 +9,16 @@ const ListItem = styled('li')(({ theme }) => ({
 }));
 
 export default function ChipsArray(props) {
-  const {array} = props;
-  const [chipData, setChipData] = React.useState(array);
-  const [chipsSelected, setChipsSelected] = React.useState([
-  ]); 
-
+  const { array, selectedArray, setSelectedArray } = props;
   const handleClick = (chipToSelect) => () => {
-    if (chipsSelected.some((chip) => chip.key === chipToSelect.key)) {
+    if (selectedArray.some((chip) => chip?.id === chipToSelect?.id)) {
       // Deselect the chip
-      setChipsSelected((selectedChips) =>
-        selectedChips.filter((chip) => chip.key !== chipToSelect.key)
+      setSelectedArray((selectedChips) =>
+        selectedChips.filter((chip) => chip?.id !== chipToSelect?.id)
       );
     } else {
       // Select the chip
-      setChipsSelected((selectedChips) => [...selectedChips, chipToSelect]);
+      setSelectedArray((selectedChips) => [...selectedChips, chipToSelect]);
     }
   };
 
@@ -34,19 +30,18 @@ export default function ChipsArray(props) {
         flexWrap: 'wrap',
         listStyle: 'none',
         p: 0.5,
-        mt: "2vh",
+        mt: '2vh',
       }}
       component="ul"
     >
-      {chipData.map((data) => {
-        const isSelected = chipsSelected.some((chip) => chip.key === data.key);
+      {array.map((data) => {
+        const isSelected = selectedArray.some((chip) => chip?.id === data?.id);
         return (
-          <ListItem key={data.key}>
+          <ListItem id={data?.id} key={data?.id}>
             <Chip
-              label={data.label}
+              label={data?.name}
               onClick={handleClick(data)}
               color={isSelected ? 'secondary' : 'success'}
-              
             />
           </ListItem>
         );

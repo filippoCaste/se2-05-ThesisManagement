@@ -1,0 +1,55 @@
+###     PROPOSALS
+POST http://localhost:3001/api/proposals HTTP/1.1
+content-type: application/json
+
+{
+    "title": "DevOps proposal",
+    "type":"Innovation that inspires",
+    "description": "This is a DevOps proposal.",
+    "level": 4,
+    "expiration_date": "2023-12-22",
+    "notes": "No additional notes",
+    "required_knowledge": "Student must know the principle of software development.",
+    "cod_degree": ["2"],
+    "cod_group": "1",
+    "supervisors_obj": {
+        "supervisor_id": 10000,
+        "co_supervisors": [
+            10001,
+            10002
+            ]
+    },
+    "keywords": [
+        "Javascript"
+    ]
+}
+         
+         #"external_supervisor_id": ""
+###
+
+GET http://localhost:3001/api/proposals HTTP/1.1
+
+###     DEGREES
+GET http://localhost:3001/api/degrees HTTP/1.1
+
+
+###     GROUPS 
+GET http://localhost:3001/api/groups HTTP/1.1
+
+
+###     TEACHERS
+GET http://localhost:3001/api/teachers HTTP/1.1
+
+###
+GET http://localhost:3001/api/teachers/10000 HTTP/1.1
+
+
+###     STUDENTS
+GET http://localhost:3001/api/students/400000 HTTP/1.1
+
+
+###     KEYWORDS
+GET http://localhost:3001/api/keywords HTTP/1.1
+
+
+###
