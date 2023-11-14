@@ -120,7 +120,6 @@ const getProposals = async (
       const proposalList = [];
 
       for (const proposal of proposals) {
-        console.log(proposal);
         proposalList.push(Proposal.fromProposalsResult(proposal));
       }
       return proposalList;

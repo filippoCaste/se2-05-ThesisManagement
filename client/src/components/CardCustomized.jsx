@@ -20,7 +20,6 @@ function CardCustomized(props) {
 
   const handleClick = () => {
     onClick(proposal);
-    console.log(proposal);
   };
 
   return (
@@ -81,9 +80,14 @@ function CardCustomized(props) {
             ))}
           </Box>
           {proposal?.keyword_names && (
-            <Typography sx={{ mr: '10px', fontWeight: 'bold' }}>
-              Keywords: {proposal?.keyword_names}
-            </Typography>
+             <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography sx={{ mr: '10px', fontWeight: 'bold' }}>
+                Keywords:
+              </Typography> 
+              <Typography>
+                {proposal.keyword_names}
+                </Typography>
+              </Box>
           )}
           {/* <ChipsCustomized array={[]} /> */}
           <Typography sx={{ mr: '10px', fontWeight: 'bold' }}>
