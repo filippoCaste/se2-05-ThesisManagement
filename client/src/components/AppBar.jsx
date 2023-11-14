@@ -13,7 +13,7 @@ import { UserContext } from '../Contexts';
 
 
 export default function PrimarySearchAppBar(props) {
-  const {openSelectionsMobile, setOpenSelectionsMobile,currentDataAndTime, setCurrentDataAndTime, proposals} = props;
+  const {openSelectionsMobile, setOpenSelectionsMobile,currentDataAndTime, setCurrentDataAndTime} = props;
   const [openClock, setOpenClock] = React.useState(false);
   const [anchorElA, setAnchorElA] = React.useState(null);
   const [mobileMoreAnchorElA, setMobileMoreanchorElA] = React.useState(null);
@@ -135,7 +135,7 @@ export default function PrimarySearchAppBar(props) {
             color="inherit"
             aria-label="open drawer"
             sx={{ mr: 2, display:{xs:'inline',md: 'none'} }}
-            onClick={()=>setOpenSelectionsMobile(!openSelectionsMobile)}
+            onClick={()=>{setOpenSelectionsMobile(!openSelectionsMobile);}}
           >
             <MenuIcon />
           </IconButton>

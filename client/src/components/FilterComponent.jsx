@@ -56,6 +56,7 @@ export default function FilterComponent(props) {
           label="Title"
           variant="outlined"
           value={title}
+          sx={{mt:'1vh'}}
           onChange={(ev) => setTitle(ev.target.value)}
         />
       </Box>
@@ -72,7 +73,7 @@ export default function FilterComponent(props) {
       <Typography variant="h7" fontWeight={'bold'}>
         Expiration Date:
       </Typography>
-      <Box display="flex" sx={{ mt: '2vh' }}>
+      <Box display="flex" sx={{ mt: '1vh' }}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             label="From..."
