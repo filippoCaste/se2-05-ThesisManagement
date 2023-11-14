@@ -258,8 +258,8 @@ function AddProposalTeacher(props)
     <br /> <br /><br /><br /> <br /> <br />
 
     <Typography variant="h5"> INSERT A NEW PROPOSAL OF THESIS      </Typography>
-    <Typography variant="h7"> GROUP NAME    : {user.group_name}   </Typography> <br />
-    <Typography variant="h7"> COD DEPARTMENT: {user.cod_department}         </Typography>
+    <Typography variant="h7"> GROUP NAME    : {user?.group_name}   </Typography> <br />
+    <Typography variant="h7"> COD DEPARTMENT: {user?.cod_department}         </Typography>
     
     {openError? <Alert severity="warning" onClose={()=>setOpenError(false)}> <AlertTitle> {errorMess} </AlertTitle> </Alert> : false}
 
