@@ -6,7 +6,7 @@ import {
   Card,
   Box,
 } from '@mui/material';
-import ChipsCustomized from './ChipsCustomized';
+
 import dayjs from 'dayjs';
 
 function CardCustomized(props) {
@@ -61,7 +61,7 @@ function CardCustomized(props) {
                   Supervisor:
                 </Typography>
                 <Typography>
-                  {mainSupervisor.name} ({mainSupervisor.email})
+                  {mainSupervisor.name} {mainSupervisor.surname} ({mainSupervisor.email})
                 </Typography>
               </>
             )}
@@ -74,7 +74,7 @@ function CardCustomized(props) {
                     coSupervisors:
                   </Typography>
                   <Typography>
-                    {supervisor.name} ({supervisor.email})
+                    {supervisor.name} {supervisor.surname}  ({supervisor.email})
                   </Typography>
                 </Box>
               </>

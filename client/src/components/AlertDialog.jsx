@@ -43,7 +43,7 @@ export default function AlertDialog({ open, handleClose, item, handleApply, load
         {mainSupervisor && (
           <>
             <Typography>
-              Supervisor: {mainSupervisor.name} ({mainSupervisor.email})
+              Supervisor: {mainSupervisor.name} {mainSupervisor.surname} ({mainSupervisor.email})
             </Typography>
           </>
         )}
@@ -52,7 +52,7 @@ export default function AlertDialog({ open, handleClose, item, handleApply, load
         {coSupervisors?.map((supervisor, index) => (
             <>
             <Typography key={index}>
-              Co-Supervisor: {supervisor.name} ({supervisor.email})
+              Co-Supervisor: {supervisor.name} {supervisor.surname} ({supervisor.email})
             </Typography>
 
             </>

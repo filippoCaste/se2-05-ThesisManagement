@@ -87,10 +87,18 @@ const getProposals = async (
       queryParams.push(`cod_degree=${cod_degree}`);
     }
     if (level_ids.length != 0) {
-      queryParams.push(`level_ids=[${level_ids.map(value => '"' + value.id + '"').join(',')}]`);
+      queryParams.push(
+        `level_ids=[${level_ids
+          .map((value) => '"' + value.id + '"')
+          .join(",")}]`
+      );
     }
     if (keyword_ids.length != 0) {
-      queryParams.push(`keyword_ids=[${keyword_ids.map(value => '"' + value.id + '"').join(',')}]`);
+      queryParams.push(
+        `keyword_ids=[${keyword_ids
+          .map((value) => '"' + value.id + '"')
+          .join(",")}]`
+      );
     }
     if (supervisor_id) {
       queryParams.push(`supervisor_id=${supervisor_id}`);
@@ -112,6 +120,7 @@ const getProposals = async (
       const proposalList = [];
 
       for (const proposal of proposals) {
+        console.log(proposal);
         proposalList.push(Proposal.fromProposalsResult(proposal));
       }
       return proposalList;

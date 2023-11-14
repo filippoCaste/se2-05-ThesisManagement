@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import { db } from "../config/db.js";
 import { Proposal } from "../models/Proposal.js";
 import { Teacher } from "../models/Teacher.js";
@@ -32,7 +32,7 @@ export const getProposalsFromDB = (
       params.push(supervisor_id);
     }
     if (cod_degree) {
-      cod_degree_condition = 'AND p.cod_degree = ?';
+      cod_degree_condition = "AND p.cod_degree = ?";
       params.push(cod_degree);
     }
     // consider cases where there is only start_date or end_date or both
@@ -76,23 +76,20 @@ export const getProposalsFromDB = (
       GROUP BY p.id
       ORDER BY expiration_date ASC;
     `;
-    db.all(
-      sql, params,
-      async (err, rows) => {
-        if (err) {
-          return reject(err);
-        }
-        const returnObj = [];
-        for (const row of rows) {
-          const supervisorsInfo = await getExtraInfoFromProposal(row);
-          const proposal = Proposal.fromProposalsResult(row);
-          const serializedProposal = proposal.serialize();
-          serializedProposal.supervisorsInfo = supervisorsInfo;
-          returnObj.push(serializedProposal);
-        }
-        return resolve(returnObj);
+    db.all(sql, params, async (err, rows) => {
+      if (err) {
+        return reject(err);
       }
-    );
+      const returnObj = [];
+      for (const row of rows) {
+        const supervisorsInfo = await getExtraInfoFromProposal(row);
+        const proposal = Proposal.fromProposalsResult(row);
+        const serializedProposal = proposal.serialize();
+        serializedProposal.supervisorsInfo = supervisorsInfo;
+        returnObj.push(serializedProposal);
+      }
+      return resolve(returnObj);
+    });
   });
 };
 
@@ -100,7 +97,7 @@ export const getExtraInfoFromProposal = (proposal) => {
   return new Promise((resolve, reject) => {
     const supervisors = [];
     const sql = `
-    SELECT id, name, email, cod_department, cod_group
+    SELECT id, name,surname, email, cod_department, cod_group
     FROM Teachers
     WHERE id IN (?, ?, ?)
   `;
@@ -137,41 +134,79 @@ export const getKeyWordsFromDB = (proposal_id) => {
 };
 
 /**
- * 
- * @param {*} title 
- * @param {*} type 
- * @param {*} description 
- * @param {*} level 
- * @param {*} expiration_date 
- * @param {*} notes 
- * @param {*} cod_degree 
- * @param {*} cod_group 
+ *
+ * @param {*} title
+ * @param {*} type
+ * @param {*} description
+ * @param {*} level
+ * @param {*} expiration_date
+ * @param {*} notes
+ * @param {*} cod_degree
+ * @param {*} cod_group
  * @param {*} required_knowledge - a string
  * @param {*} supervisor_obj - an object containing fields: supervisor_id, co_supervisor_id, external_supervisor
- * @returns 
+ * @returns
  */
-export const postNewProposal = (title, type, description, level, expiration_date, notes, cod_degree, cod_group, required_knowledge, supervisor_obj, keywords) => {
+export const postNewProposal = (
+  title,
+  type,
+  description,
+  level,
+  expiration_date,
+  notes,
+  cod_degree,
+  cod_group,
+  required_knowledge,
+  supervisor_obj,
+  keywords
+) => {
   return new Promise((resolve, reject) => {
     try {
       db.serialize(function () {
         const date = dayjs(expiration_date).format();
-        const sqlProp = db.prepare("INSERT INTO Proposals(title, type, description, level, expiration_date, notes, cod_degree, cod_group, required_knowledge) VALUES (?,?,?,?,?,?,?,?,?);");
-        sqlProp.run(title, type, description, level, date, notes, cod_degree, cod_group, required_knowledge);
+        const sqlProp = db.prepare(
+          "INSERT INTO Proposals(title, type, description, level, expiration_date, notes, cod_degree, cod_group, required_knowledge) VALUES (?,?,?,?,?,?,?,?,?);"
+        );
+        sqlProp.run(
+          title,
+          type,
+          description,
+          level,
+          date,
+          notes,
+          cod_degree,
+          cod_group,
+          required_knowledge
+        );
         sqlProp.finalize();
 
-        const sqlKeyw = db.prepare("INSERT INTO ProposalKeywords(proposal_id, keyword_id) VALUES (?,?)");
+        const sqlKeyw = db.prepare(
+          "INSERT INTO ProposalKeywords(proposal_id, keyword_id) VALUES (?,?)"
+        );
         const sqlGetKeyw = db.prepare("SELECT id FROM Keywords WHERE name = ?");
 
-        const sqlSuper = db.prepare("INSERT INTO Supervisors(proposal_id, supervisor_id, co_supervisor_id, external_supervisor) VALUES(?,?,?,?);");
-        const sqlLast = db.prepare("SELECT id FROM Proposals ORDER BY id DESC LIMIT 1");
+        const sqlSuper = db.prepare(
+          "INSERT INTO Supervisors(proposal_id, supervisor_id, co_supervisor_id, external_supervisor) VALUES(?,?,?,?);"
+        );
+        const sqlLast = db.prepare(
+          "SELECT id FROM Proposals ORDER BY id DESC LIMIT 1"
+        );
         sqlLast.get(function (err, row) {
           if (err) {
             reject(err);
           }
           const propId = row.id;
-          if (supervisor_obj.co_supervisors && supervisor_obj.co_supervisors.length > 0) {
+          if (
+            supervisor_obj.co_supervisors &&
+            supervisor_obj.co_supervisors.length > 0
+          ) {
             for (let id of supervisor_obj.co_supervisors) {
-              sqlSuper.run(propId, supervisor_obj.supervisor_id, id || null, supervisor_obj.external_supervisor_id || null)
+              sqlSuper.run(
+                propId,
+                supervisor_obj.supervisor_id,
+                id || null,
+                supervisor_obj.external_supervisor_id || null
+              );
             }
             sqlSuper.finalize();
           }
@@ -186,18 +221,17 @@ export const postNewProposal = (title, type, description, level, expiration_date
                   sqlKeyw.finalize();
                 }
               }
-            })
+            });
             sqlGetKeyw.finalize();
           }
 
           return true;
-        })
+        });
         sqlLast.finalize();
-
-      })
+      });
       resolve(true);
     } catch (err) {
-      reject(err)
+      reject(err);
     }
-  })
-}
+  });
+};

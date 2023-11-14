@@ -67,7 +67,8 @@ export const postProposal = async (req, res) => {
         Number.isNaN(cod_group) ||
         level.toString() != req.body.level ||
         cod_group.toString() != req.body.cod_group ||
-        level > 2 || level < 1
+        level > 2 ||
+        level < 1
       ) {
         return res.status(400).json({ error: "Uncorrect fields" });
       }

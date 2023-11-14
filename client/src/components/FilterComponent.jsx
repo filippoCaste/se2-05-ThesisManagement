@@ -47,6 +47,19 @@ export default function FilterComponent(props) {
 
   return (
     <Box>
+        <Box sx={{ mt: '2vh' }}>
+         <Typography variant="h7" fontWeight={'bold'} sx={{ display: 'block'}}>
+          Title:
+        </Typography>
+        <TextField
+          id="outlined-basic"
+          label="Title"
+          variant="outlined"
+          value={title}
+          onChange={(ev) => setTitle(ev.target.value)}
+        />
+      </Box>
+      <Box sx={{ mt: '2vh' }}>
       <Typography variant="h7" fontWeight={'bold'}>
         Level:
       </Typography>
@@ -55,7 +68,7 @@ export default function FilterComponent(props) {
         setSelectedArray={setSelectedLevels}
         selectedArray={selectedLevels}
       />
-
+  </Box>
       <Typography variant="h7" fontWeight={'bold'}>
         Expiration Date:
       </Typography>
@@ -75,7 +88,7 @@ export default function FilterComponent(props) {
           />
           <DatePicker
             label="To..."
-            minDate={currentDataAndTime}
+            minDate={selectedStartExpirationDate ? selectedStartExpirationDate : currentDataAndTime}
             format="DD/MM/YYYY"
             value={selectedExpirationDate}
             onChange={(date) => setSelectedExpirationDate(date)}
@@ -111,15 +124,7 @@ export default function FilterComponent(props) {
           supervisorId={selectedSupervisorId}
         />
       </Box>
-      <Box sx={{ mt: '2vh' }}>
-        <TextField
-          id="outlined-basic"
-          label="Title"
-          variant="outlined"
-          value={title}
-          onChange={(ev) => setTitle(ev.target.value)}
-        />
-      </Box>
+
     </Box>
   );
 }

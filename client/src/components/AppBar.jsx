@@ -4,7 +4,6 @@ import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import ClockCustomized from './ClockCustomized';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import headerBackground from "../../public/img/imageedit_3_5228036516.jpg";
 import Logout from '@mui/icons-material/Logout';
@@ -123,18 +122,6 @@ export default function PrimarySearchAppBar(props) {
       open={Boolean(mobileMoreAnchorElA)}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem id="notifications">
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
       <MenuItem id="profile" onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -185,15 +172,7 @@ export default function PrimarySearchAppBar(props) {
                 onOpen={handleClockOpen}
                 onClose={handleClockClose}/>
             </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            
             <IconButton
               size="large"
               edge="end"
