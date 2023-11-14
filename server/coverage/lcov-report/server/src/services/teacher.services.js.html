@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">10% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/20</span>
+                <span class='fraction'>10/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>3/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">42.85% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>3/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">10% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/20</span>
+                <span class='fraction'>10/20</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -140,16 +140,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -157,9 +156,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -188,17 +188,17 @@ export const getAllTeachers = <span class="fstat-no" title="function not covered
     });
 }
 &nbsp;
-export const getTeacherById = <span class="fstat-no" title="function not covered" >(t</span>eacher_id) =&gt; {
+export const getTeacherById = (teacher_id) =&gt; {
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve, reject) =&gt; {</span>
-        const sql = <span class="cstat-no" title="statement not covered" >"SELECT T.id as id, T.name as name, T.surname as surname, T.email as email, T.cod_group as cod_group, G.title_group as title_group, G.cod_department as cod_department " +</span>
+    return new Promise((resolve, reject) =&gt; {
+        const sql = "SELECT T.id as id, T.name as name, T.surname as surname, T.email as email, T.cod_group as cod_group, G.title_group as title_group, G.cod_department as cod_department " +
         "FROM Teachers T, Groups G WHERE T.id = ? AND T.cod_group = G.cod_group";
-<span class="cstat-no" title="statement not covered" >        db.get(sql, [teacher_id], <span class="fstat-no" title="function not covered" >(e</span>rr,row) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >            if(err) {</span>
+        db.get(sql, [teacher_id], (err,row) =&gt; {
+            <span class="missing-if-branch" title="if path not taken" >I</span>if(err) {
 <span class="cstat-no" title="statement not covered" >                reject(err);</span>
             }
-<span class="cstat-no" title="statement not covered" >            if(row) {</span>
-                const teacher = <span class="cstat-no" title="statement not covered" >{</span>
+            if(row) {
+                const teacher = {
                     id: row.id,
                     surname: row.surname,
                     name: row.name,
@@ -207,9 +207,9 @@ export const getTeacherById = <span class="fstat-no" title="function not covered
                     cod_department: row.cod_department,
                     group_name: row.title_group
                 };
-<span class="cstat-no" title="statement not covered" >                resolve(teacher);</span>
+                resolve(teacher);
             } else {
-<span class="cstat-no" title="statement not covered" >                resolve(undefined)</span>
+                resolve(undefined)
             }
         });
     });
@@ -220,7 +220,7 @@ export const getTeacherById = <span class="fstat-no" title="function not covered
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-11T16:12:06.145Z
+                at 2023-11-14T18:21:27.809Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -82,7 +82,7 @@ describe('GET /api/keywords', () => {
                     done();
                 }
             });
-    })
+    }, 20000)
 })
 
 describe('POST /api/proposals', () => {

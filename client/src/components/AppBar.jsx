@@ -4,14 +4,12 @@ import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import ClockCustomized from './ClockCustomized';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import headerBackground from "../../public/img/imageedit_3_5228036516.jpg";
 import Logout from '@mui/icons-material/Logout';
 import Image from "mui-image";
 import { AppBar, Toolbar, IconButton, Typography, Badge, MenuItem, Menu , TextField, ListItemIcon, Box} from '@mui/material';
 import { UserContext } from '../Contexts';
-import { useAuth0 } from "@auth0/auth0-react";
 
 
 export default function PrimarySearchAppBar(props) {
@@ -19,13 +17,8 @@ export default function PrimarySearchAppBar(props) {
   const [openClock, setOpenClock] = React.useState(false);
   const [anchorElA, setAnchorElA] = React.useState(null);
   const [mobileMoreAnchorElA, setMobileMoreanchorElA] = React.useState(null);
-  const {
-    isAuthenticated,
-    loginWithRedirect,
-    logout,
-  } = useAuth0();
 
-  const { userData } = React.useContext(UserContext);
+  const { user } = React.useContext(UserContext);
   
   const handleClockOpen = () => {
     setOpenClock(true);
@@ -51,15 +44,6 @@ export default function PrimarySearchAppBar(props) {
     setMobileMoreanchorElA(event.currentTarget);
   };
 
-  const handleLoginOrMobileMenuOpen = (event) => {
-    if(isAuthenticated){
-      handleMobileMenuOpen(event);
-    }
-    else
-      loginWithRedirect();
-      
-  };
-
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -82,25 +66,27 @@ export default function PrimarySearchAppBar(props) {
         <Typography mr={"0.5vw"} fontWeight="bold" >
           ID:
         </Typography>
-        <Typography >{userData? userData.id : ""}</Typography>
+        <Typography >{user? user.id : ""}</Typography>
       </Box>
       <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography mr={"0.5vw"} fontWeight="bold" >
           Surname:
         </Typography>
-        <Typography >{userData? userData.surname : ""}</Typography>
+        <Typography >{user? user.surname : ""}</Typography>
       </Box>
       <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography mr={"0.5vw"} fontWeight="bold" >
           Name:
         </Typography>
-        <Typography>{userData? userData.name : ""}</Typography>
+        <Typography>{user? user.name : ""}</Typography>
       </Box>
-      <MenuItem id="logout" onClick={()=>logout({ logoutParams: { returnTo: window.location.origin } })} sx={{mt:"1vw"}}>
+      <MenuItem id="logout" sx={{mt:"1vw"}}>
+          <IconButton href="http://localhost:3001/api/users/logout">
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
           Logout
+          </IconButton>
         </MenuItem>
      
     </Menu>
@@ -123,18 +109,6 @@ export default function PrimarySearchAppBar(props) {
       open={Boolean(mobileMoreAnchorElA)}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem id="notifications">
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
       <MenuItem id="profile" onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -185,26 +159,29 @@ export default function PrimarySearchAppBar(props) {
                 onOpen={handleClockOpen}
                 onClose={handleClockClose}/>
             </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
+            
+              {!user ? (<IconButton
               size="large"
               edge="end"
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleLoginOrMobileMenuOpen}
+              href="http://localhost:3001/api/users/login"
               color="inherit"
             >
               <AccountCircle />
-            </IconButton>
+            </IconButton>): (<IconButton
+              size="large"
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>) }
+            
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -212,7 +189,7 @@ export default function PrimarySearchAppBar(props) {
               aria-label="show more"
               aria-controls={mobileMenuId}
               aria-haspopup="true"
-              onClick={handleLoginOrMobileMenuOpen}
+              onClick={handleMobileMenuOpen}
               color="inherit"
             >
               <MoreIcon />

@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.95% </span>
+                <span class="strong">88.46% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>20/23</span>
+                <span class='fraction'>23/26</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.95% </span>
+                <span class="strong">88.46% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>20/23</span>
+                <span class='fraction'>23/26</span>
             </div>
         
             
@@ -126,7 +126,11 @@
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
 <a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -142,18 +146,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -166,6 +158,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -174,7 +179,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -199,12 +207,22 @@ import { router as teacherRoutes } from "./src/routes/teacher.route.js";
 import { router as groupRoutes } from "./src/routes/group.route.js";
 import { router as studentRoutes } from "./src/routes/student.route.js";
 import { router as keywordRoutes } from "./src/routes/keyword.route.js";
-&nbsp;
-&nbsp;
+import { router as levelRoutes } from "./src/routes/level.route.js";
+import { router as applicationRoutes } from "./src/routes/application.route.js";
 import passport from "passport";
 import session from "express-session";
 import morgan from "morgan";
-import { strategy } from "./src/config/configs.js";
+import {strategy} from "./src/config/configs.js";
+&nbsp;
+passport.use(strategy);
+&nbsp;
+passport.serializeUser(<span class="fstat-no" title="function not covered" >fu</span>nction (user, done) {
+<span class="cstat-no" title="statement not covered" >  done(null, user);</span>
+});
+&nbsp;
+passport.deserializeUser(<span class="fstat-no" title="function not covered" >as</span>ync function (user, done) {
+<span class="cstat-no" title="statement not covered" >  done(null, user);</span>
+});
 &nbsp;
 const app = express();
 const port = 3001;
@@ -218,16 +236,6 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 &nbsp;
-passport.use(strategy);
-&nbsp;
-passport.serializeUser(<span class="fstat-no" title="function not covered" >fu</span>nction (user, callback) {
-<span class="cstat-no" title="statement not covered" >  callback(null, user);</span>
-});
-&nbsp;
-passport.deserializeUser(<span class="fstat-no" title="function not covered" >fu</span>nction (user, callback) {
-<span class="cstat-no" title="statement not covered" >  return callback(null, user);</span>
-});
-&nbsp;
 app.use(
   session({
     secret: "session-secret",
@@ -236,7 +244,9 @@ app.use(
     cookie: { _expires: 60000000, maxAge: 60000000 },
   })
 );
-app.use(passport.authenticate("session"));
+&nbsp;
+app.use(passport.initialize());
+app.use(passport.session());
 &nbsp;
 app.use("/api/session", sessionRoutes);
 app.use("/api/users", userRoutes);
@@ -246,12 +256,14 @@ app.use("/api/teachers", teacherRoutes);
 app.use("/api/groups", groupRoutes);
 app.use("/api/students", studentRoutes);
 app.use("/api/keywords", keywordRoutes);
+app.use("/api/levels", levelRoutes);
+app.use("/api/applications", applicationRoutes);
 &nbsp;
 app.listen(port, <span class="fstat-no" title="function not covered" >()</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >  console.log(`app listening on port ${port}!`);</span>
 });
 &nbsp;
-export {app}
+export { app };
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -259,7 +271,7 @@ export {app}
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-11T16:12:06.145Z
+                at 2023-11-14T18:21:27.809Z
             </div>
         <script src="../prettify.js"></script>
         <script>

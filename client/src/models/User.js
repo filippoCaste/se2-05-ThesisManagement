@@ -1,22 +1,24 @@
 export class User {
   constructor(data) {
     this.id = data.id;
-    this.surname = data.surname;
-    this.name = data.name;
     this.email = data.email;
+    this.name = data.name;
+    this.surname = data.surname;
+    this.role = data.role;
   }
 
   serialize = () => {
     return {
       id: this.id,
-      surname: this.surname,
-      name: this.name,
       email: this.email,
+      name: this.name,
+      surname: this.surname,
+      role: this.role,
     };
   };
 
   static fromJson = (json) => {
-    return new User(json.id, json.surname, json.name, json.email);
+    return new User(json.id, json.email, json.name, json.surname, json.role);
   };
 }
 

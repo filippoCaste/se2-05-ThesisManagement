@@ -1,15 +1,22 @@
 // Supervisor class definition
 class Supervisor {
-  constructor(id, name, email, cod_group) {
+  constructor(id, name, surname, email, cod_group) {
     this.id = id;
     this.name = name;
+    this.surname = surname;
     this.email = email;
     this.cod_group = cod_group;
   }
 
   // Static method to create a Supervisor object from JSON
   static fromJson = (json) => {
-    return new Supervisor(json.id, json.name, json.email, json.cod_group);
+    return new Supervisor(
+      json.id,
+      json.name,
+      json.surname,
+      json.email,
+      json.cod_group
+    );
   };
 
   // Static method to create a Supervisor object from a result
@@ -17,6 +24,7 @@ class Supervisor {
     return new Supervisor(
       result.id,
       result.name,
+      result.surname,
       result.email,
       result.cod_group
     );
@@ -36,7 +44,8 @@ export default class Proposal {
     notes,
     cod_group,
     required_knowledge,
-    supervisorsInfo // Array of supervisor information
+    supervisorsInfo, // Array of supervisor information
+    keyword_names
   ) {
     this.id = id;
     this.title = title;
@@ -49,6 +58,7 @@ export default class Proposal {
     this.cod_group = cod_group;
     this.required_knowledge = required_knowledge;
     this.supervisorsInfo = supervisorsInfo.map(Supervisor.fromJson); // Map supervisor info to Supervisor objects
+    this.keyword_names = keyword_names;
   }
 
   serialize = () => {
@@ -66,6 +76,7 @@ export default class Proposal {
       supervisorsInfo: this.supervisorsInfo.map((supervisor) =>
         supervisor.serialize()
       ), // Serialize supervisor info
+      keyword_names: this.keyword_names,
     };
   };
 
@@ -82,7 +93,8 @@ export default class Proposal {
       json.notes,
       json.cod_group,
       json.required_knowledge,
-      json.supervisorsInfo // Pass array of supervisor info directly
+      json.supervisorsInfo, // Pass array of supervisor info directly
+      json.keyword_names
     );
   };
 
@@ -98,7 +110,8 @@ export default class Proposal {
       result.notes,
       result.cod_group,
       result.required_knowledge,
-      result.supervisorsInfo // Pass array of supervisor info directly
+      result.supervisorsInfo, // Pass array of supervisor info directly
+      result.keyword_names
     );
   };
 }

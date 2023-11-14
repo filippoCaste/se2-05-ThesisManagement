@@ -13,7 +13,17 @@ import { router as applicationRoutes } from "./src/routes/application.route.js";
 import passport from "passport";
 import session from "express-session";
 import morgan from "morgan";
-import { strategy } from "./src/config/configs.js";
+import {strategy} from "./src/config/configs.js";
+
+passport.use(strategy);
+
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(async function (user, done) {
+  done(null, user);
+});
 
 const app = express();
 const port = 3001;
@@ -27,16 +37,6 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-passport.use(strategy);
-
-passport.serializeUser(function (user, callback) {
-  callback(null, user);
-});
-
-passport.deserializeUser(function (user, callback) {
-  return callback(null, user);
-});
-
 app.use(
   session({
     secret: "session-secret",
@@ -45,7 +45,9 @@ app.use(
     cookie: { _expires: 60000000, maxAge: 60000000 },
   })
 );
-app.use(passport.authenticate("session"));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/api/session", sessionRoutes);
 app.use("/api/users", userRoutes);

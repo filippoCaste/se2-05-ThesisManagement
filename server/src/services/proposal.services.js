@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import { db } from "../config/db.js";
 import { Proposal } from "../models/Proposal.js";
 import { Teacher } from "../models/Teacher.js";
@@ -12,28 +12,40 @@ export const getProposalsFromDB = (
   end_date
 ) => {
   return new Promise((resolve, reject) => {
+    const params = [];
     var levels = "";
     var keywords = "";
     var supervisor = "";
+    var cod_degree_condition = "";
     if (level_ids && level_ids.length > 0) {
       levels = ` AND level IN (${level_ids.map(() => "?").join(",")})`;
+      params.push(...level_ids);
     }
     if (keyword_ids && keyword_ids.length > 0) {
       keywords = ` AND pk.keyword_id IN (${keyword_ids
         .map(() => "?")
         .join(",")})`;
+      params.push(...keyword_ids);
     }
     if (supervisor_id) {
       supervisor = ` AND s.supervisor_id=?`;
+      params.push(supervisor_id);
+    }
+    if (cod_degree) {
+      cod_degree_condition = "AND p.cod_degree = ?";
+      params.push(cod_degree);
     }
     // consider cases where there is only start_date or end_date or both
     var date = "";
     if (start_date && end_date) {
-      date = ` AND (expiration_date BETWEEN ? AND ?)`;
+      date = ` AND (p.expiration_date BETWEEN ? AND ?)`;
+      params.push(start_date, end_date);
     } else if (start_date) {
-      date = ` AND expiration_date >= '${start_date}'`;
+      date = ` AND p.expiration_date >= ?`;
+      params.push(start_date);
     } else if (end_date) {
-      date = ` AND expiration_date <= '${end_date}''`;
+      date = ` AND p.expiration_date <= ?`;
+      params.push(end_date);
     }
 
     const sql = `
@@ -51,37 +63,33 @@ export const getProposalsFromDB = (
         s.external_supervisor,
         group_concat(k.type) as keyword_types,
         group_concat(k.name) as keyword_names
-      FROM Proposals p
-      LEFT JOIN ProposalKeywords pk ON p.id = pk.proposal_id
-      LEFT JOIN Keywords k ON k.id = pk.keyword_id
-      LEFT JOIN Supervisors s ON s.proposal_id = p.id
+      FROM Proposals AS p
+      LEFT JOIN ProposalKeywords AS pk ON p.id = pk.proposal_id
+      LEFT JOIN Keywords AS k ON k.id = pk.keyword_id
+      LEFT JOIN Supervisors AS s ON s.proposal_id = p.id
       WHERE p.expiration_date >= date('now')
-        AND p.cod_degree = ?
         ${levels}
         ${keywords}
         ${supervisor}
+        ${cod_degree_condition}
         ${date}
       GROUP BY p.id
       ORDER BY expiration_date ASC;
     `;
-    db.all(
-      sql,
-      [cod_degree, ...level_ids, ...keyword_ids, supervisor_id],
-      async (err, rows) => {
-        if (err) {
-          return reject(err);
-        }
-        const returnObj = [];
-        for (const row of rows) {
-          const supervisorsInfo = await getExtraInfoFromProposal(row);
-          const proposal = Proposal.fromProposalsResult(row);
-          const serializedProposal = proposal.serialize();
-          serializedProposal.supervisorsInfo = supervisorsInfo;
-          returnObj.push(serializedProposal);
-        }
-        return resolve(returnObj);
+    db.all(sql, params, async (err, rows) => {
+      if (err) {
+        return reject(err);
       }
-    );
+      const returnObj = [];
+      for (const row of rows) {
+        const supervisorsInfo = await getExtraInfoFromProposal(row);
+        const proposal = Proposal.fromProposalsResult(row);
+        const serializedProposal = proposal.serialize();
+        serializedProposal.supervisorsInfo = supervisorsInfo;
+        returnObj.push(serializedProposal);
+      }
+      return resolve(returnObj);
+    });
   });
 };
 
@@ -89,7 +97,7 @@ export const getExtraInfoFromProposal = (proposal) => {
   return new Promise((resolve, reject) => {
     const supervisors = [];
     const sql = `
-    SELECT id, name, email, cod_department, cod_group
+    SELECT id, name,surname, email, cod_department, cod_group
     FROM Teachers
     WHERE id IN (?, ?, ?)
   `;
@@ -152,47 +160,85 @@ export const getProposalInfoByID = (proposal_id) => {
   });
 };
 /**
- * 
- * @param {*} title 
- * @param {*} type 
- * @param {*} description 
- * @param {*} level 
- * @param {*} expiration_date 
- * @param {*} notes 
- * @param {*} cod_degree 
- * @param {*} cod_group 
+ *
+ * @param {*} title
+ * @param {*} type
+ * @param {*} description
+ * @param {*} level
+ * @param {*} expiration_date
+ * @param {*} notes
+ * @param {*} cod_degree
+ * @param {*} cod_group
  * @param {*} required_knowledge - a string
  * @param {*} supervisor_obj - an object containing fields: supervisor_id, co_supervisor_id, external_supervisor
- * @returns 
+ * @returns
  */
-export const postNewProposal = (title, type, description, level, expiration_date, notes, cod_degree, cod_group, required_knowledge, supervisor_obj, keywords) => {
+export const postNewProposal = (
+  title,
+  type,
+  description,
+  level,
+  expiration_date,
+  notes,
+  cod_degree,
+  cod_group,
+  required_knowledge,
+  supervisor_obj,
+  keywords
+) => {
   return new Promise((resolve, reject) => {
     try {
       db.serialize(function () {
         const date = dayjs(expiration_date).format();
-        const sqlProp = db.prepare("INSERT INTO Proposals(title, type, description, level, expiration_date, notes, cod_degree, cod_group, required_knowledge) VALUES (?,?,?,?,?,?,?,?,?);");
-        sqlProp.run(title, type, description, level, date, notes, cod_degree, cod_group, required_knowledge);
+        const sqlProp = db.prepare(
+          "INSERT INTO Proposals(title, type, description, level, expiration_date, notes, cod_degree, cod_group, required_knowledge) VALUES (?,?,?,?,?,?,?,?,?);"
+        );
+        sqlProp.run(
+          title,
+          type,
+          description,
+          level,
+          date,
+          notes,
+          cod_degree,
+          cod_group,
+          required_knowledge
+        );
         sqlProp.finalize();
 
-        const sqlKeyw = db.prepare("INSERT INTO ProposalKeywords(proposal_id, keyword_id) VALUES (?,?)");
+        const sqlKeyw = db.prepare(
+          "INSERT INTO ProposalKeywords(proposal_id, keyword_id) VALUES (?,?)"
+        );
         const sqlGetKeyw = db.prepare("SELECT id FROM Keywords WHERE name = ?");
 
-        const sqlSuper = db.prepare("INSERT INTO Supervisors(proposal_id, supervisor_id, co_supervisor_id, external_supervisor) VALUES(?,?,?,?);");
-        const sqlLast = db.prepare("SELECT id FROM Proposals ORDER BY id DESC LIMIT 1");
-        sqlLast.get( function(err, row) {
+        const sqlSuper = db.prepare(
+          "INSERT INTO Supervisors(proposal_id, supervisor_id, co_supervisor_id, external_supervisor) VALUES(?,?,?,?);"
+        );
+        const sqlLast = db.prepare(
+          "SELECT id FROM Proposals ORDER BY id DESC LIMIT 1"
+        );
+        sqlLast.get(function (err, row) {
           if (err) {
             reject(err);
           }
           const propId = row.id;
-          if (supervisor_obj.co_supervisors && supervisor_obj.co_supervisors.length>0) {
+          if (
+            supervisor_obj.co_supervisors &&
+            supervisor_obj.co_supervisors.length > 0
+          ) {
             for (let id of supervisor_obj.co_supervisors) {
-              sqlSuper.run(propId, supervisor_obj.supervisor_id, id || null, supervisor_obj.external_supervisor_id || null)
+              sqlSuper.run(
+                propId,
+                supervisor_obj.supervisor_id,
+                id || null,
+                supervisor_obj.external_supervisor_id || null
+              );
             }
             sqlSuper.finalize();
           }
 
           for (let kw of keywords) {
-            sqlGetKeyw.get( kw, (err, row) => {
+            sqlGetKeyw.get(kw, (err, row) => {
               if (err) {
                 reject(err);
               } else {
@@ -201,18 +247,17 @@ export const postNewProposal = (title, type, description, level, expiration_date
                   sqlKeyw.finalize();
                 }
               }
-            })
+            });
             sqlGetKeyw.finalize();
           }
 
           return true;
-        })
+        });
         sqlLast.finalize();
-
-      })
+      });
       resolve(true);
-    } catch(err) {
-      reject(err)
+    } catch (err) {
+      reject(err);
     }
-  })
-}
+  });
+};
