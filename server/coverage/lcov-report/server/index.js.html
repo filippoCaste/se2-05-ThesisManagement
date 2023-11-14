@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">87.5% </span>
+                <span class="strong">92% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>21/24</span>
+                <span class='fraction'>23/25</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>1/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">87.5% </span>
+                <span class="strong">92% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>21/24</span>
+                <span class='fraction'>23/25</span>
             </div>
         
             
@@ -126,7 +126,10 @@
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
 <a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -142,17 +145,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -165,6 +157,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -172,6 +176,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -185,7 +191,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -203,7 +209,18 @@ import { router as levelRoutes } from "./src/routes/level.route.js";
 import passport from "passport";
 import session from "express-session";
 import morgan from "morgan";
-import { strategy } from "./src/config/configs.js";
+import {strategy} from "./src/config/configs.js";
+import {getUserById} from "./src/services/user.services.js";
+&nbsp;
+passport.use(strategy);
+&nbsp;
+passport.serializeUser(<span class="fstat-no" title="function not covered" >fu</span>nction (user, done) {
+<span class="cstat-no" title="statement not covered" >  done(null, user);</span>
+});
+&nbsp;
+passport.deserializeUser(<span class="fstat-no" title="function not covered" >as</span>ync function (user, done) {
+<span class="cstat-no" title="statement not covered" >  done(null, user);</span>
+});
 &nbsp;
 const app = express();
 const port = 3001;
@@ -217,16 +234,6 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 &nbsp;
-passport.use(strategy);
-&nbsp;
-passport.serializeUser(<span class="fstat-no" title="function not covered" >fu</span>nction (user, callback) {
-<span class="cstat-no" title="statement not covered" >  callback(null, user);</span>
-});
-&nbsp;
-passport.deserializeUser(<span class="fstat-no" title="function not covered" >fu</span>nction (user, callback) {
-<span class="cstat-no" title="statement not covered" >  return callback(null, user);</span>
-});
-&nbsp;
 app.use(
   session({
     secret: "session-secret",
@@ -235,7 +242,9 @@ app.use(
     cookie: { _expires: 60000000, maxAge: 60000000 },
   })
 );
-app.use(passport.authenticate("session"));
+&nbsp;
+app.use(passport.initialize());
+app.use(passport.session());
 &nbsp;
 app.use("/api/session", sessionRoutes);
 app.use("/api/users", userRoutes);
@@ -247,8 +256,8 @@ app.use("/api/students", studentRoutes);
 app.use("/api/keywords", keywordRoutes);
 app.use("/api/levels", levelRoutes);
 &nbsp;
-app.listen(port, <span class="fstat-no" title="function not covered" >()</span> =&gt; {
-<span class="cstat-no" title="statement not covered" >  console.log(`app listening on port ${port}!`);</span>
+app.listen(port, () =&gt; {
+  console.log(`app listening on port ${port}!`);
 });
 &nbsp;
 export { app };
@@ -259,7 +268,7 @@ export { app };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-13T16:46:35.036Z
+                at 2023-11-14T09:54:38.098Z
             </div>
         <script src="../prettify.js"></script>
         <script>

@@ -19,7 +19,7 @@ export default function PrimarySearchAppBar(props) {
   const [anchorElA, setAnchorElA] = React.useState(null);
   const [mobileMoreAnchorElA, setMobileMoreanchorElA] = React.useState(null);
 
-  const { userData } = React.useContext(UserContext);
+  const { user } = React.useContext(UserContext);
   
   const handleClockOpen = () => {
     setOpenClock(true);
@@ -67,22 +67,22 @@ export default function PrimarySearchAppBar(props) {
         <Typography mr={"0.5vw"} fontWeight="bold" >
           ID:
         </Typography>
-        <Typography >{userData? userData.id : ""}</Typography>
+        <Typography >{user? user.id : ""}</Typography>
       </Box>
       <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography mr={"0.5vw"} fontWeight="bold" >
           Surname:
         </Typography>
-        <Typography >{userData? userData.surname : ""}</Typography>
+        <Typography >{user? user.surname : ""}</Typography>
       </Box>
       <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography mr={"0.5vw"} fontWeight="bold" >
           Name:
         </Typography>
-        <Typography>{userData? userData.name : ""}</Typography>
+        <Typography>{user? user.name : ""}</Typography>
       </Box>
       <MenuItem id="logout" sx={{mt:"1vw"}}>
-          <IconButton href="http://localhost:3001/logout">
+          <IconButton href="http://localhost:3001/api/users/logout">
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
@@ -181,13 +181,13 @@ export default function PrimarySearchAppBar(props) {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-            {!userData ? (<IconButton
+            {!user ? (<IconButton
               size="large"
               edge="end"
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              href="http://localhost:3001/login"
+              href="http://localhost:3001/api/users/login"
               color="inherit"
             >
               <AccountCircle />

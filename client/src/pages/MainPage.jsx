@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 
 function MainPage(props) {
   const {openSelectionsMobile,proposals,currentDataAndTime} = props;
-  const { userData } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const drawerWidth = "30vw"; 
   const [selectedLevels,setSelectedLevels] = useState([]);
   const [selectedExpirationDate,setSelectedExpirationDate] = useState(null);
@@ -23,7 +23,7 @@ useEffect(() => {
       const startDate = selectedStartExpirationDate ? dayjs(selectedStartExpirationDate).format("YYYY-MM-DD") : dayjs(currentDataAndTime).format("YYYY-MM-DD");
       const endDate = selectedExpirationDate ? dayjs(selectedExpirationDate).format("YYYY-MM-DD") : null;
       const resultsResponse = await proposalAPI.getProposals(
-        userData?.cod_degree,
+        user?.cod_degree,
         selectedLevels,
         selectedKeywords,
         selectedSupervisorId,
@@ -38,13 +38,12 @@ useEffect(() => {
       setFilteredProposals([]);
     }
   };
-  console.log(userData)
   resultProposals().catch(console.error);
-}, [userData, selectedLevels, selectedKeywords, selectedSupervisorId, selectedStartExpirationDate, selectedExpirationDate, currentDataAndTime]);
+}, [user, selectedLevels, selectedKeywords, selectedSupervisorId, selectedStartExpirationDate, selectedExpirationDate, currentDataAndTime]);
 
 
   return (
-   
+
    <Box sx={{ display:"inline-flex"}} mt={"15vh"} mx={"6vh"}>
     <ResponsiveDrawer openSelectionsMobile={openSelectionsMobile} 
                     drawerWidth={drawerWidth} 
