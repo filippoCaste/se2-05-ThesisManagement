@@ -30,7 +30,7 @@ jobs:
         run: npm install
 
       - name: Run server tests
-        run: npm test 
+        run: npm run test:coverage
 
   client:
     runs-on: ubuntu-latest
@@ -51,4 +51,4 @@ jobs:
         run: npm install
 
       - name: Run server tests
-        run: npm test 
+        run: npm run test:coverage
