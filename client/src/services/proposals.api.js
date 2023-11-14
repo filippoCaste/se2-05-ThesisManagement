@@ -87,10 +87,10 @@ const getProposals = async (
       queryParams.push(`cod_degree=${cod_degree}`);
     }
     if (level_ids.length != 0) {
-      queryParams.push(`level_ids=${level_ids.join(",")}`);
+      queryParams.push(`level_ids=[${level_ids.map(value => '"' + value.id + '"').join(',')}]`);
     }
     if (keyword_ids.length != 0) {
-      queryParams.push(`keyword_ids=${keyword_ids.join(",")}`);
+      queryParams.push(`keyword_ids=[${keyword_ids.map(value => '"' + value.id + '"').join(',')}]`);
     }
     if (supervisor_id) {
       queryParams.push(`supervisor_id=${supervisor_id}`);

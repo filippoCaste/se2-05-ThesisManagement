@@ -9,11 +9,11 @@ const ListItem = styled('li')(({ theme }) => ({
 }));
 
 export default function ChipsArray(props) {
-  const {array, selectedArray, setSelectedArray} = props;
+  const { array, selectedArray, setSelectedArray } = props;
   const handleClick = (chipToSelect) => () => {
     if (selectedArray.some((chip) => chip?.id === chipToSelect?.id)) {
       // Deselect the chip
-        setSelectedArray((selectedChips) =>
+      setSelectedArray((selectedChips) =>
         selectedChips.filter((chip) => chip?.id !== chipToSelect?.id)
       );
     } else {
@@ -30,19 +30,18 @@ export default function ChipsArray(props) {
         flexWrap: 'wrap',
         listStyle: 'none',
         p: 0.5,
-        mt: "2vh",
+        mt: '2vh',
       }}
       component="ul"
     >
       {array.map((data) => {
         const isSelected = selectedArray.some((chip) => chip?.id === data?.id);
         return (
-          <ListItem id={data?.id}>
+          <ListItem id={data?.id} key={data?.id}>
             <Chip
               label={data?.name}
               onClick={handleClick(data)}
               color={isSelected ? 'secondary' : 'success'}
-              
             />
           </ListItem>
         );

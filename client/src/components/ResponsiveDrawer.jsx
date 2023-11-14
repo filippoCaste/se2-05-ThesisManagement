@@ -14,7 +14,6 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Box from '@mui/material/Box';
 
-
 export default function ResponsiveDrawer(props) {
   const {
     openSelectionsMobile,
@@ -26,13 +25,14 @@ export default function ResponsiveDrawer(props) {
     setSelectedSupervisorId,
     selectedExpirationDate,
     selectedLevels,
-    selectedSupervisorId,    
+    selectedSupervisorId,
     currentDataAndTime,
     selectedStartExpirationDate,
     setSelectedStartExpirationDate,
+    title,
+    setTitle,
   } = props;
   const [openFilter, setOpenFilter] = React.useState(true);
-
 
   const handleClickFilter = () => {
     setOpenFilter(!openFilter);
@@ -44,53 +44,66 @@ export default function ResponsiveDrawer(props) {
     setSelectedKeywords([]);
     setSelectedExpirationDate(null);
     setSelectedSupervisorId(null); // Assuming setSupervisorid is a function to set Supervisor ID
-
   };
 
   return (
-      <Drawer
-        variant="permanent"
-        sx={{
-          width: drawerWidth,
-          display: {
-            sm: openSelectionsMobile ? "block" : "none",
-            md: "block"
-          },
+    <Drawer
+      variant="permanent"
+      sx={{
+        width: drawerWidth,
+        display: {
+          sm: openSelectionsMobile ? 'block' : 'none',
+          md: 'block',
+        },
 
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: {sm:"100vw",md: drawerWidth}, boxSizing: 'border-box' },
-        }}
-      >
-        <Box sx={{ overflow: 'auto', mt:"15vh", mx:"2vh" }}>
-
+        flexShrink: 0,
+        [`& .MuiDrawer-paper`]: {
+          width: { sm: '100vw', md: drawerWidth },
+          boxSizing: 'border-box',
+        },
+      }}
+    >
+      <Box sx={{ overflow: 'auto', mt: '15vh', mx: '2vh' }}>
         <ListItemButton onClick={handleClickFilter}>
-          <Typography variant="h7" fontWeight={'bold'} >Filter by:</Typography> 
-          <ListItemText  />
+          <Typography variant="h7" fontWeight={'bold'}>
+            Filter by:
+          </Typography>
+          <ListItemText />
           {openFilter ? <ExpandLess /> : <ExpandMore />}
-         </ListItemButton>
-         <Collapse in={openFilter} timeout="auto" unmountOnExit>  
+        </ListItemButton>
+        <Collapse in={openFilter} timeout="auto" unmountOnExit>
           <Divider />
           <List component="div" disablePadding>
-          <FilterComponent
-            setSelectedLevels={setSelectedLevels}
-            selectedExpirationDate={selectedExpirationDate}
-            selectedLevels={selectedLevels}
-            setSelectedExpirationDate={setSelectedExpirationDate}
-            setSelectedKeywords={setSelectedKeywords}
-            setSelectedSupervisorId={setSelectedSupervisorId}
-            selectedSupervisorId={selectedSupervisorId}
-            selectedKeywords={selectedKeywords}
-            currentDataAndTime={currentDataAndTime}
-            selectedStartExpirationDate={selectedStartExpirationDate}
-            setSelectedStartExpirationDate={setSelectedStartExpirationDate}
-          />
+            <FilterComponent
+              setSelectedLevels={setSelectedLevels}
+              selectedExpirationDate={selectedExpirationDate}
+              selectedLevels={selectedLevels}
+              setSelectedExpirationDate={setSelectedExpirationDate}
+              setSelectedKeywords={setSelectedKeywords}
+              setSelectedSupervisorId={setSelectedSupervisorId}
+              selectedSupervisorId={selectedSupervisorId}
+              selectedKeywords={selectedKeywords}
+              currentDataAndTime={currentDataAndTime}
+              selectedStartExpirationDate={selectedStartExpirationDate}
+              setSelectedStartExpirationDate={setSelectedStartExpirationDate}
+              title={title}
+              setTitle={setTitle}
+            />
           </List>
-          </Collapse>
+        </Collapse>
 
-        
-        <Link position="absolute" bottom="5vh" right="5vh" href="#" color="inherit" underline="none" onClick={handleResetFilters}>Reset all</Link>  
-        </Box>
-        
-      </Drawer>
+        <Link
+          position="absolute"
+          bottom="5vh"
+          right="5vh"
+          href="#"
+          color="inherit"
+          underline="none"
+          onClick={handleResetFilters}
+        >
+          Reset all
+        </Link>
+      </Box>
+    </Drawer>
   );
 }

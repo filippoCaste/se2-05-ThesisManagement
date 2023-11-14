@@ -1,5 +1,5 @@
 import {
-  getKeyWordsFromDB,
+  // getProposalsByTeacherId,
   getProposalsFromDB,
   postNewProposal,
 } from "../services/proposal.services.js";
@@ -12,9 +12,6 @@ export const getProposals = async (req, res, next) => {
     const start_expiration_date = req.query.start_date;
     const end_expiration_date = req.query.end_date;
 
-    if (!cod_degree) {
-      return res.status(400).json({ message: "cod_degree is required" });
-    }
     if (
       start_expiration_date &&
       isValidDateFormat(start_expiration_date) === false
@@ -69,7 +66,8 @@ export const postProposal = async (req, res) => {
         Number.isNaN(level) ||
         Number.isNaN(cod_group) ||
         level.toString() != req.body.level ||
-        cod_group.toString() != req.body.cod_group
+        cod_group.toString() != req.body.cod_group ||
+        level > 2 || level < 1
       ) {
         return res.status(400).json({ error: "Uncorrect fields" });
       }
