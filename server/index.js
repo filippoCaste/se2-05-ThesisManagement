@@ -14,16 +14,6 @@ import session from "express-session";
 import morgan from "morgan";
 import {strategy} from "./src/config/configs.js";
 
-passport.use(strategy);
-
-passport.serializeUser(function (user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(async function (user, done) {
-  done(null, user);
-});
-
 const app = express();
 const port = 3001;
 
@@ -47,6 +37,16 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+passport.use(strategy);
+
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(async function (user, done) {
+  done(null, user);
+});
 
 app.use("/api/session", sessionRoutes);
 app.use("/api/users", userRoutes);

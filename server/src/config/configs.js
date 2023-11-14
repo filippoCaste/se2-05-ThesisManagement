@@ -1,4 +1,5 @@
 import auth0Strategy from 'passport-auth0';
+import { getUserById } from '../services/user.services.js';
 
 export const strategy = new auth0Strategy({
   domain: 'thesis-management-05.eu.auth0.com',
@@ -16,6 +17,26 @@ export const strategy = new auth0Strategy({
 export const isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
+  }
+  return res.status(401).json({ error: "Not authorized" });
+};
+
+export const isStudent = async (req, res, next) => {
+  if (req.isAuthenticated()) {
+    const user = await getUserById(req.user.substring(1, req.user.length));
+    if (user.role === "student") {
+      return next();
+    }
+  }
+  return res.status(401).json({ error: "Not authorized" });
+};
+
+export const isTeacher = async (req, res, next) => {
+  if (req.isAuthenticated()) {
+    const user = await getUserById(req.user.substring(1, req.user.length));
+    if (user.role === "teacher") {
+      return next();
+    }
   }
   return res.status(401).json({ error: "Not authorized" });
 };
