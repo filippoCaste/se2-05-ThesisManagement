@@ -46,10 +46,9 @@ function MainPage(props) {
         setFilteredProposals([]);
       }
     };
-    console.log(userData);
     resultProposals().catch(console.error);
   }, [
-    userData,
+    user,
     selectedLevels,
     selectedKeywords,
     selectedSupervisorId,
