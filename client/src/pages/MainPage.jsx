@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 
 function MainPage(props) {
   const { openSelectionsMobile, currentDataAndTime } = props;
-  const { userData } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const drawerWidth = '20vw';
   const [selectedLevels, setSelectedLevels] = useState([]);
   const [selectedExpirationDate, setSelectedExpirationDate] = useState(null);
@@ -29,7 +29,7 @@ function MainPage(props) {
           ? dayjs(selectedExpirationDate).format('YYYY-MM-DD')
           : null;
         const resultsResponse = await proposalAPI.getProposals(
-          userData?.cod_degree,
+          user?.cod_degree,
           selectedLevels,
           selectedKeywords,
           selectedSupervisorId,
@@ -47,7 +47,7 @@ function MainPage(props) {
     };
     resultProposals().catch(console.error);
   }, [
-    userData,
+    user,
     selectedLevels,
     selectedKeywords,
     selectedSupervisorId,

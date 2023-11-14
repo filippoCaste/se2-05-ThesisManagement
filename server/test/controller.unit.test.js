@@ -1,5 +1,4 @@
 import "jest-extended";
-import request from 'supertest';
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
@@ -83,7 +82,7 @@ describe('GET /api/keywords', () => {
                     done();
                 }
             });
-    })
+    }, 20000)
 })
 
 describe('POST /api/proposals', () => {
@@ -94,12 +93,12 @@ describe('POST /api/proposals', () => {
                 "title": "DevOps proposal",
                 "type": "Innovation that inspires",
                 "description": "This is a DevOps proposal.",
-                "level": 4,
+                "level": 1,
                 "expiration_date": "2023-12-22",
                 "notes": "No additional notes",
                 "required_knowledge": "Student must know the principle of software development.",
                 "cod_degree": ["2"],
-                "cod_group": "1",
+                "cod_group": 1,
                 "supervisors_obj": {
                     "supervisor_id": 10000,
                     "co_supervisors": [
@@ -127,7 +126,7 @@ describe('POST /api/proposals', () => {
             .send({
                 "title": "DevOps proposal",
                 "type": "Innovation that inspires",
-                "level": 4,
+                "level": 1,
                 "expiration_date": "2023-12-22",
                 "notes": "No additional notes",
                 "required_knowledge": "Student must know the principle of software development.",

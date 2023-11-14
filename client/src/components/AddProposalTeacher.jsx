@@ -113,7 +113,7 @@ function AddProposalTeacher(props)
     setErrorMsgAPI(errMsgAPI);
   }
 
-  const { userData } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [teachersList, SetTeachersList]=useState('');
   const [usersList, SetUsersList]=useState('');
 
@@ -211,7 +211,7 @@ function AddProposalTeacher(props)
                   expiration_date: formatted_expiration,
                   type: type,
                   level: level,
-                  cod_group: userData.cod_group,  
+                  cod_group: user.cod_group,  
                   cod_degree: selectedDegree.cod_degree,
               }
             
@@ -258,8 +258,8 @@ function AddProposalTeacher(props)
     <br /> <br /><br /><br /> <br /> <br />
 
     <Typography variant="h5"> INSERT A NEW PROPOSAL OF THESIS      </Typography>
-    <Typography variant="h7"> GROUP NAME    : {userData.group_name}   </Typography> <br />
-    <Typography variant="h7"> COD DEPARTMENT: {userData.cod_department}         </Typography>
+    <Typography variant="h7"> GROUP NAME    : {user.group_name}   </Typography> <br />
+    <Typography variant="h7"> COD DEPARTMENT: {user.cod_department}         </Typography>
     
     {openError? <Alert severity="warning" onClose={()=>setOpenError(false)}> <AlertTitle> {errorMess} </AlertTitle> </Alert> : false}
 
