@@ -29,6 +29,10 @@ content-type: application/json
 
 GET http://localhost:3001/api/proposals HTTP/1.1
 
+###
+
+GET http://localhost:3001/api/proposals/teachers/10000 HTTP/1.1
+
 ###     DEGREES
 GET http://localhost:3001/api/degrees HTTP/1.1
 
@@ -52,4 +56,5 @@ GET http://localhost:3001/api/students/400000 HTTP/1.1
 GET http://localhost:3001/api/keywords HTTP/1.1
 
 
-###
+###     APPLICATIONS
+GET http://localhost:3001/api/applications/proposal/15 HTTP/1.1

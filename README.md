@@ -32,7 +32,7 @@
     "title": "DevOps proposal",
     "type":"Innovation that inspires",
     "description": "This is a DevOps proposal.",
-    "level": 1,
+    "level": 4,
     "expiration_date": "2023-12-22",
     "notes": "No additional notes",
     "required_knowledge": "Student must know the principle of software development.",
@@ -69,6 +69,32 @@
     "required_knowledge": null,
     "status": "posted"
   }, ]
+```
+
+- GET `/teachers/:id`
+  - request body content: none
+  - response: 
+    - 200 OK (success) with array of thesis proposals object 
+    - 400 Bad Request if the id is of unknown teachers
+    - 401 Unauthorized (failure) with error message
+```json
+[
+  {
+    "id": 15,
+    "title": "Thesis proposal IV",
+    "description": "This is an innovative proposal.",
+    "type": "Innovation that inspires",
+    "level": 4,
+    "expiration_date": "2024-03-01T00:00:00+01:00",
+    "notes": "No additional notes",
+    "cod_degree": 2,
+    "cod_group": 1,
+    "required_knowledge": "Student must know the principle of design of mobile applications.",
+    "status": "posted",
+    "title_degree": "COMMUNICATIONS ENGINEERING",
+    "title_group": "Elite"
+  },
+]
 ```
 
 ### `/api/degrees`:
@@ -159,6 +185,27 @@
   }, ]
 ```
 
+### `/api/applications`:
+
+- GET `/proposal/:id`
+  - request body content: none
+  - response: 200 OK (success) with the list of applications or error message
+
+```json
+[
+  {
+    "student_id": 400000,
+    "submission_date": "2023-10-12",
+    "student_name": "Mario",
+    "student_surname": "Rossi",
+    "student_email": "mario.rossi@studenti.polito.it",
+    "student_nationality": "italian",
+    "student_enrollment_year": 2022,
+    "student_title_degree": "COMPUTER ENGINEERING"
+  },
+]
+```
+
 ## Database Tables
 
 ### Tables
@@ -244,6 +291,7 @@ Sure, here's the documentation for the given database:
 - status: TEXT (DEFAULT 'posted')
 
 #### `Applications`
+- application_id: INTEGER (AI)
 - proposal_id: INTEGER (NOT NULL)
 - student_id: INTEGER (NOT NULL)
 - status: TEXT (DEFAULT 'sent')
