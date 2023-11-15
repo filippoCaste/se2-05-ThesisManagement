@@ -177,7 +177,7 @@ describe('POST /api/proposals', () => {
                 "keywords": [
                     "Javascript"
                 ]
-})
+            })
             .end((err, res) => {
                 if (err) {
                     done(err);
@@ -260,6 +260,23 @@ describe('POST /api/proposals', () => {
     })
 })
 
+describe('GET /api/proposals/', () => {
+    it('it should GET all proposals by teacher id', (done) => {
+        chai.request(httpServer)
+            .get('/api/proposals/teachers/10000')
+            .end((err, res) => {
+                if (err) {
+                    done(err);
+                } else {
+                    res.statusCode.should.be.equal(200);
+
+                    done();
+                }
+            });
+
+    });
+})
+
 describe('GET /api/teachers/:id', () => {
     it('it should GET the teacher in the database with the specified id', (done) => {
         chai.request(httpServer)
@@ -316,7 +333,7 @@ describe('GET /api/teachers/:id', () => {
 describe('GET /api/students/:id', () => {
     it('it should GET the student in the database with the specified id', (done) => {
         chai.request(httpServer)
-            .get('/api/students/400000')
+            .get('/api/students/318082')
             .end((err, res) => {
                 if (err) {
                     done(err);
@@ -364,4 +381,27 @@ describe('GET /api/students/:id', () => {
             });
     })
 
+})
+
+
+describe('GET /api/applications', () => {
+    it('it should provide details about the proposal', (done) => {
+        chai.request(httpServer)
+            .get('/api/applications/proposal/15')
+            .end((err, res) => {
+                if (err) {
+                    done(err);
+                } else {
+                    res.statusCode.should.be.equal(200);
+                    res.body[0].should.have.property("student_id");
+                    res.body[0].should.have.property("student_name");
+                    res.body[0].should.have.property("student_surname");
+                    res.body[0].should.have.property("student_email");
+                    res.body[0].should.have.property("student_nationality");
+                    res.body[0].should.have.property("student_enrollment_year");
+                    res.body[0].should.have.property("student_title_degree");
+                    done();
+                }
+            });
+    })
 })

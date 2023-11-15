@@ -49,7 +49,7 @@ GET http://localhost:3001/api/teachers/10000 HTTP/1.1
 
 
 ###     STUDENTS
-GET http://localhost:3001/api/students/400000 HTTP/1.1
+GET http://localhost:3001/api/students/318082 HTTP/1.1
 
 
 ###     KEYWORDS

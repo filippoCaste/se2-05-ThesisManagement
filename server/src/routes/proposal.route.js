@@ -2,8 +2,8 @@ import { Router } from "express";
 import {
   getProposals,
   postProposal,
+  getProposalTeacherId
 } from "../controllers/proposal.controller.js";
-import { getProposalTeacherId } from "../controllers/proposal.controller.js";
 
 const router = Router();
 

@@ -1,10 +1,12 @@
 import {
+  getProposalsByTeacherId,
   // getProposalsByTeacherId,
   getProposalsFromDB,
   postNewProposal,
 } from "../services/proposal.services.js";
 import { LevelsEnum } from "../models/LevelsEnum.js";
 import { isValidDateFormat } from "../utils/utils.js";
+import { getTeacherById } from "../services/teacher.services.js";
 
 export const getProposals = async (req, res, next) => {
   try {
