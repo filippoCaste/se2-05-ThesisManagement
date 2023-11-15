@@ -19,57 +19,19 @@ import headerBackground from "../../public/img/imageedit_3_5228036516.jpg";
 import Logout from '@mui/icons-material/Logout';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Image from "mui-image";
-import Box from '@mui/material/Box';
+import { AppBar, Toolbar, IconButton, Typography, Badge, MenuItem, Menu , TextField, ListItemIcon, Box} from '@mui/material';
+import { UserContext } from '../Contexts';
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-    },
-  },
-}));
 
 export default function PrimarySearchAppBar(props) {
   const {openSelectionsMobile, setOpenSelectionsMobile,currentDataAndTime, setCurrentDataAndTime} = props;
   const [openClock, setOpenClock] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const [anchorElA, setAnchorElA] = React.useState(null);
+  const [mobileMoreAnchorElA, setMobileMoreanchorElA] = React.useState(null);
 
-    const handleClockOpen = () => {
+  const { user } = React.useContext(UserContext);
+  
+  const handleClockOpen = () => {
     setOpenClock(true);
   };
 
@@ -94,7 +56,7 @@ export default function PrimarySearchAppBar(props) {
   }
 
   const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
+    setMobileMoreanchorElA(event.currentTarget);
   };
 
   const menuId = 'primary-search-account-menu';
@@ -119,37 +81,27 @@ export default function PrimarySearchAppBar(props) {
         <Typography mr={"0.5vw"} fontWeight="bold" >
           ID:
         </Typography>
-        <Typography >Ciccio Caio</Typography>
+        <Typography >{user? user.id : ""}</Typography>
       </Box>
       <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography mr={"0.5vw"} fontWeight="bold" >
           Surname:
         </Typography>
-        <Typography >Ciccio Caio</Typography>
+        <Typography >{user? user.surname : ""}</Typography>
       </Box>
       <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography mr={"0.5vw"} fontWeight="bold" >
           Name:
         </Typography>
-        <Typography>Ciccio Caio</Typography>
+        <Typography>{user? user.name : ""}</Typography>
       </Box>
-      <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
-        <Typography fontWeight="bold" mr={"0.5vw"} >
-          Enrollment Year:
-        </Typography>
-        <Typography>Ciccio Caio</Typography>
-      </Box>
-      <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
-        <Typography fontWeight="bold" mr={"0.5vw"} >
-          Title Degree:
-        </Typography>
-        <Typography>Titolo(Codice)</Typography>
-      </Box>
-      <MenuItem onClick={handleLogout} sx={{mt:"1vw"}}>
+      <MenuItem id="logout" sx={{mt:"1vw"}}>
+          <IconButton href="http://localhost:3001/api/users/logout">
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
           Logout
+          </IconButton>
         </MenuItem>
      
     </Menu>
@@ -251,7 +203,17 @@ export default function PrimarySearchAppBar(props) {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-            <IconButton
+            {!user ? (<IconButton
+              size="large"
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              href="http://localhost:3001/api/users/login"
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>): (<IconButton
               size="large"
               edge="end"
               aria-label="account of current user"
@@ -261,7 +223,8 @@ export default function PrimarySearchAppBar(props) {
               color="inherit"
             >
               <AccountCircle />
-            </IconButton>
+            </IconButton>) }
+            
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton

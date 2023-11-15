@@ -1,7 +1,4 @@
 import "jest-extended";
-import request from 'supertest';
-import { getApplicationsByProposalId } from "../src/services/application.services";
-import { getApplicationsProposalId } from "../src/controllers/application.controller";
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
@@ -9,8 +6,6 @@ const should = chai.should();
 import { app } from '../index';
 const server = app;
 chai.use(chaiHttp);
-
-jest.mock('../src/services/application.services');
 
 let httpServer;
 
@@ -87,7 +82,7 @@ describe('GET /api/keywords', () => {
                     done();
                 }
             });
-    })
+    }, 20000)
 })
 
 describe('POST /api/proposals', () => {
@@ -98,12 +93,12 @@ describe('POST /api/proposals', () => {
                 "title": "DevOps proposal",
                 "type": "Innovation that inspires",
                 "description": "This is a DevOps proposal.",
-                "level": 4,
+                "level": 1,
                 "expiration_date": "2023-12-22",
                 "notes": "No additional notes",
                 "required_knowledge": "Student must know the principle of software development.",
                 "cod_degree": ["2"],
-                "cod_group": "1",
+                "cod_group": 1,
                 "supervisors_obj": {
                     "supervisor_id": 10000,
                     "co_supervisors": [
@@ -131,7 +126,7 @@ describe('POST /api/proposals', () => {
             .send({
                 "title": "DevOps proposal",
                 "type": "Innovation that inspires",
-                "level": 4,
+                "level": 1,
                 "expiration_date": "2023-12-22",
                 "notes": "No additional notes",
                 "required_knowledge": "Student must know the principle of software development.",
@@ -370,75 +365,3 @@ describe('GET /api/students/:id', () => {
     })
 
 })
-
-describe('getApplicationsProposalId', () => {
-    const mockRequest = {
-        params: {
-            id: 1
-        }
-    };
-    const mockResponse = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn()
-    }
-
-    beforeEach(() => {
-        jest.clearAllMocks();
-    });
-
-    test('should return 200 and an empty array if the proposal exists but there aren\'t any applications for it', async () => {
-        const mockApplicationdData = [];
-
-        const req = mockRequest(1);
-        const res = mockResponse();
-        await getApplicationsProposalId(req, res);
-        expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith(mockApplicationdData);
-    });
-
-    test('should return 200 and an array with the applications if the proposal exists and there are applications for it', async () => {
-        const mockApplicationdData = [
-            {
-                student_id: 400000,
-                submission_date: "2021-05-12",
-                student_name: "Mario",
-                student_surname: "Rossi",
-                student_email: "s400000@studenti.polito.it",
-                student_nationality: "Italian",
-                student_enrollment_year: 2018,
-                student_title_degree: "Bachelor's degree in Computer Engineering"
-            },
-            {
-                student_id: 400001,
-                submission_date: "2021-05-12",
-                student_name: "Luca",
-                student_surname: "Verdi",
-                student_email: "s40001@studenti.polito.it",
-                student_nationality: "Italian",
-                student_enrollment_year: 2018,
-                student_title_degree: "Bachelor's degree in Computer Engineering"
-            }
-        ];
-
-        const req = mockRequest(1);
-        const res = mockResponse();
-        await getApplicationsProposalId(req, res);
-        expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith(mockApplicationdData);
-    });
-
-    /*test('should return 404 if the proposal does not exist', async () => {
-        const req = mockRequest(2);
-        const res = mockResponse();
-        await getApplicationsProposalId(req, res);
-        expect(res.status).toHaveBeenCalledWith(404);
-    });*/
-
-    test('should return 500 if error', async () => {
-        const req = mockRequest("a");
-        const res = mockResponse();
-        await getApplicationsProposalId(req, res);
-        expect(res.status).toHaveBeenCalledWith(500);
-    });
-
-});

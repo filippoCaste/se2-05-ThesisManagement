@@ -111,7 +111,7 @@ function AddProposalTeacher(props)
     setErrorMsgAPI(errMsgAPI);
   }
 
-  const [teacherLoggato, SetTeacherLoggato]=useState(''); //fatto poi meglio tramite ID di sessione
+  const { user } = useContext(UserContext);
   const [teachersList, SetTeachersList]=useState('');
   const [usersList, SetUsersList]=useState('');
 
@@ -201,32 +201,21 @@ function AddProposalTeacher(props)
 
           let formatted_expiration = formatDate(expiration_date);
 
-          //converto level 1: Bachelor of Science
-          //converto level 2: Master of Science
-          let livello_convertito;
-         
-          if(selectedLevel=='Bachelor of Science')
-              livello_convertito= 1;
-
-          if(selectedLevel=='Master of Science')
-              livello_convertito= 2;
-         
-              
-          let nuovo_oggetto=
-          {
-              title:   title,
-              description: description,
-              required_knowledge: required_knowledge,
-              supervisor_id: selectedSupervisor.teacher_id, 
-              co_supervisors:  selectedCoSup,
-              notes: notes,
-              keywords: selectedKeywords,          //contiene solo name
-              expiration_date: formatted_expiration,
-              type: type,
-              level: livello_convertito,
-              cod_group: teacherLoggato.teacher_cod_group,  
-              cod_degree: selectedDegree.cod_degree,
-          }
+              let nuovo_oggetto=
+              {
+                  title:   title,
+                  description: description,
+                  required_knowledge: required_knowledge,
+                  supervisor_id: selectedSupervisor.teacher_id, 
+                  co_supervisors:  selectedCoSup,
+                  notes: notes,
+                  keywords: selectedKeywords,          //contiene solo name
+                  expiration_date: formatted_expiration,
+                  type: type,
+                  level: level,
+                  cod_group: user.cod_group,  
+                  cod_degree: selectedDegree.cod_degree,
+              }
             
             
             //POST PROPOSAL
@@ -276,8 +265,8 @@ function AddProposalTeacher(props)
     <br /> <br /><br /><br /> <br /> <br />
 
     <Typography variant="h5"> INSERT A NEW PROPOSAL OF THESIS      </Typography>
-    <Typography variant="h7"> GROUP NAME    : {teacherLoggato.group_name}   </Typography> <br />
-    <Typography variant="h7"> COD DEPARTMENT: {teacherLoggato.cod_department}         </Typography>
+    <Typography variant="h7"> GROUP NAME    : {user?.group_name}   </Typography> <br />
+    <Typography variant="h7"> COD DEPARTMENT: {user?.cod_department}         </Typography>
     
     {openError? <Alert severity="warning" onClose={()=>setOpenError(false)}> <AlertTitle> {errorMess} </AlertTitle> </Alert> : false}
 

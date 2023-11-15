@@ -22,9 +22,11 @@
     "express-validator": "^7.0.1",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
+    "jest-extended": "^4.0.2",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "passport": "^0.6.0",
+    "passport-auth0": "^1.4.4",
     "passport-local": "^1.0.0",
     "react-test-renderer": "^18.2.0",
     "sqlite3": "^5.1.6"
@@ -36,28 +38,7 @@
     "nodemon": "^2.0.22"
   },
   "jest": {
-    "testEnvironment": "jsdom",
-    "moduleNameMapper": {
-      "^.+\\.svg$": "jest-svg-transformer",
-      "^.+\\.(css|less|scss)$": "identity-obj-proxy"
-    },
-    "setupFilesAfterEnv": [
-      "<rootDir>/setupTests.js"
-    ],
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "src/**/*.js"
-    ],
-    "coverageDirectory": "coverage",
-    "coverageReporters": [
-      "json",
-      "lcov",
-      "text-summary",
-      "text"
-    ]
-  },
-  "directories": {
-    "test": "test"
+    "testTimeout": 3000
   },
   "description": ""
 }

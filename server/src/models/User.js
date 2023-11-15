@@ -1,8 +1,9 @@
 export class User {
-  constructor(id, name, email, role) {
+  constructor(id, email, name, surname, role) {
     this.id = id;
-    this.name = name;
     this.email = email;
+    this.name = name;
+    this.surname = surname;
     this.role = role;
   }
 
@@ -10,14 +11,15 @@ export class User {
   serialize = () => {
     return {
       id: this.id,
-      username: this.username,
       email: this.email,
+      name: this.name,
+      surname: this.surname,
       role: this.role,
     };
   };
 
   // Used to retrieve the user object from client object
   static fromJson = (json) => {
-    return new User(json.id, json.username, json.email, json.role);
+    return new User(json.id, json.email, json.name, json.surname, json.role);
   };
 }
