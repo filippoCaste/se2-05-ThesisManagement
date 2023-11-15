@@ -11,6 +11,7 @@ import CustomSnackBar from "./components/CustomSnackbar.jsx";
 import { UserContext } from './Contexts';
 import TeacherPage from "./components/TeacherPage.jsx";
 import AddProposalTeacher from "./components/AddProposalTeacher.jsx";
+import BrowseApplicationsComponent from "./components/BrowseApplicationsComponent.jsx";
 import InitialPage from "./pages/InitialPage.jsx";
 import userAPI from "./services/users.api.js";
 import studentsAPI from "./services/students.api.js";
@@ -77,7 +78,7 @@ function App() {
 
               <Route path="/teacher" element={<TeacherPage />}  />
               <Route path="/teacher/addProposal" element={<AddProposalTeacher />}  />
-              
+              <Route path="/teacher/browseApplications" element={<BrowseApplicationsComponent />}  />
 
             </Routes>
           </UserContext.Provider>

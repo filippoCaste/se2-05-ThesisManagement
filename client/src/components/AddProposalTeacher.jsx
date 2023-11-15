@@ -1,30 +1,18 @@
 import React from 'react';
 import { useState, useEffect, useContext } from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
-import Link from '@mui/material/Link';
-import { Navigate, useNavigate } from 'react-router-dom';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Typography from '@mui/material/Typography';
 import { UserContext } from '../Contexts';
-
 import { FormControl, InputLabel, Select, MenuItem, Input } from '@mui/material';
-
-
-import proposalAPI from '../services/proposals.api'
-import API_Degrees from '../services/degrees.api'
-import API_Keywords from '../services/keywords.api'
-import API_Teachers from '../services/teachers.api'
-import API_Group from '../services/groups.api'
-import API_Users from '../services/users.api'
-import proposalsAPI from '../services/degrees.api';
-
+import proposalAPI from '../services/proposals.api';
+import API_Degrees from '../services/degrees.api';
+import API_Keywords from '../services/keywords.api';
+import API_Teachers from '../services/teachers.api';
+import Button from '@mui/material/Button';
 
 function isValidDate(dateString) {
   // La regex per il formato "dd/mm/yyyy"
@@ -115,13 +103,9 @@ function AddProposalTeacher(props)
 
   const { user } = useContext(UserContext);
   const [teachersList, SetTeachersList]=useState('');
-  const [usersList, SetUsersList]=useState('');
-
   const [degreesList, SetDegreesList]=useState('');
   const [selectedDegree, setSelectedDegree] = useState('');
-
   const [selectedSupervisor, setSelectedSupervisor] = useState('');
-
   const [keywordsList, SetKeywordsList]=useState(''); //prese dal DB
 
 
