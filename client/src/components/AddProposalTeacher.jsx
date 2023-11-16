@@ -139,7 +139,7 @@ function AddProposalTeacher(props)
   const [required_knowledge,setRequired_knowledge]=useState('esame di architetture');
   const [notes,setNotes]=useState('blabla');
   const [type,setType]=useState('tipo');
-  const [level,setLevel]=useState(1);
+  const [level,setLevel]=useState('');
   const [expiration_date,setExpirationDate]=useState("08/11/2023");
   
        
@@ -336,9 +336,23 @@ function AddProposalTeacher(props)
        <TextField label="Type" name="type" variant="filled"  fullWidth
         value={type}  onChange={ev=>setType(ev.target.value)}/>  <br /> <br />
 
-       <TextField label="Level" name="level" variant="outlined"  fullWidth 
-        value={level}  onChange={ev=>setLevel(ev.target.value)}/>  <br /> <br />
+       {/* <TextField label="Level" name="level" variant="outlined"  fullWidth 
+        value={level}  onChange={ev=>setLevel(ev.target.value)}/>  <br /> <br /> */}
 
+        <FormControl fullWidth>
+          <InputLabel id="level-label"> Select a Degree Level</InputLabel>
+          < Select
+            labelId="word-label"
+            id="level-select"
+            onChange={(ev) => { setLevel(ev.target.value) }}
+          >
+            {
+              Array.from(["MSc", "BSc"]).map((el, index) =>
+              (el === "MSc" ? <MenuItem key={index} value={"MSc"}> Master of Science </MenuItem> 
+                            : <MenuItem key={index} value={"BSc"}> Bachelor of Science </MenuItem>))
+            }
+          </Select>
+        </FormControl> 
     
       <FormControl fullWidth>
         <InputLabel id="keywords-label">Select keywords</InputLabel>
@@ -365,7 +379,7 @@ function AddProposalTeacher(props)
     <br />
 
         <Button variant="contained" color="primary" type="submit" onClick={()=>setInvioForm(true)}> ADD PROPOSAL </Button>
-        <Button variant="contained" color="error" onClick={()=>navigate('/teacher')}> CANCEL </Button>
+        {' '} <Button variant="contained" color="error" onClick={()=>navigate('/teacher')}> CANCEL </Button>
       
       </form>
    
