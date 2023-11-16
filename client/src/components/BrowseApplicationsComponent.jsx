@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from 'react';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Collapse, List } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Collapse, List, Container } from '@mui/material';
 import API_Proposal from '../services/proposals.api';
 import API_Applications from '../services/applications.api';
 import { UserContext } from '../Contexts';
@@ -55,28 +55,24 @@ function RigaProposal(props)
     // livello 2: Master of Science
     let livello_convertito= proposal.level;
 
-    if(proposal.level==1)
+    if(proposal.level==="BSc")
         livello_convertito= 'Bachelor of Science';
-    if(proposal.level==2)
+    if(proposal.level==="MSc")
         livello_convertito= 'Master of Science';
-      
-    
 
     return(
         <>
-        <React.Fragment key={proposal.id}>
+        {/* <React.Fragment key={proposal.id}> */}
          <TableRow style={{ boxShadow: '2px 2px 5px #888888'}} >
-           <TableCell style={{ fontSize: '18px' }}>   {proposal.title}             </TableCell>
-           <TableCell style={{ fontSize: '18px' }}>   {proposal.type}              </TableCell>
-           <TableCell style={{ fontSize: '18px' }}>   {proposal.description}       </TableCell>
-           <TableCell style={{ fontSize: '18px' }}>   {livello_convertito}         </TableCell>
-           <TableCell style={{ fontSize: '18px' }}>   {proposal.notes}             </TableCell>
-           <TableCell style={{ fontSize: '18px' }}>   {expirationDateFormattata}   </TableCell>
-           <TableCell style={{ fontSize: '18px' }}>   {proposal.required_knowledge}   </TableCell>
-           <TableCell style={{ fontSize: '18px' }}>   {proposal.title_degree}   </TableCell>
-           <TableCell style={{ fontSize: '18px' }}>   {proposal.title_group}   </TableCell>
-           <TableCell style={{ fontSize: '18px' }}>   {proposal.cod_degree}   </TableCell>
-           <TableCell style={{ fontSize: '18px' }}>   {proposal.cod_group}   </TableCell>
+            <TableCell >   {proposal.title}             </TableCell>
+            <TableCell >   {proposal.type}              </TableCell>
+            <TableCell >   {proposal.description}       </TableCell>
+            <TableCell >   {livello_convertito}         </TableCell>
+            <TableCell >   {proposal.notes}             </TableCell>
+            <TableCell >   {expirationDateFormattata}   </TableCell>
+            <TableCell >   {proposal.required_knowledge}   </TableCell>
+            <TableCell >   {proposal.title_degree}   </TableCell>
+            <TableCell >   {proposal.title_group}   </TableCell>
            
         </ TableRow>
 
@@ -107,14 +103,14 @@ function RigaProposal(props)
                        <TableBody>
                             {studentList.map((student, studentIndex) => (
                                 <TableRow key={studentIndex}>
-                                    <TableCell style={{ fontSize: '18px' }}>   {student.student_id}   </TableCell>
-                                    <TableCell style={{ fontSize: '18px' }}>   {student.student_name}   </TableCell>
-                                    <TableCell style={{ fontSize: '18px' }}>   {student.student_surname}   </TableCell>
-                                    <TableCell style={{ fontSize: '18px' }}>   {student.student_email}   </TableCell>
-                                    <TableCell style={{ fontSize: '18px' }}>   {student.submission_date}   </TableCell>
-                                    <TableCell style={{ fontSize: '18px' }}>   {student.student_title_degree}   </TableCell>
-                                    <TableCell style={{ fontSize: '18px' }}>   {student.student_enrollment_year}   </TableCell>
-                                    <TableCell style={{ fontSize: '18px' }}>   {student.student_nationality}   </TableCell>
+                                    <TableCell style={{ fontSize: '2vh' }}>   {student.student_id}   </TableCell>
+                                    <TableCell style={{ fontSize: '2vh' }}>   {student.student_name}   </TableCell>
+                                    <TableCell style={{ fontSize: '2vh' }}>   {student.student_surname}   </TableCell>
+                                    <TableCell style={{ fontSize: '2vh' }}>   {student.student_email}   </TableCell>
+                                    <TableCell style={{ fontSize: '2vh' }}>   {student.submission_date}   </TableCell>
+                                    <TableCell style={{ fontSize: '2vh' }}>   {student.student_title_degree}   </TableCell>
+                                    <TableCell style={{ fontSize: '2vh' }}>   {student.student_enrollment_year}   </TableCell>
+                                    <TableCell style={{ fontSize: '2vh' }}>   {student.student_nationality}   </TableCell>
                                              
                                 </TableRow>
                             ))}
@@ -136,7 +132,7 @@ function RigaProposal(props)
             </TableRow>
         )}
          
-        </React.Fragment>
+        {/* </React.Fragment> */}
         
         <br /> 
         <TableRow> 
@@ -190,11 +186,11 @@ function BrowseApplicationsComponent(props)
 
 
     return(
-        <>
-            <br /> <br /> <br /> <br />  <br /> 
+        <Container>
+            <br /> <br /> <br /> <br />  <br /> <br/>
             <Typography variant="h5"> ALL MY APPLICATIONS POSTED  </Typography>
             <br /> 
-            <Button variant="contained" color="error" onClick={()=>navigate('/teacher')}> BACK </Button>
+            <Button variant="contained" color="error" onClick={()=>navigate('/teacher')}> BACK </Button> <br/>
 
             <TableContainer component={Paper}>
             <Table>
@@ -208,10 +204,7 @@ function BrowseApplicationsComponent(props)
                         <TableCell> <Typography fontWeight="bold"> EXPIRATION DATE </Typography> </TableCell>
                         <TableCell> <Typography fontWeight="bold"> REQUIRED KNOWLEDGE </Typography> </TableCell>
                         <TableCell> <Typography fontWeight="bold"> TITLE DEGREE </Typography> </TableCell>
-                        <TableCell> <Typography fontWeight="bold"> TITLE GROUP </Typography> </TableCell>
-                        <TableCell> <Typography fontWeight="bold"> COD DEGREE </Typography> </TableCell>
-                        <TableCell> <Typography fontWeight="bold"> COD GROUP </Typography> </TableCell>
-                   
+                        <TableCell> <Typography fontWeight="bold"> TITLE GROUP </Typography> </TableCell>                   
                     </TableRow>
                 </TableHead>
                 
@@ -227,7 +220,7 @@ function BrowseApplicationsComponent(props)
             
          
 
-        </>    
+        </Container>    
     );
 
 

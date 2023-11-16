@@ -34,7 +34,7 @@ export default function AlertDialog({ open, handleClose, item, handleApply, load
           Level: {item?.level}
         </Typography>
         <Typography gutterBottom>
-          Degree Code: {item?.cod_degree}
+          Degree: {item?.title_degree}
         </Typography>
         
 
@@ -57,7 +57,7 @@ export default function AlertDialog({ open, handleClose, item, handleApply, load
         ))}
 
         <Typography gutterBottom>
-          Group Code: {item?.cod_group}
+          Group: {item?.title_group}
         </Typography>
         <Typography gutterBottom>
           Required Knowledge: {item?.required_knowledge}
