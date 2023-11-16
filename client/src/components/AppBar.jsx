@@ -1,7 +1,5 @@
 import * as React from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
-import { styled, alpha } from '@mui/material/styles';
-import InputBase from '@mui/material/InputBase';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import ClockCustomized from './ClockCustomized';
 import MoreIcon from '@mui/icons-material/MoreVert';
@@ -32,16 +30,10 @@ export default function PrimarySearchAppBar(props) {
     setAnchorElA(event.currentTarget);
   };
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreanchorElA(null);
-  };
+
   const handleMenuClose = () => {
     setAnchorElA(null);
-    handleMobileMenuClose();
-  };
 
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreanchorElA(event.currentTarget);
   };
 
   const menuId = 'primary-search-account-menu';
@@ -95,7 +87,7 @@ export default function PrimarySearchAppBar(props) {
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
-      anchorEl={setMobileMoreanchorElA}
+      anchorEl={mobileMoreAnchorElA}
       anchorOrigin={{
         vertical: 'top',
         horizontal: 'right',
@@ -107,20 +99,9 @@ export default function PrimarySearchAppBar(props) {
         horizontal: 'right',
       }}
       open={Boolean(mobileMoreAnchorElA)}
-      onClose={handleMobileMenuClose}
+      onClose={handleMenuClose}
     >
-      <MenuItem id="profile" onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
+     
     </Menu>
   );
 
@@ -189,7 +170,7 @@ export default function PrimarySearchAppBar(props) {
               aria-label="show more"
               aria-controls={mobileMenuId}
               aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
+              onClick={handleProfileMenuOpen}
               color="inherit"
             >
               <MoreIcon />
