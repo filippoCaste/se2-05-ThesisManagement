@@ -54,9 +54,11 @@ export const getProposalsFromDB = (
         p.description,
         p.expiration_date,
         p.cod_degree,
+        d.title_degree,
         p.level,
         p.notes,
         p.cod_group,
+        g.title_group,
         p.required_knowledge,
         s.supervisor_id,
         s.co_supervisor_id,
@@ -67,6 +69,8 @@ export const getProposalsFromDB = (
       LEFT JOIN ProposalKeywords AS pk ON p.id = pk.proposal_id
       LEFT JOIN Keywords AS k ON k.id = pk.keyword_id
       LEFT JOIN Supervisors AS s ON s.proposal_id = p.id
+      LEFT JOIN Degrees AS d ON p.cod_degree = d.cod_degree
+      LEFT JOIN Groups AS g ON p.cod_group = g.cod_group
       WHERE p.expiration_date >= date('now')
         ${levels}
         ${keywords}

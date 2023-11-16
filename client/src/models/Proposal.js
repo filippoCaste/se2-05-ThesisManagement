@@ -39,10 +39,12 @@ export default class Proposal {
     description,
     expiration_date,
     cod_degree,
+    title_degree,
     level,
     supervisor_id,
     notes,
     cod_group,
+    title_group,
     required_knowledge,
     supervisorsInfo, // Array of supervisor information
     keyword_names
@@ -54,8 +56,10 @@ export default class Proposal {
     this.expiration_date = expiration_date;
     this.level = level;
     this.cod_degree = cod_degree;
+    this.title_degree = title_degree;
     this.supervisor_id = supervisor_id;
     this.cod_group = cod_group;
+    this.title_group = title_group;
     this.required_knowledge = required_knowledge;
     this.supervisorsInfo = supervisorsInfo.map(Supervisor.fromJson); // Map supervisor info to Supervisor objects
     this.keyword_names = keyword_names;
@@ -68,10 +72,12 @@ export default class Proposal {
       description: this.description,
       expiration_date: this.expiration_date,
       cod_degree: this.cod_degree,
+      title_degree:this.title_group,
       level: this.level,
       supervisor_id: this.supervisor_id,
       notes: this.notes,
       cod_group: this.cod_group,
+      title_group:this.title_group,
       required_knowledge: this.required_knowledge,
       supervisorsInfo: this.supervisorsInfo.map((supervisor) =>
         supervisor.serialize()
@@ -88,10 +94,12 @@ export default class Proposal {
       json.description,
       json.expiration_date,
       json.cod_degree,
+      json.title_degree,
       json.level,
       json.supervisor_id,
       json.notes,
       json.cod_group,
+      json.title_group,
       json.required_knowledge,
       json.supervisorsInfo, // Pass array of supervisor info directly
       json.keyword_names
@@ -105,10 +113,12 @@ export default class Proposal {
       result.description,
       result.expiration_date,
       result.cod_degree,
+      result.title_degree,
       result.level,
       result.supervisor_id,
       result.notes,
       result.cod_group,
+      result.title_group,
       result.required_knowledge,
       result.supervisorsInfo, // Pass array of supervisor info directly
       result.keyword_names
