@@ -37,11 +37,11 @@ On "Call the next user" and "See the next number" we instead focused on code rev
 
 | Story                  | # Tasks | Points | Hours est. | Hours actual |
 | ---------------------- | ------- | ------ | ---------- | ------------ |
-| #0                     | 17      |        |          |          |
-| Insert proposal       |    6    |       |    14.5    |    19    |
-| Apply for a proposal |   3     |       |   11   |    11     |
-| Browse application | 4       |       | 10      | 10.16         |
-|  Search a proposal  | 4       |       |   15.5  |   37.3  |
+| #0                     | 17      |        |     26.25     |    40.26   |
+| Insert proposal       |    6    |   200   |    14.5    |    19    |
+|  Search a proposal  | 4       |   195   |   15.5  |   37.3  |
+| Apply for a proposal |   3     |   190   |   11   |    11     |
+| Browse application | 4       |   185  | 10      | 10.16         |
 
 <!-- > place technical tasks corresponding to story `#0` and leave out story points (not applicable in this case) -->
 
