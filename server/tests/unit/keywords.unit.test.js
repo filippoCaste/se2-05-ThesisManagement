@@ -31,4 +31,19 @@ describe('getKeywords', () => {
         await controllers.getKeywords(mockRequest, mockResponse);
         expect(mockResponse.json).toHaveBeenCalledWith(mockKeywords);
     });
+
+    test('should return a 500 error if getAllKeywords throws', async () => {
+        const mockRequest = {};
+        const mockResponse = {
+            json: jest.fn().mockReturnThis(),
+            status: jest.fn().mockReturnThis()
+        };
+        const mockError = new Error('test error');
+
+        services.getAllKeywords = jest.fn().mockRejectedValue(mockError);
+        
+        await controllers.getKeywords(mockRequest, mockResponse);
+        expect(mockResponse.status).toHaveBeenCalledWith(500);
+        expect(mockResponse.json).toHaveBeenCalledWith({ error: mockError.message });
+    });
 });

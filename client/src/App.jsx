@@ -9,7 +9,7 @@ import NotFoundPage from "./pages/NotFoundPage.jsx";
 import AppNavBar from "./components/AppBar.jsx";
 import CustomSnackBar from "./components/CustomSnackbar.jsx";
 import { UserContext } from './Contexts';
-import TeacherPage from "./components/TeacherPage.jsx";
+import TeacherPage from "./pages/TeacherPage.jsx";
 import AddProposalTeacher from "./components/AddProposalTeacher.jsx";
 import BrowseApplicationsComponent from "./components/BrowseApplicationsComponent.jsx";
 import InitialPage from "./pages/InitialPage.jsx";

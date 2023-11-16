@@ -3,7 +3,7 @@ import "jest-extended";
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
-import { app } from '../index';
+import { app } from '../../index';
 const server = app;
 chai.use(chaiHttp);
 

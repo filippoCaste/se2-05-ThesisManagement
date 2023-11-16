@@ -1,41 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< HEAD
-<coverage generated="1699966555345" clover="3.2.0">
-  <project timestamp="1699966555345" name="All files">
-    <metrics statements="377" coveredstatements="191" conditionals="129" coveredconditionals="48" methods="81" coveredmethods="30" elements="587" coveredelements="269" complexity="0" loc="377" ncloc="377" packages="7" files="32" classes="32"/>
+<coverage generated="1700133266213" clover="3.2.0">
+  <project timestamp="1700133266213" name="All files">
+    <metrics statements="506" coveredstatements="237" conditionals="171" coveredconditionals="51" methods="109" coveredmethods="41" elements="786" coveredelements="329" complexity="0" loc="506" ncloc="506" packages="7" files="37" classes="37"/>
     <package name="server">
-      <metrics statements="25" coveredstatements="22" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+      <metrics statements="26" coveredstatements="24" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="1"/>
       <file name="index.js" path="/home/giogiunta/se2-05-ThesisManagement/server/index.js">
-        <metrics statements="25" coveredstatements="22" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="17" count="1" type="stmt"/>
-        <line num="19" count="1" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="23" count="1" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="27" count="1" type="stmt"/>
-=======
-<coverage generated="1699986087857" clover="3.2.0">
-  <project timestamp="1699986087858" name="All files">
-    <metrics statements="453" coveredstatements="218" conditionals="157" coveredconditionals="61" methods="97" coveredmethods="32" elements="707" coveredelements="311" complexity="0" loc="453" ncloc="453" packages="7" files="37" classes="37"/>
-    <package name="server">
-      <metrics statements="26" coveredstatements="23" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
-      <file name="index.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/index.js">
-        <metrics statements="26" coveredstatements="23" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="26" coveredstatements="24" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="1"/>
         <line num="18" count="1" type="stmt"/>
-        <line num="20" count="1" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="24" count="1" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
->>>>>>> origin/UserPage
+        <line num="19" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
         <line num="28" count="1" type="stmt"/>
         <line num="30" count="1" type="stmt"/>
-        <line num="31" count="1" type="stmt"/>
-        <line num="32" count="1" type="stmt"/>
-        <line num="37" count="1" type="stmt"/>
         <line num="39" count="1" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
         <line num="48" count="1" type="stmt"/>
-        <line num="49" count="1" type="stmt"/>
-        <line num="51" count="1" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
         <line num="52" count="1" type="stmt"/>
         <line num="53" count="1" type="stmt"/>
         <line num="54" count="1" type="stmt"/>
@@ -44,46 +28,45 @@
         <line num="57" count="1" type="stmt"/>
         <line num="58" count="1" type="stmt"/>
         <line num="59" count="1" type="stmt"/>
-<<<<<<< HEAD
-        <line num="61" count="1" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
-=======
         <line num="60" count="1" type="stmt"/>
         <line num="61" count="1" type="stmt"/>
         <line num="63" count="1" type="stmt"/>
-        <line num="64" count="0" type="stmt"/>
->>>>>>> origin/UserPage
+        <line num="64" count="1" type="stmt"/>
       </file>
     </package>
     <package name="server.src.config">
-      <metrics statements="8" coveredstatements="4" conditionals="4" coveredconditionals="1" methods="3" coveredmethods="1"/>
-<<<<<<< HEAD
+      <metrics statements="20" coveredstatements="6" conditionals="12" coveredconditionals="1" methods="5" coveredmethods="1"/>
       <file name="configs.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/config/configs.js">
-=======
-      <file name="configs.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/config/configs.js">
->>>>>>> origin/UserPage
-        <metrics statements="6" coveredstatements="2" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="16" count="1" type="stmt"/>
-        <line num="17" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
+        <metrics statements="18" coveredstatements="4" conditionals="10" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
       </file>
-      <file name="db.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/config/db.js">
+      <file name="db.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/config/db.js">
         <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
         <line num="4" count="1" type="stmt"/>
         <line num="5" count="1" type="cond" truecount="1" falsecount="1"/>
       </file>
     </package>
     <package name="server.src.controllers">
-<<<<<<< HEAD
-      <metrics statements="86" coveredstatements="57" conditionals="41" coveredconditionals="29" methods="9" coveredmethods="6"/>
-      <file name="degree.controller.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/controllers/degree.controller.js">
-=======
-      <metrics statements="102" coveredstatements="74" conditionals="53" coveredconditionals="41" methods="10" coveredmethods="7"/>
-      <file name="application.controller.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/controllers/application.controller.js">
-        <metrics statements="14" coveredstatements="1" conditionals="10" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <metrics statements="121" coveredstatements="73" conditionals="55" coveredconditionals="30" methods="12" coveredmethods="8"/>
+      <file name="application.controller.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/controllers/application.controller.js">
+        <metrics statements="21" coveredstatements="7" conditionals="10" coveredconditionals="0" methods="2" coveredmethods="1"/>
         <line num="4" count="1" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
         <line num="6" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -98,9 +81,15 @@
         <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="31" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
       </file>
-      <file name="degree.controller.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/controllers/degree.controller.js">
->>>>>>> origin/UserPage
+      <file name="degree.controller.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/controllers/degree.controller.js">
         <metrics statements="5" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="4" count="1" type="stmt"/>
         <line num="5" count="1" type="stmt"/>
@@ -108,7 +97,7 @@
         <line num="7" count="1" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
       </file>
-      <file name="group.controller.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/controllers/group.controller.js">
+      <file name="group.controller.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/controllers/group.controller.js">
         <metrics statements="5" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="4" count="1" type="stmt"/>
         <line num="5" count="1" type="stmt"/>
@@ -116,7 +105,7 @@
         <line num="7" count="1" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
       </file>
-      <file name="keyword.controller.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/controllers/keyword.controller.js">
+      <file name="keyword.controller.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/controllers/keyword.controller.js">
         <metrics statements="5" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="5" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
@@ -124,7 +113,7 @@
         <line num="8" count="1" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
       </file>
-      <file name="level.controller.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/controllers/level.controller.js">
+      <file name="level.controller.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/controllers/level.controller.js">
         <metrics statements="5" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="5" count="1" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
@@ -132,95 +121,65 @@
         <line num="8" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
       </file>
-<<<<<<< HEAD
       <file name="proposal.controller.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/controllers/proposal.controller.js">
-        <metrics statements="41" coveredstatements="25" conditionals="33" coveredconditionals="21" methods="2" coveredmethods="1"/>
-        <line num="9" count="1" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
+        <metrics statements="55" coveredstatements="34" conditionals="37" coveredconditionals="22" methods="3" coveredmethods="2"/>
+        <line num="10" count="1" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
-        <line num="15" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="23" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="54" count="1" type="stmt"/>
-        <line num="55" count="5" type="stmt"/>
-        <line num="56" count="5" type="stmt"/>
-        <line num="57" count="5" type="stmt"/>
-=======
-      <file name="proposal.controller.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/controllers/proposal.controller.js">
-        <metrics statements="43" coveredstatements="41" conditionals="35" coveredconditionals="33" methods="2" coveredmethods="2"/>
-        <line num="9" count="2" type="stmt"/>
-        <line num="10" count="5" type="stmt"/>
-        <line num="11" count="5" type="stmt"/>
-        <line num="12" count="5" type="stmt"/>
-        <line num="13" count="5" type="stmt"/>
-        <line num="15" count="5" type="cond" truecount="2" falsecount="0"/>
-        <line num="16" count="1" type="stmt"/>
-        <line num="18" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="22" count="1" type="stmt"/>
-        <line num="26" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="30" count="1" type="stmt"/>
-        <line num="35" count="2" type="stmt"/>
-        <line num="37" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="40" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="44" count="2" type="stmt"/>
-        <line num="52" count="1" type="stmt"/>
-        <line num="54" count="1" type="stmt"/>
-        <line num="57" count="2" type="stmt"/>
->>>>>>> origin/UserPage
-        <line num="58" count="5" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="16" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="19" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="27" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="58" count="1" type="stmt"/>
         <line num="59" count="5" type="stmt"/>
         <line num="60" count="5" type="stmt"/>
         <line num="61" count="5" type="stmt"/>
         <line num="62" count="5" type="stmt"/>
         <line num="63" count="5" type="stmt"/>
         <line num="64" count="5" type="stmt"/>
-<<<<<<< HEAD
-        <line num="65" count="5" type="cond" truecount="2" falsecount="0"/>
-        <line num="72" count="2" type="stmt"/>
-        <line num="74" count="3" type="stmt"/>
-        <line num="75" count="4" type="stmt"/>
-        <line num="76" count="4" type="cond" truecount="4" falsecount="0"/>
-        <line num="77" count="1" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
-        <line num="83" count="2" type="stmt"/>
-        <line num="84" count="2" type="stmt"/>
-        <line num="86" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="95" count="1" type="stmt"/>
-        <line num="97" count="1" type="stmt"/>
-        <line num="98" count="1" type="stmt"/>
-        <line num="112" count="1" type="stmt"/>
-        <line num="115" count="0" type="stmt"/>
-=======
         <line num="65" count="5" type="stmt"/>
         <line num="66" count="5" type="stmt"/>
         <line num="67" count="5" type="stmt"/>
-        <line num="68" count="5" type="cond" truecount="2" falsecount="0"/>
-        <line num="76" count="2" type="stmt"/>
-        <line num="78" count="3" type="stmt"/>
-        <line num="79" count="4" type="stmt"/>
-        <line num="80" count="4" type="cond" truecount="4" falsecount="0"/>
-        <line num="81" count="1" type="stmt"/>
-        <line num="85" count="0" type="stmt"/>
-        <line num="87" count="2" type="stmt"/>
+        <line num="68" count="5" type="stmt"/>
+        <line num="69" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="77" count="2" type="stmt"/>
+        <line num="79" count="3" type="stmt"/>
+        <line num="80" count="4" type="stmt"/>
+        <line num="81" count="4" type="cond" truecount="4" falsecount="0"/>
+        <line num="82" count="1" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
         <line num="88" count="2" type="stmt"/>
-        <line num="90" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="99" count="1" type="stmt"/>
-        <line num="101" count="1" type="stmt"/>
+        <line num="89" count="2" type="stmt"/>
+        <line num="91" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="100" count="1" type="stmt"/>
         <line num="102" count="1" type="stmt"/>
-        <line num="116" count="1" type="stmt"/>
-        <line num="119" count="0" type="stmt"/>
->>>>>>> origin/UserPage
+        <line num="103" count="1" type="stmt"/>
+        <line num="117" count="1" type="stmt"/>
+        <line num="120" count="0" type="stmt"/>
+        <line num="124" count="1" type="stmt"/>
+        <line num="125" count="1" type="stmt"/>
+        <line num="126" count="1" type="stmt"/>
+        <line num="127" count="1" type="stmt"/>
+        <line num="128" count="1" type="stmt"/>
+        <line num="129" count="1" type="stmt"/>
+        <line num="130" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="131" count="0" type="stmt"/>
+        <line num="134" count="0" type="stmt"/>
+        <line num="136" count="1" type="stmt"/>
+        <line num="137" count="1" type="stmt"/>
+        <line num="139" count="0" type="stmt"/>
       </file>
-      <file name="student.controller.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/controllers/student.controller.js">
+      <file name="student.controller.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/controllers/student.controller.js">
         <metrics statements="10" coveredstatements="9" conditionals="4" coveredconditionals="4" methods="1" coveredmethods="1"/>
         <line num="5" count="1" type="stmt"/>
         <line num="6" count="3" type="stmt"/>
@@ -233,7 +192,7 @@
         <line num="15" count="1" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
       </file>
-      <file name="teacher.controller.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/controllers/teacher.controller.js">
+      <file name="teacher.controller.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/controllers/teacher.controller.js">
         <metrics statements="15" coveredstatements="10" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="1"/>
         <line num="5" count="1" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
@@ -254,7 +213,7 @@
     </package>
     <package name="server.src.models">
       <metrics statements="61" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="17" coveredmethods="0"/>
-      <file name="Application.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/models/Application.js">
+      <file name="Application.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/models/Application.js">
         <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
@@ -265,11 +224,11 @@
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
       </file>
-      <file name="LevelsEnum.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/models/LevelsEnum.js">
+      <file name="LevelsEnum.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/models/LevelsEnum.js">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="2" type="stmt"/>
+        <line num="1" count="1" type="stmt"/>
       </file>
-      <file name="Proposal.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/models/Proposal.js">
+      <file name="Proposal.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/models/Proposal.js">
         <metrics statements="18" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
@@ -290,7 +249,7 @@
         <line num="66" count="1" type="stmt"/>
         <line num="67" count="0" type="stmt"/>
       </file>
-      <file name="Student.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/models/Student.js">
+      <file name="Student.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/models/Student.js">
         <metrics statements="12" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
@@ -305,7 +264,7 @@
         <line num="37" count="1" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
       </file>
-      <file name="Teacher.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/models/Teacher.js">
+      <file name="Teacher.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/models/Teacher.js">
         <metrics statements="13" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
@@ -321,7 +280,7 @@
         <line num="38" count="1" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
       </file>
-      <file name="User.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/models/User.js">
+      <file name="User.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/models/User.js">
         <metrics statements="9" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
@@ -335,48 +294,41 @@
       </file>
     </package>
     <package name="server.src.routes">
-<<<<<<< HEAD
-      <metrics statements="42" coveredstatements="22" conditionals="16" coveredconditionals="0" methods="9" coveredmethods="0"/>
-      <file name="degree.route.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/routes/degree.route.js">
-=======
-      <metrics statements="44" coveredstatements="24" conditionals="16" coveredconditionals="0" methods="9" coveredmethods="0"/>
-      <file name="application.route.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/routes/application.route.js">
-        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="4" count="1" type="stmt"/>
-        <line num="6" count="1" type="stmt"/>
-      </file>
-      <file name="degree.route.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/routes/degree.route.js">
->>>>>>> origin/UserPage
-        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="7" count="1" type="stmt"/>
-      </file>
-      <file name="group.route.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/routes/group.route.js">
-        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="7" count="1" type="stmt"/>
-      </file>
-      <file name="keyword.route.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/routes/keyword.route.js">
-        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="7" count="1" type="stmt"/>
-      </file>
-      <file name="level.route.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/routes/level.route.js">
-        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="7" count="1" type="stmt"/>
-      </file>
-      <file name="proposal.route.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/routes/proposal.route.js">
+      <metrics statements="46" coveredstatements="26" conditionals="16" coveredconditionals="0" methods="9" coveredmethods="0"/>
+      <file name="application.route.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/routes/application.route.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="5" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
-        <line num="11" count="1" type="stmt"/>
       </file>
-<<<<<<< HEAD
+      <file name="degree.route.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/routes/degree.route.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+      </file>
+      <file name="group.route.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/routes/group.route.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+      </file>
+      <file name="keyword.route.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/routes/keyword.route.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+      </file>
+      <file name="level.route.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/routes/level.route.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+      </file>
+      <file name="proposal.route.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/routes/proposal.route.js">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+      </file>
       <file name="session.route.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/routes/session.route.js">
-=======
-      <file name="session.route.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/routes/session.route.js">
->>>>>>> origin/UserPage
         <metrics statements="5" coveredstatements="2" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="4" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
@@ -384,22 +336,18 @@
         <line num="9" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
       </file>
-      <file name="student.route.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/routes/student.route.js">
+      <file name="student.route.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/routes/student.route.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="5" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
       </file>
-      <file name="teacher.route.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/routes/teacher.route.js">
+      <file name="teacher.route.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/routes/teacher.route.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="5" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
         <line num="8" count="1" type="stmt"/>
       </file>
-<<<<<<< HEAD
       <file name="user.route.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/routes/user.route.js">
-=======
-      <file name="user.route.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/routes/user.route.js">
->>>>>>> origin/UserPage
         <metrics statements="21" coveredstatements="4" conditionals="14" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="5" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
@@ -425,13 +373,9 @@
       </file>
     </package>
     <package name="server.src.services">
-<<<<<<< HEAD
-      <metrics statements="171" coveredstatements="80" conditionals="62" coveredconditionals="18" methods="45" coveredmethods="23"/>
-      <file name="degree.services.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/services/degree.services.js">
-=======
-      <metrics statements="207" coveredstatements="83" conditionals="78" coveredconditionals="18" methods="54" coveredmethods="23"/>
-      <file name="application.services.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/services/application.services.js">
-        <metrics statements="27" coveredstatements="2" conditionals="12" coveredconditionals="0" methods="6" coveredmethods="0"/>
+      <metrics statements="227" coveredstatements="101" conditionals="82" coveredconditionals="20" methods="62" coveredmethods="31"/>
+      <file name="application.services.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/services/application.services.js">
+        <metrics statements="37" coveredstatements="11" conditionals="14" coveredconditionals="1" methods="10" coveredmethods="4"/>
         <line num="6" count="1" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
@@ -459,9 +403,18 @@
         <line num="74" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="75" count="0" type="stmt"/>
         <line num="79" count="0" type="stmt"/>
+        <line num="84" count="1" type="stmt"/>
+        <line num="85" count="1" type="stmt"/>
+        <line num="86" count="1" type="stmt"/>
+        <line num="87" count="1" type="stmt"/>
+        <line num="88" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="91" count="1" type="stmt"/>
+        <line num="92" count="1" type="stmt"/>
+        <line num="102" count="1" type="stmt"/>
+        <line num="104" count="1" type="stmt"/>
       </file>
-      <file name="degree.services.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/services/degree.services.js">
->>>>>>> origin/UserPage
+      <file name="degree.services.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/services/degree.services.js">
         <metrics statements="10" coveredstatements="9" conditionals="2" coveredconditionals="1" methods="4" coveredmethods="4"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
@@ -474,7 +427,7 @@
         <line num="15" count="14" type="stmt"/>
         <line num="17" count="1" type="stmt"/>
       </file>
-      <file name="group.services.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/services/group.services.js">
+      <file name="group.services.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/services/group.services.js">
         <metrics statements="10" coveredstatements="9" conditionals="2" coveredconditionals="1" methods="4" coveredmethods="4"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
@@ -487,7 +440,7 @@
         <line num="16" count="8" type="stmt"/>
         <line num="18" count="1" type="stmt"/>
       </file>
-      <file name="keyword.services.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/services/keyword.services.js">
+      <file name="keyword.services.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/services/keyword.services.js">
         <metrics statements="10" coveredstatements="9" conditionals="2" coveredconditionals="1" methods="4" coveredmethods="4"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
@@ -500,7 +453,7 @@
         <line num="16" count="5" type="stmt"/>
         <line num="18" count="1" type="stmt"/>
       </file>
-      <file name="level.services.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/services/level.services.js">
+      <file name="level.services.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/services/level.services.js">
         <metrics statements="10" coveredstatements="1" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
@@ -513,13 +466,8 @@
         <line num="15" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
       </file>
-<<<<<<< HEAD
       <file name="proposal.services.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/services/proposal.services.js">
-        <metrics statements="91" coveredstatements="32" conditionals="40" coveredconditionals="9" methods="16" coveredmethods="5"/>
-=======
-      <file name="proposal.services.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/services/proposal.services.js">
-        <metrics statements="100" coveredstatements="33" conditionals="44" coveredconditionals="9" methods="19" coveredmethods="5"/>
->>>>>>> origin/UserPage
+        <metrics statements="110" coveredstatements="42" conditionals="46" coveredconditionals="10" methods="23" coveredmethods="9"/>
         <line num="6" count="1" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
@@ -552,72 +500,15 @@
         <line num="48" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
         <line num="79" count="0" type="stmt"/>
-<<<<<<< HEAD
-        <line num="82" count="0" type="cond" truecount="0" falsecount="2"/>
-=======
         <line num="80" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="81" count="0" type="stmt"/>
->>>>>>> origin/UserPage
         <line num="83" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
         <line num="85" count="0" type="stmt"/>
         <line num="86" count="0" type="stmt"/>
         <line num="87" count="0" type="stmt"/>
         <line num="88" count="0" type="stmt"/>
         <line num="89" count="0" type="stmt"/>
-<<<<<<< HEAD
-        <line num="90" count="0" type="stmt"/>
-        <line num="91" count="0" type="stmt"/>
-        <line num="93" count="0" type="stmt"/>
-        <line num="99" count="1" type="stmt"/>
-        <line num="100" count="0" type="stmt"/>
-        <line num="101" count="0" type="stmt"/>
-        <line num="102" count="0" type="stmt"/>
-        <line num="107" count="0" type="stmt"/>
-        <line num="115" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="116" count="0" type="stmt"/>
-        <line num="118" count="0" type="stmt"/>
-        <line num="119" count="0" type="stmt"/>
-        <line num="121" count="0" type="stmt"/>
-        <line num="127" count="1" type="stmt"/>
-        <line num="128" count="0" type="stmt"/>
-        <line num="129" count="0" type="stmt"/>
-        <line num="130" count="0" type="stmt"/>
-        <line num="131" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="132" count="0" type="stmt"/>
-        <line num="134" count="0" type="stmt"/>
-        <line num="153" count="1" type="stmt"/>
-        <line num="154" count="1" type="stmt"/>
-        <line num="155" count="1" type="stmt"/>
-        <line num="156" count="1" type="stmt"/>
-        <line num="157" count="1" type="stmt"/>
-        <line num="158" count="1" type="stmt"/>
-        <line num="159" count="1" type="stmt"/>
-        <line num="160" count="1" type="stmt"/>
-        <line num="162" count="1" type="stmt"/>
-        <line num="163" count="1" type="stmt"/>
-        <line num="165" count="1" type="stmt"/>
-        <line num="166" count="1" type="stmt"/>
-        <line num="167" count="1" type="stmt"/>
-        <line num="168" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="169" count="0" type="stmt"/>
-        <line num="171" count="1" type="stmt"/>
-        <line num="172" count="1" type="cond" truecount="3" falsecount="1"/>
-        <line num="173" count="1" type="stmt"/>
-        <line num="174" count="2" type="cond" truecount="3" falsecount="1"/>
-        <line num="176" count="1" type="stmt"/>
-        <line num="179" count="1" type="stmt"/>
-        <line num="180" count="1" type="stmt"/>
-        <line num="181" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="182" count="0" type="stmt"/>
-        <line num="184" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="185" count="1" type="stmt"/>
-        <line num="186" count="1" type="stmt"/>
-        <line num="190" count="1" type="stmt"/>
-        <line num="193" count="1" type="stmt"/>
-        <line num="195" count="1" type="stmt"/>
-        <line num="198" count="1" type="stmt"/>
-        <line num="200" count="0" type="stmt"/>
-=======
         <line num="91" count="0" type="stmt"/>
         <line num="96" count="1" type="stmt"/>
         <line num="97" count="0" type="stmt"/>
@@ -677,9 +568,18 @@
         <line num="256" count="1" type="stmt"/>
         <line num="258" count="1" type="stmt"/>
         <line num="260" count="0" type="stmt"/>
->>>>>>> origin/UserPage
+        <line num="265" count="1" type="stmt"/>
+        <line num="266" count="1" type="stmt"/>
+        <line num="267" count="1" type="stmt"/>
+        <line num="271" count="1" type="stmt"/>
+        <line num="272" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="273" count="0" type="stmt"/>
+        <line num="275" count="1" type="stmt"/>
+        <line num="276" count="7" type="stmt"/>
+        <line num="291" count="7" type="stmt"/>
+        <line num="293" count="1" type="stmt"/>
       </file>
-      <file name="student.services.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/services/student.services.js">
+      <file name="student.services.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/services/student.services.js">
         <metrics statements="10" coveredstatements="9" conditionals="4" coveredconditionals="3" methods="3" coveredmethods="3"/>
         <line num="3" count="1" type="stmt"/>
         <line num="5" count="2" type="stmt"/>
@@ -692,7 +592,7 @@
         <line num="22" count="1" type="stmt"/>
         <line num="24" count="1" type="stmt"/>
       </file>
-      <file name="teacher.services.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/services/teacher.services.js">
+      <file name="teacher.services.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/services/teacher.services.js">
         <metrics statements="20" coveredstatements="10" conditionals="6" coveredconditionals="3" methods="7" coveredmethods="3"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
@@ -705,17 +605,17 @@
         <line num="19" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
-        <line num="28" count="2" type="stmt"/>
-        <line num="29" count="2" type="stmt"/>
-        <line num="31" count="2" type="stmt"/>
-        <line num="32" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="28" count="3" type="stmt"/>
+        <line num="29" count="3" type="stmt"/>
+        <line num="31" count="3" type="stmt"/>
+        <line num="32" count="3" type="cond" truecount="1" falsecount="1"/>
         <line num="33" count="0" type="stmt"/>
-        <line num="35" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="36" count="1" type="stmt"/>
-        <line num="45" count="1" type="stmt"/>
+        <line num="35" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="36" count="2" type="stmt"/>
+        <line num="45" count="2" type="stmt"/>
         <line num="47" count="1" type="stmt"/>
       </file>
-      <file name="user.services.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/services/user.services.js">
+      <file name="user.services.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/services/user.services.js">
         <metrics statements="10" coveredstatements="1" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="4" count="1" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
@@ -730,12 +630,12 @@
       </file>
     </package>
     <package name="server.src.utils">
-      <metrics statements="5" coveredstatements="3" conditionals="6" coveredconditionals="1" methods="1" coveredmethods="1"/>
-      <file name="utils.js" path="/Users/rafalapetina/Polito/Year2_Sem1/Software Engineering 2/Thesis-Management/server/src/utils/utils.js">
-        <metrics statements="5" coveredstatements="3" conditionals="6" coveredconditionals="1" methods="1" coveredmethods="1"/>
-        <line num="3" count="2" type="stmt"/>
-        <line num="5" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="6" count="2" type="stmt"/>
+      <metrics statements="5" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <file name="utils.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/utils/utils.js">
+        <metrics statements="5" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="5" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="6" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
       </file>

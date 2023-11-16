@@ -1,6 +1,6 @@
-const { createApplication } = require('../src/controllers/application.controller');
-import { createApplicationInDb } from '../src/services/application.services.js';
-jest.mock('../src/services/application.services.js', () => ({
+const { createApplication } = require('../../src/controllers/application.controller.js');
+import { createApplicationInDb } from '../../src/services/application.services.js';
+jest.mock('../../src/services/application.services.js', () => ({
     createApplicationInDb: jest.fn(),
 }));
 

@@ -1,6 +1,5 @@
 import {
   getProposalsByTeacherId,
-  // getProposalsByTeacherId,
   getProposalsFromDB,
   postNewProposal,
 } from "../services/proposal.services.js";
