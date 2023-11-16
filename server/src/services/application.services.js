@@ -80,7 +80,6 @@ const getStudentInfoByID = (student_id) => {
     });
   });
 };
-import { db } from '../config/db.js';
 
 export const getApplicationsByProposalId = (proposalId) => {
     return new Promise((resolve, reject) => {
