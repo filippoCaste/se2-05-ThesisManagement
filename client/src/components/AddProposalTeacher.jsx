@@ -7,12 +7,15 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Typography from '@mui/material/Typography';
 import { UserContext } from '../Contexts';
-import { FormControl, InputLabel, Select, MenuItem, Input } from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem, Input, Container } from '@mui/material';
 import proposalAPI from '../services/proposals.api';
 import API_Degrees from '../services/degrees.api';
 import API_Keywords from '../services/keywords.api';
 import API_Teachers from '../services/teachers.api';
 import Button from '@mui/material/Button';
+import { DatePicker } from '@mui/x-date-pickers';
+
+import dayjs from 'dayjs'
 
 function isValidDate(dateString) {
   // La regex per il formato "dd/mm/yyyy"
@@ -134,13 +137,13 @@ function AddProposalTeacher(props)
 
   //ID TEACHER FALSO, VERRA PRESO DAL COOKIE DI SESSIONE DOPO L'ACCESSO
   
-  const [title,setTitle]=useState('Tesi sui processori');
-  const [description,setDescription]=useState('description');
-  const [required_knowledge,setRequired_knowledge]=useState('esame di architetture');
-  const [notes,setNotes]=useState('blabla');
-  const [type,setType]=useState('tipo');
+  const [title,setTitle]=useState('');
+  const [description,setDescription]=useState('');
+  const [required_knowledge,setRequired_knowledge]=useState('');
+  const [notes,setNotes]=useState('');
+  const [type,setType]=useState('');
   const [level,setLevel]=useState('');
-  const [expiration_date,setExpirationDate]=useState("08/11/2023");
+  const [expiration_date,setExpirationDate]=useState(dayjs().format('DD/MM/YYYY'));
   
        
   //HANDLER SUBMIT
@@ -237,7 +240,7 @@ function AddProposalTeacher(props)
   const [invioForm,setInvioForm]=useState(false);
 
    return (
-    <>
+    <Container>
       
     <br /> <br /><br /><br /> <br /> <br />
 
@@ -331,6 +334,16 @@ function AddProposalTeacher(props)
         <TextField label="Expiration Date  (dd/mm/yyyy)" value={expiration_date}  fullWidth
           onChange={ev=>setExpirationDate(ev.target.value)} 
           InputLabelProps={{ shrink: true, }} /> <br />  <br /> 
+{/* 
+             <DatePicker
+               label="Expiration Date"
+               inputVariant="outlined"
+               format="yyyy/mm/dd"
+               value={expiration_date}
+               onChange={date => setExpirationDate(date)}
+               fullWidth
+               InputLabelProps={{ shrink: true }}
+             /> */}
 
 
        <TextField label="Type" name="type" variant="filled"  fullWidth
@@ -383,7 +396,7 @@ function AddProposalTeacher(props)
       
       </form>
    
-      </>
+      </Container>
       
   );
 
