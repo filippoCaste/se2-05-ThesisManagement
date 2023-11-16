@@ -60,25 +60,23 @@ export const postProposal = async (req, res) => {
     const title = req.body.title;
     const type = req.body.type;
     const description = req.body.description;
-    let level = req.body.level;
+    const level = req.body.level;
     let cod_group = req.body.cod_group;
     let cod_degree = req.body.cod_degree;
     try {
-      level = parseInt(level);
       cod_group = parseInt(cod_group);
       if (
-        Number.isNaN(level) ||
         Number.isNaN(cod_group) ||
-        level.toString() != req.body.level ||
         cod_group.toString() != req.body.cod_group ||
-        level > 2 ||
-        level < 1
+        (level !== "MSc" &&
+        level !== "BSc")
       ) {
         return res.status(400).json({ error: "Uncorrect fields" });
       }
       for (let c of cod_degree) {
         let val = parseInt(c);
         if (Number.isNaN(val) || val.toString() != c) {
+          console.log("hh")
           return res.status(400).json({ error: "Uncorrect fields" });
         }
       }
@@ -104,7 +102,7 @@ export const postProposal = async (req, res) => {
           title.trim(),
           type.trim(),
           description.trim(),
-          level,
+          level.trim(),
           expiration_date.trim(),
           notes.trim(),
           cod_degree,

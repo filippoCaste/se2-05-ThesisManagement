@@ -3,10 +3,10 @@ POST http://localhost:3001/api/proposals HTTP/1.1
 content-type: application/json
 
 {
-    "title": "DevOps proposal",
-    "type":"Innovation that inspires",
-    "description": "This is a DevOps proposal.",
-    "level": 4,
+    "title": "Prank proposal",
+    "type":"A prank that inspires",
+    "description": "This is a fake proposal.",
+    "level": "MSc",
     "expiration_date": "2023-12-22",
     "notes": "No additional notes",
     "required_knowledge": "Student must know the principle of software development.",
@@ -15,12 +15,11 @@ content-type: application/json
     "supervisors_obj": {
         "supervisor_id": 10000,
         "co_supervisors": [
-            10001,
-            10002
+            10001
             ]
     },
     "keywords": [
-        "Javascript"
+        "AI"
     ]
 }
          
