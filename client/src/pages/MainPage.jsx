@@ -9,11 +9,10 @@ import dayjs from 'dayjs';
 function MainPage(props) {
   const { openSelectionsMobile, currentDataAndTime } = props;
   const { user } = useContext(UserContext);
-  const drawerWidth = '30vw';
+  const drawerWidth = '20vw';
   const [selectedLevels, setSelectedLevels] = useState([]);
   const [selectedExpirationDate, setSelectedExpirationDate] = useState(null);
-  const [selectedStartExpirationDate, setSelectedStartExpirationDate] =
-    useState(currentDataAndTime);
+  const [selectedStartExpirationDate, setSelectedStartExpirationDate] = useState(currentDataAndTime);
   const [selectedKeywords, setSelectedKeywords] = useState([]);
   const [selectedSupervisorId, setSelectedSupervisorId] = useState(null);
   const [filteredProposals, setFilteredProposals] = useState([]);
@@ -58,7 +57,6 @@ function MainPage(props) {
   ]);
 
   useEffect(() => {
-    console.log(title);
     const temp = proposals.filter((o) =>
       Object.keys(o).some((k) =>
         o['title'].toLowerCase().includes(title.toLowerCase())
@@ -66,6 +64,10 @@ function MainPage(props) {
     );
     setFilteredProposals(temp);
   }, [title]);
+
+  useEffect(() => {
+    setSelectedStartExpirationDate(currentDataAndTime);
+  },[currentDataAndTime])
 
   return (
     <Box sx={{ display: 'inline-flex' }} mt={'15vh'} mx={'6vh'}>

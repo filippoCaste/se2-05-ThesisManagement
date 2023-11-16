@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import IconButton from '@mui/material/IconButton';
 import QueryBuilderOutlinedIcon from '@mui/icons-material/QueryBuilderOutlined';
+import { MobileDatePicker } from '@mui/x-date-pickers';
 
 
 
@@ -40,7 +40,7 @@ function ButtonField(props) {
 
     return (
     <LocalizationProvider dateAdapter={AdapterDayjs} >
-    <MobileDateTimePicker       
+    <MobileDatePicker       
       value={currentDataAndTime}
       slots={{ field: ButtonField, ...props.slots }}
       slotProps={{ field: { setOpen } }}

@@ -1,7 +1,8 @@
 export class Teacher {
-  constructor(id, name, email, password, cod_degree, cod_group) {
+  constructor(id, name, surname, email, password, cod_degree, cod_group) {
     this.id = id;
     this.name = name;
+    this.surname = surname;
     this.email = email;
     this.password = password;
     this.cod_degree = cod_degree;
@@ -13,6 +14,7 @@ export class Teacher {
     return {
       id: this.id,
       name: this.name,
+      surname: this.surname,
       email: this.email,
       password: this.password,
       cod_degree: this.cod_degree,
@@ -25,6 +27,7 @@ export class Teacher {
     return new Teacher(
       json.id,
       json.name,
+      json.surname,
       json.email,
       json.password,
       json.cod_degree,
@@ -36,6 +39,7 @@ export class Teacher {
     return new Teacher(
       result.id,
       result.name,
+      result.surname,
       result.email,
       result.password,
       result.cod_degree,

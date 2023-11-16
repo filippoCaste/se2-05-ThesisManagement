@@ -6,7 +6,7 @@ import {
   Card,
   Box,
 } from '@mui/material';
-import ChipsCustomized from './ChipsCustomized';
+
 import dayjs from 'dayjs';
 
 function CardCustomized(props) {
@@ -20,7 +20,6 @@ function CardCustomized(props) {
 
   const handleClick = () => {
     onClick(proposal);
-    console.log(proposal);
   };
 
   return (
@@ -61,7 +60,7 @@ function CardCustomized(props) {
                   Supervisor:
                 </Typography>
                 <Typography>
-                  {mainSupervisor.name} ({mainSupervisor.email})
+                  {mainSupervisor.name} {mainSupervisor.surname} ({mainSupervisor.email})
                 </Typography>
               </>
             )}
@@ -74,16 +73,21 @@ function CardCustomized(props) {
                     coSupervisors:
                   </Typography>
                   <Typography>
-                    {supervisor.name} ({supervisor.email})
+                    {supervisor.name} {supervisor.surname}  ({supervisor.email})
                   </Typography>
                 </Box>
               </>
             ))}
           </Box>
           {proposal?.keyword_names && (
-            <Typography sx={{ mr: '10px', fontWeight: 'bold' }}>
-              Keywords: {proposal?.keyword_names}
-            </Typography>
+             <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography sx={{ mr: '10px', fontWeight: 'bold' }}>
+                Keywords:
+              </Typography> 
+              <Typography>
+                {proposal.keyword_names}
+                </Typography>
+              </Box>
           )}
           {/* <ChipsCustomized array={[]} /> */}
           <Typography sx={{ mr: '10px', fontWeight: 'bold' }}>

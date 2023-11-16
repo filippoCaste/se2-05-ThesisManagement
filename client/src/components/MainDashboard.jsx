@@ -30,9 +30,9 @@ function MainDashboard(props) {
           item={selectedItem}
         />
       )}
-      <Grid mt={"0.5vh"} container spacing={2} sx={{ width: {sm:"100vw",md: 100-drawerWidth}}}>
+      <Grid mt={"0.5vh"} container spacing={2} sx={{ width: {xs:"100vw",sm:"auto"} }}>
         {proposals.map((proposal) => (
-          <Grid item key={proposal.id} xs={6} sm ={4} md={3} >
+          <Grid item key={proposal.id} sm ={6} md={4} >
             <CardCustomized proposal={proposal} onClick={handleCardClick} />
           </Grid>
         ))}

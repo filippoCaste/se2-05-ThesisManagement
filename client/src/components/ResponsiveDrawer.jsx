@@ -43,6 +43,7 @@ export default function ResponsiveDrawer(props) {
     setSelectedLevels([]);
     setSelectedKeywords([]);
     setSelectedExpirationDate(null);
+    setSelectedStartExpirationDate(currentDataAndTime);
     setSelectedSupervisorId(null); // Assuming setSupervisorid is a function to set Supervisor ID
   };
 
