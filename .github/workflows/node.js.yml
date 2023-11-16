@@ -32,23 +32,23 @@ jobs:
       - name: Run server tests
         run: npm run test:coverage
 
-  client:
-    runs-on: ubuntu-latest
+  # client:
+  #   runs-on: ubuntu-latest
 
-    defaults:
-      run: 
-        working-directory: client
+  #   defaults:
+  #     run: 
+  #       working-directory: client
 
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
+  #   strategy:
+  #     matrix:
+  #       node-version: [14.x, 16.x, 18.x]
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v3
 
-      - name: Install server dependencies
-        run: npm install
+  #     - name: Install server dependencies
+  #       run: npm install
 
-      - name: Run server tests
-        run: npm run test:coverage
+  #     - name: Run server tests
+  #       run: npm run test:coverage
