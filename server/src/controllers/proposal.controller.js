@@ -14,6 +14,9 @@ export const getProposals = async (req, res, next) => {
     const start_expiration_date = req.query.start_date;
     const end_expiration_date = req.query.end_date;
 
+    if (!cod_degree) {
+      return res.status(400).json({ error: "Request should contain a cod_degree" });
+    }
     if (
       start_expiration_date &&
       isValidDateFormat(start_expiration_date) === false
@@ -48,9 +51,9 @@ export const getProposals = async (req, res, next) => {
       start_expiration_date,
       end_expiration_date
     );
-    return res.json(proposals);
+    return res.status(200).json(proposals);
   } catch (err) {
-    return next(err);
+    res.status(500).json({ error: err.message });
   }
 };
 export const postProposal = async (req, res) => {

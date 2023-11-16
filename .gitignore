@@ -13,6 +13,9 @@ node_modules/
 build/
 dist/
 
+# Coverage
+coverage/
+
 # IDE files
 .vscode/
 .idea/

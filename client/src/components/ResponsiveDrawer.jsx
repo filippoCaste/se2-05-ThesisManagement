@@ -56,7 +56,6 @@ export default function ResponsiveDrawer(props) {
           sm: openSelectionsMobile ? 'block' : 'none',
           md: 'block',
         },
-
         flexShrink: 0,
         [`& .MuiDrawer-paper`]: {
           width: { sm: '100vw', md: drawerWidth },

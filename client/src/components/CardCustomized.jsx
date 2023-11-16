@@ -89,7 +89,7 @@ function CardCustomized(props) {
                 </Typography>
               </Box>
           )}
-          {/* <ChipsCustomized array={[]} /> */}
+
           <Typography sx={{ mr: '10px', fontWeight: 'bold' }}>
             Overview:
           </Typography>
