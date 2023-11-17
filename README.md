@@ -209,9 +209,6 @@
 ## Database Tables
 
 ### Tables
-
-Sure, here's the documentation for the given database:
-
 #### `ProposalKeywords`
 - proposal_id: INTEGER (NOT NULL)
 - keyword_id: INTEGER (NOT NULL)
