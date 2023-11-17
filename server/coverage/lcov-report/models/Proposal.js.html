@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">11.11% </span>
+                <span class="strong">10% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/18</span>
+                <span class='fraction'>2/20</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">11.11% </span>
+                <span class="strong">10% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/18</span>
+                <span class='fraction'>2/20</span>
             </div>
         
             
@@ -145,7 +145,17 @@
 <a name='L80'></a><a href='#L80'>80</a>
 <a name='L81'></a><a href='#L81'>81</a>
 <a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -160,6 +170,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -177,6 +191,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -210,8 +226,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -234,10 +254,12 @@
     description,
     expiration_date,
     cod_degree,
+    title_degree,
     level,
     supervisor_id,
     notes,
     cod_group,
+    title_group,
     required_knowledge,
     keyword_names,
     keyword_types
@@ -249,8 +271,10 @@
 <span class="cstat-no" title="statement not covered" >    this.expiration_date = expiration_date;</span>
 <span class="cstat-no" title="statement not covered" >    this.level = level;</span>
 <span class="cstat-no" title="statement not covered" >    this.cod_degree = cod_degree;</span>
+<span class="cstat-no" title="statement not covered" >    this.title_degree = title_degree</span>
 <span class="cstat-no" title="statement not covered" >    this.supervisor_id = supervisor_id;</span>
 <span class="cstat-no" title="statement not covered" >    this.cod_group = cod_group;</span>
+<span class="cstat-no" title="statement not covered" >    this.title_group = title_group;</span>
 <span class="cstat-no" title="statement not covered" >    this.required_knowledge = required_knowledge;</span>
 <span class="cstat-no" title="statement not covered" >    this.keyword_names = keyword_names;</span>
 <span class="cstat-no" title="statement not covered" >    this.keyword_types = keyword_types;</span>
@@ -264,10 +288,12 @@
       description: this.description,
       expiration_date: this.expiration_date,
       cod_degree: this.cod_degree,
+      title_degree: this.title_degree,
       level: this.level,
       supervisor_id: this.supervisor_id,
       notes: this.notes,
       cod_group: this.cod_group,
+      title_group: this.title_group,
       required_knowledge: this.required_knowledge,
       keyword_names: this.keyword_names,
       keyword_types: this.keyword_types,
@@ -282,10 +308,12 @@
       json.description,
       json.expiration_date,
       json.cod_degree,
+      json.title_degree,
       json.level,
       json.supervisor_id,
       json.notes,
       json.cod_group,
+      json.title_group,
       json.required_knowledge,
       json.keyword_names,
       json.keyword_types
@@ -299,10 +327,12 @@
       result.description,
       result.expiration_date,
       result.cod_degree,
+      result.title_degree,
       result.level,
       result.supervisor_id,
       result.notes,
       result.cod_group,
+      result.title_group,
       result.required_knowledge,
       result.keyword_names,
       result.keyword_types
@@ -316,7 +346,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-16T11:14:15.406Z
+                at 2023-11-16T14:47:30.635Z
             </div>
         <script src="../prettify.js"></script>
         <script>

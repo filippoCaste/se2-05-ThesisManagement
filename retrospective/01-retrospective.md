@@ -1,4 +1,4 @@
-# TEMPLATE FOR RETROSPECTIVE (Team 05)
+# RETROSPECTIVE #1 (Team 05)
 
 The retrospective should include _at least_ the following
 sections:
@@ -38,10 +38,10 @@ On "Call the next user" and "See the next number" we instead focused on code rev
 | Story                  | # Tasks | Points | Hours est. | Hours actual |
 | ---------------------- | ------- | ------ | ---------- | ------------ |
 | #0                     | 17      |        |     26.25     |    40.26   |
-| Insert proposal       |    6    |   200   |    14.5    |    19    |
-|  Search a proposal  | 4       |   195   |   15.5  |   37.3  |
-| Apply for a proposal |   3     |   190   |   11   |    11     |
-| Browse application | 4       |   185  | 10      | 10.16         |
+| Insert proposal       |    6    |   2   |    14.5    |    19    |
+|  Search a proposal  | 4       |   2   |   15.5  |   37.3  |
+| Apply for a proposal |   3     |   2   |   11   |    11     |
+| Browse application | 4       |   1  | 10      | 10.16         |
 
 <!-- > place technical tasks corresponding to story `#0` and leave out story points (not applicable in this case) -->
 
