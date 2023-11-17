@@ -177,51 +177,23 @@ function AddProposalTeacher(props)
                   cod_degree: selectedDegree.cod_degree,
               }
 
-            
-            let old_keywords= keywordsList.map(k=>k.name);
-            let new_keywords= nuovo_oggetto.keywords;
-            let nuove_keywords_da_postare = new_keywords.filter(keyword => !old_keywords.includes(keyword));
-   
-            if(nuove_keywords_da_postare.length == 0)
-            {
-              //POST PROPOSAL
-              let list_cod_degree=[nuovo_oggetto.cod_degree];
-              let supervisors_obj={"supervisor_id":  nuovo_oggetto.supervisor_id, 
-              "co_supervisors":  nuovo_oggetto.co_supervisors};
 
-              proposalAPI.postProposal
-              ( 
-                  nuovo_oggetto.title, nuovo_oggetto.type, nuovo_oggetto.description,
-                  nuovo_oggetto.level, nuovo_oggetto.expiration_date, nuovo_oggetto.notes,
-                  nuovo_oggetto.required_knowledge,  list_cod_degree, nuovo_oggetto.cod_group,
-                  supervisors_obj, nuovo_oggetto.keywords
-              )
-              .then(()=> setSuccessSubmit(true))
-              .catch(err=>handleError(err));  
-            }     
-            else
-            {
-              /*
-              if(nuove_keywords_da_postare.length > 0)
-              {
-                //POST PROPOSAL
-                let list_cod_degree=[nuovo_oggetto.cod_degree];
-                let supervisors_obj={"supervisor_id":  nuovo_oggetto.supervisor_id, 
-                "co_supervisors":  nuovo_oggetto.co_supervisors};
-  
-                proposalAPI.postProposal
-                ( 
-                    nuovo_oggetto.title, nuovo_oggetto.type, nuovo_oggetto.description,
-                    nuovo_oggetto.level, nuovo_oggetto.expiration_date, nuovo_oggetto.notes,
-                    nuovo_oggetto.required_knowledge,  list_cod_degree, nuovo_oggetto.cod_group,
-                    supervisors_obj, nuovo_oggetto.keywords
-                )
-                .then( // RICHIAMO API POST KEYWORDS)
-                .catch(err=>handleError(err));  
-              }   
-              */
-            }
-          
+            //POST PROPOSAL
+            let list_cod_degree=[nuovo_oggetto.cod_degree];
+            let supervisors_obj={"supervisor_id":  nuovo_oggetto.supervisor_id, 
+            "co_supervisors":  nuovo_oggetto.co_supervisors};
+
+            proposalAPI.postProposal
+            ( 
+                nuovo_oggetto.title, nuovo_oggetto.type, nuovo_oggetto.description,
+                nuovo_oggetto.level, nuovo_oggetto.expiration_date, nuovo_oggetto.notes,
+                nuovo_oggetto.required_knowledge,  list_cod_degree, nuovo_oggetto.cod_group,
+                supervisors_obj, nuovo_oggetto.keywords
+            )
+            .then(()=> setSuccessSubmit(true))
+            .catch(err=>handleError(err));  
+                 
+        
          }
          
 
