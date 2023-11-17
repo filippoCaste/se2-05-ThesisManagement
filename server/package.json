@@ -49,5 +49,8 @@
   "jest": {
     "testTimeout": 3000
   },
+  "directories": {
+    "test": "tests"
+  },
   "description": ""
 }

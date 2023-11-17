@@ -7,59 +7,26 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Typography from '@mui/material/Typography';
 import { UserContext } from '../Contexts';
-import { FormControl, InputLabel, Select, MenuItem, Input, Container } from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem, Input, Container, IconButton,  Paper } from '@mui/material';
+
 import proposalAPI from '../services/proposals.api';
 import API_Degrees from '../services/degrees.api';
 import API_Keywords from '../services/keywords.api';
 import API_Teachers from '../services/teachers.api';
+
 import Button from '@mui/material/Button';
-import { DatePicker } from '@mui/x-date-pickers';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-import dayjs from 'dayjs'
 
-function isValidDate(dateString) {
-  // La regex per il formato "dd/mm/yyyy"
-  var datePattern = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import Box from '@mui/material/Box';
 
-  if (!datePattern.test(dateString)) {
-    return false; // La stringa non corrisponde al formato
-  }
 
-  // Estrai i componenti della data
-  var [, day, month, year] = dateString.match(datePattern);
+import dayjs from 'dayjs' ;
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
-  // Converte i componenti in numeri
-  day = parseInt(day, 10);
-  month = parseInt(month, 10);
-  year = parseInt(year, 10);
-
-  // Verifica la validità della data
-  if (
-    month < 1 || month > 12 ||
-    day < 1 || day > 31 ||
-    year < 1000 || year > 9999
-  ) {
-    return false; // Data non valida
-  }
-
-  // Controllo speciale per febbraio (bisestile)
-  if (month === 2) {
-    if ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) {
-      if (day > 29) {
-        return false; // Febbraio ha al massimo 29 giorni in un anno bisestile
-      }
-    } else if (day > 28) {
-      return false; // Febbraio ha al massimo 28 giorni in un anno non bisestile
-    }
-  }
-
-  // Controlli aggiuntivi per i mesi con meno di 31 giorni
-  if ([4, 6, 9, 11].includes(month) && day > 30) {
-    return false; // Aprile, giugno, settembre, novembre hanno al massimo 30 giorni
-  }
-
-  return true; // La data è valida
-}
 
 function formatDate(inputDate) {
   // Divide la stringa della data in giorno, mese e anno
@@ -85,6 +52,7 @@ function formatDate(inputDate) {
 function AddProposalTeacher(props)
 {
   const navigate= useNavigate();
+  dayjs.extend(customParseFormat);
 
   const [errorMsgAPI, setErrorMsgAPI] = useState('');
 
@@ -108,7 +76,7 @@ function AddProposalTeacher(props)
   const [teachersList, SetTeachersList]=useState('');
   const [degreesList, SetDegreesList]=useState('');
   const [selectedDegree, setSelectedDegree] = useState('');
-  const [selectedSupervisor, setSelectedSupervisor] = useState('');
+  const [selectedSupervisor, setSelectedSupervisor] = useState(user.id);
   const [keywordsList, SetKeywordsList]=useState(''); //prese dal DB
 
 
@@ -143,7 +111,7 @@ function AddProposalTeacher(props)
   const [notes,setNotes]=useState('');
   const [type,setType]=useState('');
   const [level,setLevel]=useState('');
-  const [expiration_date,setExpirationDate]=useState(dayjs().format('DD/MM/YYYY'));
+  const [expiration_date,setExpirationDate]=useState(null);
   
        
   //HANDLER SUBMIT
@@ -159,85 +127,164 @@ function AddProposalTeacher(props)
                              // soluzione provvisoria, da correggere meglio
 
        ////////controllo input ////////////////////////
-       let corretto=true;
+       let corretto= true;
 
+       let campi_vuoti=' ';
 
-       //metti condizione lunghezza co supervisors scelte == 0
-       if( (title=='')||(description=='')||(required_knowledge=='')||(selectedSupervisor=='')
-            ||(notes=='')||(expiration_date=="dd/mm/yyyy")
-            ||(type=='')||(level=='')||(selectedDegree=='') 
-            || (selectedKeywords.length==0) || ( selectedCoSup.length==0) ) 
+       if(title=='') { campi_vuoti=campi_vuoti + " TITLE , "; corretto= false; }
+       if(description=='') {campi_vuoti=campi_vuoti + " DESCRIPTION , "; corretto= false; }
+       if(required_knowledge=='') { campi_vuoti=campi_vuoti + " REQUIRED KNOWLEDGE , "; corretto= false; }
+       if(notes=='') { campi_vuoti=campi_vuoti + " NOTES , "; corretto= false; }
+       if(type=='') { campi_vuoti=campi_vuoti + " TYPE , "; corretto= false; }
+       if(level=='') { campi_vuoti=campi_vuoti + " LEVEL , "; corretto= false; }
+       if(selectedDegree=='') {campi_vuoti=campi_vuoti + " DEGREE , "; corretto= false; }
+       if(selectedCoSupList.length==0) { campi_vuoti=campi_vuoti + " CO-SUPERVISORS , "; corretto= false; }
+       if(selectedKeywordList.length==0) { campi_vuoti=campi_vuoti + " KEYWORDS , "; corretto= false; }
+       if((expiration_date==null)) { campi_vuoti=campi_vuoti + " EXPIRATION DATE , "; corretto= false; }
+       
+
+       //messaggio errore campi vuoti
+       if(corretto == false) 
        {
            setOpenError(true);
-           setErrorMess("ATTENTION: FIELD EMPTY");
+           setErrorMess("ATTENTION: "+campi_vuoti+" EMPTY ");
            corretto=false;
        }
 
-       if(((isValidDate(expiration_date)==false))&&(corretto==true))
-       {
-          setOpenError(true);
-          setErrorMess("ATTENTION: FORMAT DD/MM/YYYY")
-          corretto=false;
-       }
-
+       
          ////////SE INPUT CORRETTO //////////////////////////////////
          if(corretto==true)
          {
 
-          let formatted_expiration = formatDate(expiration_date);
+          //let formatted_expiration = formatDate(expiration_date);
+
+          let formatted_expiration = expiration_date.format("YYYY-MM-DD");
+          console.log("data: "+formatted_expiration);
 
               let nuovo_oggetto=
               {
                   title:   title,
                   description: description,
                   required_knowledge: required_knowledge,
-                  supervisor_id: selectedSupervisor.teacher_id, 
-                  co_supervisors:  selectedCoSup,
+                  supervisor_id: selectedSupervisor, 
+                  co_supervisors:  selectedCoSupList,
                   notes: notes,
-                  keywords: selectedKeywords,          //contiene solo name
+                  keywords: selectedKeywordList,          
                   expiration_date: formatted_expiration,
                   type: type,
                   level: level,
                   cod_group: user.cod_group,  
                   cod_degree: selectedDegree.cod_degree,
               }
-            
-            
-            //POST PROPOSAL
-            let list_cod_degree=[nuovo_oggetto.cod_degree];
-            let supervisors_obj={"supervisor_id":  nuovo_oggetto.supervisor_id, 
-             "co_supervisors":  nuovo_oggetto.co_supervisors};
 
-            proposalAPI.postProposal
-            ( 
-                nuovo_oggetto.title, nuovo_oggetto.type, nuovo_oggetto.description,
-                nuovo_oggetto.level, nuovo_oggetto.expiration_date, nuovo_oggetto.notes,
-                nuovo_oggetto.required_knowledge,  list_cod_degree, nuovo_oggetto.cod_group,
-                supervisors_obj, nuovo_oggetto.keywords
-            )
-            .then(()=> setSuccessSubmit(true))
-            .catch(err=>handleError(err));  
-              
-              
+            
+            let old_keywords= keywordsList.map(k=>k.name);
+            let new_keywords= nuovo_oggetto.keywords;
+            let nuove_keywords_da_postare = new_keywords.filter(keyword => !old_keywords.includes(keyword));
+   
+            if(nuove_keywords_da_postare.length == 0)
+            {
+              //POST PROPOSAL
+              let list_cod_degree=[nuovo_oggetto.cod_degree];
+              let supervisors_obj={"supervisor_id":  nuovo_oggetto.supervisor_id, 
+              "co_supervisors":  nuovo_oggetto.co_supervisors};
+
+              proposalAPI.postProposal
+              ( 
+                  nuovo_oggetto.title, nuovo_oggetto.type, nuovo_oggetto.description,
+                  nuovo_oggetto.level, nuovo_oggetto.expiration_date, nuovo_oggetto.notes,
+                  nuovo_oggetto.required_knowledge,  list_cod_degree, nuovo_oggetto.cod_group,
+                  supervisors_obj, nuovo_oggetto.keywords
+              )
+              .then(()=> setSuccessSubmit(true))
+              .catch(err=>handleError(err));  
+            }     
+            else
+            {
+              /*
+              if(nuove_keywords_da_postare.length > 0)
+              {
+                //POST PROPOSAL
+                let list_cod_degree=[nuovo_oggetto.cod_degree];
+                let supervisors_obj={"supervisor_id":  nuovo_oggetto.supervisor_id, 
+                "co_supervisors":  nuovo_oggetto.co_supervisors};
+  
+                proposalAPI.postProposal
+                ( 
+                    nuovo_oggetto.title, nuovo_oggetto.type, nuovo_oggetto.description,
+                    nuovo_oggetto.level, nuovo_oggetto.expiration_date, nuovo_oggetto.notes,
+                    nuovo_oggetto.required_knowledge,  list_cod_degree, nuovo_oggetto.cod_group,
+                    supervisors_obj, nuovo_oggetto.keywords
+                )
+                .then( // RICHIAMO API POST KEYWORDS)
+                .catch(err=>handleError(err));  
+              }   
+              */
+            }
+          
          }
          
 
-    }
-  
+      }
+    
    }   
    
    const [openError, setOpenError] = useState(false);
    const [openSuccessSubmit, setSuccessSubmit] = useState(false);
    const [errorMess, setErrorMess] = useState('');
    
- 
-    //KEYWORDS A TENDINA
-  const [selectedKeywords, setSelectedKeywords] = useState([]);
-     
+    
   //CO SUPERVISORS A TENDINA
-  const [selectedCoSup, setSelectedCoSup] = useState([]);
+  const [selectedCoSup, setSelectedCoSup] = useState('');
+  const [selectedCoSupList, setSelectedCoSupList] = useState([]);
 
+  const handleAddClickCoSupervisor = () => {
+      if(selectedCoSup != '')
+      {
+        if (selectedCoSup && !selectedCoSupList.includes(selectedCoSup)) 
+        {
+          setSelectedCoSupList([...selectedCoSupList, selectedCoSup]);
+          setSelectedCoSup(''); // Pulisce la selezione dopo l'aggiunta
+        }
+      }
+  };
+
+  const handleRemoveClickCoSupervisor = (indexToRemove) => {
+    const updatedCoSupList = selectedCoSupList.filter(
+      (_, index) => index !== indexToRemove
+    );
+    setSelectedCoSupList(updatedCoSupList);
+  };
+
+  //KEWWORDS A TENDINA
+  const [newKeyword, setNewKeyword] = useState('');
+  
+  const [selectedKeyword, setSelectedKeyword] = useState('');
+  const [selectedKeywordList, setSelectedKeywordList] = useState([]);
+
+  const handleAddClickKeyword = () => {
+    if (selectedKeyword !== '') {
+      if (!selectedKeywordList.includes(selectedKeyword)) {
+        setSelectedKeywordList([...selectedKeywordList, selectedKeyword]);
+        setSelectedKeyword(''); // Pulisce la selezione dopo l'aggiunta
+      }
+    } else if (newKeyword !== '') {
+      // Aggiunge la nuova keyword
+      setSelectedKeywordList([...selectedKeywordList, newKeyword]);
+      setNewKeyword(''); // Pulisce l'input della nuova keyword dopo l'aggiunta
+    }
+  }
+
+  const handleRemoveClickKeyword = (indexToRemove) => {
+    const updatedKeywordList = selectedKeywordList.filter(
+      (_, index) => index !== indexToRemove
+    );
+    setSelectedKeywordList(updatedKeywordList);
+  };
+
+  //INVIO FORM
   const [invioForm,setInvioForm]=useState(false);
+
 
    return (
     <Container>
@@ -245,8 +292,12 @@ function AddProposalTeacher(props)
     <br /> <br /><br /><br /> <br /> <br />
 
     <Typography variant="h5"> INSERT A NEW PROPOSAL OF THESIS      </Typography>
+    <Typography variant="h7"> TEACHER: {user.name} {user.surname} {user.id} </Typography> <br />
+    
     <Typography variant="h7"> GROUP NAME    : {user?.group_name}   </Typography> <br />
     <Typography variant="h7"> COD DEPARTMENT: {user?.cod_department}         </Typography>
+
+
     
     {openError? <Alert severity="warning" onClose={()=>setOpenError(false)}> <AlertTitle> {errorMess} </AlertTitle> </Alert> : false}
 
@@ -255,140 +306,214 @@ function AddProposalTeacher(props)
     <br /> <br />
 
     <form onSubmit={handleSubmit}>
-    <Grid container spacing={2}>
-        <Grid item xs={6}>
 
-          <TextField label="Title" name="title" variant="filled" fullWidth
+             
+        <Typography variant="subtitle1" fontWeight="bold">   TITLE </Typography>
+          <TextField  name="title" variant="filled" fullWidth
           value={title}  onChange={ev=>setTitle(ev.target.value)}/>  <br /> <br /> 
 
-          <TextField label="Description" name="description" variant="outlined"  fullWidth
-          value={description}  onChange={ev=>setDescription(ev.target.value)}/>  <br />  <br />      
-        
-           <TextField label="Required Knowledge" name="required_knowledge" variant="filled" fullWidth 
+        <Typography variant="subtitle2" fontWeight="bold"> DESCRIPTION </Typography>
+        <TextField  name="description" variant="outlined"  fullWidth  multiline
+           rows={7} value={description}  onChange={ev=>setDescription(ev.target.value)}   />  <br />  <br /> 
+
+          <Grid container spacing={2}> 
+              <Grid item xs={4}>
+                <FormControl fullWidth>  
+                <Typography variant="subtitle1" fontWeight="bold">  SUPERVISORD ID  </Typography>
+                  <TextField name="supervisor" variant="outlined" fullWidth
+                  value={selectedSupervisor}  onChange={ev=>setSelectedSupervisor(ev.target.value)} disabled /> 
+                </FormControl> 
+              </Grid>
+
+              <Grid item xs={4}>
+                  <FormControl fullWidth>
+                  <Typography variant="subtitle1" fontWeight="bold">  SELECT A DEGREE LEVEL  </Typography>
+                    < Select
+                      labelId="word-label"
+                      id="level-select"
+                      onChange={(ev) => { setLevel(ev.target.value) }}
+                    >
+                      {
+                        Array.from(["MSc", "BSc"]).map((el, index) =>
+                        (el === "MSc" ? <MenuItem key={index} value={"MSc"}> Master of Science </MenuItem> 
+                                      : <MenuItem key={index} value={"BSc"}> Bachelor of Science </MenuItem>))
+                      }
+                    </Select>
+                  </FormControl> 
+              </Grid>
+
+              <Grid item xs={4}>
+                <FormControl fullWidth>
+                <Typography variant="subtitle1" fontWeight="bold">  SELECT A DEGREE </Typography>     
+                < Select 
+                    labelId="word-label" 
+                    id="degree-select" 
+                    value={selectedDegree}   
+                    onChange={(event) => {setSelectedDegree(event.target.value); }}
+                >
+                  {   
+                      Array.from(degreesList).map((degree, index) => 
+                    (<MenuItem key={index} value={degree}> {degree.title_degree} </MenuItem> ))
+                  }
+                </Select>
+              </FormControl>   
+              </Grid> 
+            </Grid> <br/>    
+
+            <Grid container spacing={2}> 
+              <Grid item xs={6}>
+                  <Typography variant="subtitle1" fontWeight="bold"> TYPE </Typography>     
+                  <TextField  name="type" variant="filled"  fullWidth
+                  value={type}  onChange={ev=>setType(ev.target.value)}/>  <br /> <br />
+              </Grid>
+
+              <Grid item xs={6}>
+              <FormControl fullWidth>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Typography variant="subtitle1" fontWeight="bold"> EXPIRATION DATE </Typography>
+                  <DatePicker
+                    format="DD/MM/YYYY"
+                    value={expiration_date}
+                    onChange={(newDate) => { setExpirationDate(newDate); }}
+                    minDate={dayjs()}
+                  />
+                </LocalizationProvider>
+                </FormControl> 
+              </Grid>
+          </Grid>  
+
+          <Typography variant="subtitle5" fontWeight="bold"> REQUIRED KNOWLEDGE </Typography>
+          <TextField  name="required_knowledge" variant="filled" fullWidth multiline  rows={7}
           value={required_knowledge}  onChange={ev=>setRequired_knowledge(ev.target.value)}/>  <br /> <br />
+       
+      <br />  <br /> 
 
-
+      <Grid item xs={4}>
+      <Paper elevation={3} style={{ padding: '16px' }}>
         <FormControl fullWidth>
-            <InputLabel id="supervisor-label"> Select a Supervisor</InputLabel>
-            < Select 
-                labelId="word-label" 
-                id="supervisor-select" 
-                value={selectedSupervisor}   
-                onChange={(event) => {setSelectedSupervisor(event.target.value); }}
-            >
-              {   
-                  Array.from(teachersList).map((teacher, index) => 
-                (<MenuItem key={index} value={teacher}> {teacher.email} </MenuItem> ))
-              }
-            </Select>
-      </FormControl> 
-          <br />  <br /> 
-
-
-           <TextField label="Notes" name="notes" variant="filled" fullWidth
-           value={notes}  onChange={ev=>setNotes(ev.target.value)}/>  <br /> <br />
-
-           <FormControl fullWidth>
-              <InputLabel id="cosup-label">Select Co - Supervisors</InputLabel>
-              <Select
-                labelId="cosup-label"
-                id="cosup-select"
-                multiple
-                value={selectedCoSup}
-                onChange={(event) => {setSelectedCoSup(event.target.value)}}
-                input={<Input id="select-multiple" />}
-              >
-                {Array.from(teachersList).map((teacher, index) => (
-                  <MenuItem key={index} value={teacher.teacher_id}>
-                    {teacher.email}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-          
-          
-           <br />  <br /> 
-
-  
-        </Grid>
-
-        <Grid item xs={6}>
-
-        <FormControl fullWidth>
-        <InputLabel id="degree-label"> Select a Degree</InputLabel>
-        < Select 
-            labelId="word-label" 
-            id="degree-select" 
-            value={selectedDegree}   
-            onChange={(event) => {setSelectedDegree(event.target.value); }}
-        >
-          {   
-              Array.from(degreesList).map((degree, index) => 
-             (<MenuItem key={index} value={degree}> {degree.title_degree} </MenuItem> ))
-          }
-        </Select>
-      </FormControl>  <br />  <br /> 
-        
-        
-        <TextField label="Expiration Date  (dd/mm/yyyy)" value={expiration_date}  fullWidth
-          onChange={ev=>setExpirationDate(ev.target.value)} 
-          InputLabelProps={{ shrink: true, }} /> <br />  <br /> 
-{/* 
-             <DatePicker
-               label="Expiration Date"
-               inputVariant="outlined"
-               format="yyyy/mm/dd"
-               value={expiration_date}
-               onChange={date => setExpirationDate(date)}
-               fullWidth
-               InputLabelProps={{ shrink: true }}
-             /> */}
-
-
-       <TextField label="Type" name="type" variant="filled"  fullWidth
-        value={type}  onChange={ev=>setType(ev.target.value)}/>  <br /> <br />
-
-       {/* <TextField label="Level" name="level" variant="outlined"  fullWidth 
-        value={level}  onChange={ev=>setLevel(ev.target.value)}/>  <br /> <br /> */}
-
-        <FormControl fullWidth>
-          <InputLabel id="level-label"> Select a Degree Level</InputLabel>
-          < Select
-            labelId="word-label"
-            id="level-select"
-            onChange={(ev) => { setLevel(ev.target.value) }}
+          <Typography variant="h6" gutterBottom fontWeight="bold">
+            SELECT CO-SUPERVISORS
+          </Typography>
+          <Select
+            labelId="cosup-label"
+            id="cosup-select"
+            value={selectedCoSup}
+            onChange={(event) => setSelectedCoSup(event.target.value)}
+            input={<Input id="select-multiple" />}
           >
-            {
-              Array.from(["MSc", "BSc"]).map((el, index) =>
-              (el === "MSc" ? <MenuItem key={index} value={"MSc"}> Master of Science </MenuItem> 
-                            : <MenuItem key={index} value={"BSc"}> Bachelor of Science </MenuItem>))
-            }
+            {Array.from(teachersList).map((teacher, index) => (
+              <MenuItem key={index} value={teacher.teacher_id}>
+                {teacher.name} {teacher.surname} {teacher.email} {teacher.teacher_id}
+              </MenuItem>
+            ))}
           </Select>
-        </FormControl> 
-    
-      <FormControl fullWidth>
-        <InputLabel id="keywords-label">Select keywords</InputLabel>
-        <Select
-          labelId="keywords-label"
-          id="keywords-select"
-          multiple
-          value={selectedKeywords}
-          onChange={(event) => {setSelectedKeywords(event.target.value)}}
-          input={<Input id="select-multiple" />}
-        >
-          {Array.from(keywordsList).map((k, index) => (
+
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleAddClickCoSupervisor}
+            style={{ marginTop: '16px' }}
+          >
+            ADD
+          </Button>
+
+          {/* Visualizza i co-supervisori selezionati */}
+          <Typography variant="h6" style={{ marginTop: '16px' }}>
+            Selected Co-Supervisors
+          </Typography>
+          {selectedCoSupList.map((coSupervisor, index) => (
+            <Paper key={index} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
+              <Grid container alignItems="center">
+                <Grid item xs={10}>
+                  <Typography variant="body1">{coSupervisor}</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <IconButton
+                    color="primary"
+                    aria-label="delete"
+                    onClick={() => handleRemoveClickCoSupervisor(index)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Grid>
+              </Grid>
+            </Paper>
+          ))}
+        </FormControl>
+      </Paper>
+    </Grid> <br/> <br/>
+
+    <Grid item xs={4}>
+      <Paper elevation={3} style={{ padding: '16px' }}>
+        <FormControl fullWidth>
+          <Typography variant="h6" gutterBottom fontWeight="bold">
+            SELECT KEYWORDS
+          </Typography>
+          <Select
+            labelId="keyword-label"
+            id="cosup-select"
+            value={selectedKeyword}
+            onChange={(event) => setSelectedKeyword(event.target.value)}
+            input={<Input id="select-multiple" />}
+          >
+           {Array.from(keywordsList).map((k, index) => (
             <MenuItem key={index} value={k.name}>
               {k.name}
             </MenuItem>
           ))}
-        </Select>
-      </FormControl>
+          </Select>
 
+          {/* Input per una nuova keyword */}
+          <TextField
+            label="New Keyword"
+            variant="outlined"
+            fullWidth
+            value={newKeyword}
+            onChange={(event) => setNewKeyword(event.target.value)}
+            style={{ marginTop: '16px' }}
+          />
 
+          {/* Pulsante per aggiungere la nuova keyword o selezionare quella esistente */}
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleAddClickKeyword}
+            style={{ marginTop: '16px' }}
+          >
+            ADD
+          </Button>
 
-       </Grid>
-    </Grid>
+          {/* Visualizza i co-supervisori selezionati */}
+          <Typography variant="h6" style={{ marginTop: '16px' }}>
+            Selected Keywords
+          </Typography>
+          {selectedKeywordList.map((keyword, index) => (
+            <Paper key={index} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
+              <Grid container alignItems="center">
+                <Grid item xs={10}>
+                  <Typography variant="body1">{keyword}</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <IconButton
+                    color="primary"
+                    aria-label="delete"
+                    onClick={() => handleRemoveClickKeyword(index)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Grid>
+              </Grid>
+            </Paper>
+          ))}
+        </FormControl>
+      </Paper>
+    </Grid>   <br/> <br/>
+
+    <Typography variant="subtitle5" fontWeight="bold"> NOTES </Typography>
+           <TextField  name="notes" variant="filled" fullWidth  multiline  rows={5}
+           value={notes}  onChange={ev=>setNotes(ev.target.value)}/>  <br /> <br />
+ 
+
     <br />
 
         <Button variant="contained" color="primary" type="submit" onClick={()=>setInvioForm(true)}> ADD PROPOSAL </Button>

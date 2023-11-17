@@ -43,5 +43,6 @@
   },
   "author": "",
   "license": "ISC",
+  "main": "vite.config.js",
   "description": ""
 }
