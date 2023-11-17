@@ -70,26 +70,26 @@ On "Call the next user" and "See the next number" we instead focused on code rev
 ## ASSESSMENT
 
 - What caused your errors in estimation (if any)?
-> We decreased our error ratio, this means that in the trial sprint we had acquired more experience about estimation. Some errors are due to underestimation of the initialization if the repository, the setup of the web application and all the database by creating the structure and populate it with data.  
-> Some few differences between the estimation and the real situation comes also from the fixes we needed to do in order to accomplish with the clarifications in the FAQ.
+> We decreased our error ratio, this means that in the trial sprint we had acquired more experience about estimation. Some errors are due to underestimation of the initialization of the repository, the setup of the web application and all the database by creating the structure and populate it with data.  
+> Some few differences between the estimation and the real situation come also from the fixes we needed to do in order to accomplish the clarifications in the FAQ.
 - What lessons did you learn (both positive and negative) in this sprint?
 > Communication is the most important part of the process. Organization should be prioritized.  
 > Creating a structured timeline that outlines tasks for team members to follow should be established before initiating any work. Prior to implementation, the team should reach a consensus on the API design.
 
 - Which improvement goals set in the previous retrospective were you able to achieve?
 >More scrum: they went as planned and it made clear an overview of the current workflow direction  
->Know what others do: it is better than demo version but more work needs still to be done
+>Know what others do: it is better to define what the others do to not duplicate apis/tests or, more in general, part of the code.
 - Which ones you were not able to achieve? Why?
-> We organized better, but indeed it was not enough. 
+> We organized better with the scrum meetings, but indeed it was not enough. We should try to organize real-life (i.e. not videocall) meetings and work coordinated.
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
 
->1.  define everything before start, roles and the database architecture in the SCRUM planning phase.
->2. some days before the demo, we have to do the merges, so that we have time to resolve all the conflicts that could appear.
+>1. Define everything before start, roles and the database architecture in the SCRUM planning phase.
+>2. Some days before the demo, we have to do the merges, so that we have time to resolve all the conflicts that could appear.
 >3. Team building to improve organization performance as well as team coordination.   
->4. Better communication among those working on their same assigned story.Making clear the timeline of each one could effectively make the difference to avoid any overlap of work by daily notification of the planned workflow.
+>4. Better communication among those working on their same assigned story. Making clear the timeline of each one could effectively make the difference to avoid any overlap of work by daily notification of the planned workflow.
 
 
 - One thing you are proud of as a Team!!  
-***All of us did his/her best, and this is a good point of start!***  
+***All of us did his/her best, this is a good point!***  
 
 >We are proud to have achieved some of the previous objectives, and we know we will be greater scrum by scrum!
