@@ -10,6 +10,7 @@
     - [`/api/students`:](#apistudents)
     - [`/api/keywords`:](#apikeywords)
     - [`/api/applications`:](#apiapplications)
+    - [`/api/levels`:](#apilevels)
     - [Others](#others)
       - [Keywords](#keywords)
   - [Database Tables](#database-tables)
@@ -41,7 +42,9 @@
 
 - POST `/`
   - request body content: all the fields for the proposal:
-  - response: 200 OK (success) or error message
+  - response: 
+    - 200 OK (success)
+    - 500 Internal Server Error: Indicates an error during processing.
 ```json
 {
     "title": "DevOps proposal",
@@ -67,24 +70,34 @@
 ```
 
 - GET `/`
-  - request body content: none
-  - response: 200 OK (success) with user object or 401 Unauthorized (failure) with error message
-```json
-[
-    {
-    "id": 1,
-    "title": "Sw eng proposal",
-    "type": "something innovative",
-    "description": "This is an innovative proposal.",
-    "level": "MSc",
-    "expiration_date": "2024-08-30T00:00:00+02:00",
-    "notes": "No additional notes",
-    "cod_degree": "0",
-    "cod_group": 1,
-    "required_knowledge": null,
-    "status": "posted"
-  }, ]
-```
+  - Description: Retrieve a list of proposals based on specified filters.
+  - Query Parameters:
+    - `cod_degree (required):` The code of the degree associated with the proposals.
+    - `start_date (optional)`: The start date for filtering proposals (format: YYYY-MM-dd).
+    - `end_date (optional)`: The end date for filtering proposals (format: YYYY-MM-dd).
+    - `supervisor_id (optional)`: The ID of the supervisor for additional filtering.
+    - `keyword_ids (optional)`: An array of keyword IDs for further filtering.
+    - `level_ids (optional)`: An array of level IDs for additional filtering.
+  - Response:
+    - 200 OK: Successfully retrieves and returns a list of proposals.
+    - 400 Bad Request: Indicates missing or invalid parameters.
+    - 500 Internal Server Error: Indicates an error during processing.
+    ```json
+    [
+        {
+        "id": 1,
+        "title": "Sw eng proposal",
+        "type": "something innovative",
+        "description": "This is an innovative proposal.",
+        "level": "MSc",
+        "expiration_date": "2024-08-30T00:00:00+02:00",
+        "notes": "No additional notes",
+        "cod_degree": "0",
+        "cod_group": 1,
+        "required_knowledge": null,
+        "status": "posted"
+      }, ]
+    ```
 
 - GET `/teachers/:id`
   - request body content: none
@@ -92,6 +105,7 @@
     - 200 OK (success) with array of thesis proposals object 
     - 400 Bad Request if the id is of unknown teachers
     - 401 Unauthorized (failure) with error message
+    - 500 Internal Server Error: Indicates an error during processing.
 ```json
 [
   {
@@ -116,7 +130,9 @@
 
 - GET `/`
   - request body content: none
-  - response: 200 OK (success) with degree object or error message
+  - response: 
+    - 200 OK (success) with degree object or error message
+    - 500 Internal Server Error: Indicates an error during processing.
 ```json
 [ {
     "cod_degree": 1,
@@ -128,7 +144,9 @@
 
 - GET `/`
   - request body content: none
-  - response: 200 OK (success) with object or error message
+  - response: 
+    - 200 OK (success) with object or error message
+    - 500 Internal Server Error: Indicates an error during processing.
 ```json
   [ {
     "cod_group": 0,
@@ -140,7 +158,9 @@
 ### `/api/teachers`:
 - GET `/`
   - request body content: none
-  - response: 200 OK (success) with teachers or error message
+  - response: 
+    - 200 OK (success) with teachers or error message
+    - 500 Internal Server Error: Indicates an error during processing.
 ```json
   [   {
     "teacher_id": 10000,
@@ -156,6 +176,7 @@
   - response: 
     - 200 OK (success) with the *teacher* with the corresponding `id` or error message
     - 404 if the user is not found
+    - 500 Internal Server Error: Indicates an error during processing.
 ```json
 {
   "id": 10000,
@@ -175,6 +196,7 @@
   - response: 
     - 200 OK (success) with the *student* with the corresponding `id` or error message
     - 404 if the user is not found
+    - 500 Internal Server Error: Indicates an error during processing.
 ```json
 {
   "student_id": 400000,
@@ -192,7 +214,9 @@
 
 - GET `/`
   - request body content: none
-  - response: 200 OK (success) with teachers or error message
+  - response: 
+    - 200 OK (success) with teachers or error message
+    - 500 Internal Server Error: Indicates an error during processing.
 ```json
   [ {
     "id": 1,
@@ -204,22 +228,58 @@
 
 - GET `/proposal/:id`
   - request body content: none
-  - response: 200 OK (success) with the list of applications or error message
+  - response: 
+    - 200 OK (success) with the list of applications or error message
+    - 500 Internal Server Error: Indicates an error during processing.
+  ```json
+  [
+    {
+      "student_id": 400000,
+      "submission_date": "2023-10-12",
+      "student_name": "Mario",
+      "student_surname": "Rossi",
+      "student_email": "mario.rossi@studenti.polito.it",
+      "student_nationality": "italian",
+      "student_enrollment_year": 2022,
+      "student_title_degree": "COMPUTER ENGINEERING"
+    },
+  ]
+  ```
+- POST `/`
+  - Description: Create a new application for a proposal.
+  - Request Body:
+      - `proposal_id`
+      - `student_id`
+      - `submission_date`
+  - Response:
+    - 200 OK: Application successfully created.
+    - 400 Bad Request: Indicates missing or invalid parameters.
+    - 500 Internal Server Error: Indicates an error during processing.
+  ```json
+  {
+    "application_id": 123,
+    "proposal_id": 1,
+    "student_id": 1001,
+    "submission_date": "2023-11-18T00:00:00.000Z"
+  }
+  ```
 
+### `/api/levels`:
+
+- GET `/`
+  - request body content: none
+  - response: 
+    - 200 OK (success) with degree object or error message
+    - 500 Internal Server Error: Indicates an error during processing.
 ```json
 [
   {
-    "student_id": 400000,
-    "submission_date": "2023-10-12",
-    "student_name": "Mario",
-    "student_surname": "Rossi",
-    "student_email": "mario.rossi@studenti.polito.it",
-    "student_nationality": "italian",
-    "student_enrollment_year": 2022,
-    "student_title_degree": "COMPUTER ENGINEERING"
+    "id": "MSc",
+    "name": "MSc"
   },
-]
+] 
 ```
+
 
 ### Others
 #### Keywords
