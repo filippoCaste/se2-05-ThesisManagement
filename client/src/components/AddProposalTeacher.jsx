@@ -156,10 +156,9 @@ function AddProposalTeacher(props)
          if(corretto==true)
          {
 
-          //let formatted_expiration = formatDate(expiration_date);
-
           let formatted_expiration = expiration_date.format("YYYY-MM-DD");
-          console.log("data: "+formatted_expiration);
+          
+          let listaCoSup= selectedCoSupList.map(co=>co.teacher_id);
 
               let nuovo_oggetto=
               {
@@ -167,7 +166,7 @@ function AddProposalTeacher(props)
                   description: description,
                   required_knowledge: required_knowledge,
                   supervisor_id: selectedSupervisor, 
-                  co_supervisors:  selectedCoSupList,
+                  co_supervisors:  listaCoSup,
                   notes: notes,
                   keywords: selectedKeywordList,          
                   expiration_date: formatted_expiration,
@@ -183,6 +182,7 @@ function AddProposalTeacher(props)
             let supervisors_obj={"supervisor_id":  nuovo_oggetto.supervisor_id, 
             "co_supervisors":  nuovo_oggetto.co_supervisors};
 
+            
             proposalAPI.postProposal
             ( 
                 nuovo_oggetto.title, nuovo_oggetto.type, nuovo_oggetto.description,
@@ -263,8 +263,9 @@ function AddProposalTeacher(props)
       
     <br /> <br /><br /><br /> <br /> <br />
 
-    <Typography variant="h5"> INSERT A NEW PROPOSAL OF THESIS      </Typography>
-    <Typography variant="h7"> TEACHER: {user.name} {user.surname} {user.id} </Typography> <br />
+    <Typography variant="h5" align="center"> INSERT A NEW PROPOSAL OF THESIS      </Typography> <br />
+    <Typography variant="h7"> TEACHER: {user.name} {user.surname} </Typography> <br />
+    <Typography variant="h7"> ID: {user.id} </Typography> <br /> <br />
     
     <Typography variant="h7"> GROUP NAME    : {user?.group_name}   </Typography> <br />
     <Typography variant="h7"> COD DEPARTMENT: {user?.cod_department}         </Typography>
@@ -324,7 +325,7 @@ function AddProposalTeacher(props)
                     onChange={(event) => {setSelectedDegree(event.target.value); }}
                 >
                   {   
-                      Array.from(degreesList).map((degree, index) => 
+                      Array.from(degreesList).filter(d=>d.level_degree == level).map((degree, index) => 
                     (<MenuItem key={index} value={degree}> {degree.title_degree} </MenuItem> ))
                   }
                 </Select>
@@ -373,9 +374,9 @@ function AddProposalTeacher(props)
             onChange={(event) => setSelectedCoSup(event.target.value)}
             input={<Input id="select-multiple" />}
           >
-            {Array.from(teachersList).map((teacher, index) => (
-              <MenuItem key={index} value={teacher.teacher_id}>
-                {teacher.name} {teacher.surname} {teacher.email} {teacher.teacher_id}
+            {Array.from(teachersList).filter(t => t.teacher_id != user.id).map((teacher, index) => (
+              <MenuItem key={index} value={teacher}>
+                {teacher.name} {teacher.surname} - {teacher.teacher_id}
               </MenuItem>
             ))}
           </Select>
@@ -397,7 +398,7 @@ function AddProposalTeacher(props)
             <Paper key={index} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
               <Grid container alignItems="center">
                 <Grid item xs={10}>
-                  <Typography variant="body1">{coSupervisor}</Typography>
+                  <Typography variant="body1">{coSupervisor.name} {coSupervisor.surname} - {coSupervisor.teacher_id}</Typography>
                 </Grid>
                 <Grid item xs={2}>
                   <IconButton
