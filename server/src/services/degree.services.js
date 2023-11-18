@@ -10,7 +10,8 @@ export const getAllDegrees = () => {
             const degrees = rows.map((e) => {
                 const obj = {
                     cod_degree: e.cod_degree,
-                    title_degree: e.title_degree
+                    title_degree: e.title_degree,
+                    level_degree: e.level
                 }
                 return obj;
             });
