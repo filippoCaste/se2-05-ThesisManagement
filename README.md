@@ -1,26 +1,41 @@
-## React Client Application Routes
+# Thesis Management 
 
-<!-- - Route `/`:
-- Route `/login`: Login page. Perform authentication using username and password. Params passed throught props: handleLogin function. -->
+- [Thesis Management](#thesis-management)
+  - [Login credentials](#login-credentials)
+  - [API Server](#api-server)
+    - [`/api/proposals`:](#apiproposals)
+    - [`/api/degrees`:](#apidegrees)
+    - [`/api/groups`:](#apigroups)
+    - [`/api/teachers`:](#apiteachers)
+    - [`/api/students`:](#apistudents)
+    - [`/api/keywords`:](#apikeywords)
+    - [`/api/applications`:](#apiapplications)
+    - [Others](#others)
+      - [Keywords](#keywords)
+  - [Database Tables](#database-tables)
+    - [Tables](#tables)
+      - [`ProposalKeywords`](#proposalkeywords)
+      - [`Keywords`](#keywords-1)
+      - [`Courses`](#courses)
+      - [`Departments`](#departments)
+      - [`Degrees`](#degrees)
+      - [`Groups`](#groups)
+      - [`Users`](#users)
+      - [`Teachers`](#teachers)
+      - [`Careers`](#careers)
+      - [`Students`](#students)
+      - [`Supervisors`](#supervisors)
+      - [`Proposals`](#proposals)
+      - [`Applications`](#applications)
+  - [Main React Components](#main-react-components)
+
+## Login credentials
+|username|password|
+|---|---|
+|d10000@polito.it | 10000 |
+|s308692@studenti.polito.it | 308692 |
 
 ## API Server
-
-<!-- In the `index.js` file there are the following endpoints. The logic is separated in three main folders. The `routes` folder contains the routes related to certain entity, the `controller` folder has the logic for the route and the `services` folder contains the database queries that can be reused by different controllers and provide a higher level of abstraction.
-
-`/api/session`:
-
-- POST `/login`
-  - request body content: creadentials with username and password
-  - response: 201 Created (success) with user object or 401 Unauthorized (failure) with error message
-- GET `/current`
-  - request body content: none
-  - response: 200 OK (success) with user object or 401 Unauthorized (failure) with error message
-- DELETE `/current`
-  - request body content: none
-  - response: 200 OK (success)
-- GET `/register`
-  - request body content: json object with username, email and password
-  - response: 201 Created (success) with user object or 401 Unauthorized (failure) with error message -->
 
 ### `/api/proposals`:
 
@@ -206,6 +221,11 @@
 ]
 ```
 
+### Others
+#### Keywords
+- `postKeyword(keywordName)`: post a new keyword in the database (path: `services/keyword.services.js`)
+- `getKeywordByName(keywordName)`: if exists, it returns a keyword with the specified name (path: `services/keyword.services.js`)
+
 ## Database Tables
 
 ### Tables
@@ -308,7 +328,3 @@
 
 - `AppBar` (in `AppBar.jsx`): shows the AppBar with the application name (with link to "/" by clicking on it), the name of user logged in, the login/logout button. Params passed: app title, user object, handleLogout, function for the admin to change the app title.
 - `CustomSnackbar` (in `CustomSnackbar.jsx`): shows the snackbar with a message on the bottom left corner. Present in all pages. Passed param: message. -->
-
-## Users Credentials
-### to be changed to our database
-- username: John, password: 12345
