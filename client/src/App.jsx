@@ -26,20 +26,10 @@ function App() {
 
   useEffect(() => {
     userAPI.getUserInfo().then((userInfo) => {
-      if(userInfo?.role === 'student') {
-        studentsAPI.getStudentById(userInfo.id).then((studentInfo) => {;
-        setUser(new Student(studentInfo));
-        }).catch((error) => {
-          console.log(error);
-        });
-      }
-      else {
-        teachersAPI.getTeacherById(userInfo.id).then((teacherInfo) => {
-          setUser(new Professor(teacherInfo));
-        }).catch((error) => {
-          console.log(error);
-        });
-      }
+      if(userInfo?.email[0] === "s") 
+        setUser(new Student(userInfo));
+      else if (userInfo?.email[0] === "d")
+          setUser(new Professor(userInfo));
       
     }
     ).catch((err) => {

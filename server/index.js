@@ -10,6 +10,9 @@ import { router as studentRoutes } from "./src/routes/student.route.js";
 import { router as keywordRoutes } from "./src/routes/keyword.route.js";
 import { router as levelRoutes } from "./src/routes/level.route.js";
 import { router as applicationRoutes } from "./src/routes/application.route.js";
+import { getUserById } from "./src/services/user.services.js";
+import { getStudentById } from "./src/services/student.services.js";
+import { getTeacherById } from "./src/services/teacher.services.js";
 import passport from "passport";
 import session from "express-session";
 import morgan from "morgan";
@@ -45,7 +48,15 @@ passport.serializeUser(function (user, done) {
   done(null, user);
 });
 
-passport.deserializeUser(async function (user, done) {
+passport.deserializeUser(async function (id, done) {
+  let user = await getUserById(id.slice(1));
+  if(user.role == 'student')
+    user = await getStudentById(user.id);
+  else if(user.role == 'teacher')
+    user = await getTeacherById(user.id);
+  else 
+    done(err, null);
+
   done(null, user);
 });
 

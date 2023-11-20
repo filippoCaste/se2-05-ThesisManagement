@@ -10,7 +10,7 @@ export const strategy = new auth0Strategy({
   credentials: true
 },
   function (accessToken, refreshToken, extraParams, profile, done) {
-      return done(null, profile.nickname);
+      return done(null, profile);
   }
 );
 
@@ -23,7 +23,7 @@ export const isLoggedIn = (req, res, next) => {
 
 export const isStudent = async (req, res, next) => {
   if (req.isAuthenticated()) {
-    const user = await getUserById(req.user.substring(1, req.user.length));
+    const user = await getUserById(req.user.id);
     if (user.role === "student") {
       return next();
     }
@@ -33,7 +33,7 @@ export const isStudent = async (req, res, next) => {
 
 export const isTeacher = async (req, res, next) => {
   if (req.isAuthenticated()) {
-    const user = await getUserById(req.user.substring(1, req.user.length));
+    const user = await getUserById(req.user.id);
     if (user.role === "teacher") {
       return next();
     }
