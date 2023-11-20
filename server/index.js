@@ -45,7 +45,7 @@ app.use(passport.session());
 passport.use(strategy);
 
 passport.serializeUser(function (user, done) {
-  done(null, user);
+  done(null, user.nickname);
 });
 
 passport.deserializeUser(async function (id, done) {

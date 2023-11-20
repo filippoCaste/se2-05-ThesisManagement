@@ -22,8 +22,7 @@ router.get('/login/callback', (req, res, next) => {
         if (!user) return res.redirect('/login');
         req.logIn(user, async function (err) {
             if (err) { return next(err); }
-  
-            const userData = await getUserById(user.substring(1, user.length));
+            const userData = await getUserById(user.nickname.slice(1));
             return res.redirect("http://localhost:5173/" + userData.role);
         });
     }
