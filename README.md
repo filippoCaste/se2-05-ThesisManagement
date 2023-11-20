@@ -137,7 +137,8 @@
 ```json
 [ {
     "cod_degree": 1,
-    "title_degree": "AUTOMOTIVE ENGINEERING (INGEGNERIA DELL'AUTOVEICOLO)"
+    "title_degree": "AUTOMOTIVE ENGINEERING (INGEGNERIA DELL'AUTOVEICOLO)",
+    "level_degree": "MSc"
   }, ]
 ```
 

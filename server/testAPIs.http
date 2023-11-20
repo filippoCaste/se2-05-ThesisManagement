@@ -19,7 +19,7 @@ content-type: application/json
             ]
     },
     "keywords": [
-        "AI"
+        "AI", "Mobile Application", "Web development"
     ]
 }
          
@@ -57,3 +57,6 @@ GET http://localhost:3001/api/keywords HTTP/1.1
 
 ###     APPLICATIONS
 GET http://localhost:3001/api/applications/proposal/15 HTTP/1.1
+
+###     LEVELS
+GET http://localhost:3001/api/levels HTTP/1.1

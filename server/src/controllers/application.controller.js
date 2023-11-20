@@ -1,4 +1,5 @@
-import { createApplicationInDb } from "../services/application.services.js";
+"use strict";
+import { createApplicationInDb, getApplicationsByProposalId } from "../services/application.services.js";
 import { isValidDateFormat } from "../utils/utils.js";
 
 export const createApplication = async (req, res) => {
@@ -32,9 +33,6 @@ export const createApplication = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
-"use strict";
-
-import { getApplicationsByProposalId } from "../services/application.services.js";
 
 export const getApplicationsProposalId = async (req, res) => {
     try {

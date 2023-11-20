@@ -6,6 +6,7 @@ import {
 import { LevelsEnum } from "../models/LevelsEnum.js";
 import { isValidDateFormat } from "../utils/utils.js";
 import { getTeacherById } from "../services/teacher.services.js";
+import { getKeywordByName, postKeyword } from "../services/keyword.services.js";
 
 export const getProposals = async (req, res, next) => {
   try {
@@ -55,6 +56,13 @@ export const getProposals = async (req, res, next) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+/**
+ * 
+ * @param {*} req: `req.body` must contain fields: *title*, *type*, *description*, *level*, *cod_group*, *cod_degree*, *expiration_date*, *supervisor_obj*, *keywords*
+ * @param {*} res 
+ * @returns 
+ */
 export const postProposal = async (req, res) => {
   try {
     const title = req.body.title;
@@ -76,7 +84,6 @@ export const postProposal = async (req, res) => {
       for (let c of cod_degree) {
         let val = parseInt(c);
         if (Number.isNaN(val) || val.toString() != c) {
-          console.log("hh")
           return res.status(400).json({ error: "Uncorrect fields" });
         }
       }
@@ -91,12 +98,18 @@ export const postProposal = async (req, res) => {
       !type ||
       !description ||
       !expiration_date ||
-      !notes ||
       !cod_degree ||
       !req.body.supervisors_obj.supervisor_id
     ) {
       return res.status(400).json({ error: "Missing fields" });
     } else {
+      for(let kw of req.body.keywords) {
+        kw = kw.trim();
+        const k = await getKeywordByName(kw);
+        if (!k) {
+          await postKeyword(kw);
+        }
+      }
       for (let cod_degree of req.body.cod_degree) {
         await postNewProposal(
           title.trim(),
