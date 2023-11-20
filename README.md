@@ -35,6 +35,7 @@
 |---|---|
 |d10000@polito.it | 10000 |
 |s308692@studenti.polito.it | 308692 |
+|s318082@studenti.polito.it | 318082 |
 
 ## API Server
 
