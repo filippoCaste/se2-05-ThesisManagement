@@ -97,7 +97,7 @@ export default function ResponsiveDrawer(props) {
           bottom="5vh"
           right="5vh"
           href="#"
-          color="inherit"
+          color="red"
           underline="none"
           onClick={handleResetFilters}
         >

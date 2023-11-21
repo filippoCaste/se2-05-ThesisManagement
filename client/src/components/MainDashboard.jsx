@@ -6,6 +6,7 @@ import levelAPI from '../services/levels.api';
 import applicationsAPI from '../services/applications.api';
 import { UserContext } from '../Contexts';
 import dayjs from 'dayjs';
+import StickyHeadTable from './TableComponent';
 
 function MainDashboard(props) {
   const {proposals, openSelectionMobile, drawerWidth } = props;
@@ -19,6 +20,14 @@ function MainDashboard(props) {
     setOpenDialog(true);
   };
   
+  /*
+  {proposals.map((proposal) => (
+          <Grid item key={proposal.id} sm ={6} md={4} >
+            <CardCustomized proposal={proposal} onClick={handleCardClick} />
+          </Grid>
+        ))}
+  */
+
   return (
     <>
       {openDialog && (
@@ -39,11 +48,7 @@ function MainDashboard(props) {
         />
       )}
       <Grid mt={"0.5vh"} container spacing={2} sx={{ width: {xs:"100vw",sm:"auto"} }}>
-        {proposals.map((proposal) => (
-          <Grid item key={proposal.id} sm ={6} md={4} >
-            <CardCustomized proposal={proposal} onClick={handleCardClick} />
-          </Grid>
-        ))}
+        <StickyHeadTable proposals={proposals} onClick={handleCardClick}/>
       </Grid>
     </>
   );
