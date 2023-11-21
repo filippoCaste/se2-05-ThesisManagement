@@ -13,16 +13,7 @@ const getUserInfo = async () => {
   }
 };
 
-const userLogin = () => {
-  try {
-    fetch(SERVER_URL + '/api/users/login');
-  } catch (error) {
-    console.error('Errore durante la chiamata a /api/users/login:', error.message);
-  }
-};
-
 const userAPI = {
-  getUserInfo,
-  userLogin
+  getUserInfo
 };
 export default userAPI;
