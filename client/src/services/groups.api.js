@@ -5,6 +5,7 @@ const getAllGroups = async () => {
     try {
         const response = await fetch(SERVER_URL + "/api/groups", {
             method: "GET",
+            credentials: 'include'
         });
         if (response.ok) {
             const groups = await response.json();

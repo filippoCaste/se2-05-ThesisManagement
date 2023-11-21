@@ -5,6 +5,7 @@ const getAllDegrees = async () => {
     try {
         const response = await fetch(SERVER_URL + "/api/degrees", {
             method: "GET",
+            credentials: 'include',
         });
         if (response.ok) {
             const degrees = await response.json();

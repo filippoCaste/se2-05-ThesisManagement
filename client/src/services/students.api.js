@@ -5,6 +5,7 @@ const getStudentById = async (studentId) => {
     try {
         const response = await fetch(SERVER_URL + `/api/students/${studentId}`, {
             method: "GET",
+            credentials: 'include',
         });
         if (response.ok) {
             const student = await response.json();

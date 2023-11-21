@@ -4,13 +4,14 @@ import {
   postProposal,
   getProposalTeacherId
 } from "../controllers/proposal.controller.js";
+import { isLoggedIn, isTeacher } from "../config/configs.js";
 
 const router = Router();
 
-router.get("/", getProposals);
+router.get("/", isLoggedIn, getProposals);
 
-router.post("/", postProposal);
+router.post("/", isTeacher, postProposal);
 
-router.get('/teachers/:id', getProposalTeacherId)
+router.get('/teachers/:id', isLoggedIn, getProposalTeacherId)
 
 export { router };

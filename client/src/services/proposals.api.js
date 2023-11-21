@@ -32,6 +32,7 @@ const postProposal = async (
 
     const response = await fetch(SERVER_URL + "/api/proposals", {
       method: "POST",
+      credentials: 'include',
       headers: {
         "Content-Type": "application/json",
       },

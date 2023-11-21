@@ -5,6 +5,7 @@ const getAllKeywords = async () => {
   try {
     const response = await fetch(SERVER_URL + "/api/keywords", {
       method: "GET",
+      credentials: 'include',
     });
     if (response.ok) {
       const keywords = await response.json();
@@ -24,6 +25,7 @@ const postKeywords = async (name, type) => {
 
     const response = await fetch(SERVER_URL + "/api/keywords", {
       method: "POST",
+      credentials: 'include',
       headers: {
         "Content-Type": "application/json",
       },
