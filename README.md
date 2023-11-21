@@ -34,6 +34,7 @@
 |username|password|
 |---|---|
 |d10000@polito.it | 10000 |
+|d10001@polito.it | 10001 |
 |s308692@studenti.polito.it | 308692 |
 |s318082@studenti.polito.it | 318082 |
 
