@@ -6,8 +6,12 @@ name: Node.js CI
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - 'server/tests/integration/'
   pull_request:
     branches: [ "main" ]
+    paths-ignore:
+      - 'server/tests/integration/'
 
 jobs:
 
