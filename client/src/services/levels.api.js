@@ -3,7 +3,9 @@ const SERVER_URL = "http://localhost:3001";
 
 const getLevels = async () => {
   try {
-    const response = await fetch(`${SERVER_URL}/api/levels`);
+    const response = await fetch(`${SERVER_URL}/api/levels`, {
+      credentials: 'include'
+    });
     if (response.ok) {
       const levels = await response.json();
 

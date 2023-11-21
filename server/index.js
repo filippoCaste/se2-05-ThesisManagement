@@ -48,6 +48,8 @@ passport.serializeUser(function (user, done) {
   done(null, user.nickname);
 });
 
+app.use(passport.authenticate('session'));
+
 passport.deserializeUser(async function (id, done) {
   let user = await getUserById(id.slice(1));
   if(user.role == 'student')

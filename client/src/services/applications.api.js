@@ -7,6 +7,7 @@ const createApplication = async (proposal_id, student_id, submission_date) => {
 
     const response = await fetch(SERVER_URL + "/api/applications", {
       method: "POST",
+      credentials: 'include',
       headers: {
         "Content-Type": "application/json",
       },
@@ -27,6 +28,7 @@ const getApplicationStudentsByProposalId = async (proposalId) => {
   try {
       const response = await fetch(SERVER_URL + `/api/applications/proposal/${proposalId}`, {
           method: "GET",
+          credentials: 'include',
       });
       if (response.ok) {
           const application = await response.json();
