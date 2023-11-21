@@ -316,7 +316,7 @@ function AddProposalTeacher(props)
               </Grid>
 
               <Grid item xs={4}>
-                <FormControl fullWidth>
+                <FormControl fullWidth disabled={level===''}>
                 <Typography variant="subtitle1" fontWeight="bold">  SELECT A DEGREE </Typography>     
                 < Select 
                     labelId="word-label" 
