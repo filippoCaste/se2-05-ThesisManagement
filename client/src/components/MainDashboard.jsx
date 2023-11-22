@@ -6,11 +6,12 @@ import dayjs from 'dayjs';
 import StickyHeadTable from './TableComponent';
 
 function MainDashboard(props) {
-  const {proposals, openSelectionMobile, drawerWidth } = props;
+  const { proposals, openSelectionMobile, drawerWidth, isAppliedProposals } =
+    props;
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [loading, setLoading] = useState(false);
-  const {user} = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   const handleCardClick = (datum) => {
     setSelectedItem(datum);
@@ -22,21 +23,32 @@ function MainDashboard(props) {
       {openDialog && (
         <AlertDialog
           open={openDialog}
-          handleClose={() => {setLoading(false);setOpenDialog(false); console.log(selectedItem.id+ " "+ user.id)}}
-          handleApply={() => {
-
-              setLoading(true);
-              
-              applicationsAPI.createApplication(selectedItem.id, user.id,dayjs().format("YYYY-MM-DD"));
-
-              setOpenDialog(false);
-              setLoading(false);
+          handleClose={() => {
+            setLoading(false);
+            setOpenDialog(false);
+            console.log(selectedItem.id + ' ' + user.id);
           }}
-          loading = {loading}
+          handleApply={() => {
+            setLoading(true);
+
+            applicationsAPI.createApplication(
+              selectedItem.id,
+              user.id,
+              dayjs().format('YYYY-MM-DD')
+            );
+
+            setOpenDialog(false);
+            setLoading(false);
+          }}
+          loading={loading}
           item={selectedItem}
         />
       )}
-      <StickyHeadTable proposals={proposals} onClick={handleCardClick}/>
+      <StickyHeadTable
+        proposals={proposals}
+        onClick={handleCardClick}
+        isAppliedProposals={isAppliedProposals}
+      />
     </>
   );
 }
