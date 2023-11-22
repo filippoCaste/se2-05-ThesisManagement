@@ -8,6 +8,7 @@ import Logout from '@mui/icons-material/Logout';
 import Image from "mui-image";
 import { AppBar, Toolbar, IconButton, Typography, Badge, MenuItem, Menu , TextField, ListItemIcon, Box} from '@mui/material';
 import { UserContext } from '../Contexts';
+import theme from '../theme';
 
 
 export default function PrimarySearchAppBar(props) {
@@ -52,35 +53,34 @@ export default function PrimarySearchAppBar(props) {
       }}
       open={Boolean(anchorElA)}
       onClose={handleMenuClose}
-      sx={{elevation:3}}
+      sx={{ elevation: 3, color: theme.palette.primary.main }}
     >
-      <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center'}}>
-        <Typography mr={"0.5vw"} fontWeight="bold" >
-          ID:
+      <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
+        <Typography mr={"0.5vw"} fontWeight="bold" sx={{ color: theme.palette.main, fontFamily: 'cursive' }}>
+          User ID:
         </Typography>
-        <Typography >{user? user.id : ""}</Typography>
+        <Typography sx={{ color: theme.palette.main, fontFamily: 'cursive' }}>{user ? user.id : ""}</Typography>
       </Box>
       <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
-        <Typography mr={"0.5vw"} fontWeight="bold" >
+        <Typography mr={"0.5vw"} fontWeight="bold" sx={{ color: theme.palette.main, fontFamily: 'cursive' }}>
           Surname:
         </Typography>
-        <Typography >{user? user.surname : ""}</Typography>
+        <Typography sx={{ color: theme.palette.main, fontFamily: 'cursive' }}>{user ? user.surname : ""}</Typography>
       </Box>
       <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
-        <Typography mr={"0.5vw"} fontWeight="bold" >
+        <Typography mr={"0.5vw"} fontWeight="bold" sx={{ color: theme.palette.main, fontFamily: 'cursive' }}>
           Name:
         </Typography>
-        <Typography>{user? user.name : ""}</Typography>
+        <Typography sx={{ color: theme.palette.main, fontFamily: 'cursive' }}>{user ? user.name : ""}</Typography>
       </Box>
-      <MenuItem id="logout" sx={{mt:"1vw"}}>
-          <IconButton href="http://localhost:3001/api/users/logout">
+      <MenuItem id="logout" sx={{ mt: "1vw" }}>
+        <IconButton href="http://localhost:3001/api/users/logout">
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
-          Logout
-          </IconButton>
-        </MenuItem>
-     
+          <Typography sx={{ color: theme.palette.main, fontFamily: 'cursive' }}>Logout</Typography>
+        </IconButton>
+      </MenuItem>
     </Menu>
   );
 
