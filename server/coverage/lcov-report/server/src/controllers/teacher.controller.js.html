@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">40% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/15</span>
+                <span class='fraction'>6/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">40% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/15</span>
+                <span class='fraction'>6/15</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -95,26 +95,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -123,26 +123,26 @@
 import { getTeacherById } from '../services/teacher.services.js';
 import { getAllTeachers } from '../services/teacher.services.js';
 &nbsp;
-export const getTeachers = <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
-<span class="cstat-no" title="statement not covered" >    try {</span>
-        const result = <span class="cstat-no" title="statement not covered" >await getAllTeachers();</span>
-<span class="cstat-no" title="statement not covered" >        return res.json(result);</span>
+export const getTeachers = async (req, res) =&gt; {
+    try {
+        const result = await getAllTeachers();
+        return res.json(result);
     } catch (err) {
-<span class="cstat-no" title="statement not covered" >        return res.status(500).json({ error: err.message });</span>
+        return res.status(500).json({ error: err.message });
     }
 }
 &nbsp;
-export const getTeacherId = async(req, res) =&gt; {
-    try {
-        const id = parseInt(req.params.id)
-        if(isNaN(id)) {
-            return res.status(400).json({ error: "Uncorrect id" })
+export const getTeacherId = <span class="fstat-no" title="function not covered" >as</span>ync(req, res) =&gt; {
+<span class="cstat-no" title="statement not covered" >    try {</span>
+        const id = <span class="cstat-no" title="statement not covered" >parseInt(req.params.id)</span>
+<span class="cstat-no" title="statement not covered" >        if(isNaN(id)) {</span>
+<span class="cstat-no" title="statement not covered" >            return res.status(400).json({ error: "Uncorrect id" })</span>
         }
-        const teacher = await getTeacherById(id);
-        if (teacher) {
-            return res.json(teacher);
+        const teacher = <span class="cstat-no" title="statement not covered" >await getTeacherById(id);</span>
+<span class="cstat-no" title="statement not covered" >        if (teacher) {</span>
+<span class="cstat-no" title="statement not covered" >            return res.json(teacher);</span>
         } else {
-            res.status(404).json({ error: "User not found" })
+<span class="cstat-no" title="statement not covered" >            res.status(404).json({ error: "User not found" })</span>
         }
     } catch(err) {
 <span class="cstat-no" title="statement not covered" >        return res.status(500).json({ error: err.message });</span>
@@ -154,7 +154,7 @@ export const getTeacherId = async(req, res) =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-16T11:14:26.133Z
+                at 2023-11-22T22:07:38.438Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

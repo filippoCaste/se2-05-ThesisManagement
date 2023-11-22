@@ -71,6 +71,11 @@
 }
 ```
 
+- DELETE `/:id`
+  - request body content: none
+  - response: 
+    - 200 OK (success)
+    - 500 Internal Server Error: Indicates an error during processing.
 - GET `/`
   - Description: Retrieve a list of proposals based on specified filters.
   - Query Parameters:

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">22.22% </span>
+                <span class="strong">44.44% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/18</span>
+                <span class='fraction'>8/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">20% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>2/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">22.22% </span>
+                <span class="strong">44.44% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/18</span>
+                <span class='fraction'>8/18</span>
             </div>
         
             
@@ -121,20 +121,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -145,6 +135,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import auth0Strategy from 'passport-auth0';
 import { getUserById } from '../services/user.services.js';
 &nbsp;
@@ -157,20 +157,20 @@ export const strategy = new auth0Strategy({
   credentials: true
 },
 <span class="fstat-no" title="function not covered" >  fu</span>nction (accessToken, refreshToken, extraParams, profile, done) {
-<span class="cstat-no" title="statement not covered" >      return done(null, profile.nickname);</span>
+<span class="cstat-no" title="statement not covered" >      return done(null, profile);</span>
   }
 );
 &nbsp;
-export const isLoggedIn = <span class="fstat-no" title="function not covered" >(r</span>eq, res, next) =&gt; {
-<span class="cstat-no" title="statement not covered" >  if (req.isAuthenticated()) {</span>
+export const isLoggedIn = (req, res, next) =&gt; {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (req.isAuthenticated()) {
 <span class="cstat-no" title="statement not covered" >    return next();</span>
   }
-<span class="cstat-no" title="statement not covered" >  return res.status(401).json({ error: "Not authorized" });</span>
+  return res.status(401).json({ error: "Not authorized" });
 };
 &nbsp;
 export const isStudent = <span class="fstat-no" title="function not covered" >as</span>ync (req, res, next) =&gt; {
 <span class="cstat-no" title="statement not covered" >  if (req.isAuthenticated()) {</span>
-    const user = <span class="cstat-no" title="statement not covered" >await getUserById(req.user.substring(1, req.user.length));</span>
+    const user = <span class="cstat-no" title="statement not covered" >await getUserById(req.user.id);</span>
 <span class="cstat-no" title="statement not covered" >    if (user.role === "student") {</span>
 <span class="cstat-no" title="statement not covered" >      return next();</span>
     }
@@ -178,14 +178,14 @@ export const isStudent = <span class="fstat-no" title="function not covered" >as
 <span class="cstat-no" title="statement not covered" >  return res.status(401).json({ error: "Not authorized" });</span>
 };
 &nbsp;
-export const isTeacher = <span class="fstat-no" title="function not covered" >as</span>ync (req, res, next) =&gt; {
-<span class="cstat-no" title="statement not covered" >  if (req.isAuthenticated()) {</span>
-    const user = <span class="cstat-no" title="statement not covered" >await getUserById(req.user.substring(1, req.user.length));</span>
+export const isTeacher = async (req, res, next) =&gt; {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (req.isAuthenticated()) {
+    const user = <span class="cstat-no" title="statement not covered" >await getUserById(req.user.id);</span>
 <span class="cstat-no" title="statement not covered" >    if (user.role === "teacher") {</span>
 <span class="cstat-no" title="statement not covered" >      return next();</span>
     }
   }
-<span class="cstat-no" title="statement not covered" >  return res.status(401).json({ error: "Not authorized" });</span>
+  return res.status(401).json({ error: "Not authorized" });
 };</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -193,7 +193,7 @@ export const isTeacher = <span class="fstat-no" title="function not covered" >as
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-16T11:14:26.133Z
+                at 2023-11-22T22:07:38.438Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

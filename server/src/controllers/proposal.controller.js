@@ -2,6 +2,8 @@ import {
   getProposalsByTeacherId,
   getProposalsFromDB,
   postNewProposal,
+  deleteProposalById,
+  getSupervisorByProposalId
 } from "../services/proposal.services.js";
 import { LevelsEnum } from "../models/LevelsEnum.js";
 import { isValidDateFormat } from "../utils/utils.js";
@@ -150,3 +152,21 @@ export const getProposalTeacherId = async (req, res) => {
     return res.status(500).json({ error: err.message });
   }
 }
+
+export const deleteProposal = async (req, res) => {
+  try {
+    const proposalId = req.params.id;
+    const teacherid = req.user.id;
+    
+    const supervisorid = await getSupervisorByProposalId(proposalId);
+    
+    if (supervisorid && supervisorid == teacherid) {
+        const deletedProposalMessage = await deleteProposalById(proposalId);
+        if(deletedProposalMessage)
+          return res.json({ message: deletedProposalMessage });
+        else throw new Error(" couldn't delete the proposal")
+    }else {throw new Error(" teacher has no permissions!")}
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};

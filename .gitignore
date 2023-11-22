@@ -27,3 +27,4 @@ coverage/
 Thumbs.db
 */*.db
 */*.sqlite
+server/database.sqlite

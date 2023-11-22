@@ -26,6 +26,11 @@ content-type: application/json
          #"external_supervisor_id": ""
 ###
 
+DELETE http://localhost:3001/api/proposals/33 HTTP/1.1
+
+###
+
+
 GET http://localhost:3001/api/proposals HTTP/1.1
 
 ###

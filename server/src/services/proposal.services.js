@@ -298,3 +298,89 @@ export const getProposalsByTeacherId = (teacherId) => {
     });
   });
 }
+
+export const deleteProposalById = (proposalId) => {
+  return new Promise((resolve, reject) => {
+    try {
+      db.serialize(function () {
+        const keywordIds = []; // Array to store keyword IDs
+
+        // SQL to retrieve keyword IDs associated with the proposal
+        const sqlGetKeywordIds = db.prepare(
+          "SELECT keyword_id FROM ProposalKeywords WHERE proposal_id = ?"
+        );
+        sqlGetKeywordIds.each(proposalId, (err, row) => {
+          if (err) {
+            reject(err);
+          } else {
+            keywordIds.push(row.keyword_id);
+          }
+        }, () => {
+          // After retrieving keyword IDs, perform deletion
+          const sqlDeleteKeywordsFromProposal = db.prepare(
+            "DELETE FROM ProposalKeywords WHERE proposal_id = ?"
+          );
+          sqlDeleteKeywordsFromProposal.run(proposalId);
+          sqlDeleteKeywordsFromProposal.finalize();
+
+          const sqlDeleteSupervisors = db.prepare(
+            "DELETE FROM Supervisors WHERE proposal_id = ?"
+          );
+          sqlDeleteSupervisors.run(proposalId);
+          sqlDeleteSupervisors.finalize();
+
+          const sqlDeleteApplications = db.prepare(
+            "DELETE FROM Applications WHERE proposal_id = ?"
+          );
+          sqlDeleteApplications.run(proposalId);
+          sqlDeleteApplications.finalize();
+
+          const sqlDeleteProposal = db.prepare(
+            "DELETE FROM Proposals WHERE id = ?"
+          );
+          sqlDeleteProposal.run(proposalId);
+          sqlDeleteProposal.finalize();
+
+          // Delete keywords that are not associated with any other proposal
+          const sqlDeleteUnusedKeywords = db.prepare(`
+            DELETE FROM Keywords 
+            WHERE id IN (
+              SELECT id FROM Keywords 
+              WHERE id IN (${keywordIds.join(',')})
+              AND id NOT IN (
+                SELECT keyword_id FROM ProposalKeywords
+              )
+            )
+          `);
+          sqlDeleteUnusedKeywords.run();
+          sqlDeleteUnusedKeywords.finalize();
+
+          resolve(true); // Resolve with deleted keyword IDs
+        });
+
+        sqlGetKeywordIds.finalize();
+      });
+    } catch (err) {
+      reject(err); // Something went wrong
+    }
+  });
+};
+
+
+
+export const getSupervisorByProposalId = (proposalId) => {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT supervisor_id FROM Supervisors WHERE proposal_id = ? LIMIT 1";
+    db.get(sql, [proposalId], (err, row) => {
+      if (err) {
+        return reject(err);
+      }
+      
+      if (!row) {
+        return reject(new Error("No supervisor found for the given proposal ID"));
+      }
+
+      resolve(row.supervisor_id);
+    });
+  });
+};

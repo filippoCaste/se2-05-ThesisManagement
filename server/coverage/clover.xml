@@ -1,131 +1,215 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1700146050708" clover="3.2.0">
-  <project timestamp="1700146050709" name="All files">
-    <metrics statements="364" coveredstatements="126" conditionals="129" coveredconditionals="48" methods="78" coveredmethods="15" elements="571" coveredelements="189" complexity="0" loc="364" ncloc="364" packages="5" files="19" classes="19"/>
-    <package name="config">
-      <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
-      <file name="db.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/config/db.js">
-        <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
-        <line num="4" count="8" type="stmt"/>
-        <line num="5" count="1" type="cond" truecount="1" falsecount="1"/>
+<coverage generated="1700690858544" clover="3.2.0">
+  <project timestamp="1700690858544" name="All files">
+    <metrics statements="532" coveredstatements="200" conditionals="178" coveredconditionals="51" methods="115" coveredmethods="20" elements="825" coveredelements="271" complexity="0" loc="532" ncloc="532" packages="7" files="37" classes="37"/>
+    <package name="server">
+      <metrics statements="33" coveredstatements="24" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
+      <file name="index.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\index.js">
+        <metrics statements="33" coveredstatements="24" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="51" count="1" type="stmt"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="57" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
+        <line num="68" count="1" type="stmt"/>
+        <line num="69" count="1" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="72" count="1" type="stmt"/>
+        <line num="73" count="1" type="stmt"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="76" count="1" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="controllers">
-      <metrics statements="106" coveredstatements="91" conditionals="49" coveredconditionals="40" methods="10" coveredmethods="9"/>
-      <file name="application.controller.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/controllers/application.controller.js">
-        <metrics statements="21" coveredstatements="20" conditionals="10" coveredconditionals="9" methods="2" coveredmethods="2"/>
-        <line num="4" count="2" type="stmt"/>
-        <line num="5" count="6" type="stmt"/>
-        <line num="6" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="7" count="1" type="stmt"/>
-        <line num="11" count="5" type="cond" truecount="2" falsecount="0"/>
-        <line num="12" count="1" type="stmt"/>
-        <line num="16" count="4" type="cond" truecount="4" falsecount="0"/>
-        <line num="17" count="2" type="stmt"/>
-        <line num="22" count="2" type="stmt"/>
-        <line num="23" count="2" type="stmt"/>
-        <line num="28" count="1" type="stmt"/>
-        <line num="30" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="32" count="1" type="stmt"/>
-        <line num="35" count="2" type="stmt"/>
-        <line num="39" count="2" type="stmt"/>
-        <line num="40" count="3" type="stmt"/>
-        <line num="41" count="3" type="stmt"/>
-        <line num="42" count="3" type="stmt"/>
-        <line num="43" count="2" type="stmt"/>
-        <line num="45" count="1" type="stmt"/>
-      </file>
-      <file name="degree.controller.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/controllers/degree.controller.js">
-        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+    <package name="server.src.config">
+      <metrics statements="20" coveredstatements="10" conditionals="12" coveredconditionals="3" methods="5" coveredmethods="3"/>
+      <file name="configs.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\config\configs.js">
+        <metrics statements="18" coveredstatements="8" conditionals="10" coveredconditionals="2" methods="4" coveredmethods="2"/>
         <line num="4" count="1" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="8" type="cond" truecount="1" falsecount="1"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="21" count="8" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="35" count="8" type="cond" truecount="1" falsecount="1"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="41" count="8" type="stmt"/>
+      </file>
+      <file name="db.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\config\db.js">
+        <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
+        <line num="4" count="9" type="stmt"/>
+        <line num="5" count="4" type="cond" truecount="1" falsecount="1"/>
+      </file>
+    </package>
+    <package name="server.src.controllers">
+      <metrics statements="124" coveredstatements="96" conditionals="54" coveredconditionals="40" methods="12" coveredmethods="9"/>
+      <file name="application.controller.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\controllers\application.controller.js">
+        <metrics statements="20" coveredstatements="19" conditionals="10" coveredconditionals="9" methods="2" coveredmethods="2"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="6" count="6" type="stmt"/>
+        <line num="7" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="12" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="17" count="4" type="cond" truecount="4" falsecount="0"/>
+        <line num="18" count="2" type="stmt"/>
+        <line num="23" count="2" type="stmt"/>
+        <line num="24" count="2" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="31" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="37" count="3" type="stmt"/>
+        <line num="38" count="3" type="stmt"/>
+        <line num="39" count="3" type="stmt"/>
+        <line num="40" count="3" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+      </file>
+      <file name="degree.controller.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\controllers\degree.controller.js">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="4" count="2" type="stmt"/>
         <line num="5" count="2" type="stmt"/>
         <line num="6" count="2" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
       </file>
-      <file name="keyword.controller.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/controllers/keyword.controller.js">
+      <file name="group.controller.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\controllers\group.controller.js">
+        <metrics statements="5" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+      </file>
+      <file name="keyword.controller.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\controllers\keyword.controller.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="5" count="1" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
         <line num="6" count="2" type="stmt"/>
         <line num="7" count="2" type="stmt"/>
         <line num="8" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
       </file>
-      <file name="level.controller.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/controllers/level.controller.js">
+      <file name="level.controller.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\controllers\level.controller.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="5" count="2" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
         <line num="6" count="3" type="stmt"/>
         <line num="7" count="3" type="stmt"/>
         <line num="8" count="2" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
       </file>
-      <file name="proposal.controller.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/controllers/proposal.controller.js">
-        <metrics statements="55" coveredstatements="50" conditionals="35" coveredconditionals="31" methods="3" coveredmethods="3"/>
-        <line num="10" count="2" type="stmt"/>
-        <line num="11" count="5" type="stmt"/>
+      <file name="proposal.controller.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\controllers\proposal.controller.js">
+        <metrics statements="59" coveredstatements="54" conditionals="36" coveredconditionals="31" methods="3" coveredmethods="3"/>
+        <line num="11" count="3" type="stmt"/>
         <line num="12" count="5" type="stmt"/>
         <line num="13" count="5" type="stmt"/>
         <line num="14" count="5" type="stmt"/>
-        <line num="16" count="5" type="cond" truecount="2" falsecount="0"/>
-        <line num="17" count="1" type="stmt"/>
-        <line num="19" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="23" count="1" type="stmt"/>
-        <line num="27" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="31" count="1" type="stmt"/>
-        <line num="36" count="2" type="stmt"/>
-        <line num="38" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="41" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="45" count="2" type="stmt"/>
-        <line num="53" count="1" type="stmt"/>
-        <line num="55" count="1" type="stmt"/>
-        <line num="58" count="2" type="stmt"/>
-        <line num="59" count="4" type="stmt"/>
-        <line num="60" count="4" type="stmt"/>
-        <line num="61" count="4" type="stmt"/>
-        <line num="62" count="4" type="stmt"/>
-        <line num="63" count="4" type="stmt"/>
-        <line num="64" count="4" type="stmt"/>
-        <line num="65" count="4" type="stmt"/>
-        <line num="66" count="4" type="stmt"/>
+        <line num="15" count="5" type="stmt"/>
+        <line num="17" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="20" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="28" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="37" count="2" type="stmt"/>
+        <line num="39" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="42" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="46" count="2" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="66" count="3" type="stmt"/>
         <line num="67" count="4" type="stmt"/>
-        <line num="68" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="74" count="3" type="stmt"/>
-        <line num="76" count="1" type="stmt"/>
-        <line num="77" count="1" type="stmt"/>
-        <line num="78" count="1" type="cond" truecount="3" falsecount="1"/>
-        <line num="79" count="0" type="stmt"/>
-        <line num="80" count="0" type="stmt"/>
-        <line num="84" count="0" type="stmt"/>
-        <line num="86" count="1" type="stmt"/>
-        <line num="87" count="1" type="stmt"/>
-        <line num="89" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="98" count="0" type="stmt"/>
-        <line num="100" count="1" type="stmt"/>
-        <line num="101" count="1" type="stmt"/>
-        <line num="115" count="1" type="stmt"/>
-        <line num="118" count="0" type="stmt"/>
-        <line num="122" count="2" type="stmt"/>
-        <line num="123" count="3" type="stmt"/>
-        <line num="124" count="3" type="stmt"/>
-        <line num="125" count="3" type="stmt"/>
-        <line num="126" count="3" type="stmt"/>
-        <line num="127" count="3" type="stmt"/>
-        <line num="128" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="129" count="1" type="stmt"/>
-        <line num="132" count="2" type="stmt"/>
-        <line num="134" count="1" type="stmt"/>
-        <line num="135" count="1" type="stmt"/>
-        <line num="137" count="2" type="stmt"/>
+        <line num="68" count="4" type="stmt"/>
+        <line num="69" count="4" type="stmt"/>
+        <line num="70" count="4" type="stmt"/>
+        <line num="71" count="4" type="stmt"/>
+        <line num="72" count="4" type="stmt"/>
+        <line num="73" count="4" type="stmt"/>
+        <line num="74" count="4" type="stmt"/>
+        <line num="75" count="4" type="stmt"/>
+        <line num="76" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="82" count="3" type="stmt"/>
+        <line num="84" count="1" type="stmt"/>
+        <line num="85" count="1" type="stmt"/>
+        <line num="86" count="1" type="cond" truecount="3" falsecount="1"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="93" count="1" type="stmt"/>
+        <line num="94" count="1" type="stmt"/>
+        <line num="96" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="104" count="0" type="stmt"/>
+        <line num="106" count="1" type="stmt"/>
+        <line num="107" count="1" type="stmt"/>
+        <line num="108" count="1" type="stmt"/>
+        <line num="109" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="113" count="1" type="stmt"/>
+        <line num="114" count="1" type="stmt"/>
+        <line num="128" count="1" type="stmt"/>
+        <line num="131" count="0" type="stmt"/>
+        <line num="135" count="3" type="stmt"/>
+        <line num="136" count="3" type="stmt"/>
+        <line num="137" count="3" type="stmt"/>
+        <line num="138" count="3" type="stmt"/>
+        <line num="139" count="3" type="stmt"/>
+        <line num="140" count="3" type="stmt"/>
+        <line num="141" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="142" count="1" type="stmt"/>
+        <line num="145" count="2" type="stmt"/>
+        <line num="147" count="1" type="stmt"/>
+        <line num="148" count="1" type="stmt"/>
+        <line num="150" count="2" type="stmt"/>
       </file>
-      <file name="teacher.controller.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/controllers/teacher.controller.js">
-        <metrics statements="15" coveredstatements="6" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="1"/>
+      <file name="student.controller.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\controllers\student.controller.js">
+        <metrics statements="10" coveredstatements="1" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="5" count="1" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="12" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+      </file>
+      <file name="teacher.controller.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\controllers\teacher.controller.js">
+        <metrics statements="15" coveredstatements="6" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="1"/>
+        <line num="5" count="2" type="stmt"/>
         <line num="6" count="2" type="stmt"/>
         <line num="7" count="2" type="stmt"/>
         <line num="8" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
-        <line num="14" count="1" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -137,9 +221,9 @@
         <line num="27" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="models">
-      <metrics statements="54" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="14" coveredmethods="0"/>
-      <file name="Application.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/models/Application.js">
+    <package name="server.src.models">
+      <metrics statements="63" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="17" coveredmethods="0"/>
+      <file name="Application.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\models\Application.js">
         <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
@@ -150,11 +234,11 @@
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
       </file>
-      <file name="LevelsEnum.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/models/LevelsEnum.js">
+      <file name="LevelsEnum.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\models\LevelsEnum.js">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="2" type="stmt"/>
+        <line num="1" count="3" type="stmt"/>
       </file>
-      <file name="Proposal.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/models/Proposal.js">
+      <file name="Proposal.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\models\Proposal.js">
         <metrics statements="20" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
@@ -172,12 +256,12 @@
         <line num="31" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
-        <line num="55" count="2" type="stmt"/>
+        <line num="55" count="3" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
-        <line num="74" count="2" type="stmt"/>
+        <line num="74" count="3" type="stmt"/>
         <line num="75" count="0" type="stmt"/>
       </file>
-      <file name="Student.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/models/Student.js">
+      <file name="Student.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\models\Student.js">
         <metrics statements="12" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
@@ -189,10 +273,10 @@
         <line num="19" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
-        <line num="37" count="1" type="stmt"/>
+        <line num="37" count="2" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
       </file>
-      <file name="Teacher.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/models/Teacher.js">
+      <file name="Teacher.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\models\Teacher.js">
         <metrics statements="13" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
@@ -203,17 +287,108 @@
         <line num="9" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
-        <line num="26" count="2" type="stmt"/>
+        <line num="26" count="3" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
-        <line num="38" count="2" type="stmt"/>
+        <line num="38" count="3" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
       </file>
+      <file name="User.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\models\User.js">
+        <metrics statements="9" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+      </file>
     </package>
-    <package name="services">
-      <metrics statements="197" coveredstatements="22" conditionals="72" coveredconditionals="1" methods="52" coveredmethods="4"/>
-      <file name="application.services.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/services/application.services.js">
-        <metrics statements="37" coveredstatements="3" conditionals="14" coveredconditionals="0" methods="10" coveredmethods="0"/>
+    <package name="server.src.routes">
+      <metrics statements="46" coveredstatements="26" conditionals="16" coveredconditionals="0" methods="9" coveredmethods="0"/>
+      <file name="application.route.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\routes\application.route.js">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+      </file>
+      <file name="degree.route.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\routes\degree.route.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+      </file>
+      <file name="group.route.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\routes\group.route.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+      </file>
+      <file name="keyword.route.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\routes\keyword.route.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+      </file>
+      <file name="level.route.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\routes\level.route.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+      </file>
+      <file name="proposal.route.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\routes\proposal.route.js">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+      </file>
+      <file name="session.route.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\routes\session.route.js">
+        <metrics statements="5" coveredstatements="2" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+      </file>
+      <file name="student.route.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\routes\student.route.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+      </file>
+      <file name="teacher.route.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\routes\teacher.route.js">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+      </file>
+      <file name="user.route.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\routes\user.route.js">
+        <metrics statements="21" coveredstatements="4" conditionals="14" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="10" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="12" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="22" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="server.src.services">
+      <metrics statements="241" coveredstatements="32" conditionals="86" coveredconditionals="2" methods="68" coveredmethods="7"/>
+      <file name="application.services.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\services\application.services.js">
+        <metrics statements="37" coveredstatements="3" conditionals="14" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <line num="6" count="2" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
@@ -231,7 +406,7 @@
         <line num="42" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
-        <line num="57" count="1" type="stmt"/>
+        <line num="57" count="2" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
         <line num="69" count="0" type="stmt"/>
         <line num="70" count="0" type="stmt"/>
@@ -240,7 +415,7 @@
         <line num="74" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="75" count="0" type="stmt"/>
         <line num="79" count="0" type="stmt"/>
-        <line num="84" count="1" type="stmt"/>
+        <line num="84" count="2" type="stmt"/>
         <line num="85" count="0" type="stmt"/>
         <line num="86" count="0" type="stmt"/>
         <line num="87" count="0" type="stmt"/>
@@ -251,9 +426,9 @@
         <line num="102" count="0" type="stmt"/>
         <line num="104" count="0" type="stmt"/>
       </file>
-      <file name="degree.services.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/services/degree.services.js">
+      <file name="degree.services.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\services\degree.services.js">
         <metrics statements="10" coveredstatements="1" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
-        <line num="3" count="1" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
@@ -261,10 +436,10 @@
         <line num="8" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
       </file>
-      <file name="keyword.services.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/services/keyword.services.js">
+      <file name="group.services.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\services\group.services.js">
         <metrics statements="10" coveredstatements="1" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
@@ -277,9 +452,36 @@
         <line num="16" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
       </file>
-      <file name="level.services.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/services/level.services.js">
+      <file name="keyword.services.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\services\keyword.services.js">
+        <metrics statements="24" coveredstatements="8" conditionals="6" coveredconditionals="1" methods="10" coveredmethods="3"/>
+        <line num="3" count="4" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="23" count="4" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="35" count="4" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="39" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+      </file>
+      <file name="level.services.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\services\level.services.js">
         <metrics statements="10" coveredstatements="9" conditionals="2" coveredconditionals="1" methods="4" coveredmethods="4"/>
-        <line num="3" count="2" type="stmt"/>
+        <line num="3" count="3" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
         <line num="5" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
@@ -290,9 +492,9 @@
         <line num="15" count="1" type="stmt"/>
         <line num="17" count="1" type="stmt"/>
       </file>
-      <file name="proposal.services.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/services/proposal.services.js">
+      <file name="proposal.services.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\services\proposal.services.js">
         <metrics statements="110" coveredstatements="6" conditionals="46" coveredconditionals="0" methods="23" coveredmethods="0"/>
-        <line num="6" count="2" type="stmt"/>
+        <line num="6" count="3" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
@@ -334,7 +536,7 @@
         <line num="92" count="0" type="stmt"/>
         <line num="93" count="0" type="stmt"/>
         <line num="95" count="0" type="stmt"/>
-        <line num="100" count="2" type="stmt"/>
+        <line num="100" count="3" type="stmt"/>
         <line num="101" count="0" type="stmt"/>
         <line num="102" count="0" type="stmt"/>
         <line num="103" count="0" type="stmt"/>
@@ -344,14 +546,14 @@
         <line num="119" count="0" type="stmt"/>
         <line num="120" count="0" type="stmt"/>
         <line num="122" count="0" type="stmt"/>
-        <line num="128" count="2" type="stmt"/>
+        <line num="128" count="3" type="stmt"/>
         <line num="129" count="0" type="stmt"/>
         <line num="130" count="0" type="stmt"/>
         <line num="131" count="0" type="stmt"/>
         <line num="132" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="133" count="0" type="stmt"/>
         <line num="135" count="0" type="stmt"/>
-        <line num="140" count="2" type="stmt"/>
+        <line num="140" count="3" type="stmt"/>
         <line num="141" count="0" type="stmt"/>
         <line num="142" count="0" type="stmt"/>
         <line num="153" count="0" type="stmt"/>
@@ -360,7 +562,7 @@
         <line num="157" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="158" count="0" type="stmt"/>
         <line num="162" count="0" type="stmt"/>
-        <line num="180" count="2" type="stmt"/>
+        <line num="180" count="3" type="stmt"/>
         <line num="193" count="0" type="stmt"/>
         <line num="194" count="0" type="stmt"/>
         <line num="195" count="0" type="stmt"/>
@@ -392,7 +594,7 @@
         <line num="260" count="0" type="stmt"/>
         <line num="262" count="0" type="stmt"/>
         <line num="264" count="0" type="stmt"/>
-        <line num="269" count="2" type="stmt"/>
+        <line num="269" count="3" type="stmt"/>
         <line num="270" count="0" type="stmt"/>
         <line num="271" count="0" type="stmt"/>
         <line num="275" count="0" type="stmt"/>
@@ -403,9 +605,22 @@
         <line num="295" count="0" type="stmt"/>
         <line num="297" count="0" type="stmt"/>
       </file>
-      <file name="teacher.services.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/services/teacher.services.js">
+      <file name="student.services.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\services\student.services.js">
+        <metrics statements="10" coveredstatements="1" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="11" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+      </file>
+      <file name="teacher.services.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\services\teacher.services.js">
         <metrics statements="20" coveredstatements="2" conditionals="6" coveredconditionals="0" methods="7" coveredmethods="0"/>
-        <line num="3" count="3" type="stmt"/>
+        <line num="3" count="4" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
@@ -415,7 +630,7 @@
         <line num="11" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
-        <line num="26" count="3" type="stmt"/>
+        <line num="26" count="4" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
@@ -426,10 +641,23 @@
         <line num="45" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
       </file>
+      <file name="user.services.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\services\user.services.js">
+        <metrics statements="10" coveredstatements="1" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="11" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+      </file>
     </package>
-    <package name="utils">
+    <package name="server.src.utils">
       <metrics statements="5" coveredstatements="5" conditionals="6" coveredconditionals="6" methods="1" coveredmethods="1"/>
-      <file name="utils.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/utils/utils.js">
+      <file name="utils.js" path="C:\Users\bruno\Desktop\Polito\sw2\ThesisManagement\se2-05-ThesisManagement\server\src\utils\utils.js">
         <metrics statements="5" coveredstatements="5" conditionals="6" coveredconditionals="6" methods="1" coveredmethods="1"/>
         <line num="3" count="6" type="stmt"/>
         <line num="5" count="6" type="cond" truecount="2" falsecount="0"/>
