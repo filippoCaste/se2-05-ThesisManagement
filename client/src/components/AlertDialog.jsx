@@ -1,72 +1,84 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Typography from '@mui/material/Typography';
-import CircularProgress from '@mui/material/CircularProgress';
+import React from 'react';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
+  CircularProgress,
+} from '@mui/material';
 import dayjs from 'dayjs';
+import theme from '../theme';
+
 export default function AlertDialog({ open, handleClose, item, handleApply, loading }) {
-  // Filter the supervisors based on the supervisor_id
-  const mainSupervisor = item?.supervisorsInfo?.find(supervisor => supervisor.id === item.supervisor_id);
-  const coSupervisors = item?.supervisorsInfo?.filter(supervisor => supervisor.id !== item.supervisor_id);
+  const { supervisorsInfo, supervisor_id, title, description, notes, expiration_date, level, title_degree, title_group, required_knowledge } = item || {};
+  const mainSupervisor = supervisorsInfo?.find(supervisor => supervisor.id === supervisor_id);
+  const coSupervisors = supervisorsInfo?.filter(supervisor => supervisor.id !== supervisor_id);
 
   return (
     <Dialog
       open={open}
       onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
+      fullWidth
+      maxWidth="md"
+      PaperProps={{
+        sx: {
+          borderRadius: 8,
+        },
+      }}
     >
-      <DialogTitle id="alert-dialog-title" sx={{fontWeight: 'bold' }}>{item?.title}</DialogTitle>
-      <DialogContent>
-        <Typography gutterBottom>
-          Description: {item?.description}
+      <DialogTitle sx={{ borderBottom: `1px solid ${theme.palette.secondary.main}`, color: theme.palette.primary.main }}>
+        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+          {title}
         </Typography>
-        <Typography gutterBottom>
-          Notes: {item?.notes}
-        </Typography>
-        <Typography gutterBottom>
-          Expiration Date: {dayjs(item?.expiration_date).format("YYYY-MM-DD")}
-        </Typography>
-        <Typography gutterBottom>
-          Level: {item?.level}
-        </Typography>
-        <Typography gutterBottom>
-          Degree: {item?.title_degree}
-        </Typography>
-        
+      </DialogTitle>
+      <DialogContent sx={{ padding: '20px', backgroundColor: theme.palette.background.default }}>
+        {renderField("Description", description)}
+        {renderField("Notes", notes)}
+        {renderField("Expiration Date", dayjs(expiration_date).format("YYYY-MM-DD"))}
+        {renderField("Level", level)}
+        {renderField("Degree", title_degree)}
 
-        {mainSupervisor && (
-          <>
-            <Typography>
-              Supervisor: {mainSupervisor.name} {mainSupervisor.surname} ({mainSupervisor.email})
-            </Typography>
-          </>
-        )}
+        {mainSupervisor && renderSupervisor("Supervisor", mainSupervisor)}
+        {coSupervisors?.map((supervisor, index) => renderSupervisor("Co-Supervisor", supervisor, index))}
 
-        {/* Display co-supervisors */}
-        {coSupervisors?.map((supervisor, index) => (
-            <>
-            <Typography key={index}>
-              Co-Supervisor: {supervisor.name} {supervisor.surname} ({supervisor.email})
-            </Typography>
-
-            </>
-        ))}
-
-        <Typography gutterBottom>
-          Group: {item?.title_group}
-        </Typography>
-        <Typography gutterBottom>
-          Required Knowledge: {item?.required_knowledge}
-        </Typography>
+        {renderField("Group", title_group)}
+        {renderField("Required Knowledge", required_knowledge)}
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Close</Button>
-        {loading ? <CircularProgress /> : <Button onClick={handleApply} autoFocus>Apply</Button>}
+      <DialogActions sx={{ padding: '20px', borderTop: `1px solid ${theme.palette.secondary.main}`, justifyContent: 'space-between' }}>
+        <Button onClick={handleClose} color="secondary">
+          <Typography variant="button" sx={{ color: theme.palette.secondary.main }}>
+            Close
+          </Typography>
+        </Button>
+        {loading ? (
+          <CircularProgress color="primary" size={24} />
+        ) : (
+          <Button onClick={handleApply} variant="contained" color="primary">
+            <Typography variant="button" sx={{ fontWeight: 'bold' }}>
+              Apply
+            </Typography>
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );
+
+  function renderField(label, value) {
+    return (
+      <Typography variant="body1" gutterBottom sx={{ color: theme.palette.text.primary }}>
+        <strong>{label}:</strong> {value}
+      </Typography>
+    );
+  }
+
+  function renderSupervisor(label, supervisor, index) {
+    const { name, surname, email } = supervisor;
+    return (
+      <Typography key={index} variant="body1" gutterBottom sx={{ color: theme.palette.text.primary }}>
+        <strong>{label}:</strong> {`${name} ${surname} (${email})`}
+      </Typography>
+    );
+  }
 }
