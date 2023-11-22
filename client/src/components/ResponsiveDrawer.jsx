@@ -34,9 +34,9 @@ export default function ResponsiveDrawer(props) {
   } = props;
   const [openFilter, setOpenFilter] = React.useState(true);
 
-  const handleClickFilter = () => {
+  /*const handleClickFilter = () => {
     setOpenFilter(!openFilter);
-  };
+  };*/
 
   const handleResetFilters = () => {
     // Reset all filters here
@@ -64,13 +64,13 @@ export default function ResponsiveDrawer(props) {
       }}
     >
       <Box sx={{ overflow: 'auto', mt: '15vh', mx: '2vh' }}>
-        <ListItemButton onClick={handleClickFilter}>
+        {/*<ListItemButton onClick={handleClickFilter}>
           <Typography variant="h7" fontWeight={'bold'}>
             Filter by:
           </Typography>
           <ListItemText />
           {openFilter ? <ExpandLess /> : <ExpandMore />}
-        </ListItemButton>
+    </ListItemButton>*/}
         <Collapse in={openFilter} timeout="auto" unmountOnExit>
           <Divider />
           <List component="div" disablePadding>

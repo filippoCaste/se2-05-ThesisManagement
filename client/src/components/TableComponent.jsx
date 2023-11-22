@@ -10,6 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import dayjs from 'dayjs';
 import Button from '@mui/material/Button';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import '../App.css';
 
 export default function StickyHeadTable(props) {
   const [page, setPage] = React.useState(0);
@@ -109,16 +110,17 @@ export default function StickyHeadTable(props) {
   };
 
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '8px' }}>
-      <TableContainer sx={{ maxHeight: '100%' }}>
+    <Paper className="paperContainer">
+      <TableContainer className="tableContainer">
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
-            <TableRow style={{ backgroundColor: '#2196f3', color: 'white' }}>
+            <TableRow className="headerRow">
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ width: column.maxWidth, cursor: 'pointer' }}
+                  style={{ width: column.maxWidth }}
+                  className="tableCell"
                   onClick={() => handleRequestSort(column.id)}
                 >
                   <b>{renderSortArrow(column.id, column.label)}</b>
@@ -128,38 +130,34 @@ export default function StickyHeadTable(props) {
           </TableHead>
           <TableBody>
             {renderNoProposalsMessage()}
-            {sortedProposals
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={row.code}
-                    style={{ backgroundColor: index % 2 === 0 ? '#f5f5f5' : 'white', transition: 'background-color 0.3s' }}
+            {sortedProposals.map((row, index) => (
+              <TableRow
+                key={row.code}
+                hover
+                role="checkbox"
+                tabIndex={-1}
+                className={`proposalRow ${index % 2 === 0 ? 'proposalRowOdd' : ''}`}
+              >
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{
+                      width: column.maxWidth,
+                      whiteSpace: 'normal',
+                      maxHeight: '100px',
+                      padding: '8px'
+                    }}
                   >
-                    {columns.map((column) => (
-                      <TableCell
-                        key={column.id}
-                        align={column.align}
-                        style={{
-                          width: column.maxWidth,
-                          whiteSpace: 'normal',
-                          maxHeight: '100px',
-                          padding: '8px',
-                        }}
-                      >
-                        {column.id === 'supervisor_id'
-                        ? row.supervisorsInfo.find((supervisor) => supervisor.id === row.supervisor_id)?.name + ' ' + row.supervisorsInfo.find((supervisor) => supervisor.id === row.supervisor_id)?.surname
-                        : column.format
-                          ? column.format(row[column.id], row)
-                          : row[column.id]}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                );
-              })}
+                    {column.id === 'supervisor_id'
+                      ? `${row.supervisorsInfo.find((supervisor) => supervisor.id === row.supervisor_id)?.name} ${row.supervisorsInfo.find((supervisor) => supervisor.id === row.supervisor_id)?.surname}`
+                      : column.format
+                      ? column.format(row[column.id], row)
+                      : row[column.id]}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
