@@ -29,6 +29,7 @@ const getTeacherById = async (teacherId) => {
 
     const response = await fetch(SERVER_URL + `/api/teachers/${teacherId}`, {
       method: "GET",
+      credentials: 'include',
     });
 
     if (response.ok) {

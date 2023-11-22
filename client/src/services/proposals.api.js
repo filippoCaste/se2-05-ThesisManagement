@@ -55,6 +55,7 @@ const postProposalKeywords = async (proposal_id, keyword_id) => {
 
     const response = await fetch(SERVER_URL + "/api/proposal_keyword", {
       method: "POST",
+      credentials: 'include',
       headers: {
         "Content-Type": "application/json",
       },
@@ -115,7 +116,9 @@ const getProposals = async (
       url += `?${queryParams.join("&")}`;
     }
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      credentials: 'include',
+    });
     if (response.ok) {
       const proposals = await response.json();
       const proposalList = [];
@@ -137,6 +140,7 @@ const getProposalsByTeacherId = async (teacherId) => {
   try {
       const response = await fetch(SERVER_URL + `/api/proposals/teachers/${teacherId}`, {
           method: "GET",
+          credentials: 'include',
       });
       if (response.ok) {
           const proposals = await response.json();
