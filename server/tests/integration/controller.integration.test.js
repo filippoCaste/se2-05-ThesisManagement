@@ -114,7 +114,7 @@ describe('POST /api/proposals', () => {
                 if (err) {
                     done(err);
                 } else {
-                    res.statusCode.should.be.equal(200);
+                    res.statusCode.should.be.equal(201);
                     done();
                 }
             });

@@ -128,6 +128,38 @@
 ]
 ```
 
+- PUT `/:proposalId`
+  - request body content: the object containing the fields of the proposal
+  - response:
+    - 204: No content (successful operation)
+    - 401: Unauthorized
+    - 403: Forbidden
+    - 404: Not found
+    - 500: Internal server error
+  ```json
+  {
+    "title": "Some proposal",
+    "type":"A proposal that inspires",
+    "description": "This is a fake proposal.",
+    "level": "MSc",
+    "expiration_date": "2023-12-22",
+    "notes": "additional notes",
+    "required_knowledge": "Student must know the principle of software development.",
+    "cod_degree": ["5"],
+    "cod_group": "1",
+    "supervisors_obj": {
+        "supervisor_id": 10000,
+        "co_supervisors": [
+            10001,
+            10002
+            ]
+    },
+    "keywords": [
+        "AI", "Java", "Web development"
+    ]
+  }
+  ```
+
 ### `/api/degrees`:
 
 - GET `/`
@@ -362,7 +394,7 @@
 - title: TEXT
 - type: TEXT
 - description: TEXT
-- level: INTEGER
+- level: TEXT (one between "MSc" and "BSc")
 - expiration_date: TEXT
 - notes: TEXT
 - cod_degree: TEXT (NOT NULL)

@@ -2,9 +2,9 @@ import {
   getProposalsByTeacherId,
   getProposalsFromDB,
   postNewProposal,
+  updateProposalByProposalId,
 } from "../services/proposal.services.js";
-import { LevelsEnum } from "../models/LevelsEnum.js";
-import { isValidDateFormat } from "../utils/utils.js";
+import { isNumericInputValid, isTextInputValid, isValidDateFormat } from "../utils/utils.js";
 import { getTeacherById } from "../services/teacher.services.js";
 import { getKeywordByName, postKeyword } from "../services/keyword.services.js";
 
@@ -59,51 +59,24 @@ export const getProposals = async (req, res, next) => {
 
 /**
  * 
- * @param {*} req: `req.body` must contain fields: *title*, *type*, *description*, *level*, *cod_group*, *cod_degree*, *expiration_date*, *supervisor_obj*, *keywords*
+ * @param {*} req: `req.body` must contain fields: *title*, *type*, *description*, *level*, *cod_group*, *cod_degree*, *expiration_date*, *supervisors_obj*, *keywords*
  * @param {*} res 
  * @returns 
  */
 export const postProposal = async (req, res) => {
   try {
-    const title = req.body.title;
-    const type = req.body.type;
-    const description = req.body.description;
-    const level = req.body.level;
-    let cod_group = req.body.cod_group;
-    let cod_degree = req.body.cod_degree;
-    try {
-      cod_group = parseInt(cod_group);
-      if (
-        Number.isNaN(cod_group) ||
-        cod_group.toString() != req.body.cod_group ||
-        (level !== "MSc" &&
-        level !== "BSc")
-      ) {
-        return res.status(400).json({ error: "Uncorrect fields" });
-      }
-      for (let c of cod_degree) {
-        let val = parseInt(c);
-        if (Number.isNaN(val) || val.toString() != c) {
-          return res.status(400).json({ error: "Uncorrect fields" });
-        }
-      }
-    } catch (err) {
-      throw new Error("Errors converting to integer");
-    }
-    const expiration_date = req.body.expiration_date;
-    const notes = req.body.notes;
+    const { title, type, description, level, cod_group, cod_degree, expiration_date, supervisors_obj, keywords } = req.body;
 
-    if (
-      !title ||
-      !type ||
-      !description ||
-      !expiration_date ||
-      !cod_degree ||
-      !req.body.supervisors_obj.supervisor_id
+    if (!isNumericInputValid([cod_group, proposalId])
+      || !isNumericInputValid(cod_degree)
+      || !isTextInputValid(keywords)
+      || !isTextInputValid([title, type, description, level])
+      || !isValidDateFormat(expiration_date)
+      || !isSupervisorsObjValid(supervisors_obj)
     ) {
-      return res.status(400).json({ error: "Missing fields" });
+      return res.status(400).send({ error: "Uncorrect fields" });
     } else {
-      for(let kw of req.body.keywords) {
+      for(let kw of keywords) {
         kw = kw.trim();
         const k = await getKeywordByName(kw);
         if (!k) {
@@ -125,7 +98,7 @@ export const postProposal = async (req, res) => {
           req.body.keywords
         );
       }
-      return res.sendStatus(200);
+      return res.status(201);
     }
   } catch (err) {
     return res.status(500).json({ error: err.message });
@@ -149,4 +122,65 @@ export const getProposalTeacherId = async (req, res) => {
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
+}
+
+/**
+ * 
+ * @param {*} req  
+ * The request object:
+ * - `req.body` must contain: title, type, description, level, cod_group, cod_degree, expiration_date, supervisors_obj, keywords  
+ * - `req.params` must contain: proposalId
+ * @param {*} res 
+ * The response code:
+ * - 204: No Content -> successful operation
+ * - 400: Bad Request -> uncorrect fields
+ * - 401: Unauthorized
+ * - 500: Internal server error
+ * @returns 
+ */
+export const updateProposal = async (req, res) => {
+  try {
+    const proposalId = req.params.proposalId;
+
+    const { title, type, description, level, cod_group, cod_degree, expiration_date, supervisors_obj, keywords } = req.body;
+
+    if(!isNumericInputValid([cod_group, proposalId]) 
+          || !isNumericInputValid(cod_degree)
+          || !isTextInputValid(keywords)
+          || !isTextInputValid([title, type, description, level])
+          || !isValidDateFormat(expiration_date)
+          || !isSupervisorsObjValid(supervisors_obj)
+      ) {
+      return res.status(400).send({error: "Uncorrect fields"});
+    } else {
+      // add new keyword if not already in the database
+      for (let kw of keywords) {
+        kw = kw.trim();
+        const k = await getKeywordByName(kw);
+        if (!k) {
+          await postKeyword(kw);
+        }
+      }
+
+      // update a proposal
+      await updateProposalByProposalId(proposalId, req.user.id, { title, type, description, level, cod_group, cod_degree, expiration_date, supervisors_obj, keywords })
+      res.status(204).send();
+    }
+
+  } catch(err) {
+    if(err == 404) {
+      res.status(404).json({error: "Proposal not found"})
+    } else if(err == 403) {
+      res.status(403).json({error: "You cannot access this resource"})
+    } else {
+      res.status(500).json({ error: err.message });
+      }
+  }
+};
+
+
+function isSupervisorsObjValid(supervisors_obj) {
+  const array = supervisors_obj.co_supervisors;
+  array.push(supervisors_obj.supervisor_id)
+  return isNumericInputValid(array);
 }

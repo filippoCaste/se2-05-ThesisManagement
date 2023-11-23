@@ -32,6 +32,33 @@ GET http://localhost:3001/api/proposals HTTP/1.1
 
 GET http://localhost:3001/api/proposals/teachers/10000 HTTP/1.1
 
+###
+
+PUT http://localhost:3001/api/proposals/31 HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Prank proposal",
+    "type":"A prank that inspires",
+    "description": "This is a fake proposal.",
+    "level": "MSc",
+    "expiration_date": "2023-12-22",
+    "notes": "additional notes",
+    "required_knowledge": "Student must know the principle of software development.",
+    "cod_degree": ["5"],
+    "cod_group": "1",
+    "supervisors_obj": {
+        "supervisor_id": 10000,
+        "co_supervisors": [
+            10001,
+            10002
+            ]
+    },
+    "keywords": [
+        "AI", "Application", "Web development"
+    ]
+}
+
 ###     DEGREES
 GET http://localhost:3001/api/degrees HTTP/1.1
 

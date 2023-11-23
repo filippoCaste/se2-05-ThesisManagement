@@ -3,6 +3,7 @@ export function isValidDateFormat(dateString) {
     const dateRegex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
   
     if (!dateRegex.test(dateString)) {
+      console.log("The input date is not correct")
       return false; // Date format doesn't match 'YYYY-MM-DD'
     }
   
@@ -17,3 +18,35 @@ export function isValidDateFormat(dateString) {
       date.getDate() === parseInt(dateString.substring(8, 10), 10)
     );
   }
+
+/**
+* Check whether the input values are text or contains undefined values
+* @param {Array} values : array of input values to be checked
+* @returns `true` if the input is okay, `false` otherwise
+*/
+export function isTextInputValid(values) {
+  for(let text of values) {
+    const value = text.trim();
+    if (value === '' || !value) {
+      console.log("The error is in value: " + text);
+      return false;
+    }
+    return true;
+  }
+}
+
+/**
+ * Check whether the input values are not numbers or contains undefined values
+ * @param {Array} values : array of input values to be checked
+ * @returns `true` if the input is okay, `false` otherwise
+ */
+export function isNumericInputValid(values) {
+  for(let number of values) {
+    const value = parseInt(number);
+    if(isNaN(value) || ! value || number != value.toString()) {
+      console.log("The error is in value: " + number);
+      return false;
+    }
+    return true;
+  }
+}
