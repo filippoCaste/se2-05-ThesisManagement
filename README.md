@@ -253,6 +253,48 @@
     },
   ]
   ```
+  - GET `/proposal/`
+  - request body content: none
+  - response: 
+    - 200 OK (success) with the list of applications of that student or error message
+    - 500 Internal Server Error: Indicates an error during processing.
+  ```json
+  [
+    {
+      "id": 4,
+      "title": "thesis",
+      "description": "description55",
+      "expiration_date": "2023-11-19T00:00:00+01:00",
+      "cod_degree": "5",
+      "title_degree": "COMPUTER ENGINEERING",
+      "level": "MSc",
+      "supervisor_id": 10000,
+      "notes": "notes",
+      "cod_group": 1,
+      "title_group": "Elite",
+      "required_knowledge": "softeng2 exam",
+      "keyword_names": "Javascript",
+      "keyword_types": "KEYWORD",
+      "status": "submitted",
+      "supervisorsInfo": [
+        {
+          "id": 10000,
+          "name": "Mario",
+          "surname": "Rossi",
+          "email": "d10000@polito.it",
+          "cod_group": 1
+        },
+        {
+          "id": 10001,
+          "name": "Giuseppe",
+          "surname": "Verdi",
+          "email": "d10001@polito.it",
+          "cod_group": 1
+        }
+      ]
+    }
+  ]
+  ```
 - POST `/`
   - Description: Create a new application for a proposal.
   - Request Body:

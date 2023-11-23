@@ -1,5 +1,5 @@
 "use strict";
-import { createApplicationInDb, getApplicationsByProposalId } from "../services/application.services.js";
+import { createApplicationInDb, getApplicationsByProposalId, getApplicationsByStudentId } from "../services/application.services.js";
 import { isValidDateFormat } from "../utils/utils.js";
 
 export const createApplication = async (req, res) => {
@@ -42,4 +42,13 @@ export const getApplicationsProposalId = async (req, res) => {
     } catch (err) {
         return res.status(500).json({ error: err.message });
     }
+};
+export const getApplicationsStudentId = async (req, res) => {
+  try {
+      const studentid = req.user.id;
+      const result = await getApplicationsByStudentId(studentid);
+      return res.json(result);
+  } catch (err) {
+      return res.status(500).json({ error: err.message });
+  }
 };

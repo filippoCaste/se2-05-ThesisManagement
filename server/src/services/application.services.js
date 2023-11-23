@@ -2,7 +2,8 @@ import { db } from "../config/db.js";
 import { Student } from "../models/Student.js";
 import { getProposalInfoByID } from "./proposal.services.js";
 import { Application } from "../models/Application.js";
-
+import { Proposal } from "../models/Proposal.js";
+import { getExtraInfoFromProposal } from "./proposal.services.js";
 export const createApplicationInDb = (
   proposal_id,
   student_id,
@@ -105,3 +106,75 @@ export const getApplicationsByProposalId = (proposalId) => {
         });
     });
 }
+
+export const getApplicationsByStudentId = (studentId) => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+    SELECT 
+    a.application_id AS id,
+    p.title,
+    p.description,
+    p.expiration_date,
+    p.cod_degree,
+    d.title_degree,
+    p.level,
+    s.supervisor_id,
+    p.notes,
+    p.cod_group,
+    g.title_group,
+    p.required_knowledge,
+    s.supervisor_id,
+    s.co_supervisor_id,
+    s.external_supervisor,
+    group_concat(k.name) as keyword_names,
+    group_concat(k.type) as keyword_types,
+    a.status AS application_status
+      FROM Proposals AS p
+      LEFT JOIN ProposalKeywords AS pk ON p.id = pk.proposal_id
+      LEFT JOIN Keywords AS k ON k.id = pk.keyword_id
+      LEFT JOIN Supervisors AS s ON s.proposal_id = p.id
+      LEFT JOIN Degrees AS d ON p.cod_degree = d.cod_degree
+      LEFT JOIN Groups AS g ON p.cod_group = g.cod_group
+      LEFT JOIN Applications AS a ON p.id = a.proposal_id
+      WHERE a.student_id = ? 
+      GROUP BY p.id, a.application_id
+      ORDER BY expiration_date ASC;`;
+
+    db.all(sql, [studentId], async (err, rows) => {
+      if (err) {
+        return reject(err);
+      }
+
+      const applications = [];
+
+      for (const row of rows) {
+        const supervisorsInfo = await getExtraInfoFromProposal(row);
+
+        const application = {
+          id: row.id,
+          title: row.title,
+          description: row.description,
+          expiration_date: row.expiration_date,
+          cod_degree: row.cod_degree,
+          title_degree: row.title_degree,
+          level: row.level,
+          supervisor_id: row.supervisor_id,
+          notes: row.notes,
+          cod_group: row.cod_group,
+          title_group: row.title_group,
+          required_knowledge: row.required_knowledge,
+          keyword_names: row.keyword_names,
+          keyword_types: row.keyword_types,
+          status: row.application_status // Corrected alias name
+        };
+
+        application.supervisorsInfo = supervisorsInfo;
+        applications.push(application);
+      }
+
+      resolve(applications);
+    });
+  });
+};
+
+
