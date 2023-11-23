@@ -143,9 +143,17 @@ function CollapsibleTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.listProposals.map((row, index) => (
-            <Row key={row.id} row={row} isEvenRow={index % 2 === 0} onClick={props.onClick}/>
-          ))}
+        {props.listProposals.length > 0 ? (
+          props.listProposals.map((row, index) => (
+            <Row key={row.id} row={row} isEvenRow={index % 2 === 0} onClick={props.onClick} />
+          ))
+        ) : (
+          <TableRow>
+            <TableCell colSpan={9}>
+              No thesis available
+            </TableCell>
+          </TableRow>
+        )}
         </TableBody>
       </Table>
   );
