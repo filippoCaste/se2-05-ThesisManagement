@@ -1,5 +1,5 @@
 "use strict";
-import { createApplicationInDb, getApplicationsByProposalId } from "../services/application.services.js";
+import { changeStatus, createApplicationInDb, getApplicationsByProposalId } from "../services/application.services.js";
 import { isValidDateFormat } from "../utils/utils.js";
 
 export const createApplication = async (req, res) => {
@@ -43,3 +43,27 @@ export const getApplicationsProposalId = async (req, res) => {
         return res.status(500).json({ error: err.message });
     }
 };
+
+export const changeStatusOfApplication = async (req, res) => {
+  try {
+    const applicationId = req.params.applicationId;
+    const status = req.body.status.trim();
+
+    if(status!=="accepted" && status!=="refused") {
+      res.status(400).json({error: "Uncorrect fields"})
+    }
+
+    await changeStatus(applicationId, 10000, status);
+
+    res.status(204).send();
+
+  } catch(err) {
+    if (err == 404) {
+      res.status(404).json({ error: "Proposal not found" })
+    } else if (err == 403) {
+      res.status(403).json({ error: "You cannot access this resource" })
+    } else {
+      res.status(500).json({ error: err.message });
+    }
+  }
+}

@@ -59,6 +59,7 @@ content-type: application/json
     ]
 }
 
+
 ###     DEGREES
 GET http://localhost:3001/api/degrees HTTP/1.1
 
@@ -84,6 +85,16 @@ GET http://localhost:3001/api/keywords HTTP/1.1
 
 ###     APPLICATIONS
 GET http://localhost:3001/api/applications/proposal/15 HTTP/1.1
+
+###
+
+PUT http://localhost:3001/api/applications/4 HTTP/1.1
+Content-Type: application/json
+
+{
+    "status": "refused"
+}
+
 
 ###     LEVELS
 GET http://localhost:3001/api/levels HTTP/1.1

@@ -105,3 +105,28 @@ export const getApplicationsByProposalId = (proposalId) => {
         });
     });
 }
+
+export const changeStatus = (applicationId, userId, status) => {
+  return new Promise((resolve, reject) => {
+    const sql1 = "SELECT s.supervisor_id as supervisor_id FROM Supervisors s, Applications a WHERE a.application_id=? AND a.proposal_id=s.proposal_id";
+    db.get(sql1, [applicationId], (err, row) => {
+      if (err) {
+        reject(err);
+      } else if (!row) {
+        reject(404);
+      } else if(userId != row.supervisor_id) {
+        reject(403);
+      }
+    });
+
+    const sql2 = "UPDATE Applications SET status=? WHERE application_id=?";
+    db.run(sql2, [status, applicationId], (err) => {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(true);
+      }
+    });
+
+  });
+}
