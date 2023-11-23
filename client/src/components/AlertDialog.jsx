@@ -36,7 +36,7 @@ export default function AlertDialog({ open, handleClose, item, handleApply, load
       <DialogContent sx={{ padding: '20px', backgroundColor: theme.palette.background.default }}>
         {renderField("Description", description)}
         {renderField("Notes", notes)}
-        {renderField("Expiration Date", dayjs(expiration_date).format("YYYY-MM-DD"))}
+        {renderField("Expiration Date", dayjs(expiration_date).format("DD/MM/YYYY"))}
         {renderField("Level", level)}
         {renderField("Degree", title_degree)}
 
@@ -51,21 +51,32 @@ export default function AlertDialog({ open, handleClose, item, handleApply, load
           <Typography variant="button" sx={{ color: theme.palette.secondary.main }}>
             Close
           </Typography>
-        </Button>
+        </Button>  
         {loading ? (
           <CircularProgress color="primary" size={24} />
         ) : (
-          <Button onClick={handleApply} variant="contained" color="primary">
-            <Typography variant="button" sx={{ fontWeight: 'bold' }}>
-              Apply
-            </Typography>
-          </Button>
+          handleApply && (
+            <Button onClick={handleApply} color="primary" variant="contained">
+              <Typography variant="button" sx={{ color: 'white' }}>
+                Apply
+              </Typography>
+            </Button>
+          )
         )}
       </DialogActions>
     </Dialog>
   );
 
   function renderField(label, value) {
+    if (label === "Level") {
+      return (
+        <Typography variant="body1" gutterBottom sx={{ color: theme.palette.text.primary }}>
+          <strong>{label}:</strong> {value === "MSc" ? "Master of Science" : value === "BSc" ? "Bachelor of Science" : ""}
+        </Typography>
+      );
+    }
+
+
     return (
       <Typography variant="body1" gutterBottom sx={{ color: theme.palette.text.primary }}>
         <strong>{label}:</strong> {value}
