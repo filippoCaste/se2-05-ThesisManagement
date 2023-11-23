@@ -11,7 +11,6 @@ import CustomSnackBar from "./components/CustomSnackbar.jsx";
 import { UserContext } from './Contexts';
 import TeacherPage from "./pages/TeacherPage.jsx";
 import AddProposalTeacher from "./components/AddProposalTeacher.jsx";
-import BrowseApplicationsComponent from "./components/BrowseApplicationsComponent.jsx";
 import InitialPage from "./pages/InitialPage.jsx";
 import userAPI from "./services/users.api.js";
 import { Student, Professor } from "./models/User.js";
