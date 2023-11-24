@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import AlertDialog from './AlertDialog';
 import applicationsAPI from '../services/applications.api';
-import { UserContext } from '../Contexts';
+import { MessageContext, UserContext } from '../Contexts';
 import dayjs from 'dayjs';
 import StickyHeadTable from './TableComponent';
 
@@ -11,6 +11,7 @@ function MainDashboard(props) {
   const [selectedItem, setSelectedItem] = useState(null);
   const [loading, setLoading] = useState(false);
   const {user} = useContext(UserContext);
+  const handleMessage = useContext(MessageContext);
 
   const handleCardClick = (datum) => {
     setSelectedItem(datum);
@@ -31,6 +32,7 @@ function MainDashboard(props) {
 
               setOpenDialog(false);
               setLoading(false);
+              handleMessage("Successfully Applied","success");
           }}
           loading = {loading}
           item={selectedItem}

@@ -7,7 +7,7 @@ import headerBackground from "../../public/img/imageedit_3_5228036516.jpg";
 import Logout from '@mui/icons-material/Logout';
 import Image from "mui-image";
 import { AppBar, Toolbar, IconButton, Typography, Badge, MenuItem, Menu , TextField, ListItemIcon, Box} from '@mui/material';
-import { UserContext } from '../Contexts';
+import { MessageContext, UserContext } from '../Contexts';
 import theme from '../theme';
 
 
@@ -16,7 +16,7 @@ export default function PrimarySearchAppBar(props) {
   const [openClock, setOpenClock] = React.useState(false);
   const [anchorElA, setAnchorElA] = React.useState(null);
   const [mobileMoreAnchorElA, setMobileMoreanchorElA] = React.useState(null);
-
+  const {handleMessage} = React.useContext(MessageContext);
   const { user } = React.useContext(UserContext);
   
   const handleClockOpen = () => {
@@ -74,7 +74,7 @@ export default function PrimarySearchAppBar(props) {
         <Typography sx={{ color: theme.palette.main, fontFamily: 'cursive' }}>{user ? user.name : ""}</Typography>
       </Box>
       <MenuItem id="logout" sx={{ mt: "1vw" }}>
-        <IconButton href="http://localhost:3001/api/users/logout">
+        <IconButton href="http://localhost:3001/api/users/logout" >
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
