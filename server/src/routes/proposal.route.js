@@ -3,7 +3,8 @@ import {
   getProposals,
   postProposal,
   getProposalTeacherId,
-  deleteProposal
+  deleteProposal,
+  archiveProposal
 } from "../controllers/proposal.controller.js";
 import { isLoggedIn, isTeacher } from "../config/configs.js";
 
@@ -17,6 +18,6 @@ router.get('/teachers/:id', isLoggedIn, getProposalTeacherId)
 
 router.delete("/:id",isLoggedIn,isTeacher,deleteProposal);
 
-
+router.put("/:id",archiveProposal);
 
 export { router };

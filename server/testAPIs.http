@@ -29,6 +29,9 @@ content-type: application/json
 DELETE http://localhost:3001/api/proposals/33 HTTP/1.1
 
 ###
+PUT http://localhost:3001/api/proposals/27 HTTP/1.1
+###
+
 
 GET http://localhost:3001/api/proposals HTTP/1.1
 

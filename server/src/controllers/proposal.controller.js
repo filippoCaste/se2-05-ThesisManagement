@@ -3,7 +3,8 @@ import {
   getProposalsFromDB,
   postNewProposal,
   deleteProposalById,
-  getSupervisorByProposalId
+  getSupervisorByProposalId,
+  archiveProposalByProposalId
 } from "../services/proposal.services.js";
 import { LevelsEnum } from "../models/LevelsEnum.js";
 import { isValidDateFormat } from "../utils/utils.js";
@@ -165,6 +166,27 @@ export const deleteProposal = async (req, res) => {
         if(deletedProposalMessage)
           return res.json({ message: deletedProposalMessage });
         else throw new Error(" couldn't delete the proposal")
+    }else {throw new Error(" teacher has no permissions!")}
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
+export const archiveProposal = async (req, res) => {
+  try {
+    const proposalId = req.params.id;
+    const teacherid = 10000;
+    
+    const supervisorid = await getSupervisorByProposalId(proposalId);
+    
+    if (supervisorid && supervisorid == teacherid) {
+        const archiveproposalResponse = await archiveProposalByProposalId(proposalId);
+        if (archiveproposalResponse) {
+          return res.status(200).json({
+            message: `Proposal ${proposalId} archived successfully`
+          });
+        }        
+        else throw new Error(" couldn't archive the proposal")
     }else {throw new Error(" teacher has no permissions!")}
   } catch (err) {
     return res.status(500).json({ error: err.message });

@@ -384,3 +384,36 @@ export const getSupervisorByProposalId = (proposalId) => {
     });
   });
 };
+
+export const archiveProposalByProposalId = (proposalId) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const sqlProposal = db.prepare('UPDATE proposals SET status = "archived" WHERE id = ?');
+      const sqlApplications = db.prepare('UPDATE applications SET status = "rejected" WHERE proposal_Id = ?');
+
+      sqlProposal.run(proposalId, function(errorProposal) {
+        if (errorProposal) {
+          console.error('Error updating proposal status:', errorProposal);
+          reject(errorProposal);
+          return;
+        }
+
+        sqlApplications.run(proposalId, function(errorApplications) {
+          if (errorApplications) {
+            console.error('Error updating applications status:', errorApplications);
+            reject(errorApplications);
+            return;
+          }
+
+          console.log('Proposal and related applications updated successfully.');
+          resolve('Proposal and related applications archived.');
+        });
+      });
+    } catch (err) {
+      console.error('Error:', err);
+      reject(err);
+    }
+  });
+};
+
+

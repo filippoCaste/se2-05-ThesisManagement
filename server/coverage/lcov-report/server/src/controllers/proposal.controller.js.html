@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.46% </span>
+                <span class="strong">67.46% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>55/71</span>
+                <span class='fraction'>56/83</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">73.8% </span>
+                <span class="strong">64.58% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>31/42</span>
+                <span class='fraction'>31/48</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">60% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/4</span>
+                <span class='fraction'>3/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.46% </span>
+                <span class="strong">67.46% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>55/71</span>
+                <span class='fraction'>56/83</span>
             </div>
         
             
@@ -234,7 +234,30 @@
 <a name='L169'></a><a href='#L169'>169</a>
 <a name='L170'></a><a href='#L170'>170</a>
 <a name='L171'></a><a href='#L171'>171</a>
-<a name='L172'></a><a href='#L172'>172</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -400,6 +423,27 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -410,7 +454,8 @@
   getProposalsFromDB,
   postNewProposal,
   deleteProposalById,
-  getSupervisorByProposalId
+  getSupervisorByProposalId,
+  archiveProposalByProposalId
 } from "../services/proposal.services.js";
 import { LevelsEnum } from "../models/LevelsEnum.js";
 import { isValidDateFormat } from "../utils/utils.js";
@@ -576,6 +621,27 @@ export const deleteProposal = <span class="fstat-no" title="function not covered
   } catch (err) {
 <span class="cstat-no" title="statement not covered" >    return res.status(500).json({ error: err.message });</span>
   }
+};
+&nbsp;
+export const archiveProposal = <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
+<span class="cstat-no" title="statement not covered" >  try {</span>
+    const proposalId = <span class="cstat-no" title="statement not covered" >req.params.id;</span>
+    const teacherid = <span class="cstat-no" title="statement not covered" >10000;</span>
+    
+    const supervisorid = <span class="cstat-no" title="statement not covered" >await getSupervisorByProposalId(proposalId);</span>
+    
+<span class="cstat-no" title="statement not covered" >    if (supervisorid &amp;&amp; supervisorid == teacherid) {</span>
+        const archiveproposalResponse = <span class="cstat-no" title="statement not covered" >await archiveProposalByProposalId(proposalId);</span>
+<span class="cstat-no" title="statement not covered" >        if (archiveproposalResponse) {</span>
+<span class="cstat-no" title="statement not covered" >          return res.status(200).json({</span>
+            message: `Proposal ${proposalId} archived successfully`
+          });
+        }        
+        else <span class="cstat-no" title="statement not covered" >throw new Error(" couldn't archive the proposal")</span>
+    }else {<span class="cstat-no" title="statement not covered" >throw new Error(" teacher has no permissions!")}</span>
+  } catch (err) {
+<span class="cstat-no" title="statement not covered" >    return res.status(500).json({ error: err.message });</span>
+  }
 };</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -583,7 +649,7 @@ export const deleteProposal = <span class="fstat-no" title="function not covered
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-24T09:46:08.388Z
+                at 2023-11-24T11:57:27.939Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
