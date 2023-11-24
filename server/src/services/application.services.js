@@ -3,37 +3,33 @@ import { Student } from "../models/Student.js";
 import { getProposalInfoByID } from "./proposal.services.js";
 import { Application } from "../models/Application.js";
 
-export const createApplicationInDb = (
+export const createApplicationInDb = async (
   proposal_id,
   student_id,
   submission_date
 ) => {
+  const student = await getStudentInfoByID(student_id);
+  const proposal = await getProposalInfoByID(proposal_id);
+  if (proposal.expiration_date < submission_date) {
+    throw new Error(
+        `Proposal with id ${proposal_id} has expired on ${proposal.expiration_date}`
+      );
+    }
+  if (proposal.cod_degree.toString() !== student.cod_degree.toString()) {
+    throw new Error(
+        `Proposal and student cod_degree should match. Proposal with id ${proposal_id} has ` +
+        `cod_degree ${proposal.cod_degree}, but student has cod_degree ${student.cod_degree}`
+      )
+    }
+  if (proposal.expiration_date < submission_date) {
+    throw new Error(
+        `Proposal with id ${proposal_id} has expired on ${proposal.expiration_date}`
+      )
+    }
+
   return new Promise(async (resolve, reject) => {
+    
     try {
-      const student = await getStudentInfoByID(student_id);
-      const proposal = await getProposalInfoByID(proposal_id);
-      if (proposal.expiration_date < submission_date) {
-        return reject({
-          scheduledError: new Error(
-            `Proposal with id ${proposal_id} has expired on ${proposal.expiration_date}`
-          ),
-        });
-      }
-      if (proposal.cod_degree.toString() !== student.cod_degree.toString()) {
-        return reject({
-          scheduledError: new Error(
-            `Proposal and student cod_degree should match. Proposal with id ${proposal_id} has ` +
-              `cod_degree ${proposal.cod_degree}, but student has cod_degree ${student.cod_degree}`
-          ),
-        });
-      }
-      if (proposal.expiration_date < submission_date) {
-        return reject({
-          scheduledError: new Error(
-            `Proposal with id ${proposal_id} has expired on ${proposal.expiration_date}`
-          ),
-        });
-      }
       const sql = `INSERT INTO Applications (proposal_id, student_id, submission_date) VALUES (?, ?, ?)`;
       db.run(sql, [proposal_id, student_id, submission_date], function (err) {
         if (err) {
