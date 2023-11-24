@@ -43,9 +43,33 @@ const getApplicationStudentsByProposalId = async (proposalId) => {
 
 };
 
+const changeStatusOfApplication = async (applicationId, status) => {
+  try {
+    const data = { status };
+
+    const response = await fetch(SERVER_URL + `/api/applications/${applicationId}`, {
+      method: "PUT",
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (response.ok) {
+      return true;
+    } else {
+      const message = await response.text();
+      throw new Error("Application error: " + message);
+    }
+  } catch (error) {
+    throw new Error("Network Error: " + error.message);
+  }
+}
+
 const applicationsAPI = {
   createApplication,
   getApplicationStudentsByProposalId,
+  changeStatusOfApplication
 };
 
 export default applicationsAPI;
