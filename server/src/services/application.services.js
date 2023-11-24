@@ -90,6 +90,8 @@ export const getApplicationsByProposalId = (proposalId) => {
             }
             const applications = rows.map((e) => {
                 const obj = {
+                    application_id: e.application_id,
+                    status: e.status,
                     student_id: e.student_id,
                     submission_date: e.submission_date,
                     student_name: e.name,

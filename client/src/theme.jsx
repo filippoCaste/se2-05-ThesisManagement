@@ -15,8 +15,8 @@ const theme = createTheme({
       main: "#FCBF49", //xantous
     },
     success: {
-      main: "#EAE2B7",  //vanilla
-    },
+      main: "#35682D",  //green
+    }
   },
   // Other theme configuration options here, if needed
 });
