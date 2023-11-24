@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Typography from '@mui/material/Typography';
-import { UserContext } from '../Contexts';
+import { MessageContext, UserContext } from '../Contexts';
 import { FormControl, InputLabel, Select, MenuItem, Input, Container, IconButton,  Paper } from '@mui/material';
 
 import proposalAPI from '../services/proposals.api';
@@ -52,25 +52,8 @@ function formatDate(inputDate) {
 function AddProposalTeacher(props)
 {
   const navigate= useNavigate();
+  const handleMessage = useContext(MessageContext);
   dayjs.extend(customParseFormat);
-
-  const [errorMsgAPI, setErrorMsgAPI] = useState('');
-
-  function handleError(err) 
-  {
-    let errMsgAPI = 'ERRORE SCONOSCIUTO';
-    if (err.errors) 
-    {
-      if (err.errors[0])
-        if (err.errors[0].msg)
-          errMsgAPI = err.errors[0].msg;
-    } 
-    else if (err.error) 
-    {
-      errMsgAPI = err.error;
-    }
-    setErrorMsgAPI(errMsgAPI);
-  }
 
   const { user } = useContext(UserContext);
   const [teachersList, SetTeachersList]=useState('');
@@ -85,15 +68,15 @@ function AddProposalTeacher(props)
   useEffect(()=>{
     API_Degrees.getAllDegrees()
     .then((d) => SetDegreesList(d))
-    .catch((err) => handleError(err));
+    .catch((err) => handleMessage(err,"warning"));
 
     API_Teachers.getAllTeachers()
     .then((t) => SetTeachersList(t))
-    .catch((err) => handleError(err));
+    .catch((err) => handleMessage(err,"warning"));
 
     API_Keywords.getAllKeywords()
     .then((k) => SetKeywordsList(k))
-    .catch((err) => handleError(err));
+    .catch((err) => handleMessage(err,"warning"));
 
   },[])
 
@@ -146,9 +129,7 @@ function AddProposalTeacher(props)
        //messaggio errore campi vuoti
        if(corretto == false) 
        {
-           setOpenError(true);
-           setErrorMess("ATTENTION: "+campi_vuoti+" EMPTY ");
-           corretto=false;
+           handleMessage("ATTENTION: "+campi_vuoti+" EMPTY ", "warning");
        }
 
        
@@ -190,8 +171,10 @@ function AddProposalTeacher(props)
                 nuovo_oggetto.required_knowledge,  list_cod_degree, nuovo_oggetto.cod_group,
                 supervisors_obj, nuovo_oggetto.keywords
             )
-            .then(()=> setSuccessSubmit(true))
-            .catch(err=>handleError(err));  
+            .then(()=>{
+              handleMessage("PROPOSAL SUBMIT WITH SUCCESS", "success");
+              navigate("/teacher");
+            }).catch(err=>handleMessage(err, "warning"));  
                  
         
          }
@@ -200,12 +183,7 @@ function AddProposalTeacher(props)
       }
     
    }   
-   
-   const [openError, setOpenError] = useState(false);
-   const [openSuccessSubmit, setSuccessSubmit] = useState(false);
-   const [errorMess, setErrorMess] = useState('');
-   
-    
+       
   //CO SUPERVISORS A TENDINA
   const [selectedCoSup, setSelectedCoSup] = useState('');
   const [selectedCoSupList, setSelectedCoSupList] = useState([]);
@@ -269,12 +247,6 @@ function AddProposalTeacher(props)
     
     <Typography variant="h7"> GROUP NAME    : {user?.group_name}   </Typography> <br />
     <Typography variant="h7"> COD DEPARTMENT: {user?.cod_department}         </Typography>
-
-
-    
-    {openError? <Alert severity="warning" onClose={()=>setOpenError(false)}> <AlertTitle> {errorMess} </AlertTitle> </Alert> : false}
-
-    {openSuccessSubmit? <Alert severity="success" onClose={()=>setSuccessSubmit(false)}> <AlertTitle> PROPOSAL SUBMIT WITH SUCCESS </AlertTitle> </Alert> : false}
 
     <br /> <br />
 

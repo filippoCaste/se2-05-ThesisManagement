@@ -31,7 +31,7 @@ function CustomSnackBar(props) {
   return !props.message.text ? null : (
     <Snackbar
       open={open}
-      autoHideDuration={6000}
+      autoHideDuration={2000}
       onClose={handleClose}
       action={action}
     >

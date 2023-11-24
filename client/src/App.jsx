@@ -8,7 +8,7 @@ import MainPage from "./pages/MainPage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 import AppNavBar from "./components/AppBar.jsx";
 import CustomSnackBar from "./components/CustomSnackbar.jsx";
-import { UserContext } from './Contexts';
+import { UserContext, MessageContext } from './Contexts';
 import TeacherPage from "./pages/TeacherPage.jsx";
 import AddProposalTeacher from "./components/AddProposalTeacher.jsx";
 import BrowseApplicationsComponent from "./components/BrowseApplicationsComponent.jsx";
@@ -22,16 +22,24 @@ function App() {
   const [openSelectionsMobile, setOpenSelectionsMobile] = useState(false);
   const [currentDataAndTime, setCurrentDataAndTime] =useState(dayjs()); 
 
+  const handleMessage = (messageContent, severity) => {
+      setMessage({text: messageContent, type: severity });
+  };
+
+  
   useEffect(() => {
     userAPI.getUserInfo().then((userInfo) => {
-      if(userInfo?.email[0] === "s") 
-        setUser(new Student(userInfo));
-      else if (userInfo?.email[0] === "d")
+      if(userInfo?.email[0] === "s"){
+          setUser(new Student(userInfo));
+          handleMessage("Student successfully logged in", "success");
+      }
+      else if (userInfo?.email[0] === "d"){
           setUser(new Professor(userInfo));
-      
+          handleMessage("Teacher successfully logged in", "success");
+      }
     }
-    ).catch((err) => {
-      console.log(err);
+    ).catch((err) => {    
+      handleMessage(err,"warning"); // warning success
     });
   }, []);
 
@@ -42,6 +50,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <UserContext.Provider value={{ user, setUser }}>
+            <MessageContext.Provider value={handleMessage}>
             <CustomSnackBar message={message}></CustomSnackBar>
             <AppNavBar
               openSelectionsMobile={openSelectionsMobile}
@@ -67,6 +76,7 @@ function App() {
               <Route path="/teacher/addProposal" element={<AddProposalTeacher />}  />
 
             </Routes>
+            </MessageContext.Provider>
           </UserContext.Provider>
         </BrowserRouter>
       </ThemeProvider>

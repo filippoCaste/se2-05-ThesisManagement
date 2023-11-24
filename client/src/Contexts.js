@@ -1,5 +1,6 @@
 import { createContext } from 'react';
 
 const UserContext = createContext();
+const MessageContext = createContext();
 
-export { UserContext };
+export { UserContext, MessageContext };
