@@ -19,7 +19,7 @@ function TeacherPage(props)
    const { user } = useContext(UserContext);
    const [errorMsgAPI, setErrorMsgAPI] = useState('');
    const [listProposals, setListProposals]=useState([]);
-   //const [filterStatus,setFilterStatus]=useState('posted');
+   const [filterStatus,setFilterStatus]=useState('posted');
    const [openDialog, setOpenDialog] = useState(false);
    const [selectedItem, setSelectedItem] = useState(null);
    const [loading, setLoading] = useState(false);
@@ -66,6 +66,8 @@ function TeacherPage(props)
       fetchData();
    }, [user]);
 
+   
+
    return(
       <>
       <br />  <br />  <br />  <br /> <br />
@@ -77,7 +79,8 @@ function TeacherPage(props)
             <Button variant="contained" color="primary" 
             onClick={()=>navigate("/teacher/addProposal")} > INSERT NEW THESIS PROPOSAL </Button>  <br/> <br/>
          </Grid> 
-         {/*<Grid item xs={4}>
+         
+         <Grid item xs={4}>
             <FormControl fullWidth>
                <Typography variant="subtitle1" fontWeight="bold">  FILTER BY STATUS  </Typography>
                <Select
@@ -91,7 +94,7 @@ function TeacherPage(props)
                   }
                </Select>
             </FormControl>
-               </Grid> */}
+               </Grid> 
          
 
          <CollapsibleTable listProposals={listProposals} onClick={handleClick}/>

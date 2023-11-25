@@ -65,10 +65,10 @@ export const getProposals = async (req, res, next) => {
  */
 export const postProposal = async (req, res) => {
   try {
-    const { title, type, description, level, cod_group, cod_degree, expiration_date, supervisors_obj, keywords } = req.body;
+    const { title, type, description, level, cod_group, cod_degree, expiration_date, notes, supervisors_obj, keywords } = req.body;
 
-    if (!isNumericInputValid([cod_group, proposalId])
-      || !isNumericInputValid(cod_degree)
+
+    if (!isNumericInputValid([cod_group])
       || !isTextInputValid(keywords)
       || !isTextInputValid([title, type, description, level])
       || !isValidDateFormat(expiration_date)
@@ -142,10 +142,9 @@ export const updateProposal = async (req, res) => {
   try {
     const proposalId = req.params.proposalId;
 
-    const { title, type, description, level, cod_group, cod_degree, expiration_date, supervisors_obj, keywords } = req.body;
+    const { title, type, description, level, cod_group, cod_degree, expiration_date, notes, supervisors_obj, keywords } = req.body;
 
     if(!isNumericInputValid([cod_group, proposalId]) 
-          || !isNumericInputValid(cod_degree)
           || !isTextInputValid(keywords)
           || !isTextInputValid([title, type, description, level])
           || !isValidDateFormat(expiration_date)
@@ -163,7 +162,7 @@ export const updateProposal = async (req, res) => {
       }
 
       // update a proposal
-      await updateProposalByProposalId(proposalId, req.user.id, { title, type, description, level, cod_group, cod_degree, expiration_date, supervisors_obj, keywords })
+      await updateProposalByProposalId(proposalId, req.user.id, { title, type, description, level, cod_group, cod_degree, expiration_date, notes, supervisors_obj, keywords })
       res.status(204).send();
     }
 

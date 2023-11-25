@@ -215,23 +215,25 @@ function AddProposalTeacher(props)
 
 
             let list_cod_degree=[nuovo_oggetto.cod_degree];
+
             let supervisors_obj={"supervisor_id":  nuovo_oggetto.supervisor_id, 
             "co_supervisors":  nuovo_oggetto.co_supervisors};
 
             //POST PROPOSAL
             if(proposalId == undefined)
             {
-                console.log("QUI");
                 console.log(nuovo_oggetto);
-                proposalAPI.postProposal
-                ( 
-                    nuovo_oggetto.title, nuovo_oggetto.type, nuovo_oggetto.description,
-                    nuovo_oggetto.level, nuovo_oggetto.expiration_date, nuovo_oggetto.notes,
-                    nuovo_oggetto.required_knowledge,  list_cod_degree, nuovo_oggetto.cod_group,
-                    supervisors_obj, nuovo_oggetto.keywords
-                )
-                .then(()=> setSuccessSubmit(true))
+                setSuccessSubmit(true);
+          
+                proposalAPI.postProposal(nuovo_oggetto.title,nuovo_oggetto.type, nuovo_oggetto.description,
+                  nuovo_oggetto.level, nuovo_oggetto.expiration_date, nuovo_oggetto.notes,
+                  nuovo_oggetto.required_knowledge, list_cod_degree, nuovo_oggetto.cod_group,
+                  supervisors_obj, nuovo_oggetto.keywords)
+                .then()
                 .catch(err=>handleError(err));  
+
+                navigate('/teacher');
+                
             }
             else
             {
@@ -331,7 +333,7 @@ function AddProposalTeacher(props)
     
     {openError? <Alert severity="warning" onClose={()=>setOpenError(false)}> <AlertTitle> {errorMess} </AlertTitle> </Alert> : false}
 
-    {openSuccessSubmit? <Alert severity="success" onClose={()=>setSuccessSubmit(false)}> <AlertTitle> PROPOSAL SUBMIT WITH SUCCESS </AlertTitle> </Alert> : false}
+    {openSuccessSubmit==true? <Alert severity="success" onClose={()=>setSuccessSubmit(false)}> <AlertTitle> PROPOSAL SUBMIT WITH SUCCESS </AlertTitle> </Alert> : false}
 
     <br /> <br />
 
