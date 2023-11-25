@@ -75,12 +75,10 @@ export default function StickyHeadTable(props) {
 
   const getColorByStatus = (status) => {
     switch (status) {
-      case 'REJECTED':
+      case 'rejected':
         return 'secondary';
-      case 'PENDING':
+      case 'submitted':
         return 'primary';
-      case 'ACCEPTED':
-        return 'success';
       default:
         return 'action';
     }

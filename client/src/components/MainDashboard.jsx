@@ -44,6 +44,7 @@ function MainDashboard(props) {
           }}
           loading={loading}
           item={selectedItem}
+          isAppliedProposals={isAppliedProposals}
         />
       )}
       <StickyHeadTable
