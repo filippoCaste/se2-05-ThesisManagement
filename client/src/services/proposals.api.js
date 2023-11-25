@@ -138,28 +138,47 @@ const getProposals = async (
 
 const getProposalsByTeacherId = async (teacherId) => {
   try {
-      const response = await fetch(SERVER_URL + `/api/proposals/teachers/${teacherId}`, {
-          method: "GET",
-          credentials: 'include',
-      });
-      if (response.ok) {
-          const proposals = await response.json();
-          return proposals;
-      } else {
-          const message = await response.text();
-          throw new Error("Application error: " + message);
-      }
+    const response = await fetch(SERVER_URL + `/api/proposals/teachers/${teacherId}`, {
+      method: "GET",
+      credentials: 'include',
+    });
+    if (response.ok) {
+      const proposals = await response.json();
+      return proposals;
+    } else {
+      const message = await response.text();
+      throw new Error("Application error: " + message);
+    }
   } catch (error) {
-      throw new Error("Network Error: " + error.message);
+    throw new Error("Network Error: " + error.message);
   }
 
+};
+
+const deleteProposal = async (proposalId) => {
+  try {
+    const response = await fetch(SERVER_URL + `/api/proposals/${proposalId}`, {
+      method: "DELETE",
+      credentials: 'include',
+    });
+    if (response.ok) {
+      const deleted = await response.json();
+      return deleted;
+    } else {
+      const message = await response.text();
+      throw new Error("Application error: " + message);
+    }
+  } catch (error) {
+    throw new Error("Network Error: " + error.message);
+  }
 };
 
 const proposalAPI = {
   getProposals,
   postProposal,
   postProposalKeywords,
-  getProposalsByTeacherId
+  getProposalsByTeacherId,
+  deleteProposal,
 };
 
 export default proposalAPI;
