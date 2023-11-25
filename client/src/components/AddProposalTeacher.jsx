@@ -8,6 +8,8 @@ import AlertTitle from '@mui/material/AlertTitle';
 import Typography from '@mui/material/Typography';
 import { UserContext } from '../Contexts';
 import { FormControl, InputLabel, Select, MenuItem, Input, Container, IconButton,  Paper } from '@mui/material';
+import {  useParams } from 'react-router-dom';
+
 
 import proposalAPI from '../services/proposals.api';
 import API_Degrees from '../services/degrees.api';
@@ -51,6 +53,9 @@ function formatDate(inputDate) {
 
 function AddProposalTeacher(props)
 {
+  const { proposalId } = useParams();
+  let proposalToModify;
+
   const navigate= useNavigate();
   dayjs.extend(customParseFormat);
 
@@ -72,6 +77,15 @@ function AddProposalTeacher(props)
     setErrorMsgAPI(errMsgAPI);
   }
 
+  const [title,setTitle]=useState('');
+  const [description,setDescription]=useState('');
+  const [required_knowledge,setRequired_knowledge]=useState('');
+  const [notes,setNotes]=useState('');
+  const [type,setType]=useState('');
+  const [level,setLevel]=useState('');
+  const [expiration_date,setExpirationDate]=useState(null);
+  
+
   const { user } = useContext(UserContext);
   const [teachersList, SetTeachersList]=useState('');
   const [degreesList, SetDegreesList]=useState('');
@@ -81,8 +95,47 @@ function AddProposalTeacher(props)
 
 
   // USE EFFECT /////////////////////////////////////////////
+  useEffect(() => {
+    if (proposalId !== undefined) {
+      proposalAPI.getProposalsByTeacherId(user.id)
+        .then((proposals) => {
+          proposalToModify = proposals.find(p => p.id === parseInt(proposalId));
+          let grado= degreesList.find(d=>d.cod_degree == proposalToModify.cod_degree);
+
+          console.log("P ",proposalToModify);
+   
+          setLevel(proposalToModify.level);
+          setTitle(proposalToModify.title);
+          setDescription(proposalToModify.description);
+          setRequired_knowledge(proposalToModify.required_knowledge);
+          setNotes(proposalToModify.notes);
+          setType(proposalToModify.type);
+          setSelectedDegree(grado);
+          setExpirationDate(dayjs(proposalToModify.expiration_date)); 
+          setSelectedSupervisor(user.id);
+
+          
+          let array=[{name:"mario", surname:"rossi", teacher_id:1},
+                     {name:"luigi", surname:"bianchi", teacher_id:2},
+                    ]
+          const coSupList = array.map((coSup) => ({
+            name: coSup.name,
+            surname: coSup.surname,
+            teacher_id: coSup.teacher_id,
+          }));
+          setSelectedCoSupList(coSupList);
+  
+          let array_2=[{name:"K1"},{name:"K2"},{name:"K3"}];
+          const keywordList = array_2.map((keyword) => keyword.name);
+          setSelectedKeywordList(keywordList);
+        })
+        .catch((err) => handleError(err));
+    }
+  
+  }, [proposalId, degreesList]);
 
   useEffect(()=>{
+    
     API_Degrees.getAllDegrees()
     .then((d) => SetDegreesList(d))
     .catch((err) => handleError(err));
@@ -99,42 +152,27 @@ function AddProposalTeacher(props)
 
   ///////////////////////////////////////////////////////////
 
-
-
-  //Proposal Fields (By Slide 8)
-
-  //ID TEACHER FALSO, VERRA PRESO DAL COOKIE DI SESSIONE DOPO L'ACCESSO
-  
-  const [title,setTitle]=useState('');
-  const [description,setDescription]=useState('');
-  const [required_knowledge,setRequired_knowledge]=useState('');
-  const [notes,setNotes]=useState('');
-  const [type,setType]=useState('');
-  const [level,setLevel]=useState('');
-  const [expiration_date,setExpirationDate]=useState(null);
-  
        
   //HANDLER SUBMIT
   function handleSubmit(event) 
   {
     event.preventDefault();
-
     if(invioForm==true)
     {
-       
+
+        console.log("proposalId: ",proposalId);
         setInvioForm(false); // Istruzioni provvisori aggiunte perchè quando si preme su add del campo di testo 
                              // co supervisors venive anche inviato il form
                              // soluzione provvisoria, da correggere meglio
 
        ////////controllo input ////////////////////////
        let corretto= true;
-
+  
        let campi_vuoti=' ';
 
        if(title=='') { campi_vuoti=campi_vuoti + " TITLE , "; corretto= false; }
        if(description=='') {campi_vuoti=campi_vuoti + " DESCRIPTION , "; corretto= false; }
        if(required_knowledge=='') { campi_vuoti=campi_vuoti + " REQUIRED KNOWLEDGE , "; corretto= false; }
-       if(notes=='') { campi_vuoti=campi_vuoti + " NOTES , "; corretto= false; }
        if(type=='') { campi_vuoti=campi_vuoti + " TYPE , "; corretto= false; }
        if(level=='') { campi_vuoti=campi_vuoti + " LEVEL , "; corretto= false; }
        if(selectedDegree=='') {campi_vuoti=campi_vuoti + " DEGREE , "; corretto= false; }
@@ -150,7 +188,6 @@ function AddProposalTeacher(props)
            setErrorMess("ATTENTION: "+campi_vuoti+" EMPTY ");
            corretto=false;
        }
-
        
          ////////SE INPUT CORRETTO //////////////////////////////////
          if(corretto==true)
@@ -177,21 +214,38 @@ function AddProposalTeacher(props)
               }
 
 
-            //POST PROPOSAL
             let list_cod_degree=[nuovo_oggetto.cod_degree];
             let supervisors_obj={"supervisor_id":  nuovo_oggetto.supervisor_id, 
             "co_supervisors":  nuovo_oggetto.co_supervisors};
 
-            
-            proposalAPI.postProposal
-            ( 
-                nuovo_oggetto.title, nuovo_oggetto.type, nuovo_oggetto.description,
-                nuovo_oggetto.level, nuovo_oggetto.expiration_date, nuovo_oggetto.notes,
-                nuovo_oggetto.required_knowledge,  list_cod_degree, nuovo_oggetto.cod_group,
-                supervisors_obj, nuovo_oggetto.keywords
-            )
-            .then(()=> setSuccessSubmit(true))
-            .catch(err=>handleError(err));  
+            //POST PROPOSAL
+            if(proposalId == undefined)
+            {
+                console.log("QUI");
+                console.log(nuovo_oggetto);
+                proposalAPI.postProposal
+                ( 
+                    nuovo_oggetto.title, nuovo_oggetto.type, nuovo_oggetto.description,
+                    nuovo_oggetto.level, nuovo_oggetto.expiration_date, nuovo_oggetto.notes,
+                    nuovo_oggetto.required_knowledge,  list_cod_degree, nuovo_oggetto.cod_group,
+                    supervisors_obj, nuovo_oggetto.keywords
+                )
+                .then(()=> setSuccessSubmit(true))
+                .catch(err=>handleError(err));  
+            }
+            else
+            {
+                //UPDATE PROPOSAL
+                console.log("UPDATE");
+                
+                proposalAPI.updateProposal(proposalId, nuovo_oggetto.title, nuovo_oggetto.type,
+                  nuovo_oggetto.description, nuovo_oggetto.level, nuovo_oggetto.expiration_date,
+                  nuovo_oggetto.notes, nuovo_oggetto.required_knowledge, list_cod_degree,
+                  nuovo_oggetto.cod_group, supervisors_obj, nuovo_oggetto.keywords)
+                .then(()=> setSuccessSubmit(true))
+                .catch(err=>handleError(err));  
+
+            }
                  
         
          }
@@ -216,7 +270,6 @@ function AddProposalTeacher(props)
         if (selectedCoSup && !selectedCoSupList.includes(selectedCoSup)) 
         {
           setSelectedCoSupList([...selectedCoSupList, selectedCoSup]);
-          setSelectedCoSup(''); // Pulisce la selezione dopo l'aggiunta
         }
       }
   };
@@ -238,7 +291,6 @@ function AddProposalTeacher(props)
     if (selectedKeyword !== '') {
       if (!selectedKeywordList.includes(selectedKeyword)) {
         setSelectedKeywordList([...selectedKeywordList, selectedKeyword]);
-        setSelectedKeyword(''); // Pulisce la selezione dopo l'aggiunta
       }
     } else if (newKeyword !== '') {
       // Aggiunge la nuova keyword
@@ -263,7 +315,12 @@ function AddProposalTeacher(props)
       
     <br /> <br /><br /><br /> <br /> <br />
 
-    <Typography variant="h5" align="center"> INSERT A NEW PROPOSAL OF THESIS      </Typography> <br />
+    {proposalId? 
+       <> <Typography variant="h5" align="center"> EDIT THE THESIS  {proposalId} </Typography> <br /></>
+       :   
+       <><Typography variant="h5" align="center"> INSERT A NEW PROPOSAL OF THESIS      </Typography> <br /></>
+     }
+
     <Typography variant="h7"> TEACHER: {user.name} {user.surname} </Typography> <br />
     <Typography variant="h7"> ID: {user.id} </Typography> <br /> <br />
     
@@ -300,16 +357,17 @@ function AddProposalTeacher(props)
 
               <Grid item xs={4}>
                   <FormControl fullWidth>
-                  <Typography variant="subtitle1" fontWeight="bold">  SELECT A DEGREE LEVEL  </Typography>
+                  <Typography variant="subtitle1" fontWeight="bold">  SELECT A DEGREE LEVEL </Typography>
                     < Select
                       labelId="word-label"
                       id="level-select"
+                      value={level} 
                       onChange={(ev) => { setLevel(ev.target.value) }}
                     >
                       {
                         Array.from(["MSc", "BSc"]).map((el, index) =>
-                        (el === "MSc" ? <MenuItem key={index} value={"MSc"}> Master of Science </MenuItem> 
-                                      : <MenuItem key={index} value={"BSc"}> Bachelor of Science </MenuItem>))
+                        (el === "MSc" ? <MenuItem key={index} value={"MSc"}>Master of Science</MenuItem> 
+                                      : <MenuItem key={index} value={"BSc"}>Bachelor of Science</MenuItem>))
                       }
                     </Select>
                   </FormControl> 
@@ -489,7 +547,12 @@ function AddProposalTeacher(props)
 
     <br />
 
-        <Button variant="contained" color="primary" type="submit" onClick={()=>setInvioForm(true)}> ADD PROPOSAL </Button>
+      {proposalId?   
+        <Button variant="contained" color="primary" type="submit" onClick={()=>setInvioForm(true)}> UPDATE PROPOSAL </Button>         
+        :
+        <Button variant="contained" color="primary" type="submit" onClick={()=>setInvioForm(true)}> ADD PROPOSAL </Button> 
+      }
+
         {' '} <Button variant="contained" color="error" onClick={()=>navigate('/teacher')}> CANCEL </Button>
       
       </form>

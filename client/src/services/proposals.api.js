@@ -155,11 +155,65 @@ const getProposalsByTeacherId = async (teacherId) => {
 
 };
 
+
+
+//  fetch(  SERVER_URL + `/api/proposals/${id}`, {
+  
+const updateProposal = async (
+  id,
+  title,
+  type,
+  description,
+  level,
+  expiration_date,
+  notes,
+  required_knowledge,
+  cod_degree,
+  cod_group,
+  supervisors_obj,
+  keywords
+) => {
+  try {
+    const data = {
+      title,
+      type,
+      description,
+      level,
+      expiration_date,
+      notes,
+      required_knowledge,
+      cod_degree,
+      cod_group,
+      supervisors_obj,
+      keywords,
+    };
+
+    const response = await fetch(SERVER_URL + `/api/proposals/${id}`, {
+      method: "PUT",
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (response.ok) {
+      return true;
+    } else {
+      const message = await response.text();
+      throw new Error("Application error: " + message);
+    }
+  } catch (error) {
+    throw new Error("Network Error: " + error.message);
+  }
+};
+
+
 const proposalAPI = {
   getProposals,
   postProposal,
   postProposalKeywords,
-  getProposalsByTeacherId
+  getProposalsByTeacherId,
+  updateProposal
 };
 
 export default proposalAPI;

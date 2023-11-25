@@ -64,6 +64,8 @@ function App() {
 
               <Route path="/teacher" element={<TeacherPage />}  />
               <Route path="/teacher/addProposal" element={<AddProposalTeacher />}  />
+              <Route path='/teacher/updateProposal/:proposalId'  element={<AddProposalTeacher/>} />
+
 
             </Routes>
           </UserContext.Provider>
