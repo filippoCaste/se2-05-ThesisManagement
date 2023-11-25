@@ -63,8 +63,7 @@ export const getProposalsFromDB = (
         s.supervisor_id,
         s.co_supervisor_id,
         s.external_supervisor,
-        group_concat(k.type) as keyword_types,
-        group_concat(k.name) as keyword_names
+        group_concat(DISTINCT k.name) as keyword_names
       FROM Proposals AS p
       LEFT JOIN ProposalKeywords AS pk ON p.id = pk.proposal_id
       LEFT JOIN Keywords AS k ON k.id = pk.keyword_id
@@ -125,7 +124,7 @@ export const getExtraInfoFromProposal = (proposal) => {
   });
 };
 
-export const getKeyWordsFromDB = (proposal_id) => {
+export const getKeyWordsFromDB = () => {
   return new Promise((resolve, reject) => {
     const sql = 'SELECT id, name FROM Keywords WHERE type="KEYWORD"';
     db.all(sql, (err, rows) => {

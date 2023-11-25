@@ -85,20 +85,40 @@
     - 400 Bad Request: Indicates missing or invalid parameters.
     - 500 Internal Server Error: Indicates an error during processing.
     ```json
+    // the response
     [
-        {
-        "id": 1,
-        "title": "Sw eng proposal",
-        "type": "something innovative",
-        "description": "This is an innovative proposal.",
+      {
+        "id": 27,
+        "title": "Computer vision techniques for mobile testing",
+        "description": "Many End-to-End (E2E) testing tools allow developers to create repeatable test scripts.",
+        "expiration_date": "2024-07-31",
+        "cod_degree": "2",
+        "title_degree": "COMMUNICATIONS ENGINEERING",
         "level": "MSc",
-        "expiration_date": "2024-08-30T00:00:00+02:00",
-        "notes": "No additional notes",
-        "cod_degree": "0",
+        "supervisor_id": 10000,
+        "notes": "http://grains.polito.it/work.php",
         "cod_group": 1,
-        "required_knowledge": null,
-        "status": "posted"
-      }, ]
+        "title_group": "Elite",
+        "required_knowledge": "programming skills (Python, deep learning frameworks);\r\nexperience in training deep neural networks;\r\nfundamentals of mobile development (Android GUI, the Android Studio development environment);",
+        "keyword_names": "AI, Mobile Application",
+        "supervisorsInfo": [
+          {
+            "id": 10000,
+            "name": "Mario",
+            "surname": "Rossi",
+            "email": "d10000@polito.it",
+            "cod_group": 1
+          },
+          {
+            "id": 10001,
+            "name": "Giuseppe",
+            "surname": "Verdi",
+            "email": "d10001@polito.it",
+            "cod_group": 1
+          }
+        ]
+      }, 
+    ]
     ```
 
 - GET `/teachers/:id`
