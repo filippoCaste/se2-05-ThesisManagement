@@ -85,7 +85,7 @@ describe("postProposal", () => {
                 title: "Proposal title",
                 type: "Proposal type",
                 description: "Proposal description",
-                level: 2,
+                level: "MSc",
                 cod_group: 1,
                 cod_degree: 2,
                 expiration_date: "2021-12-31",

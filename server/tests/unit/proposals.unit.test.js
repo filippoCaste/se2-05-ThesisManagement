@@ -185,6 +185,6 @@ describe("getLevels", () => {
     await getLevels(req, res, next);
 
     //expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith([{"id": 1, "name": 1}, {"id": 4, "name": 4}, {"id": 5, "name": 5}]);
+    expect(res.json).toHaveBeenCalledWith([{"id": "BSc", "name": "BSc"}, {"id": "MSc", "name": "MSc"}]);
   });
 });
