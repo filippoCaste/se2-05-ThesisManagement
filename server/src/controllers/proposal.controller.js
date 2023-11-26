@@ -70,7 +70,7 @@ export const postProposal = async (req, res) => {
   try {
     const { title, type, description, level, cod_group, cod_degree, expiration_date, supervisors_obj, keywords } = req.body;
 
-    if (!isNumericInputValid([cod_group, proposalId])
+    if (!isNumericInputValid([cod_group])
       || !isNumericInputValid(cod_degree)
       || !isTextInputValid(keywords)
       || !isTextInputValid([title, type, description, level])
@@ -86,22 +86,22 @@ export const postProposal = async (req, res) => {
           await postKeyword(kw);
         }
       }
-      for (let cod_degree of req.body.cod_degree) {
+      for (let cod of cod_degree) {
         await postNewProposal(
           title.trim(),
           type.trim(),
           description.trim(),
           level.trim(),
           expiration_date.trim(),
-          notes.trim(),
-          cod_degree,
+          req.body.notes || '',
+          cod,
           cod_group,
           req.body.required_knowledge,
-          req.body.supervisors_obj,
-          req.body.keywords
+          supervisors_obj,
+          keywords
         );
       }
-      return res.status(201);
+      return res.status(201).send();
     }
   } catch (err) {
     return res.status(500).json({ error: err.message });
