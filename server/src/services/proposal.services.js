@@ -193,73 +193,120 @@ export const postNewProposal = (
   return new Promise((resolve, reject) => {
     try {
       db.serialize(function () {
-        const date = dayjs(expiration_date).format();
-        const sqlProp = db.prepare(
-          "INSERT INTO Proposals(title, type, description, level, expiration_date, notes, cod_degree, cod_group, required_knowledge) VALUES (?,?,?,?,?,?,?,?,?);"
-        );
-        sqlProp.run(
+        const date = dayjs(expiration_date).format("YYYY-MM-DD");
+        const sqlProp = "INSERT INTO Proposals(title, type, description, level, expiration_date, notes, cod_degree, cod_group, required_knowledge) VALUES (?,?,?,?,?,?,?,?,?);"
+        db.run(sqlProp, [
           title,
           type,
           description,
           level,
           date,
-          notes,
+          notes || '',
           cod_degree,
           cod_group,
           required_knowledge
-        );
-        sqlProp.finalize();
-
-        const sqlKeyw = db.prepare(
-          "INSERT INTO ProposalKeywords(proposal_id, keyword_id) VALUES (?,?)"
-        );
-        const sqlGetKeyw = db.prepare("SELECT id FROM Keywords WHERE name = ?");
-
-        const sqlSuper = db.prepare(
-          "INSERT INTO Supervisors(proposal_id, supervisor_id, co_supervisor_id, external_supervisor) VALUES(?,?,?,?);"
-        );
-        const sqlLast = db.prepare(
-          "SELECT id FROM Proposals ORDER BY id DESC LIMIT 1"
-        );
-        sqlLast.get(function (err, row) {
-          if (err) {
+        ], (err) => {
+          if(err) {
             reject(err);
-          }
-          const propId = row.id;
-          if (
-            supervisor_obj.co_supervisors &&
-            supervisor_obj.co_supervisors.length > 0
-          ) {
-            for (let id of supervisor_obj.co_supervisors) {
-              sqlSuper.run(
-                propId,
-                supervisor_obj.supervisor_id,
-                id || null,
-                supervisor_obj.external_supervisor_id || null
-              );
-            }
-            sqlSuper.finalize();
-          }
+          } else {
+            const sqlKeyw = "INSERT INTO ProposalKeywords(proposal_id, keyword_id) VALUES (?,?)"
+            const sqlGetKeyw = "SELECT id FROM Keywords WHERE name = ?"
 
-          for (let kw of keywords) {
-            sqlGetKeyw.get(kw, (err, row) => {
+            const sqlGetExtSup = "SELECT id, name, surname, email FROM ExternalUsers WHERE email=? AND name=? AND surname=?";
+            const sqlGetExtSup2 = "SELECT id, name, surname, email FROM ExternalUsers WHERE email=? AND name=? AND surname=?"
+            const sqlInsertExtSup = "INSERT INTO ExternalUsers(email, name, surname) VALUES (?,?,?)";
+            const sqlSuper = "INSERT INTO Supervisors(proposal_id, supervisor_id, co_supervisor_id, external_supervisor) VALUES(?,?,?,?);"
+            const sqlSuper2 = "INSERT INTO Supervisors(proposal_id, supervisor_id, co_supervisor_id, external_supervisor) VALUES(?,?,?,?);"
+            const sqlLast = "SELECT id FROM Proposals WHERE cod_degree=? AND title=? ORDER BY id DESC LIMIT 1"
+            
+            db.get(sqlLast, [cod_degree, title], (err, row) => {
               if (err) {
                 reject(err);
-              } else {
-                if (row.id) {
-                  sqlKeyw.run(propId, row.id);
-                  sqlKeyw.finalize();
+              }
+              const propId = row.id;
+              if (
+                supervisor_obj.co_supervisors &&
+                supervisor_obj.co_supervisors.length > 0
+              ) {
+                for (let c_id of supervisor_obj.co_supervisors) {
+                  if (c_id !== supervisor_obj.supervisor_id) {
+                    db.run(sqlSuper, [
+                      propId,
+                      supervisor_obj.supervisor_id,
+                      c_id || null,
+                      null
+                    ], (err) => {
+                      if (err) {
+                        reject(err);
+                      }
+                    });
+                  }
                 }
               }
-            });
-            sqlGetKeyw.finalize();
-          }
 
-          return true;
+              if (supervisor_obj.external && supervisor_obj.external.length > 0) {
+                for (let ext of supervisor_obj.external) {
+                  db.get(sqlGetExtSup, [ext.email, ext.name, ext.surname], (err, row2) => {
+                    if (err) {
+                      reject(err);
+                    }
+                    if (!row2) {
+                      // add external co_sup
+                      db.run(sqlInsertExtSup, [ext.email, ext.name, ext.surname], (err) => {
+                        if (err) {
+                          reject(err);
+                        } else {
+
+                          db.get(sqlGetExtSup2, [ext.email, ext.name, ext.surname], (err, row3) => {
+                            if (err) {
+                              reject(err);
+                            } else {
+                              db.run(sqlSuper2, [propId, supervisor_obj.supervisor_id, null, row3.id], (err) => {
+                                if (err) {
+                                  reject(err);
+                                }
+                              });
+                            }
+                          })
+
+                        }
+                      });
+                    } else {
+                      db.run(sqlSuper2, [propId, supervisor_obj.supervisor_id, null, row2.id], (err) => {
+                        if (err) {
+                          reject(err);
+                        }
+                      });
+                    }
+                  })
+                }
+              }
+
+              for (let kw of keywords) {
+                db.get(sqlGetKeyw, kw, (err, row4) => {
+                  if (err) {
+                    reject(err);
+                  } else {
+                    if (row4.id) {
+                      db.run(sqlKeyw, [propId, row4.id], (err) => {
+                        if (err) {
+                          reject(err);
+                        }
+                      });
+                    }
+                  }
+                });
+              }
+              resolve(true);
+            });
+          }
         });
-        sqlLast.finalize();
+
       });
-      resolve(true);
+
+      console.log("arrivato qui")
+      // return resolve(true);
+    
     } catch (err) {
       reject(err);
     }
@@ -365,8 +412,6 @@ export const deleteProposalById = (proposalId) => {
     }
   });
 };
-
-
 
 export const getSupervisorByProposalId = (proposalId) => {
   return new Promise((resolve, reject) => {

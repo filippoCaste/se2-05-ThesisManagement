@@ -33,6 +33,7 @@ function Row(props) {
     }
   };
 
+
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderTop: "3px solid #ddd", backgroundColor: isEvenRow ? '#f5f5f5' : '#ffffff' } }}>
@@ -46,7 +47,7 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell style={{ width: '27%' }} component="th" scope="row">{row.p.title}</TableCell>
-        <TableCell style={{ width: '10%' }}>{row.p.level === 'MSc' ? "Master of Science" : row.level === 'BSc' ? "Bachelor of Science" : ""}</TableCell>
+        <TableCell style={{ width: '10%' }}>{row.p.level === 'MSc' ? "Master of Science" :  "Bachelor of Science" }</TableCell>
         <TableCell style={{ width: '14%' }}>{row.p.title_degree}</TableCell>
         <TableCell style={{ width: '11%' }}>{dayjs(row.p.expiration_date).format("DD/MM/YYYY")}</TableCell>
         <TableCell style={{ width: '6%' }}>{row.p.status}</TableCell>

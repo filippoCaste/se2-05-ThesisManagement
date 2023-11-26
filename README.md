@@ -56,14 +56,19 @@
     "expiration_date": "2023-12-22",
     "notes": "No additional notes",
     "required_knowledge": "Student must know the principle of software development.",
-    "cod_degree": ["2"],
+    "cod_degree": ["2", 3],
     "cod_group": "1",
     "supervisors_obj": {
         "supervisor_id": 10000,
         "co_supervisors": [
             10001,
             10002
-            ]
+            ],
+        "external":[{
+          "name":"Franco",
+          "surname":"Solo",
+          "email":"franco.solo@devops.com"
+        },]
     },
     "keywords": [
         "Javascript"

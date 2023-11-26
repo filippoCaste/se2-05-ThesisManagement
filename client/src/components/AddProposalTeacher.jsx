@@ -58,7 +58,6 @@ function AddProposalTeacher(props)
   const { user } = useContext(UserContext);
   const [teachersList, SetTeachersList]=useState('');
   const [degreesList, SetDegreesList]=useState('');
-  const [selectedDegree, setSelectedDegree] = useState('');
   const [selectedSupervisor, setSelectedSupervisor] = useState(user.id);
   const [keywordsList, SetKeywordsList]=useState(''); //prese dal DB
 
@@ -95,95 +94,22 @@ function AddProposalTeacher(props)
   const [type,setType]=useState('');
   const [level,setLevel]=useState('');
   const [expiration_date,setExpirationDate]=useState(null);
-  
-       
-  //HANDLER SUBMIT
-  function handleSubmit(event) 
-  {
-    event.preventDefault();
 
-    if(invioForm==true)
-    {
-       
-        setInvioForm(false); // Istruzioni provvisori aggiunte perchè quando si preme su add del campo di testo 
-                             // co supervisors venive anche inviato il form
-                             // soluzione provvisoria, da correggere meglio
-
-       ////////controllo input ////////////////////////
-       let corretto= true;
-
-       let campi_vuoti=' ';
-
-       if(title=='') { campi_vuoti=campi_vuoti + " TITLE , "; corretto= false; }
-       if(description=='') {campi_vuoti=campi_vuoti + " DESCRIPTION , "; corretto= false; }
-       if(required_knowledge=='') { campi_vuoti=campi_vuoti + " REQUIRED KNOWLEDGE , "; corretto= false; }
-       if(notes=='') { campi_vuoti=campi_vuoti + " NOTES , "; corretto= false; }
-       if(type=='') { campi_vuoti=campi_vuoti + " TYPE , "; corretto= false; }
-       if(level=='') { campi_vuoti=campi_vuoti + " LEVEL , "; corretto= false; }
-       if(selectedDegree=='') {campi_vuoti=campi_vuoti + " DEGREE , "; corretto= false; }
-       if(selectedCoSupList.length==0) { campi_vuoti=campi_vuoti + " CO-SUPERVISORS , "; corretto= false; }
-       if(selectedKeywordList.length==0) { campi_vuoti=campi_vuoti + " KEYWORDS , "; corretto= false; }
-       if((expiration_date==null)) { campi_vuoti=campi_vuoti + " EXPIRATION DATE , "; corretto= false; }
-       
-
-       //messaggio errore campi vuoti
-       if(corretto == false) 
+   //DEGREE A TENDINA
+   const [selectedDegree, setSelectedDegree] = useState('');
+   const [selectedDegreeList, setSelectedDegreeList] = useState([]);
+ 
+   const handleAddClickDegree = () => {
+       if(selectedDegree != '')
        {
-           handleMessage("ATTENTION: "+campi_vuoti+" EMPTY ", "warning");
-       }
-
-       
-         ////////SE INPUT CORRETTO //////////////////////////////////
-         if(corretto==true)
+         if (selectedDegree && !selectedDegreeList.includes(selectedDegree)) 
          {
-
-          let formatted_expiration = expiration_date.format("YYYY-MM-DD");
-          
-          let listaCoSup= selectedCoSupList.map(co=>co.teacher_id);
-
-              let nuovo_oggetto=
-              {
-                  title:   title,
-                  description: description,
-                  required_knowledge: required_knowledge,
-                  supervisor_id: selectedSupervisor, 
-                  co_supervisors:  listaCoSup,
-                  notes: notes,
-                  keywords: selectedKeywordList,          
-                  expiration_date: formatted_expiration,
-                  type: type,
-                  level: level,
-                  cod_group: user.cod_group,  
-                  cod_degree: selectedDegree.cod_degree,
-              }
-
-
-            //POST PROPOSAL
-            let list_cod_degree=[nuovo_oggetto.cod_degree];
-            let supervisors_obj={"supervisor_id":  nuovo_oggetto.supervisor_id, 
-            "co_supervisors":  nuovo_oggetto.co_supervisors};
-
-            
-            proposalAPI.postProposal
-            ( 
-                nuovo_oggetto.title, nuovo_oggetto.type, nuovo_oggetto.description,
-                nuovo_oggetto.level, nuovo_oggetto.expiration_date, nuovo_oggetto.notes,
-                nuovo_oggetto.required_knowledge,  list_cod_degree, nuovo_oggetto.cod_group,
-                supervisors_obj, nuovo_oggetto.keywords
-            )
-            .then(()=>{
-              handleMessage("PROPOSAL SUBMIT WITH SUCCESS", "success");
-              navigate("/teacher");
-            }).catch(err=>handleMessage(err, "warning"));  
-                 
-        
+           setSelectedDegreeList([...selectedDegreeList, selectedDegree]);
+           setSelectedDegree(''); // Pulisce la selezione dopo l'aggiunta
          }
-         
+       }
+   };
 
-      }
-    
-   }   
-       
   //CO SUPERVISORS A TENDINA
   const [selectedCoSup, setSelectedCoSup] = useState('');
   const [selectedCoSupList, setSelectedCoSupList] = useState([]);
@@ -232,6 +158,100 @@ function AddProposalTeacher(props)
     setSelectedKeywordList(updatedKeywordList);
   };
 
+  //EXTERNALS
+  const [formExternal, setFormExternal] = useState({ name: '', surname: '', email: '' });
+  const [listExternals, setListExternals] = useState([]);
+
+  const handleInputChangeExternal = (field) => (event) => {
+    setFormExternal({ ...formExternal, [field]: event.target.value });
+  };
+
+  const handleAddExternal = () => {
+    setListExternals([...listExternals, formExternal]);
+    setFormExternal({ name: '', surname: '', email: '' });
+  };
+
+  const handleRemoveClickExternal = (index) => {
+    const updatedExternals = [...listExternals];
+    updatedExternals.splice(index, 1);
+    setListExternals(updatedExternals);
+  };
+  
+       
+  //HANDLER SUBMIT
+  function handleSubmit(event) 
+  {
+    event.preventDefault();
+
+    if(invioForm==true)
+    {
+       
+        setInvioForm(false); // Istruzioni provvisori aggiunte perchè quando si preme su add del campo di testo 
+                             // co supervisors venive anche inviato il form
+                             // soluzione provvisoria, da correggere meglio
+
+       ////////controllo input ////////////////////////
+       let corretto= true;
+
+       let campi_vuoti=' ';
+       let array_only_cod_degree= selectedDegreeList.map(d=>d.cod_degree);
+       let array_only_id_co_supervisors= selectedCoSupList.map(co=>co.teacher_id);
+
+
+       console.log("COSA STO INVIANDO?");
+       console.log("title: ",title);
+       console.log("description: ",description);
+       console.log("required_knowledge: ",required_knowledge);
+       console.log("notes: ",notes);
+       console.log("type: ",type);
+       console.log("level: ",level);
+       console.log("expiration_date: ",expiration_date);
+       console.log("selectedDegreeList: ",array_only_cod_degree); 
+       console.log("selectedCoSupList: ",array_only_id_co_supervisors);
+       console.log("selectedKeywordList: ",selectedKeywordList);
+       console.log("listExternals: ",listExternals);
+       
+
+       if(title=='') { campi_vuoti=campi_vuoti + " TITLE , "; corretto= false; }
+       if(description=='') {campi_vuoti=campi_vuoti + " DESCRIPTION , "; corretto= false; }
+       if(required_knowledge=='') { campi_vuoti=campi_vuoti + " REQUIRED KNOWLEDGE , "; corretto= false; }
+       if(type=='') { campi_vuoti=campi_vuoti + " TYPE , "; corretto= false; }
+       if(level=='') { campi_vuoti=campi_vuoti + " LEVEL , "; corretto= false; }
+       if(array_only_cod_degree.length==0) {campi_vuoti=campi_vuoti + " DEGREE , "; corretto= false; }
+       if(array_only_id_co_supervisors.length==0) { campi_vuoti=campi_vuoti + " CO-SUPERVISORS , "; corretto= false; }
+       if(selectedKeywordList.length==0) { campi_vuoti=campi_vuoti + " KEYWORDS , "; corretto= false; }
+       if((expiration_date==null)) { campi_vuoti=campi_vuoti + " EXPIRATION DATE , "; corretto= false; }
+       
+
+       //messaggio errore campi vuoti
+       if(corretto == false) 
+       {
+           handleMessage("ATTENTION: "+campi_vuoti+" EMPTY ", "warning");
+       }
+
+       
+         ////////SE INPUT CORRETTO //////////////////////////////////
+         if(corretto==true)
+         {
+
+          let formatted_expiration = expiration_date.format("YYYY-MM-DD");
+          let cod_group= user.cod_group;
+          let supervisors_obj={"supervisor_id":  selectedSupervisor, 
+            "co_supervisors":  array_only_id_co_supervisors, "external": listExternals};
+
+            proposalAPI.postProposal(title,type,description,level, formatted_expiration,notes,
+              required_knowledge, array_only_cod_degree,cod_group,supervisors_obj,selectedKeywordList)
+              .then(()=>navigate("/teacher"))
+              .catch((err) => handleMessage(err,"warning"));
+        
+         }
+         
+         
+      }
+    
+   }   
+       
+
   //INVIO FORM
   const [invioForm,setInvioForm]=useState(false);
 
@@ -271,48 +291,12 @@ function AddProposalTeacher(props)
               </Grid>
 
               <Grid item xs={4}>
-                  <FormControl fullWidth>
-                  <Typography variant="subtitle1" fontWeight="bold">  SELECT A DEGREE LEVEL  </Typography>
-                    < Select
-                      labelId="word-label"
-                      id="level-select"
-                      onChange={(ev) => { setLevel(ev.target.value) }}
-                    >
-                      {
-                        Array.from(["MSc", "BSc"]).map((el, index) =>
-                        (el === "MSc" ? <MenuItem key={index} value={"MSc"}> Master of Science </MenuItem> 
-                                      : <MenuItem key={index} value={"BSc"}> Bachelor of Science </MenuItem>))
-                      }
-                    </Select>
-                  </FormControl> 
-              </Grid>
-
-              <Grid item xs={4}>
-                <FormControl fullWidth disabled={level===''}>
-                <Typography variant="subtitle1" fontWeight="bold">  SELECT A DEGREE </Typography>     
-                < Select 
-                    labelId="word-label" 
-                    id="degree-select" 
-                    value={selectedDegree}   
-                    onChange={(event) => {setSelectedDegree(event.target.value); }}
-                >
-                  {   
-                      Array.from(degreesList).filter(d=>d.level_degree == level).map((degree, index) => 
-                    (<MenuItem key={index} value={degree}> {degree.title_degree} </MenuItem> ))
-                  }
-                </Select>
-              </FormControl>   
-              </Grid> 
-            </Grid> <br/>    
-
-            <Grid container spacing={2}> 
-              <Grid item xs={6}>
                   <Typography variant="subtitle1" fontWeight="bold"> TYPE </Typography>     
                   <TextField  name="type" variant="filled"  fullWidth
                   value={type}  onChange={ev=>setType(ev.target.value)}/>  <br /> <br />
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid item xs={4}>
               <FormControl fullWidth>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <Typography variant="subtitle1" fontWeight="bold"> EXPIRATION DATE </Typography>
@@ -325,7 +309,83 @@ function AddProposalTeacher(props)
                 </LocalizationProvider>
                 </FormControl> 
               </Grid>
-          </Grid>  
+             
+            </Grid> <br/>    
+
+            <Grid container spacing={2}> 
+            <Grid item xs={12}>
+                  <FormControl fullWidth>
+                  <Typography variant="subtitle1" fontWeight="bold">  SELECT A DEGREE LEVEL  </Typography>
+                    < Select
+                      labelId="word-label"
+                      id="level-select"
+                      onChange={(ev) => { setLevel(ev.target.value) }}
+                    >
+                      {
+                        Array.from(['MSc', 'BSc']).map((el, index) =>
+                        (el === 'MSc' ? <MenuItem key={index} value={'MSc'}> Master of Science </MenuItem> 
+                                      : <MenuItem key={index} value={'BSc'}> Bachelor of Science </MenuItem>))
+                      }
+                    </Select>
+                  </FormControl> 
+            </Grid>
+          </Grid>   <br/> <br/>
+
+          <Grid item xs={4}>
+          <Paper elevation={3} style={{ padding: '16px' }}>
+            <FormControl fullWidth>
+              <Typography variant="h6" gutterBottom fontWeight="bold">
+                SELECT DEGREE
+              </Typography>
+              <Select
+                labelId="degree-label"
+                id="degree-select"
+                value={selectedDegree}
+                onChange={(event) => setSelectedDegree(event.target.value)}
+                input={<Input id="select-multiple" />}
+              >
+                {Array.from(degreesList).filter(d=>d.level_degree == level).map((degree, index) => (
+                  <MenuItem key={index} value={degree}>
+                    {degree.title_degree}
+                  </MenuItem>
+                ))}
+              </Select>
+
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleAddClickDegree}
+                style={{ marginTop: '16px' }}
+              >
+                ADD
+              </Button>
+
+              {/* Visualizza i co-supervisori selezionati */}
+              <Typography variant="h6" style={{ marginTop: '16px' }}>
+                Selected Degree
+              </Typography>
+              {selectedDegreeList.map((degree, index) => (
+                <Paper key={index} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
+                  <Grid container alignItems="center">
+                    <Grid item xs={10}>
+                      <Typography variant="body1">{degree.title_degree} </Typography>
+                    </Grid>
+                    <Grid item xs={2}>
+                      <IconButton
+                        color="primary"
+                        aria-label="delete"
+                        onClick={() => handleRemoveClickDegree(index)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Grid>
+                  </Grid>
+                </Paper>
+              ))}
+            </FormControl>
+          </Paper>
+        </Grid> <br/> <br/>
+
 
           <Typography variant="subtitle5" fontWeight="bold"> REQUIRED KNOWLEDGE </Typography>
           <TextField  name="required_knowledge" variant="filled" fullWidth multiline  rows={7}
@@ -387,6 +447,7 @@ function AddProposalTeacher(props)
         </FormControl>
       </Paper>
     </Grid> <br/> <br/>
+
 
     <Grid item xs={4}>
       <Paper elevation={3} style={{ padding: '16px' }}>
@@ -453,6 +514,78 @@ function AddProposalTeacher(props)
         </FormControl>
       </Paper>
     </Grid>   <br/> <br/>
+
+    {/* EXTERNALS */}
+    <Grid item xs={4}>
+      <Paper elevation={3} style={{ padding: '16px' }}>
+        <Typography variant="h6" gutterBottom fontWeight="bold">
+          SELECT EXTERNALS
+        </Typography>
+
+        {/* Input for a new external entry */}
+        <TextField
+          label="Name"
+          variant="outlined"
+          fullWidth
+          value={formExternal.name}
+          onChange={handleInputChangeExternal('name')}
+          style={{ marginTop: '16px' }}
+        />
+        <TextField
+          label="Surname"
+          variant="outlined"
+          fullWidth
+          value={formExternal.surname}
+          onChange={handleInputChangeExternal('surname')}
+          style={{ marginTop: '16px' }}
+        />
+        <TextField
+          label="Email"
+          variant="outlined"
+          fullWidth
+          value={formExternal.email}
+          onChange={handleInputChangeExternal('email')}
+          style={{ marginTop: '16px' }}
+        />
+
+        {/* Button to add the new external entry */}
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleAddExternal}
+          style={{ marginTop: '16px' }}
+        >
+          ADD EXTERNAL
+        </Button>
+
+        {/* Display selected external entries */}
+        <Typography variant="h6" style={{ marginTop: '16px' }}>
+          Selected Externals
+        </Typography>
+        {listExternals.map((external, index) => (
+        <Paper key={index} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
+          <Grid container alignItems="center">
+            <Grid item xs={10}>
+              <Typography variant="body1">
+                {external.name} {external.surname}, {external.email}
+              </Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <IconButton
+                color="primary"
+                aria-label="delete"
+                onClick={() => handleRemoveClickExternal(index)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
+        </Paper>
+      ))}
+      </Paper>
+    </Grid> <br/> <br/>
+
+     {/* NOTES */}      
 
     <Typography variant="subtitle5" fontWeight="bold"> NOTES </Typography>
            <TextField  name="notes" variant="filled" fullWidth  multiline  rows={5}
