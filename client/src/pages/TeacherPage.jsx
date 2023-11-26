@@ -78,7 +78,7 @@ function TeacherPage(props)
       <Grid  container spacing={2}>
          <Grid item xs={4}>
             <Button variant="contained" color="primary" 
-            onClick={()=>navigate("/teacher/addProposal")} > INSERT NEW THESIS PROPOSAL </Button>  <br/> <br/>
+            onClick={()=>navigate("/teacher/addProposal", {state:{currentDataAndTime}})} > INSERT NEW THESIS PROPOSAL </Button>  <br/> <br/>
          </Grid> 
          {/*<Grid item xs={4}>
             <FormControl fullWidth>

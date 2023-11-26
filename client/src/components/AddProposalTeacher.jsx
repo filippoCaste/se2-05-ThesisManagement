@@ -51,6 +51,7 @@ function formatDate(inputDate) {
 
 function AddProposalTeacher(props)
 {
+  const {currentDataAndTime} = props;
   const navigate= useNavigate();
   const handleMessage = useContext(MessageContext);
   dayjs.extend(customParseFormat);
@@ -59,7 +60,7 @@ function AddProposalTeacher(props)
   const [teachersList, SetTeachersList]=useState('');
   const [degreesList, SetDegreesList]=useState('');
   const [selectedDegree, setSelectedDegree] = useState('');
-  const [selectedSupervisor, setSelectedSupervisor] = useState(user.id);
+  const [selectedSupervisor, setSelectedSupervisor] = useState(user?.id);
   const [keywordsList, SetKeywordsList]=useState(''); //prese dal DB
 
 
@@ -94,7 +95,7 @@ function AddProposalTeacher(props)
   const [notes,setNotes]=useState('');
   const [type,setType]=useState('');
   const [level,setLevel]=useState('');
-  const [expiration_date,setExpirationDate]=useState(null);
+  const [expiration_date,setExpirationDate]=useState(currentDataAndTime? currentDataAndTime:  dayjs());
   
        
   //HANDLER SUBMIT
@@ -311,7 +312,7 @@ function AddProposalTeacher(props)
                   <TextField  name="type" variant="filled"  fullWidth
                   value={type}  onChange={ev=>setType(ev.target.value)}/>  <br /> <br />
               </Grid>
-
+                  
               <Grid item xs={6}>
               <FormControl fullWidth>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -319,8 +320,10 @@ function AddProposalTeacher(props)
                   <DatePicker
                     format="DD/MM/YYYY"
                     value={expiration_date}
+                    minDate={dayjs(currentDataAndTime)}
+                    disablePast
                     onChange={(newDate) => { setExpirationDate(newDate); }}
-                    minDate={dayjs()}
+
                   />
                 </LocalizationProvider>
                 </FormControl> 
