@@ -62,7 +62,7 @@ export default function ResponsiveDrawer(props) {
       }}
     >
       <Collapse in={{ sm: openSelectionsMobile, md: true }} timeout="auto" unmountOnExit>
-      <Box sx={{ overflow: 'hidden', mt: '15vh', mx: '2vw'}}>
+      <Box sx={{ overflow: 'hidden', mt: '15vh', mx: '2vw', position:"relative"}}>
 
 
             <FilterComponent
@@ -85,8 +85,8 @@ export default function ResponsiveDrawer(props) {
 
         <Link
           position="absolute"
-          bottom="5vh"
-          right="5vw"
+          bottom="1vh"
+          right="1vw"
           href="#"
           color="red"
           underline="none"

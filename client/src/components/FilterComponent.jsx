@@ -5,12 +5,12 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import teachersAPI from '../services/teachers.api';
 import keywordsAPI from '../services/keywords.api';
 import theme from '../theme';
 import ChipsArray from './ChipsCustomized';
 import SupervisorMenu from './SupervisorMenu';
+import CheckboxesTags from './Autocomplete';
 
 export default function FilterComponent(props) {
   const {
@@ -110,11 +110,7 @@ export default function FilterComponent(props) {
         <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'cursive' }}>
           Keywords:
         </Typography>
-        <ChipsArray
-          array={availableKeywords}
-          setSelectedArray={setSelectedKeywords}
-          selectedArray={selectedKeywords}
-        />
+        <CheckboxesTags array={availableKeywords} setSelectedArray={setSelectedKeywords} selectedArray={selectedKeywords}/>
       </Box>
 
       <Box sx={{ mt: "10%" }}>
