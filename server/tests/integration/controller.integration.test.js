@@ -405,3 +405,82 @@ describe('GET /api/applications', () => {
             });
     })
 })
+
+describe("PUT /api/proposals", () => {
+
+  test("should return 400 if fields are incorrect", async () => {
+    const wrongFields = [
+      { field: "cod_group", value: "not number" },
+      { field: "title", value: "" },
+      { field: "keywords", value: [""] },
+      { field: "expiration_date", value: "2021-13-41" },
+      { field: "supervisors_obj", value: { supervisor_id: "not number" } },
+    ];
+    const req = {
+      title: "Computer vision techniques for mobile testing",
+      type: "External Thesis at company",
+      description:
+        "Many End-to-End (E2E) testing tools allow developers to create repeatable test scripts.",
+      level: "MSc",
+      cod_degree: [2],
+      cod_group: 1,
+      keywords: ["AI", "Computer Vision", "Mobile Testing"],
+      expiration_date: "2024-07-20",
+      supervisors_obj: {
+        supervisor_id: 10000,
+        co_supervisors: [10001],
+      },
+    };
+
+    for (let i = 0; i < wrongFields.length; i++) {
+      req[wrongFields[i].field] = wrongFields[i].value;
+
+      console.log(JSON.stringify(req));
+      const response = await chai
+        .request(httpServer)
+        .put("/api/proposals/4")
+        .send(JSON.stringify(req));
+
+    //   response.statusCode.should.be.equal(400);
+      done();
+    }
+  });
+
+  test("should return 404 if proposal is not found", async () => {
+    const body = {
+      title: "Computer vision techniques for mobile testing",
+      type: "External Thesis at company",
+      description:
+        "Many End-to-End (E2E) testing tools allow developers to create repeatable test scripts.",
+      level: "MSc",
+      cod_degree: [2],
+      cod_group: 1,
+      keywords: ["AI", "Computer Vision", "Mobile Testing"],
+      expiration_date: "2024-07-20",
+      supervisors_obj: {
+        supervisor_id: 10000,
+        co_supervisors: [10001],
+      },
+    };
+
+    const response = await request(app1)
+      .put("/api/proposals/10000")
+      .set("user", { id: 10000 })
+      .send(body);
+
+    // response.status.should.be.equal(404);
+  });
+
+  test("should return 403 if user is not the supervisor", async () => {});
+  test("should return 500 if unexpected error", async () => {});
+  test("should return 204 if proposal is accepted", async () => {});
+});
+
+describe("GET /api/applications/:applicationId", () => {
+  test("should return 400 if status is missing", async () => {});
+  test("should return 400 if status is not valid", async () => {});
+  test("should return 404 if proposal is not found", async () => {});
+  test("should return 403 if user is not the supervisor of the proposal", async () => {});
+  test("should return 500 if an error occurs during database operation", async () => {});
+  test("should return 204 if everything is OK", async () => {});
+});

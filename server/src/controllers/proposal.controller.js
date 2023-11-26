@@ -144,6 +144,9 @@ export const updateProposal = async (req, res) => {
 
     const { title, type, description, level, cod_group, cod_degree, expiration_date, notes, supervisors_obj, keywords } = req.body;
 
+    console.log(req.user);
+    console.log(req.headers);
+
     if(!isNumericInputValid([cod_group, proposalId]) 
           || !isTextInputValid(keywords)
           || !isTextInputValid([title, type, description, level])
@@ -167,6 +170,7 @@ export const updateProposal = async (req, res) => {
     }
 
   } catch(err) {
+    console.log(err);
     if(err == 404) {
       res.status(404).json({error: "Proposal not found"})
     } else if(err == 403) {
