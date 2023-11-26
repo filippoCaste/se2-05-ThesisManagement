@@ -34,6 +34,10 @@ GET http://localhost:3001/api/proposals/teachers/10000 HTTP/1.1
 
 ###
 
+GET http://localhost:3001/api/proposals/31 HTTP/1.1
+
+###
+
 PUT http://localhost:3001/api/proposals/31 HTTP/1.1
 content-type: application/json
 

@@ -183,6 +183,50 @@
   }
   ```
 
+- GET `/:proposalId`
+  - request body: none
+  - response:
+    - 200 OK (success) with array of thesis proposals object 
+    - 401 Unauthorized (failure) with error message
+    - 403 Forbidden
+    - 404 If the proposal is not found
+    - 500 Internal Server Error: Indicates an error during processing.
+```json
+{
+  "id": 31,
+  "title": "thesis",
+  "description": "description55",
+  "type": "acdemic thesis",
+  "level": "MSc",
+  "expiration_date": "2023-11-19",
+  "notes": "notes",
+  "cod_degree": 5,
+  "cod_group": 1,
+  "required_knowledge": "softeng2 exam",
+  "status": "archived",
+  "title_degree": "COMPUTER ENGINEERING",
+  "title_group": "Elite",
+  "keywords": [
+    "Javascript"
+  ],
+  "coSupervisors": [
+    {
+      "id": 10001,
+      "name": "Giuseppe",
+      "surname": "Verdi",
+      "email": "d10001@polito.it"
+    },
+  ],
+  "externalSupervisors": [ 
+    {
+      "name":"Antonio",
+      "surname":"Vito",
+      "email":"vitoantoniogmail.com"
+    },
+  ]
+}
+```
+
 ### `/api/degrees`:
 
 - GET `/`
@@ -323,7 +367,7 @@
   ```
 
 - PUT `/:applicationId`
-  - Description: accept or refuse an application made by a student
+  - Description: accept or reject an application made by a student
   - Request Body:
     - `status`
   - Response:
@@ -339,7 +383,7 @@
   }
   // or
   {
-    "status":"refused"
+    "status":"reject"
   }
   ```
 
