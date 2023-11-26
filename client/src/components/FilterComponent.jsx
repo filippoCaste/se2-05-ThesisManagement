@@ -66,7 +66,7 @@ export default function FilterComponent(props) {
           variant="outlined"
           value={title}
           onChange={(ev) => setTitle(ev.target.value)}
-          sx={{ width: {sm: '100%', md: 'auto'}, mt: '5%' }}
+          sx={{ width: '100%', mt: '5%' }}
         />
       </Box>
 
