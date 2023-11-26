@@ -11,10 +11,12 @@ import API_Applications from '../services/applications.api';
 import { UserContext } from '../Contexts';
 import CollapsibleTable from '../components/CollapsibleTable';
 import AlertDialog from '../components/AlertDialog';
-
+import dayjs from 'dayjs';
 
 function TeacherPage(props)
-{
+{  
+   const {currentDataAndTime} = props;
+
    const navigate = useNavigate();
    const { user } = useContext(UserContext);
    const [errorMsgAPI, setErrorMsgAPI] = useState('');
@@ -58,13 +60,14 @@ function TeacherPage(props)
       const fetchData = async () => {
          if (user) {
             const proposals = await API_Proposal.getProposalsByTeacherId(user.id);
-            const data = await createData(proposals);
+            const notExpiredProposals = proposals.filter((p) => dayjs(p?.expiration_date).isAfter(currentDataAndTime));
+            const data = await createData(notExpiredProposals);
             setListProposals(data);
          }
       }
 
       fetchData();
-   }, [user]);
+   }, [user,currentDataAndTime]);
 
    return(
       <>
