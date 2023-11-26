@@ -4,8 +4,8 @@ import {
   postNewProposal,
   deleteProposalById,
   getSupervisorByProposalId,
-  archiveProposalByProposalId
-  updateProposalByProposalId,
+  archiveProposalByProposalId,
+  updateProposalByProposalId
 } from "../services/proposal.services.js";
 import { isNumericInputValid, isTextInputValid, isValidDateFormat } from "../utils/utils.js";
 import { getTeacherById } from "../services/teacher.services.js";
