@@ -17,11 +17,11 @@ function TeacherPage(props) {
   const { user } = useContext(UserContext);
   const [errorMsgAPI, setErrorMsgAPI] = useState('');
   const [listProposals, setListProposals] = useState([]);
-  //const [filterStatus,setFilterStatus]=useState('posted');
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  
   function handleError(err) {
     let errMsgAPI = 'ERRORE SCONOSCIUTO';
     if (err.errors) {
@@ -94,7 +94,9 @@ function TeacherPage(props) {
           </Button>{' '}
           <br /> <br />
         </Grid>
-        {/*<Grid item xs={4}>
+        
+        {/*
+        <Grid item xs={4}>
             <FormControl fullWidth>
                <Typography variant="subtitle1" fontWeight="bold">  FILTER BY STATUS  </Typography>
                <Select
@@ -103,12 +105,13 @@ function TeacherPage(props) {
                   onChange={(ev) => { setFilterStatus(ev.target.value) }}
                >
                   {
-                     Array.from(["all", "posted", "active"]).map((status, index) => 
+                     Array.from(["all", "posted", "archived"]).map((status, index) => 
                      (<MenuItem key={index} value={status}> {status} </MenuItem> ))
                   }
                </Select>
             </FormControl>
-               </Grid> */}
+        </Grid> 
+        */}
 
         <CollapsibleTable
           listProposals={listProposals}
