@@ -17,7 +17,7 @@ import Box from '@mui/material/Box';
 export default function ResponsiveDrawer(props) {
   const {
     openSelectionsMobile,
-    drawerWidth,
+
     setSelectedLevels,
     setSelectedExpirationDate,
     selectedKeywords,
@@ -32,11 +32,9 @@ export default function ResponsiveDrawer(props) {
     title,
     setTitle,
   } = props;
-  const [openFilter, setOpenFilter] = React.useState(true);
 
-  /*const handleClickFilter = () => {
-    setOpenFilter(!openFilter);
-  };*/
+
+
 
   const handleResetFilters = () => {
     // Reset all filters here
@@ -51,29 +49,22 @@ export default function ResponsiveDrawer(props) {
     <Drawer
       variant="permanent"
       sx={{
-        width: drawerWidth,
+        width: { sm: '100vw', md: "30vw" },
         display: {
           sm: openSelectionsMobile ? 'block' : 'none',
           md: 'block',
         },
         flexShrink: 0,
         [`& .MuiDrawer-paper`]: {
-          width: { sm: '100vw', md: drawerWidth },
+          width: { sm: '100vw', md: "30vw" },
           boxSizing: 'border-box',
         },
       }}
     >
-      <Box sx={{ overflow: 'auto', mt: '15vh', mx: '2vh' }}>
-        {/*<ListItemButton onClick={handleClickFilter}>
-          <Typography variant="h7" fontWeight={'bold'}>
-            Filter by:
-          </Typography>
-          <ListItemText />
-          {openFilter ? <ExpandLess /> : <ExpandMore />}
-    </ListItemButton>*/}
-        <Collapse in={openFilter} timeout="auto" unmountOnExit>
-          <Divider />
-          <List component="div" disablePadding>
+      <Collapse in={{ sm: openSelectionsMobile, md: true }} timeout="auto" unmountOnExit>
+      <Box sx={{ overflow: 'hidden', mt: '15vh', mx: '2vw'}}>
+
+
             <FilterComponent
               setSelectedLevels={setSelectedLevels}
               selectedExpirationDate={selectedExpirationDate}
@@ -89,13 +80,13 @@ export default function ResponsiveDrawer(props) {
               title={title}
               setTitle={setTitle}
             />
-          </List>
-        </Collapse>
+
+
 
         <Link
           position="absolute"
           bottom="5vh"
-          right="5vh"
+          right="5vw"
           href="#"
           color="red"
           underline="none"
@@ -104,6 +95,7 @@ export default function ResponsiveDrawer(props) {
           Reset all
         </Link>
       </Box>
+      </Collapse>
     </Drawer>
   );
 }

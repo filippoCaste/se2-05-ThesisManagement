@@ -30,7 +30,7 @@ export default function FilterComponent(props) {
   const [availableKeywords, setAvailableKeywords] = useState([]);
   const [availableSupervisors, setAvailableSupervisors] = useState([]);
 
-  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+
 
   useEffect(() => {
     const retrieveFilterOptions = async () => {
@@ -50,14 +50,13 @@ export default function FilterComponent(props) {
   return (
     <Box
       sx={{
-        padding: isSmallScreen ? '10px' : '20px',
         background: 'white',
         borderRadius: '8px',
         boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
         color: theme.palette.primary.main,
       }}
     >
-      <Box sx={{ mb: isSmallScreen ? '10px' : '20px' }}>
+      <Box >
         <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'cursive' }}>
           Title:
         </Typography>
@@ -67,15 +66,15 @@ export default function FilterComponent(props) {
           variant="outlined"
           value={title}
           onChange={(ev) => setTitle(ev.target.value)}
-          sx={{ width: isSmallScreen ? '100%' : '240px', mt: '8px' }}
+          sx={{ width: {sm: '100%', md: 'auto'}, mt: '5%' }}
         />
       </Box>
 
-      <Box sx={{ mb: isSmallScreen ? '10px' : '20px' }}>
+      <Box sx={{ mt: "10%" }}>
         <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'cursive' }}>
           Expiration Date:
         </Typography>
-        <Box display="flex" sx={{ mt: '8px', flexDirection: isSmallScreen ? 'column' : 'row' }}>
+        <Box display="flex" sx={{ mt: '10%', flexDirection:'column' }}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="From..."
@@ -86,7 +85,7 @@ export default function FilterComponent(props) {
               slotProps={{
                 textField: {
                   helperText: 'DD/MM/YYYY',
-                  width: isSmallScreen ? '100%' : 'auto',
+                  width: {sm: '100%', md: 'auto'},
                 },
               }}
             />
@@ -99,16 +98,15 @@ export default function FilterComponent(props) {
               slotProps={{
                 textField: {
                   helperText: 'DD/MM/YYYY',
-                  width: isSmallScreen ? '100%' : 'auto',
-                  ml: isSmallScreen ? 0 : '10px',
-                },
+                  width: {sm: '100%', md: 'auto'},
+                  },
               }}
             />
           </LocalizationProvider>
         </Box>
       </Box>
 
-      <Box sx={{ mb: isSmallScreen ? '10px' : '20px' }}>
+      <Box sx={{ mt: "10%" }} >
         <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'cursive' }}>
           Keywords:
         </Typography>
@@ -119,7 +117,7 @@ export default function FilterComponent(props) {
         />
       </Box>
 
-      <Box sx={{ mb: isSmallScreen ? '10px' : '20px' }}>
+      <Box sx={{ mt: "10%" }}>
         <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'cursive' }}>
           Supervisor:
         </Typography>
