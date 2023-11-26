@@ -13,7 +13,7 @@ const router = Router();
 
 router.get("/", isLoggedIn, getProposals);
 
-router.post("/", postProposal);
+router.post("/", isTeacher, postProposal);
 
 router.get('/teachers/:id', isLoggedIn, getProposalTeacherId)
 
