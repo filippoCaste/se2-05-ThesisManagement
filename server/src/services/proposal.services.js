@@ -417,3 +417,83 @@ export const archiveProposalByProposalId = (proposalId) => {
 };
 
 
+
+
+export const updateProposalByProposalId = (proposalId, userId, proposal) => {
+  return new Promise((resolve, reject) => {
+    const sql1 = 'SELECT supervisor_id, proposal_id FROM Supervisors WHERE proposal_id = ?';
+    db.get(sql1, [proposalId], (err, row) => {
+      if (err)
+        reject(err);
+      else if (!row)
+        reject(404);
+      else if (row.supervisor_id != userId) {
+        reject(403);
+      } else {
+
+        // update the proposal data
+        const sql2 = "UPDATE Proposals SET title = ?, type=?, description=?, level=?, expiration_date=?, notes=?, cod_group=?, required_knowledge=? " +
+                      " WHERE id = ? AND cod_degree = ?";
+        // const sql2a = "SELECT * FROM Proposals WHERE id = ? AND cod_degree = ?";
+
+        for(let degree of proposal.cod_degree) {
+          db.run(sql2, [proposal.title, proposal.type, proposal.description, proposal.level, proposal.expiration_date, proposal.notes||'', proposal.cod_group, proposal.required_knowledge||'', proposalId, degree], (err) => {
+            if(err) {
+              reject(err)
+            }
+          })
+        }
+
+        // update the supervisors table (if there are new ones)
+        const sql4a = "SELECT * FROM Supervisors s WHERE s.proposal_id = ? AND co_supervisor_id = ? ;";
+        const sql4b = "INSERT INTO Supervisors(proposal_id, supervisor_id, co_supervisor_id) VALUES (?,?,?) ;";
+
+        for (let coSup of proposal.supervisors_obj.co_supervisors) {
+          db.get(sql4a, [proposalId, coSup], (err, row) => {
+            if (err) {
+              reject(err)
+            } else {
+              if (!row) {
+                db.run(sql4b, [proposalId, userId, coSup], (err) => {
+                  if (err) {
+                    reject(err);
+                  }
+                })
+              }
+            }
+          })
+        }
+
+
+        // update the keywords (if there are new ones)
+        const sql3a = "SELECT pk.keyword_id as keywordId FROM ProposalKeywords pk, Keywords k WHERE pk.proposal_id = ? AND pk.keyword_id = k.id AND k.name = ?;";
+        const sql3b = "INSERT INTO ProposalKeywords(proposal_id, keyword_id) VALUES (?,?) ;"
+        const sql3c = "SELECT * FROM Keywords WHERE name = ?"
+
+        for(let kw of proposal.keywords) {
+          db.get(sql3a, [proposalId, kw], (err, row) => {
+            if(err) {
+              reject(err);
+            }
+            if(!row) {
+              db.get(sql3c, [kw], (err, row) => {
+                if(err) {
+                  reject(err)
+                }
+                db.run(sql3b, [proposalId, row.id], (err) => {
+                  if (err) {
+                    reject(err);
+                  }
+                })
+              })
+            }
+          })
+        }
+
+        resolve(true);
+      }
+    })
+  })
+
+}
+

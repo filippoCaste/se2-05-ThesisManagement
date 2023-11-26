@@ -133,6 +133,41 @@
 ]
 ```
 
+- PUT `/:proposalId`
+  - Description: Update the status of an application
+  - request body content: 
+    - see below
+  - response:
+    - 204 No Content: Successfully updated.
+    - 400 Bad Request: Indicates missing or invalid parameters.
+    - 401 Unauthorized: Indicates that the user is not logged in.
+    - 403 Forbidden: User cannot access to this resource.
+    - 404 Not Found: The proposal doesn't exist.
+    - 500 Internal Server Error: Indicates an error during processing.
+  ```json
+  {
+    "title": "Some proposal",
+    "type":"A proposal that inspires",
+    "description": "This is a fake proposal.",
+    "level": "MSc",
+    "expiration_date": "2023-12-22",
+    "notes": "additional notes",
+    "required_knowledge": "Student must know the principle of software development.",
+    "cod_degree": ["5"],
+    "cod_group": "1",
+    "supervisors_obj": {
+        "supervisor_id": 10000,
+        "co_supervisors": [
+            10001,
+            10002
+            ]
+    },
+    "keywords": [
+        "AI", "Java", "Web development"
+    ]
+  }
+  ```
+
 ### `/api/degrees`:
 
 - GET `/`
@@ -310,7 +345,28 @@
     "application_id": 123,
     "proposal_id": 1,
     "student_id": 1001,
-    "submission_date": "2023-11-18T00:00:00.000Z"
+    "submission_date": "2023-11-18"
+  }
+  ```
+
+- PUT `/:applicationId`
+  - Description: accept or refuse an application made by a student
+  - Request Body:
+    - `status`
+  - Response:
+    - 204 No Content: successfully updated.
+    - 400 Bad Request: Indicates missing or invalid parameters.
+    - 401 Unauthorized: Indicates that the user is not logged in.
+    - 403 Forbidden: User cannot access to this resource.
+    - 404 Not Found: The application doesn't exist.
+    - 500 Internal Server Error: Indicates an error during processing.
+  ```json
+  {
+    "status":"accepted"
+  }
+  // or
+  {
+    "status":"refused"
   }
   ```
 
@@ -409,7 +465,7 @@
 - title: TEXT
 - type: TEXT
 - description: TEXT
-- level: INTEGER
+- level: TEXT (one between "MSc" and "BSc")
 - expiration_date: TEXT
 - notes: TEXT
 - cod_degree: TEXT (NOT NULL)
@@ -421,7 +477,7 @@
 - application_id: INTEGER (AI)
 - proposal_id: INTEGER (NOT NULL)
 - student_id: INTEGER (NOT NULL)
-- status: TEXT (DEFAULT 'sent')
+- status: TEXT (DEFAULT 'submitted', OTHERS 'accepted', 'refused')
 - submission_date: TEXT
 
 ## Main React Components

@@ -91,6 +91,8 @@ export const getApplicationsByProposalId = (proposalId) => {
             }
             const applications = rows.map((e) => {
                 const obj = {
+                    application_id: e.application_id,
+                    status: e.status,
                     student_id: e.student_id,
                     submission_date: e.submission_date,
                     student_name: e.name,
@@ -105,6 +107,56 @@ export const getApplicationsByProposalId = (proposalId) => {
             resolve (applications);
         });
     });
+}
+
+export const changeStatus = (applicationId, userId, status) => {
+  return new Promise((resolve, reject) => {
+    const sql1 = "SELECT s.supervisor_id as supervisor_id FROM Supervisors s, Applications a WHERE a.application_id=? AND a.proposal_id=s.proposal_id";
+    db.get(sql1, [applicationId], (err, row) => {
+      if (err) {
+        reject(err);
+      } else if (!row) {
+        reject(404);
+      } else if(userId != row.supervisor_id) {
+        reject(403);
+      }
+    });
+
+    const sql2 = "UPDATE Applications SET status=? WHERE application_id=?";
+    db.run(sql2, [status, applicationId], (err) => {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(true);
+      }
+    });
+
+  });
+}
+
+export const changeStatus = (applicationId, userId, status) => {
+  return new Promise((resolve, reject) => {
+    const sql1 = "SELECT s.supervisor_id as supervisor_id FROM Supervisors s, Applications a WHERE a.application_id=? AND a.proposal_id=s.proposal_id";
+    db.get(sql1, [applicationId], (err, row) => {
+      if (err) {
+        reject(err);
+      } else if (!row) {
+        reject(404);
+      } else if(userId != row.supervisor_id) {
+        reject(403);
+      }
+    });
+
+    const sql2 = "UPDATE Applications SET status=? WHERE application_id=?";
+    db.run(sql2, [status, applicationId], (err) => {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(true);
+      }
+    });
+
+  });
 }
 
 export const getApplicationsByStudentId = (studentId) => {
