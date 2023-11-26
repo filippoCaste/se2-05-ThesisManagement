@@ -172,6 +172,24 @@ const deleteProposal = async (proposalId) => {
     throw new Error("Network Error: " + error.message);
   }
 };
+const archivedProposal = async (proposalId) => {
+  try {
+    const response = await fetch(SERVER_URL + `/api/proposals/${proposalId}/archived`, {
+      method: "PUT",
+      credentials: 'include',
+    });
+    if (response.ok) {
+      const deleted = await response.json();
+      return deleted;
+    } else {
+      const message = await response.text();
+      throw new Error("Application error: " + message);
+    }
+  } catch (error) {
+    throw new Error("Network Error: " + error.message);
+  }
+};
+
 
 const proposalAPI = {
   getProposals,
@@ -179,6 +197,7 @@ const proposalAPI = {
   postProposalKeywords,
   getProposalsByTeacherId,
   deleteProposal,
+  archivedProposal
 };
 
 export default proposalAPI;

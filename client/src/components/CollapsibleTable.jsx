@@ -8,10 +8,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import applicationsAPI from '../services/applications.api';
-import Archive from '@mui/icons-material/Archive';
+
 
 function Row(props) {
-  const { row, isEvenRow, deleteProposal, index } = props;
+  const { row, isEvenRow, deleteProposal, index, onClick, archiveProposal } = props;
   const [open, setOpen] = React.useState(false);
   const [statusChangeLoading, setStatusChangeLoading] = React.useState(false);
 
@@ -49,12 +49,12 @@ function Row(props) {
         <TableCell style={{ width: '11%' }}>{dayjs(row.p.expiration_date).format("DD/MM/YYYY")}</TableCell>
         <TableCell style={{ width: '6%' }}>{row.p.status}</TableCell>
         <TableCell style={{ width: '3%' }}>
-          <IconButton style={{ color: "#007FFF" }} aria-label="show detailss" onClick={() => props.onClick(row.p)}>
+          <IconButton style={{ color: "#007FFF" }} aria-label="show detailss" onClick={() => onClick(row.p)}>
             <DescriptionOutlinedIcon />
           </IconButton>
         </TableCell>
         <TableCell style={{ width: '3%' }}>
-          <IconButton color='success' aria-label="edit" onClick={() => { }}>
+          <IconButton color='success' aria-label="edit" onClick={() => archiveProposal(index)}>
             <ArchiveIcon />
           </IconButton>
         </TableCell>
@@ -163,6 +163,7 @@ function Row(props) {
 }
 
 function CollapsibleTable(props) {
+  const {listProposals,onClick,deleteProposal, archiveProposal} = props;
   return (
     <Table aria-label="collapsible table">
       <TableHead>
@@ -180,9 +181,9 @@ function CollapsibleTable(props) {
         </TableRow>
       </TableHead>
       <TableBody>
-        {props.listProposals.length > 0 ? (
-          props.listProposals.map((row, index) => (
-            <Row key={row.id} row={row} isEvenRow={index % 2 === 0} onClick={props.onClick} />
+        {listProposals.length > 0 ? (
+          listProposals.map((row, index) => (
+            <Row key={row.id} row={row} isEvenRow={index % 2 === 0} onClick={onClick} index={index} deleteProposal={deleteProposal} archiveProposal={archiveProposal} />
           ))
         ) : (
           <TableRow>

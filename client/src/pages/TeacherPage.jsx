@@ -69,6 +69,14 @@ function TeacherPage(props) {
     await API_Proposal.deleteProposal(listProposals[index].p.id);
     setListProposals(listProposals.filter((_, i) => i !== index));
   }
+  async function archiveProposal(index) {
+    const acceptArchive = confirm('Are you sure to archive this proposal?');
+    if (!acceptArchive) {
+      return;
+    }
+    await API_Proposal.archivedProposal(listProposals[index].p.id);
+    setListProposals(listProposals.filter((_, i) => i !== index));
+  }
 
   return (
     <>
@@ -106,6 +114,7 @@ function TeacherPage(props) {
           listProposals={listProposals}
           onClick={handleClick}
           deleteProposal={deleteProposal}
+          archiveProposal={archiveProposal}
         />
         {openDialog && (
           <AlertDialog
