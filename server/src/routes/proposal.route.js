@@ -18,6 +18,6 @@ router.get('/teachers/:id', isLoggedIn, getProposalTeacherId)
 
 router.delete("/:id",isLoggedIn,isTeacher,deleteProposal);
 
-router.put("/:id",archiveProposal);
+router.put("/:id",isLoggedIn,isTeacher,archiveProposal);
 
 export { router };

@@ -175,10 +175,16 @@ export const deleteProposal = async (req, res) => {
 export const archiveProposal = async (req, res) => {
   try {
     const proposalId = req.params.id;
-    const teacherid = 10000;
+    const teacherid = req.user.id;
     
+    if (
+      Number.isNaN(proposalId) || proposalId < 0
+    ) {
+      return res.status(400).json({ error: "Uncorrect fields" });
+    }
+
     const supervisorid = await getSupervisorByProposalId(proposalId);
-    
+ 
     if (supervisorid && supervisorid == teacherid) {
         const archiveproposalResponse = await archiveProposalByProposalId(proposalId);
         if (archiveproposalResponse) {
