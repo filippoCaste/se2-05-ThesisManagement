@@ -8,7 +8,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import applicationsAPI from '../services/applications.api';
-import Archive from '@mui/icons-material/Archive';
 import { Link } from "react-router-dom";
 
 function Row(props) {
@@ -185,7 +184,8 @@ function CollapsibleTable(props) {
           ))
         ) : (
           <TableRow>
-            <TableCell colSpan={10}>
+            <TableCell />
+            <TableCell colSpan={9} >
               No thesis available
             </TableCell>
           </TableRow>

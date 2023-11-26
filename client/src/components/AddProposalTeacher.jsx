@@ -318,7 +318,7 @@ function AddProposalTeacher(props)
     <br /> <br /><br /><br /> <br /> <br />
 
     {proposalId? 
-       <> <Typography variant="h5" align="center"> EDIT THE THESIS  {proposalId} </Typography> <br /></>
+       <> <Typography variant="h5" align="center"> EDIT THE THESIS:  {title} </Typography> <br /></>
        :   
        <><Typography variant="h5" align="center"> INSERT A NEW PROPOSAL OF THESIS      </Typography> <br /></>
      }

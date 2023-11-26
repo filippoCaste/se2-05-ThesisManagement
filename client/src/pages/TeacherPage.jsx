@@ -3,9 +3,7 @@ import { useState, useEffect, useContext } from 'react';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
-import { Grid, Select, FormControl  } from '@mui/material';
-import theme from '../theme';
-import { MenuItem } from '@mui/material';
+import { Grid, FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import API_Proposal from '../services/proposals.api';
 import API_Applications from '../services/applications.api';
 import { UserContext } from '../Contexts';
@@ -59,12 +57,13 @@ function TeacherPage(props)
          if (user) {
             const proposals = await API_Proposal.getProposalsByTeacherId(user.id);
             const data = await createData(proposals);
-            setListProposals(data);
+            const filteredProposal = data.filter(row => row.p.status === filterStatus);
+            setListProposals(filteredProposal);
          }
       }
 
       fetchData();
-   }, [user]);
+   }, [user, filterStatus]);
 
    
 
@@ -72,30 +71,21 @@ function TeacherPage(props)
       <>
       <br />  <br />  <br />  <br /> <br />
 
-      {/*<Typography variant="h5" align="center"> PAGES STATUS {filterStatus}  </Typography> <br />*/}
-
       <Grid  container spacing={2}>
          <Grid item xs={4}>
             <Button variant="contained" color="primary" 
             onClick={()=>navigate("/teacher/addProposal")} > INSERT NEW THESIS PROPOSAL </Button>  <br/> <br/>
          </Grid> 
          
-         <Grid item xs={4}>
+         {/*<Grid item xs={4} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <FormControl fullWidth>
-               <Typography variant="subtitle1" fontWeight="bold">  FILTER BY STATUS  </Typography>
-               <Select
-                  labelId="word-label"
-                  id="status-select"
-                  onChange={(ev) => { setFilterStatus(ev.target.value) }}
-               >
-                  {
-                     Array.from(["all", "posted", "active"]).map((status, index) => 
-                     (<MenuItem key={index} value={status}> {status} </MenuItem> ))
-                  }
-               </Select>
+               <Typography variant="subtitle1" fontWeight="bold">  Thesis Status  </Typography>
+               <RadioGroup row value={filterStatus} onChange={(event) => setFilterStatus(event.target.value)}>
+                  <FormControlLabel value="posted" control={<Radio />} label="Posted" />
+                  {/*<FormControlLabel value="archived" control={<Radio />} label="Archived" />}
+               </RadioGroup>
             </FormControl>
-               </Grid> 
-         
+         </Grid>*/}
 
          <CollapsibleTable listProposals={listProposals} onClick={handleClick}/>
          {openDialog && (
