@@ -45,6 +45,7 @@ export default function ResponsiveDrawer(props) {
     setSelectedExpirationDate(null);
     setSelectedStartExpirationDate(currentDataAndTime);
     setSelectedSupervisorId(null); // Assuming setSupervisorid is a function to set Supervisor ID
+    handleMessage("Successfully Filter reset","success");
   };
 
   return (

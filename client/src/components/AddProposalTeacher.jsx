@@ -461,8 +461,8 @@ function AddProposalTeacher(props)
 
     <br />
 
-        <Button variant="contained" color="primary" type="submit" onClick={()=>setInvioForm(true)}> ADD PROPOSAL </Button>
-        {' '} <Button variant="contained" color="error" onClick={()=>navigate('/teacher')}> CANCEL </Button>
+        <Button variant="contained" color="primary" type="submit" onClick={()=>{setInvioForm(true); handleMessage("Added Proposal","success")}}> ADD PROPOSAL </Button>
+        {' '} <Button variant="contained" color="error" onClick={()=>{navigate('/teacher');handleMessage("Undone insert proposal","success");} }> CANCEL </Button>
       
       </form>
    

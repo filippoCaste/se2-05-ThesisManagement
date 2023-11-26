@@ -8,11 +8,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import applicationsAPI from '../services/applications.api';
-
+import { MessageContext } from '../Contexts';
+import { useContext } from 'react';
 
 function Row(props) {
   const { row, isEvenRow, deleteProposal, index, onClick, archiveProposal } = props;
   const [open, setOpen] = React.useState(false);
+  const {handleMessage} = useContext(MessageContext);
   const [statusChangeLoading, setStatusChangeLoading] = React.useState(false);
   console.log()
   const changeStatusOfApplication = async (studentsRow, status) => {
@@ -25,7 +27,7 @@ function Row(props) {
         studentsRow.status = status;
       }
     } catch (error) {
-      console.error("Error changing status:", error);
+      handleMessage("Error changing status:"+ error,"warning");
     } finally {
       setStatusChangeLoading(false);
     }
