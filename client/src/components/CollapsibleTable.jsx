@@ -14,7 +14,7 @@ function Row(props) {
   const { row, isEvenRow, deleteProposal, index, onClick, archiveProposal } = props;
   const [open, setOpen] = React.useState(false);
   const [statusChangeLoading, setStatusChangeLoading] = React.useState(false);
-
+  console.log()
   const changeStatusOfApplication = async (studentsRow, status) => {
     try {
       setStatusChangeLoading(true);
@@ -54,7 +54,7 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell style={{ width: '3%' }}>
-          <IconButton color='success' aria-label="edit" onClick={() => archiveProposal(index)}>
+          <IconButton color='success' aria-label="edit" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"}>
             <ArchiveIcon />
           </IconButton>
         </TableCell>
