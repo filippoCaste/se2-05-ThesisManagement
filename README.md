@@ -383,7 +383,7 @@
   }
   // or
   {
-    "status":"reject"
+    "status":"rejected"
   }
   ```
 
