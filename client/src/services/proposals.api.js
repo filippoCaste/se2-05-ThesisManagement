@@ -208,11 +208,32 @@ const updateProposal = async (
 };
 
 
+
+const getProposalByProposalId = async (proposalId) => {
+  try {
+      const response = await fetch(SERVER_URL + `/api/proposals/${proposalId}`, {
+          method: "GET",
+          credentials: 'include',
+      });
+      if (response.ok) {
+          const proposals = await response.json();
+          return proposals;
+      } else {
+          const message = await response.text();
+          throw new Error("Application error: " + message);
+      }
+  } catch (error) {
+      throw new Error("Network Error: " + error.message);
+  }
+
+};
+
 const proposalAPI = {
   getProposals,
   postProposal,
   postProposalKeywords,
   getProposalsByTeacherId,
+  getProposalByProposalId,
   updateProposal
 };
 

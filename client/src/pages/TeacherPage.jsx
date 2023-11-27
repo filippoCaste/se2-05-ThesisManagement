@@ -77,15 +77,15 @@ function TeacherPage(props)
             onClick={()=>navigate("/teacher/addProposal")} > INSERT NEW THESIS PROPOSAL </Button>  <br/> <br/>
          </Grid> 
          
-         {/*<Grid item xs={4} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+         <Grid item xs={4} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <FormControl fullWidth>
                <Typography variant="subtitle1" fontWeight="bold">  Thesis Status  </Typography>
                <RadioGroup row value={filterStatus} onChange={(event) => setFilterStatus(event.target.value)}>
                   <FormControlLabel value="posted" control={<Radio />} label="Posted" />
-                  {/*<FormControlLabel value="archived" control={<Radio />} label="Archived" />}
+                  <FormControlLabel value="archived" control={<Radio />} label="Archived" />
                </RadioGroup>
             </FormControl>
-         </Grid>*/}
+         </Grid>
 
          <CollapsibleTable listProposals={listProposals} onClick={handleClick}/>
          {openDialog && (
