@@ -3,9 +3,7 @@ import { useState, useEffect, useContext } from 'react';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
-import { Grid, Select, FormControl } from '@mui/material';
-import theme from '../theme';
-import { MenuItem } from '@mui/material';
+import { Grid, FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import API_Proposal from '../services/proposals.api';
 import API_Applications from '../services/applications.api';
 import { MessageContext, UserContext } from '../Contexts';
@@ -15,18 +13,26 @@ import ApplicationDialog from '../components/ApplicationDialog';
 
 function TeacherPage(props) {
   const navigate = useNavigate();
-  const {handleMessage} = useContext(MessageContext);
+  const handleMessage = useContext(MessageContext);
   const { user } = useContext(UserContext);
   const [errorMsgAPI, setErrorMsgAPI] = useState('');
   const [listProposals, setListProposals] = useState([]);
-  //const [filterStatus,setFilterStatus]=useState('posted');
+  const [filterStatus,setFilterStatus]=useState('posted');
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [loading, setLoading] = useState(false);
-
+ 
   //applications dialog
   const [openDialogApplication, setOpenDialogApplication] = useState(false);
-  const [selectedApplication, setSelectedApplication] = useState(null);
+  const [selectedApplication, setSelectedApplication] = useState(null);  function handleError(err) {
+    let errMsgAPI = 'ERRORE SCONOSCIUTO';
+    if (err.errors) {
+      if (err.errors[0]) if (err.errors[0].msg) errMsgAPI = err.errors[0].msg;
+    } else if (err.error) {
+      errMsgAPI = err.error;
+    }
+    setErrorMsgAPI(errMsgAPI);
+  }
 
   async function createRow(p) {
     const students = await API_Applications.getApplicationStudentsByProposalId(
@@ -40,25 +46,28 @@ function TeacherPage(props) {
     return rows;
   }
 
-  const handleClick = (datum) => {
-    setSelectedItem(datum);
-    setOpenDialog(true);
-  };
+   const handleClick = (datum) => {
+      setSelectedItem(datum);
+      setOpenDialog(true);
+   };
   const handleClickApplication = (datum) => {
     setSelectedApplication(datum);
     setOpenDialogApplication(true);
-  };
-  useEffect(() => {
-    const fetchData = async () => {
-      if (user) {
-        const proposals = await API_Proposal.getProposalsByTeacherId(user.id);
-        const data = await createData(proposals);
-        setListProposals(data);
+  };  
+   useEffect(() => { 
+      const fetchData = async () => {
+         if (user) {
+            const proposals = await API_Proposal.getProposalsByTeacherId(user.id);
+            const data = await createData(proposals);
+            const filteredProposal = data.filter(row => row.p.status === filterStatus);
+            setListProposals(filteredProposal);
+         }
       }
-    };
 
-    fetchData();
-  }, [user]);
+      fetchData();
+   }, [user, filterStatus]);
+
+   
 
   async function deleteProposal(index) {
     const acceptDelete = confirm('Are you sure to delete this proposal?');
@@ -67,7 +76,7 @@ function TeacherPage(props) {
     }
     await API_Proposal.deleteProposal(listProposals[index].p.id);
     setListProposals(listProposals.filter((_, i) => i !== index));
-    handleMessage("Deleted proposal", "success")
+    handleMessage("Deleted proposal", "success");
   }
   async function archiveProposal(index) {
     const acceptArchive = confirm('Are you sure to archive this proposal?');
@@ -75,8 +84,8 @@ function TeacherPage(props) {
       return;
     }
     await API_Proposal.archivedProposal(listProposals[index].p.id);
-    handleMessage("Archived proposal", "success")
     setListProposals(listProposals.filter((_, i) => i !== index));
+    handleMessage("Archived proposal", "success");
   }
 
   return (
@@ -95,21 +104,18 @@ function TeacherPage(props) {
           </Button>{' '}
           <br /> <br />
         </Grid>
-        {/*<Grid item xs={4}>
+        
+        
+        <Grid item xs={4}>
             <FormControl fullWidth>
-               <Typography variant="subtitle1" fontWeight="bold">  FILTER BY STATUS  </Typography>
-               <Select
-                  labelId="word-label"
-                  id="status-select"
-                  onChange={(ev) => { setFilterStatus(ev.target.value) }}
-               >
-                  {
-                     Array.from(["all", "posted", "active"]).map((status, index) => 
-                     (<MenuItem key={index} value={status}> {status} </MenuItem> ))
-                  }
-               </Select>
+               <Typography variant="subtitle1" fontWeight="bold">  Thesis Status  </Typography>
+               <RadioGroup row value={filterStatus} onChange={(event) => setFilterStatus(event.target.value)}>
+                  <FormControlLabel value="posted" control={<Radio />} label="Posted" />
+                  <FormControlLabel value="archived" control={<Radio />} label="Archived" />
+               </RadioGroup>
             </FormControl>
-               </Grid> */}
+        </Grid> 
+        
 
         <CollapsibleTable
           listProposals={listProposals}

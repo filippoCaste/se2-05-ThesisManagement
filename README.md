@@ -56,14 +56,19 @@
     "expiration_date": "2023-12-22",
     "notes": "No additional notes",
     "required_knowledge": "Student must know the principle of software development.",
-    "cod_degree": ["2"],
+    "cod_degree": ["2", 3],
     "cod_group": "1",
     "supervisors_obj": {
         "supervisor_id": 10000,
         "co_supervisors": [
             10001,
             10002
-            ]
+            ],
+        "external":[{
+          "name":"Franco",
+          "surname":"Solo",
+          "email":"franco.solo@devops.com"
+        },]
     },
     "keywords": [
         "Javascript"
@@ -76,6 +81,7 @@
   - response: 
     - 200 OK (success)
     - 500 Internal Server Error: Indicates an error during processing.
+
 - GET `/`
   - Description: Retrieve a list of proposals based on specified filters.
   - Query Parameters:
@@ -90,20 +96,40 @@
     - 400 Bad Request: Indicates missing or invalid parameters.
     - 500 Internal Server Error: Indicates an error during processing.
     ```json
+    // the response
     [
-        {
-        "id": 1,
-        "title": "Sw eng proposal",
-        "type": "something innovative",
-        "description": "This is an innovative proposal.",
+      {
+        "id": 27,
+        "title": "Computer vision techniques for mobile testing",
+        "description": "Many End-to-End (E2E) testing tools allow developers to create repeatable test scripts.",
+        "expiration_date": "2024-07-31",
+        "cod_degree": "2",
+        "title_degree": "COMMUNICATIONS ENGINEERING",
         "level": "MSc",
-        "expiration_date": "2024-08-30T00:00:00+02:00",
-        "notes": "No additional notes",
-        "cod_degree": "0",
+        "supervisor_id": 10000,
+        "notes": "http://grains.polito.it/work.php",
         "cod_group": 1,
-        "required_knowledge": null,
-        "status": "posted"
-      }, ]
+        "title_group": "Elite",
+        "required_knowledge": "programming skills (Python, deep learning frameworks);\r\nexperience in training deep neural networks;\r\nfundamentals of mobile development (Android GUI, the Android Studio development environment);",
+        "keyword_names": "AI, Mobile Application",
+        "supervisorsInfo": [
+          {
+            "id": 10000,
+            "name": "Mario",
+            "surname": "Rossi",
+            "email": "d10000@polito.it",
+            "cod_group": 1
+          },
+          {
+            "id": 10001,
+            "name": "Giuseppe",
+            "surname": "Verdi",
+            "email": "d10001@polito.it",
+            "cod_group": 1
+          }
+        ]
+      }, 
+    ]
     ```
 
 - GET `/teachers/:id`
@@ -167,6 +193,61 @@
     ]
   }
   ```
+
+- GET `/:proposalId`
+  - request body: none
+  - response:
+    - 200 OK (success) with array of thesis proposals object 
+    - 401 Unauthorized (failure) with error message
+    - 403 Forbidden
+    - 404 If the proposal is not found
+    - 500 Internal Server Error: Indicates an error during processing.
+```json
+{
+  "id": 27,
+  "title": "Computer vision techniques for mobile testing",
+  "description": "Many End-to-End (E2E) testing tools allow developers to create repeatable test scripts.",
+  "type": "Tesi esterna in azienda",
+  "level": "MSc",
+  "expiration_date": "2024-07-31",
+  "notes": "http://grains.polito.it/work.php",
+  "cod_degree": 2,
+  "required_knowledge": "programming skills (Python, deep learning frameworks);\r\nexperience in training deep neural networks;\r\nfundamentals of mobile development (Android GUI, the Android Studio development environment);",
+  "status": "assigned",
+  "title_degree": "COMMUNICATIONS ENGINEERING",
+  "groups": [
+    {
+      "cod_group": 2,
+      "title_group": "Automatica"
+    },
+    {
+      "cod_group": 3,
+      "title_group": "EMC Group"
+    },
+    {
+      "cod_group": 1,
+      "title_group": "Elite"
+    }
+  ],
+  "keywords": [
+    "AI"
+  ],
+  "coSupervisors": [
+    {
+      "id": 10001,
+      "name": "Giuseppe",
+      "surname": "Verdi",
+      "email": "d10001@polito.it"
+    },
+    {
+      "id": 10004,
+      "name": "Franco",
+      "surname": "Francini",
+      "email": "d10004@polito.it"
+    }
+  ]
+}
+```
 
 ### `/api/degrees`:
 
@@ -350,7 +431,7 @@
   ```
 
 - PUT `/:applicationId`
-  - Description: accept or refuse an application made by a student
+  - Description: accept or reject an application made by a student
   - Request Body:
     - `status`
   - Response:
@@ -366,7 +447,7 @@
   }
   // or
   {
-    "status":"refused"
+    "status":"rejected"
   }
   ```
 
@@ -472,6 +553,9 @@
 - cod_group: INTEGER
 - required_knowledge: TEXT
 - status: TEXT (DEFAULT 'posted')
+  - other values:
+    - `assigned`: if a student application has been accepted
+    - `archived`: if the proposal has been archived or has expired
 
 #### `Applications`
 - application_id: INTEGER (AI)

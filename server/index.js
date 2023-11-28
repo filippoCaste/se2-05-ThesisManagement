@@ -18,11 +18,28 @@ import session from "express-session";
 import morgan from "morgan";
 import {strategy} from "./src/config/configs.js";
 
+passport.use(strategy);
+
+passport.serializeUser(function (user, done) {
+  done(null, user.nickname);
+});
+
+passport.deserializeUser(async function (id, done) {
+  let user = await getUserById(id.slice(1));
+  if(user.role == 'student')
+    user = await getStudentById(user.id);
+  else if(user.role == 'teacher')
+    user = await getTeacherById(user.id);
+  else 
+    done(err, null);
+
+  done(null, user);
+});
+
 const app = express();
 const port = 3001;
-
 app.use(express.json());
-app.use(morgan("dev"));
+
 const corsOptions = {
   origin: "http://localhost:5173",
   optionsSuccessStatus: 200,
@@ -41,26 +58,8 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-passport.use(strategy);
-
-passport.serializeUser(function (user, done) {
-  done(null, user.nickname);
-});
-
 app.use(passport.authenticate('session'));
-
-passport.deserializeUser(async function (id, done) {
-  let user = await getUserById(id.slice(1));
-  if(user.role == 'student')
-    user = await getStudentById(user.id);
-  else if(user.role == 'teacher')
-    user = await getTeacherById(user.id);
-  else 
-    done(err, null);
-
-  done(null, user);
-});
+app.use(morgan("dev"));
 
 app.use("/api/session", sessionRoutes);
 app.use("/api/users", userRoutes);

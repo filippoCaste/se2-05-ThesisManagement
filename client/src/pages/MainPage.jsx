@@ -5,14 +5,18 @@ import MainDashboard from '../components/MainDashboard.jsx';
 import { UserContext } from '../Contexts';
 import proposalAPI from '../services/proposals.api.js';
 import dayjs from 'dayjs';
+import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
 function MainPage(props) {
+  const navigate = useNavigate();
   const { openSelectionsMobile, currentDataAndTime } = props;
   const { user } = useContext(UserContext);
   const drawerWidth = '20vw';
   const [selectedLevels, setSelectedLevels] = useState([]);
   const [selectedExpirationDate, setSelectedExpirationDate] = useState(null);
-  const [selectedStartExpirationDate, setSelectedStartExpirationDate] = useState(currentDataAndTime);
+  const [selectedStartExpirationDate, setSelectedStartExpirationDate] =
+    useState(currentDataAndTime);
   const [selectedKeywords, setSelectedKeywords] = useState([]);
   const [selectedSupervisorId, setSelectedSupervisorId] = useState(null);
   const [filteredProposals, setFilteredProposals] = useState([]);
@@ -67,7 +71,7 @@ function MainPage(props) {
 
   useEffect(() => {
     setSelectedStartExpirationDate(currentDataAndTime);
-  },[currentDataAndTime])
+  }, [currentDataAndTime]);
 
   return (
     <Box sx={{ display: 'inline-flex' }} mt={'15vh'} mx={'6vh'}>
@@ -88,11 +92,21 @@ function MainPage(props) {
         title={title}
         setTitle={setTitle}
       />
-      <MainDashboard
-        proposals={filteredProposals}
-        openSelectionsMobile={openSelectionsMobile}
-        drawerWidth={drawerWidth}
-      />
+      <Box>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate('/student/applications')}
+        >
+          Browse Applied Proposals
+        </Button>
+        <br />
+        <MainDashboard
+          proposals={filteredProposals}
+          openSelectionsMobile={openSelectionsMobile}
+          drawerWidth={drawerWidth}
+        />
+      </Box>
     </Box>
   );
 }

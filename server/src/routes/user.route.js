@@ -1,34 +1,43 @@
 import { Router } from "express";
 import passport from "passport";
 import { getUserById } from "../services/user.services.js";
+import bodyParser from "body-parser";
 
 const router = Router();
 
 router.get('/login', (req, res, next) => {
-    passport.authenticate('auth0', function (err, user, info) {
-        if (err) return next(err);
-        if (!user) return res.redirect('/login');
-        req.logIn(user, function (err) {
-            if (err) { return next(err); }
-            return res.redirect('/');
-        });
-    }
-    )(req, res, next);
-  });
+    passport.authenticate('saml', { failureRedirect: '/login', failureFlash: true })(req, res, next);
+});
+
+router.post('/login/callback', bodyParser.urlencoded({ extended: false }), (req, res, next) => {
+    if (!req.isAuthenticated()){
+        passport.authenticate('saml', { failureRedirect: '/login', failureFlash: true }, async function (err, user, info) {
+            if (err)
+                return next(err);
+
+            if (!user)
+                return res.redirect('/login');
+
+                req.logIn(user, async function (err) {
+                    if (err) { return next(err); }
+                    const userData = await getUserById(user.nickname.slice(1));
+                    return res.redirect("http://localhost:5173/" + userData.role);
+                });
+        })(req, res, next);
+    }else
+        res.redirect('http://localhost:5173');
+});
+
   
-router.get('/login/callback', (req, res, next) => {
-    passport.authenticate('auth0', function (err, user, info) {
-        if (err) return next(err);
-        if (!user) return res.redirect('/login');
-        req.logIn(user, async function (err) {
-            if (err) { return next(err); }
-            const userData = await getUserById(user.nickname.slice(1));
-            return res.redirect("http://localhost:5173/" + userData.role);
-        });
-    }
-    )(req, res, next);
-  }
-  );
+  /*router.post('/login/callback', passport.authenticate('saml', {
+    failureRedirect: '/login', // Redirezione in caso di errore di autenticazione
+  }), async (req, res) => {
+    console.log(req.isAuthenticated());
+  
+    // Questo punto verrà raggiunto solo se l'autenticazione è avvenuta con successo
+    const userData = await getUserById(req.user.nickname.slice(1));
+    return res.redirect("http://localhost:5173/" + userData.role);
+  });*/
   
 router.get('/logout', (req, res) => {
     req.logOut(res, function (err) {

@@ -8,6 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import applicationsAPI from '../services/applications.api';
+import { Link } from "react-router-dom";
 import { MessageContext } from '../Contexts';
 import { useContext } from 'react';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -56,6 +57,7 @@ function Row(props) {
   };
 
 
+
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderTop: "3px solid #ddd", backgroundColor: isEvenRow ? '#f5f5f5' : '#ffffff' } }}>
@@ -85,10 +87,12 @@ function Row(props) {
             <ArchiveIcon />
           </IconButton>
         </TableCell>
-        <TableCell style={{ width: '3.6%' }}>
+        <TableCell style={{ width: '3%' }}> 
+        <Link to={`/teacher/updateProposal/${row.p.id}`}>
           <IconButton color='info' aria-label="edit" onClick={() => { }}>
             <EditIcon />
           </IconButton>
+          </Link>
         </TableCell>
         <TableCell style={{ width: '3.6%' }}>
           <IconButton
@@ -270,7 +274,8 @@ function CollapsibleTable(props) {
           ))
         ) : (
           <TableRow>
-            <TableCell colSpan={10}>
+            <TableCell />
+            <TableCell colSpan={9} >
               No thesis available
             </TableCell>
           </TableRow>

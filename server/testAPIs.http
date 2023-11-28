@@ -10,16 +10,24 @@ content-type: application/json
     "expiration_date": "2023-12-22",
     "notes": "No additional notes",
     "required_knowledge": "Student must know the principle of software development.",
-    "cod_degree": ["2"],
+    "cod_degree": ["2", 3, 4],
     "cod_group": "1",
     "supervisors_obj": {
         "supervisor_id": 10000,
         "co_supervisors": [
             10001
-            ]
+            ],
+        "external":[
+            {
+                "name":"Franco",
+                "surname":"Solo",
+                "email":"franco.solo@devops.com"
+            },
+            {"name": "Antonio", "surname":"Vito", "email":"vitoantonio@gmail.com"}
+        ]
     },
     "keywords": [
-        "AI", "Mobile Application", "Web development"
+        "AI", "Mobie", "Web dev"
     ]
 }
          
@@ -32,8 +40,11 @@ DELETE http://localhost:3001/api/proposals/33 HTTP/1.1
 PUT http://localhost:3001/api/proposals/27 HTTP/1.1
 ###
 
-
 GET http://localhost:3001/api/proposals HTTP/1.1
+###
+
+
+GET http://localhost:3001/api/proposals?cod_degree=2 HTTP/1.1
 
 ###
 
@@ -41,7 +52,11 @@ GET http://localhost:3001/api/proposals/teachers/10000 HTTP/1.1
 
 ###
 
-PUT http://localhost:3001/api/proposals/31 HTTP/1.1
+GET http://localhost:3001/api/proposals/27 HTTP/1.1
+
+###
+
+PUT http://localhost:3001/api/proposals/27 HTTP/1.1
 content-type: application/json
 
 {
@@ -99,11 +114,11 @@ GET http://localhost:3001/api/applications/ HTTP/1.1
 
 ###
 
-PUT http://localhost:3001/api/applications/4 HTTP/1.1
+PUT http://localhost:3001/api/applications/5 HTTP/1.1
 Content-Type: application/json
 
 {
-    "status": "refused"
+    "status": "accepted"
 }
 
 

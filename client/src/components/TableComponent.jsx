@@ -11,21 +11,31 @@ import dayjs from 'dayjs';
 import Button from '@mui/material/Button';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import '../App.css';
+import Badge from '@mui/material/Badge';
 
 export default function StickyHeadTable(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [orderBy, setOrderBy] = React.useState('');
   const [order, setOrder] = React.useState('asc');
-  const proposals = props.proposals;
+  const { proposals, isAppliedProposals } = props;
 
   const columns = [
     { id: 'title', label: 'Title', minWidth: 450, maxWidth: 450 },
     { id: 'supervisor_id', label: 'Supervisor', minWidth: 200, maxWidth: 200 },
-    { id: 'expiration_date', label: 'Expiration Date', minWidth: 150, maxWidth: 150, format: (value) => dayjs(value).format("DD/MM/YYYY") },
+    {
+      id: 'expiration_date',
+      label: 'Expiration Date',
+      minWidth: 150,
+      maxWidth: 150,
+      format: (value) => dayjs(value).format('DD/MM/YYYY'),
+    },
     { id: 'keyword_names', label: 'Keywords', minWidth: 150, maxWidth: 150 },
     {
-      id: 'button', label: 'Apply', minWidth: 200, maxWidth: 200,
+      id: 'button',
+      label: 'Apply',
+      minWidth: 200,
+      maxWidth: 200,
       format: (value, row) => (
         <Button
           variant="outlined"
@@ -49,6 +59,30 @@ export default function StickyHeadTable(props) {
       ),
     },
   ];
+
+  // push status col if isAppliedProposals is true
+  if (isAppliedProposals) {
+    columns.push({
+      id: 'status',
+      label: 'Status',
+      minWidth: 150,
+      maxWidth: 150,
+      format: (value, row) => (
+        <Badge color={getColorByStatus(value)} badgeContent={value}></Badge>
+      ),
+    });
+  }
+
+  const getColorByStatus = (status) => {
+    switch (status) {
+      case 'rejected':
+        return 'secondary';
+      case 'submitted':
+        return 'primary';
+      default:
+        return 'action';
+    }
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -100,7 +134,11 @@ export default function StickyHeadTable(props) {
     if (sortedProposals.length === 0) {
       return (
         <TableRow>
-          <TableCell colSpan={columns.length} align="center" style={{ width: '100%' }}>
+          <TableCell
+            colSpan={columns.length}
+            align="center"
+            style={{ width: '100%' }}
+          >
             <b>No available theses</b>
           </TableCell>
         </TableRow>
@@ -136,7 +174,9 @@ export default function StickyHeadTable(props) {
                 hover
                 role="checkbox"
                 tabIndex={-1}
-                className={`proposalRow ${index % 2 === 0 ? 'proposalRowOdd' : ''}`}
+                className={`proposalRow ${
+                  index % 2 === 0 ? 'proposalRowOdd' : ''
+                }`}
               >
                 {columns.map((column) => (
                   <TableCell
@@ -146,11 +186,19 @@ export default function StickyHeadTable(props) {
                       width: column.maxWidth,
                       whiteSpace: 'normal',
                       maxHeight: '100px',
-                      padding: '8px'
+                      padding: '8px',
                     }}
                   >
                     {column.id === 'supervisor_id'
-                      ? `${row.supervisorsInfo.find((supervisor) => supervisor.id === row.supervisor_id)?.name} ${row.supervisorsInfo.find((supervisor) => supervisor.id === row.supervisor_id)?.surname}`
+                      ? `${
+                          row.supervisorsInfo.find(
+                            (supervisor) => supervisor.id === row.supervisor_id
+                          )?.name
+                        } ${
+                          row.supervisorsInfo.find(
+                            (supervisor) => supervisor.id === row.supervisor_id
+                          )?.surname
+                        }`
                       : column.format
                       ? column.format(row[column.id], row)
                       : row[column.id]}

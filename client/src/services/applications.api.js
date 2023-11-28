@@ -26,19 +26,19 @@ const createApplication = async (proposal_id, student_id, submission_date) => {
 
 const getApplicationStudentsByProposalId = async (proposalId) => {
   try {
-      const response = await fetch(SERVER_URL + `/api/applications/proposal/${proposalId}`, {
-          method: "GET",
-          credentials: 'include',
-      });
-      if (response.ok) {
-          const application = await response.json();
-          return application;
-      } else {
-          const message = await response.text();
-          throw new Error("Application error: " + message);
-      }
+    const response = await fetch(SERVER_URL + `/api/applications/proposal/${proposalId}`, {
+      method: "GET",
+      credentials: 'include',
+    });
+    if (response.ok) {
+      const application = await response.json();
+      return application;
+    } else {
+      const message = await response.text();
+      throw new Error("Application error: " + message);
+    }
   } catch (error) {
-      throw new Error("Network Error: " + error.message);
+    throw new Error("Network Error: " + error.message);
   }
 
 };
@@ -64,12 +64,31 @@ const changeStatusOfApplication = async (applicationId, status) => {
   } catch (error) {
     throw new Error("Network Error: " + error.message);
   }
-}
+};
+
+const getStudentApplications = async () => {
+  try {
+    const response = await fetch(SERVER_URL + `/api/applications`, {
+      method: "GET",
+      credentials: 'include',
+    });
+    if (response.ok) {
+      const applications = await response.json();
+      return applications;
+    } else {
+      const message = await response.text();
+      throw new Error("Application error: " + message);
+    }
+  } catch (error) {
+    throw new Error("Network Error: " + error.message);
+  }
+};
 
 const applicationsAPI = {
   createApplication,
   getApplicationStudentsByProposalId,
-  changeStatusOfApplication
+  changeStatusOfApplication,
+  getStudentApplications,
 };
 
 export default applicationsAPI;

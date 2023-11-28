@@ -155,6 +155,77 @@ const getProposalsByTeacherId = async (teacherId) => {
 
 };
 
+//  fetch(  SERVER_URL + `/api/proposals/${id}`, {
+  
+const updateProposal = async (
+  id,
+  title,
+  type,
+  description,
+  level,
+  expiration_date,
+  notes,
+  required_knowledge,
+  cod_degree,
+  cod_group,
+  supervisors_obj,
+  keywords
+) => {
+  try {
+    const data = {
+      title,
+      type,
+      description,
+      level,
+      expiration_date,
+      notes,
+      required_knowledge,
+      cod_degree,
+      cod_group,
+      supervisors_obj,
+      keywords,
+    };
+
+    const response = await fetch(SERVER_URL + `/api/proposals/${id}`, {
+      method: "PUT",
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (response.ok) {
+      return true;
+    } else {
+      const message = await response.text();
+      throw new Error("Application error: " + message);
+    }
+  } catch (error) {
+    throw new Error("Network Error: " + error.message);
+  }
+};
+
+
+
+const getProposalByProposalId = async (proposalId) => {
+  try {
+      const response = await fetch(SERVER_URL + `/api/proposals/${proposalId}`, {
+          method: "GET",
+          credentials: 'include',
+      });
+      if (response.ok) {
+          const proposals = await response.json();
+          return proposals;
+      } else {
+          const message = await response.text();
+          throw new Error("Application error: " + message);
+      }
+  } catch (error) {
+      throw new Error("Network Error: " + error.message);
+  }
+
+};
+
 const deleteProposal = async (proposalId) => {
   try {
     const response = await fetch(SERVER_URL + `/api/proposals/${proposalId}`, {
@@ -196,6 +267,8 @@ const proposalAPI = {
   postProposal,
   postProposalKeywords,
   getProposalsByTeacherId,
+  getProposalByProposalId,
+  updateProposal,
   deleteProposal,
   archivedProposal
 };
