@@ -81,6 +81,7 @@
   - response: 
     - 200 OK (success)
     - 500 Internal Server Error: Indicates an error during processing.
+
 - GET `/`
   - Description: Retrieve a list of proposals based on specified filters.
   - Query Parameters:
@@ -541,6 +542,9 @@
 - cod_group: INTEGER
 - required_knowledge: TEXT
 - status: TEXT (DEFAULT 'posted')
+  - other values:
+    - `assigned`: if a student application has been accepted
+    - `archived`: if the proposal has been archived or has expired
 
 #### `Applications`
 - application_id: INTEGER (AI)

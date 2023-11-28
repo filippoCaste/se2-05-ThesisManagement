@@ -303,11 +303,7 @@ export const postNewProposal = (
           }
         });
 
-      });
-
-      console.log("arrivato qui")
-      // return resolve(true);
-    
+      });    
     } catch (err) {
       reject(err);
     }
@@ -462,12 +458,9 @@ export const archiveProposalByProposalId = (proposalId) => {
   });
 };
 
-
-
-
 export const updateProposalByProposalId = (proposalId, userId, proposal) => {
   return new Promise((resolve, reject) => {
-    const sql1 = 'SELECT supervisor_id, proposal_id FROM Supervisors WHERE proposal_id = ?';
+    const sql1 = 'SELECT supervisor_id, proposal_id, status FROM Supervisors, Proposals WHERE proposal_id = ? AND id=proposal_id; ';
     db.get(sql1, [proposalId], (err, row) => {
       if (err)
         reject(err);
@@ -475,12 +468,13 @@ export const updateProposalByProposalId = (proposalId, userId, proposal) => {
         reject(404);
       else if (row.supervisor_id != userId) {
         reject(403);
+      } else if(row.status === 'assigned') {
+        reject(400);
       } else {
 
         // update the proposal data
         const sql2 = "UPDATE Proposals SET title = ?, type=?, description=?, level=?, expiration_date=?, notes=?, cod_group=?, required_knowledge=? " +
                       " WHERE id = ? AND cod_degree = ?";
-        // const sql2a = "SELECT * FROM Proposals WHERE id = ? AND cod_degree = ?";
 
         for(let degree of proposal.cod_degree) {
           db.run(sql2, [proposal.title, proposal.type, proposal.description, proposal.level, proposal.expiration_date, proposal.notes||'', proposal.cod_group, proposal.required_knowledge||'', proposalId, degree], (err) => {

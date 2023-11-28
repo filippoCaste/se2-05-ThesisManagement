@@ -149,6 +149,14 @@ export const changeStatus = (applicationId, userId, status) => {
                 })
               }
           }
+          if (status === 'accepted') {
+            const sql4 = "UPDATE Proposals SET status=? WHERE id=?;";
+            db.run(sql4, ["assigned", proposalId], (err) => {
+              if (err) {
+                reject(err);
+              }
+            })
+          }
         }
         resolve(true);
       })
