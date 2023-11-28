@@ -4,7 +4,7 @@ import { getProposalInfoByID } from "./proposal.services.js";
 import { Application } from "../models/Application.js";
 import { Proposal } from "../models/Proposal.js";
 import { getExtraInfoFromProposal } from "./proposal.services.js";
-export const createApplicationInDb = (
+export const createApplicationInDb = async (
   proposal_id,
   student_id,
   submission_date

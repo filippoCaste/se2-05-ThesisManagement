@@ -7,7 +7,6 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Typography from '@mui/material/Typography';
 import { MessageContext, UserContext } from '../Contexts';
-import { MessageContext, UserContext } from '../Contexts';
 import { FormControl, InputLabel, Select, MenuItem, Input, Container, IconButton,  Paper } from '@mui/material';
 
 import proposalAPI from '../services/proposals.api';
@@ -53,7 +52,6 @@ function formatDate(inputDate) {
 function AddProposalTeacher(props)
 {
   const navigate= useNavigate();
-  const handleMessage = useContext(MessageContext);
   const handleMessage = useContext(MessageContext);
   dayjs.extend(customParseFormat);
 

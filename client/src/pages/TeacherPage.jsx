@@ -10,38 +10,13 @@ import { MessageContext, UserContext } from '../Contexts';
 import CollapsibleTable from '../components/CollapsibleTable';
 import AlertDialog from '../components/AlertDialog';
 
-
-function TeacherPage(props)
-{
-   const navigate = useNavigate();
-   const { user } = useContext(UserContext);
-   const [errorMsgAPI, setErrorMsgAPI] = useState('');
-   const [listProposals, setListProposals]=useState([]);
-   const [filterStatus,setFilterStatus]=useState('posted');
-   const [openDialog, setOpenDialog] = useState(false);
-   const [selectedItem, setSelectedItem] = useState(null);
-   const [loading, setLoading] = useState(false);
-
-   function handleError(err) {
-      let errMsgAPI = 'ERRORE SCONOSCIUTO';
-      if (err.errors) 
-      {
-         if (err.errors[0])
-            if (err.errors[0].msg)
-            errMsgAPI = err.errors[0].msg;
-      } 
-      else if (err.error) 
-      {
-         errMsgAPI = err.error;
-      }
-      setErrorMsgAPI(errMsgAPI);
-   }
 function TeacherPage(props) {
   const navigate = useNavigate();
   const {handleMessage} = useContext(MessageContext);
   const { user } = useContext(UserContext);
   const [errorMsgAPI, setErrorMsgAPI] = useState('');
   const [listProposals, setListProposals] = useState([]);
+  const [filterStatus,setFilterStatus]=useState('posted');
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -124,7 +99,7 @@ function TeacherPage(props) {
           <br /> <br />
         </Grid>
         
-        {/*
+        
         <Grid item xs={4}>
             <FormControl fullWidth>
                <Typography variant="subtitle1" fontWeight="bold">  Thesis Status  </Typography>
@@ -134,7 +109,7 @@ function TeacherPage(props) {
                </RadioGroup>
             </FormControl>
         </Grid> 
-        */}
+        
 
         <CollapsibleTable
           listProposals={listProposals}
