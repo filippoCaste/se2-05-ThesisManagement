@@ -221,6 +221,8 @@ export const updateProposal = async (req, res) => {
       res.status(404).json({error: "Proposal not found"})
     } else if(err == 403) {
       res.status(403).json({error: "You cannot access this resource"})
+    } else if(err === 400) {
+      res.status(400).json({error: "This proposal cannot be modified"})
     } else {
       res.status(500).json({ error: err.message });
       }
