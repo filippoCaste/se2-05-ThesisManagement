@@ -40,12 +40,19 @@ DELETE http://localhost:3001/api/proposals/33 HTTP/1.1
 PUT http://localhost:3001/api/proposals/27 HTTP/1.1
 ###
 
-
 GET http://localhost:3001/api/proposals HTTP/1.1
+###
+
+
+GET http://localhost:3001/api/proposals?cod_degree=2 HTTP/1.1
 
 ###
 
 GET http://localhost:3001/api/proposals/teachers/10000 HTTP/1.1
+
+###
+
+GET http://localhost:3001/api/proposals/31 HTTP/1.1
 
 ###
 
@@ -111,7 +118,7 @@ PUT http://localhost:3001/api/applications/4 HTTP/1.1
 Content-Type: application/json
 
 {
-    "status": "refused"
+    "status": "accepted"
 }
 
 

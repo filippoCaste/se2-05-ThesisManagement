@@ -1,12 +1,12 @@
 import React from 'react';
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {  useParams } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Typography from '@mui/material/Typography';
-import { MessageContext, UserContext } from '../Contexts';
 import { MessageContext, UserContext } from '../Contexts';
 import { FormControl, InputLabel, Select, MenuItem, Input, Container, IconButton,  Paper } from '@mui/material';
 
@@ -50,24 +50,22 @@ function formatDate(inputDate) {
 
 
 
-function AddProposalTeacher(props)
+function EditProposalTeacher(props)
 {
   const navigate= useNavigate();
   const handleMessage = useContext(MessageContext);
-  const handleMessage = useContext(MessageContext);
   dayjs.extend(customParseFormat);
+  const { proposalId } = useParams();
+ 
 
   const { user } = useContext(UserContext);
   const [teachersList, SetTeachersList]=useState('');
   const [degreesList, SetDegreesList]=useState('');
   const [selectedSupervisor, setSelectedSupervisor] = useState(user.id);
   const [keywordsList, SetKeywordsList]=useState(''); //prese dal DB
+  const [leggiDegree, setLeggiDegree]=useState(false);
 
-
-  ///////////////////////////////////////////////////////////
-
-
-
+  
   //Proposal Fields (By Slide 8)
 
   //ID TEACHER FALSO, VERRA PRESO DAL COOKIE DI SESSIONE DOPO L'ACCESSO
@@ -124,7 +122,6 @@ function AddProposalTeacher(props)
     setSelectedCoSupList(updatedCoSupList);
   };
 
-
   //KEWWORDS A TENDINA
   const [newKeyword, setNewKeyword] = useState('');
   
@@ -169,30 +166,99 @@ function AddProposalTeacher(props)
     updatedExternals.splice(index, 1);
     setListExternals(updatedExternals);
   };
-  
+
 
     // USE EFFECT /////////////////////////////////////////////
-  
-    useEffect(()=>{
-      setSelectedDegreeList([]);
+    // UseEffect to reset selectedDegreeList when level changes
+    const [somma, setSomma] = useState(0);
 
-    },[level])
+    useEffect(() => {
+
+        setSomma((prevSomma) => prevSomma + 1);
+        console.log(); //per dare tempo NON TOGLIERE ALTRIMENTI NON FUNZIONA
+        if(somma>2)
+        {
+            console.log();
+            setSelectedDegreeList([]); //per dare tempo NON TOGLIERE ALTRIMENTI NON FUNZIONA
+        }
+    }, [level]);
+
+
+    useEffect(()=>{
+    if(degreesList.length > 0)
+    {
+        proposalAPI.getProposalByProposalId(proposalId)
+        .then((p)=>{
+            console.log("AOO",p);
+                setTitle(()=>(p.title));
+                setDescription(()=>(p.description));
+                setType(()=>(p.type));
+                setExpirationDate(()=>(dayjs(p.expiration_date)));
+                setRequired_knowledge(()=>(p.required_knowledge));
+                setNotes(()=>(p.notes));
+                setLevel(()=>(p.level));
+    
+                // Verifica se p.cod_degree è un array
+                let lista_codici_degree;
+                if((Array.isArray(p.cod_degree))==false)
+                {
+                    lista_codici_degree=[p.cod_degree];
+                }    
+                else
+                {
+                    lista_codici_degree=p.cod_degree;
+                }    
+                
+                let lista=[];
+                lista_codici_degree.forEach(codice_degree=>{
+                  
+                    degreesList.forEach(d=>{
+                        if(codice_degree == d.cod_degree)
+                        {
+                            lista.push(d);
+                        }
+                    })   
+                   
+                })
+                setSelectedDegreeList(()=>(lista));
+    
+                // Rinomina il campo 'id' in 'teacher_id' 
+                p.coSupervisors.forEach(obj => { obj.teacher_id = obj.id; delete obj.id; });
+                setSelectedCoSupList(()=>(p.coSupervisors));
+    
+                setSelectedKeywordList(()=>(p.keywords));
+    
+                if(p.externalSupervisors != undefined)
+                {
+                    setListExternals(()=>(p.externalSupervisors));
+                }
+                
+        })
+        .catch((err) => handleMessage(err,"warning"))
+    }
+    
+  },[degreesList]);
 
 
   useEffect(()=>{
+
     API_Degrees.getAllDegrees()
-    .then((d) => SetDegreesList(d))
-    .catch((err) => handleMessage(err,"warning"));
+    .then((d) => {SetDegreesList(d); setLeggiDegree(()=>true); }  )
+    .catch((err) => handleMessage(err,"warning"))
 
     API_Teachers.getAllTeachers()
     .then((t) => SetTeachersList(t))
-    .catch((err) => handleMessage(err,"warning"));
+    .catch((err) => handleMessage(err,"warning"))
 
     API_Keywords.getAllKeywords()
     .then((k) => SetKeywordsList(k))
-    .catch((err) => handleMessage(err,"warning"));
+    .catch((err) => handleMessage(err,"warning"))
 
   },[])
+
+  ///////////////////////////////////////////////////////////
+
+  
        
   //HANDLER SUBMIT
   function handleSubmit(event) 
@@ -242,7 +308,7 @@ function AddProposalTeacher(props)
        //messaggio errore campi vuoti
        if(corretto == false) 
        {
-           handleMessage("ATTENTION: "+campi_vuoti+" EMPTY ", "warning");
+            handleMessage("ATTENTION: "+campi_vuoti+" EMPTY ", "warning");
        }
 
        
@@ -253,13 +319,25 @@ function AddProposalTeacher(props)
           let formatted_expiration = expiration_date.format("YYYY-MM-DD");
           let cod_group= user.cod_group;
           let supervisors_obj={"supervisor_id":  selectedSupervisor, 
-            "co_supervisors":  array_only_id_co_supervisors, "external": listExternals};
+            "co_supervisors":  array_only_id_co_supervisors, "external": listExternals}; 
+            
+          /*
+          let supervisors_obj={"supervisor_id":  selectedSupervisor, 
+            "co_supervisors":  array_only_id_co_supervisors, "external": listExternals}; */
 
+
+           proposalAPI.updateProposal(proposalId,title,type,description,level,
+            formatted_expiration,notes, required_knowledge, array_only_cod_degree, cod_group,
+            supervisors_obj, selectedKeywordList)
+            .then(navigate("/teacher"))
+            .catch((err) => handleMessage(err,"warning"))
+
+            /*
             proposalAPI.postProposal(title,type,description,level, formatted_expiration,notes,
               required_knowledge, array_only_cod_degree,cod_group,supervisors_obj,selectedKeywordList)
-              .then(navigate("/teacher"))
-              .catch((err) => handleMessage(err,"warning"));
-        
+              .then(()=>navigate("/teacher"))
+              .catch((err) => handleMessage(err,"warning"))
+                */
          }
          
          
@@ -277,7 +355,7 @@ function AddProposalTeacher(props)
       
     <br /> <br /><br /><br /> <br /> <br />
 
-    <Typography variant="h5" align="center"> INSERT A NEW PROPOSAL OF THESIS      </Typography> <br />
+    <Typography variant="h5" align="center"> EDIT PROPOSAL OF THESIS  { proposalId }    </Typography> <br />
     <Typography variant="h7"> TEACHER: {user.name} {user.surname} </Typography> <br />
     <Typography variant="h7"> ID: {user.id} </Typography> <br /> <br />
     
@@ -328,19 +406,20 @@ function AddProposalTeacher(props)
              
             </Grid> <br/>    
 
+            
             <Grid container spacing={2}> 
             <Grid item xs={12}>
                   <FormControl fullWidth>
-                  <Typography variant="subtitle1" fontWeight="bold">  SELECT A DEGREE LEVEL  </Typography>
+                  <Typography variant="subtitle1" fontWeight="bold">  SELECT A DEGREE LEVEL </Typography>
                     < Select
                       labelId="word-label"
                       id="level-select"
                       onChange={(ev) => { setLevel(ev.target.value) }}
                     >
                       {
-                        Array.from(['MSc', 'BSc']).map((el, index) =>
-                        (el === 'MSc' ? <MenuItem key={index} value={'MSc'}> Master of Science </MenuItem> 
-                                      : <MenuItem key={index} value={'BSc'}> Bachelor of Science </MenuItem>))
+                        Array.from(["MSc", "BSc"]).map((el, index) =>
+                        (el === "MSc" ? <MenuItem key={index} value={"MSc"}> Master of Science </MenuItem> 
+                                      : <MenuItem key={index} value={"BSc"}> Bachelor of Science </MenuItem>))
                       }
                     </Select>
                   </FormControl> 
@@ -351,7 +430,7 @@ function AddProposalTeacher(props)
           <Paper elevation={3} style={{ padding: '16px' }}>
             <FormControl fullWidth>
               <Typography variant="h6" gutterBottom fontWeight="bold">
-                SELECT DEGREE  {level=='MSc'? "MASTER" : level=='BSc'? "BACHELOR" : ""}
+                SELECT DEGREE  {level=='MSc'? "MASTER" : "BACHELOR"}
               </Typography>
               <Select
                 labelId="degree-label"
@@ -610,8 +689,8 @@ function AddProposalTeacher(props)
 
     <br />
 
-        <Button variant="contained" color="primary" type="submit" onClick={()=>{setInvioForm(true); handleMessage("Added Proposal","success")}}> ADD PROPOSAL </Button>
-        {' '} <Button variant="contained" color="error" onClick={()=>{navigate('/teacher');handleMessage("Undone insert proposal","success");} }> CANCEL </Button>
+        <Button variant="contained" color="primary" type="submit" onClick={()=>{setInvioForm(true); handleMessage("Update Proposal","success")}}> UPDATE PROPOSAL </Button>
+        {' '} <Button variant="contained" color="error" onClick={()=>{navigate('/teacher');handleMessage("Undone update proposal","success");} }> CANCEL </Button>
       
       </form>
    
@@ -622,4 +701,4 @@ function AddProposalTeacher(props)
 }
 
 
-export default AddProposalTeacher;
+export default EditProposalTeacher;

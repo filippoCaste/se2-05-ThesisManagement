@@ -5,7 +5,8 @@ import {
   getProposalTeacherId,
   deleteProposal,
   archiveProposal,
-  updateProposal
+  updateProposal,
+  getProposalById
 } from "../controllers/proposal.controller.js";
 import { isLoggedIn, isTeacher } from "../config/configs.js";
 
@@ -22,5 +23,7 @@ router.delete("/:id",isLoggedIn,isTeacher,deleteProposal);
 router.put("/:id/archived",isLoggedIn,isTeacher,archiveProposal);
 
 router.put('/:proposalId', isTeacher, updateProposal);
+
+router.get("/:proposalId", isTeacher, getProposalById);
 
 export { router };

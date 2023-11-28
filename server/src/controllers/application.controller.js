@@ -56,13 +56,16 @@ export const getApplicationsStudentId = async (req, res) => {
 export const changeStatusOfApplication = async (req, res) => {
   try {
     const applicationId = req.params.applicationId;
+    if(!req.body.status) {
+      res.status(400).json({ error: "Incorrect fields" })
+    }
     const status = req.body.status.trim();
 
-    if(status!=="accepted" && status!=="refused") {
-      res.status(400).json({error: "Uncorrect fields"})
+    if(status !== "accepted" && status !== "rejected" && status !== "canceled") {
+      res.status(400).json({error: "Incorrect fields"})
     }
 
-    await changeStatus(applicationId, 10000, status);
+    await changeStatus(applicationId, req.user.id, status);
 
     res.status(204).send();
 

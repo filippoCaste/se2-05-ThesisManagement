@@ -1,4 +1,5 @@
 import {
+  getAllInfoByProposalId,
   getProposalsByTeacherId,
   getProposalsFromDB,
   postNewProposal,
@@ -68,7 +69,8 @@ export const getProposals = async (req, res, next) => {
  */
 export const postProposal = async (req, res) => {
   try {
-    const { title, type, description, level, cod_group, cod_degree, expiration_date, supervisors_obj, keywords } = req.body;
+    const { title, type, description, level, cod_group, cod_degree, expiration_date, notes, supervisors_obj, keywords } = req.body;
+
 
     if (!isNumericInputValid([cod_group])
       || !isNumericInputValid(cod_degree)
@@ -183,17 +185,15 @@ export const archiveProposal = async (req, res) => {
  * - 204: No Content -> successful operation
  * - 400: Bad Request -> uncorrect fields
  * - 401: Unauthorized
- * - 500: Internal server error
- * @returns 
+ * - 500: Internal server error 
  */
 export const updateProposal = async (req, res) => {
   try {
     const proposalId = req.params.proposalId;
 
-    const { title, type, description, level, cod_group, cod_degree, expiration_date, supervisors_obj, keywords } = req.body;
+    const { title, type, description, level, cod_group, cod_degree, expiration_date, notes, supervisors_obj, keywords } = req.body;
 
     if(!isNumericInputValid([cod_group, proposalId]) 
-          || !isNumericInputValid(cod_degree)
           || !isTextInputValid(keywords)
           || !isTextInputValid([title, type, description, level])
           || !isValidDateFormat(expiration_date)
@@ -211,11 +211,12 @@ export const updateProposal = async (req, res) => {
       }
 
       // update a proposal
-      await updateProposalByProposalId(proposalId, req.user.id, { title, type, description, level, cod_group, cod_degree, expiration_date, supervisors_obj, keywords })
+      await updateProposalByProposalId(proposalId, req.user.id, { title, type, description, level, cod_group, cod_degree, expiration_date, notes, supervisors_obj, keywords })
       res.status(204).send();
     }
 
   } catch(err) {
+    console.log(err);
     if(err == 404) {
       res.status(404).json({error: "Proposal not found"})
     } else if(err == 403) {
@@ -225,6 +226,23 @@ export const updateProposal = async (req, res) => {
       }
   }
 };
+
+export const getProposalById = async (req, res) => {
+  try {
+    const proposalId = req.params.proposalId;
+    const proposal = await getAllInfoByProposalId(proposalId, req.user.id);
+    res.status(200).json(proposal);
+  } catch(err) {
+    console.log(err);
+    if (err == 404) {
+      res.status(404).json({ error: "Proposal not found" })
+    } else if (err == 403) {
+      res.status(403).json({ error: "You cannot access this resource" })
+    } else {
+      res.status(500).json({ error: err.message });
+    }
+  } 
+}
 
 
 function isSupervisorsObjValid(supervisors_obj) {

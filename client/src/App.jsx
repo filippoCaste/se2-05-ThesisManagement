@@ -34,6 +34,13 @@ function App() {
           setUser(new Student(userInfo));
           handleMessage('Student successfully logged in', 'success');
         } else if (userInfo?.email[0] === 'd') {
+    userAPI
+      .getUserInfo()
+      .then((userInfo) => {
+        if (userInfo?.email[0] === 's') {
+          setUser(new Student(userInfo));
+          handleMessage('Student successfully logged in', 'success');
+        } else if (userInfo?.email[0] === 'd') {
           setUser(new Professor(userInfo));
           handleMessage('Teacher successfully logged in', 'success');
         }
@@ -76,6 +83,8 @@ function App() {
                 path="/teacher/addProposal"
                 element={<AddProposalTeacher />}
               />
+              <Route path='/teacher/updateProposal/:proposalId'  element={<EditProposalTeacher/>} />
+
             </Routes>
           </MessageContext.Provider>
         </UserContext.Provider>

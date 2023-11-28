@@ -9,32 +9,28 @@ export const createApplicationInDb = (
   student_id,
   submission_date
 ) => {
+  const student = await getStudentInfoByID(student_id);
+  const proposal = await getProposalInfoByID(proposal_id);
+  if (proposal.expiration_date < submission_date) {
+    throw new Error(
+        `Proposal with id ${proposal_id} has expired on ${proposal.expiration_date}`
+      );
+    }
+  if (proposal.cod_degree.toString() !== student.cod_degree.toString()) {
+    throw new Error(
+        `Proposal and student cod_degree should match. Proposal with id ${proposal_id} has ` +
+        `cod_degree ${proposal.cod_degree}, but student has cod_degree ${student.cod_degree}`
+      )
+    }
+  if (proposal.expiration_date < submission_date) {
+    throw new Error(
+        `Proposal with id ${proposal_id} has expired on ${proposal.expiration_date}`
+      )
+    }
+
   return new Promise(async (resolve, reject) => {
+    
     try {
-      const student = await getStudentInfoByID(student_id);
-      const proposal = await getProposalInfoByID(proposal_id);
-      if (proposal.expiration_date < submission_date) {
-        return reject({
-          scheduledError: new Error(
-            `Proposal with id ${proposal_id} has expired on ${proposal.expiration_date}`
-          ),
-        });
-      }
-      if (proposal.cod_degree.toString() !== student.cod_degree.toString()) {
-        return reject({
-          scheduledError: new Error(
-            `Proposal and student cod_degree should match. Proposal with id ${proposal_id} has ` +
-              `cod_degree ${proposal.cod_degree}, but student has cod_degree ${student.cod_degree}`
-          ),
-        });
-      }
-      if (proposal.expiration_date < submission_date) {
-        return reject({
-          scheduledError: new Error(
-            `Proposal with id ${proposal_id} has expired on ${proposal.expiration_date}`
-          ),
-        });
-      }
       const sql = `INSERT INTO Applications (proposal_id, student_id, submission_date) VALUES (?, ?, ?)`;
       db.run(sql, [proposal_id, student_id, submission_date], function (err) {
         if (err) {
@@ -109,9 +105,18 @@ export const getApplicationsByProposalId = (proposalId) => {
     });
 };
 
+/**
+ * This function updates the status of an application:
+ *  - if the status is 'rejected' then only the application with the corresponding application_id is updated
+ *  - if the status is 'accepted', all the others applications to the same proposal are set to 'rejected'
+ * @param {*} applicationId 
+ * @param {*} userId 
+ * @param {*} status - can be either 'accepted' or 'rejected'
+ *  
+ */
 export const changeStatus = (applicationId, userId, status) => {
   return new Promise((resolve, reject) => {
-    const sql1 = "SELECT s.supervisor_id as supervisor_id FROM Supervisors s, Applications a WHERE a.application_id=? AND a.proposal_id=s.proposal_id";
+    const sql1 = "SELECT s.supervisor_id, a.proposal_id FROM Supervisors s, Applications a WHERE a.application_id=? AND a.proposal_id=s.proposal_id";
     db.get(sql1, [applicationId], (err, row) => {
       if (err) {
         reject(err);
@@ -120,17 +125,34 @@ export const changeStatus = (applicationId, userId, status) => {
       } else if(userId != row.supervisor_id) {
         reject(403);
       }
-    });
 
-    const sql2 = "UPDATE Applications SET status=? WHERE application_id=?";
-    db.run(sql2, [status, applicationId], (err) => {
-      if(err) {
-        reject(err);
-      } else {
+      const proposalId = row.proposal_id;
+      const sql2 = "SELECT application_id FROM Applications WHERE proposal_id=?";
+      db.all(sql2, [proposalId], (err, rows) => {
+        if(err) {
+          reject(err);
+        } else if(rows.length !== 0) {
+          const sql3 = "UPDATE Applications SET status=? WHERE application_id=?";
+          for(let elem of rows) {
+            let appId = elem.application_id;
+            if(appId == applicationId) {
+              db.run(sql3, [status, applicationId], (err) => {
+                if(err) {
+                  reject(err);
+                }
+              })
+            } else if (status === 'accepted') {
+                db.run(sql3, ["canceled", appId], (err) => {
+                  if(err) {
+                    reject(err);
+                  }
+                })
+              }
+          }
+        }
         resolve(true);
-      }
+      })
     });
-
   });
 }
 
