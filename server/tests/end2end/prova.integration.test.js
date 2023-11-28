@@ -11,6 +11,7 @@ async function runEndToEndTest() {
     const elementoPassword = await driver.findElement(By.id('password'));
 
     console.log('Test completato con successo!');
+    
 
   } finally {
     await driver.quit();
