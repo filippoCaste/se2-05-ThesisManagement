@@ -52,7 +52,7 @@ GET http://localhost:3001/api/proposals/teachers/10000 HTTP/1.1
 
 ###
 
-GET http://localhost:3001/api/proposals/31 HTTP/1.1
+GET http://localhost:3001/api/proposals/27 HTTP/1.1
 
 ###
 

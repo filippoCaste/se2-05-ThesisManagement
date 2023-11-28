@@ -558,12 +558,23 @@ export const getAllInfoByProposalId = (proposalId, userId) => {
             expiration_date: row.expiration_date,
             notes: row.notes,
             cod_degree: row.cod_degree,
-            cod_group: row.cod_group,
             required_knowledge: row.required_knowledge,
             status: row.status,
             title_degree: row.title_degree,
-            title_group: row.title_group
           };
+
+          const sqlGroup = "SELECT * FROM Teachers t, Supervisors s, Groups g WHERE g.cod_group=t.cod_group AND s.co_supervisor_id=t.id AND s.proposal_id=?; "
+          db.all(sqlGroup, [proposalId], (err, rows) => {
+            if(err) {
+              reject(err);
+            } else {
+              let groups = rows.map((g) => {
+                return {cod_group: g.cod_group, title_group: g.title_group};
+              })
+              groups.push({cod_group: row.cod_group, title_group: row.title_group});
+              proposalInfo = {...proposalInfo, groups}
+            }
+          });
 
           const sqlKw = "SELECT * FROM Keywords k, ProposalKeywords pk WHERE pk.proposal_id=? AND pk.keyword_id=k.id";
           db.all(sqlKw, proposalId, (err, rows) => {

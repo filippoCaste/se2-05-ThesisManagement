@@ -204,21 +204,33 @@
     - 500 Internal Server Error: Indicates an error during processing.
 ```json
 {
-  "id": 31,
-  "title": "thesis",
-  "description": "description55",
-  "type": "acdemic thesis",
+  "id": 27,
+  "title": "Computer vision techniques for mobile testing",
+  "description": "Many End-to-End (E2E) testing tools allow developers to create repeatable test scripts.",
+  "type": "Tesi esterna in azienda",
   "level": "MSc",
-  "expiration_date": "2023-11-19",
-  "notes": "notes",
-  "cod_degree": 5,
-  "cod_group": 1,
-  "required_knowledge": "softeng2 exam",
-  "status": "archived",
-  "title_degree": "COMPUTER ENGINEERING",
-  "title_group": "Elite",
+  "expiration_date": "2024-07-31",
+  "notes": "http://grains.polito.it/work.php",
+  "cod_degree": 2,
+  "required_knowledge": "programming skills (Python, deep learning frameworks);\r\nexperience in training deep neural networks;\r\nfundamentals of mobile development (Android GUI, the Android Studio development environment);",
+  "status": "assigned",
+  "title_degree": "COMMUNICATIONS ENGINEERING",
+  "groups": [
+    {
+      "cod_group": 2,
+      "title_group": "Automatica"
+    },
+    {
+      "cod_group": 3,
+      "title_group": "EMC Group"
+    },
+    {
+      "cod_group": 1,
+      "title_group": "Elite"
+    }
+  ],
   "keywords": [
-    "Javascript"
+    "AI"
   ],
   "coSupervisors": [
     {
@@ -227,13 +239,12 @@
       "surname": "Verdi",
       "email": "d10001@polito.it"
     },
-  ],
-  "externalSupervisors": [ 
     {
-      "name":"Antonio",
-      "surname":"Vito",
-      "email":"vitoantoniogmail.com"
-    },
+      "id": 10004,
+      "name": "Franco",
+      "surname": "Francini",
+      "email": "d10004@polito.it"
+    }
   ]
 }
 ```
