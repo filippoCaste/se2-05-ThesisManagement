@@ -11,6 +11,7 @@ import API_Applications from '../services/applications.api';
 import { MessageContext, UserContext } from '../Contexts';
 import CollapsibleTable from '../components/CollapsibleTable';
 import AlertDialog from '../components/AlertDialog';
+import ApplicationDialog from '../components/ApplicationDialog';
 
 function TeacherPage(props) {
   const navigate = useNavigate();
@@ -23,7 +24,9 @@ function TeacherPage(props) {
   const [selectedItem, setSelectedItem] = useState(null);
   const [loading, setLoading] = useState(false);
 
-
+  //applications dialog
+  const [openDialogApplication, setOpenDialogApplication] = useState(false);
+  const [selectedApplication, setSelectedApplication] = useState(null);
 
   async function createRow(p) {
     const students = await API_Applications.getApplicationStudentsByProposalId(
@@ -41,7 +44,10 @@ function TeacherPage(props) {
     setSelectedItem(datum);
     setOpenDialog(true);
   };
-
+  const handleClickApplication = (datum) => {
+    setSelectedApplication(datum);
+    setOpenDialogApplication(true);
+  };
   useEffect(() => {
     const fetchData = async () => {
       if (user) {
@@ -108,6 +114,7 @@ function TeacherPage(props) {
         <CollapsibleTable
           listProposals={listProposals}
           onClick={handleClick}
+          onClickApplication={handleClickApplication}
           deleteProposal={deleteProposal}
           archiveProposal={archiveProposal}
         />
@@ -120,6 +127,17 @@ function TeacherPage(props) {
             }}
             loading={loading}
             item={selectedItem}
+          />
+        )}
+        {openDialogApplication && (
+          <ApplicationDialog
+            open={openDialogApplication}
+            handleClose={() => {
+              setLoading(false);
+              setOpenDialogApplication(false);
+            }}
+            loading={loading}
+            item={selectedApplication}
           />
         )}
       </Grid>
