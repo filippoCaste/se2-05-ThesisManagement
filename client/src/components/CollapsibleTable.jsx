@@ -123,7 +123,7 @@ function Row(props) {
                   >
                       <MenuItem style={{ color: "#007FFF" }} aria-label="show details" onClick={() => {onClick(row.p);handleClose();}}><DescriptionOutlinedIcon /></MenuItem>
                       <MenuItem aria-label="archive" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"}><ArchiveIcon   color='success'/></MenuItem>
-                      <MenuItem aria-label="edit" onClick={() => {handleClose();}}><EditIcon color='info' /></MenuItem>
+                      <MenuItem aria-label="edit" onClick={() => {handleClose();}}><Link to={`/teacher/updateProposal/${row.p.id}`}><EditIcon color='info' /></Link></MenuItem>
                       <MenuItem aria-label="delete" onClick={() => {deleteProposal(index);handleClose();}}><DeleteIcon color="error" /></MenuItem>
 
                       
