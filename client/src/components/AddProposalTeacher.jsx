@@ -51,6 +51,7 @@ function formatDate(inputDate) {
 
 function AddProposalTeacher(props)
 {
+  const {currentDataAndTime} = props;
   const navigate= useNavigate();
   const handleMessage = useContext(MessageContext);
   dayjs.extend(customParseFormat);
@@ -58,7 +59,7 @@ function AddProposalTeacher(props)
   const { user } = useContext(UserContext);
   const [teachersList, SetTeachersList]=useState('');
   const [degreesList, SetDegreesList]=useState('');
-  const [selectedSupervisor, setSelectedSupervisor] = useState(user.id);
+  const [selectedSupervisor, setSelectedSupervisor] = useState(user?.id);
   const [keywordsList, SetKeywordsList]=useState(''); //prese dal DB
 
 
@@ -76,7 +77,7 @@ function AddProposalTeacher(props)
   const [notes,setNotes]=useState('');
   const [type,setType]=useState('');
   const [level,setLevel]=useState('');
-  const [expiration_date,setExpirationDate]=useState(null);
+  const [expiration_date,setExpirationDate]=useState(currentDataAndTime? currentDataAndTime:  dayjs());
 
    //DEGREE A TENDINA
    const [selectedDegree, setSelectedDegree] = useState('');
@@ -98,7 +99,7 @@ function AddProposalTeacher(props)
       (_, index) => index !== indexToRemove
     );
     setSelectedDegreeList(updatedDegreeList);
-  };
+    };
 
   //CO SUPERVISORS A TENDINA
   const [selectedCoSup, setSelectedCoSup] = useState('');
@@ -309,16 +310,18 @@ function AddProposalTeacher(props)
                   <TextField  name="type" variant="filled"  fullWidth
                   value={type}  onChange={ev=>setType(ev.target.value)}/>  <br /> <br />
               </Grid>
-
-              <Grid item xs={4}>
+                  
+              <Grid item xs={6}>
               <FormControl fullWidth>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <Typography variant="subtitle1" fontWeight="bold"> EXPIRATION DATE </Typography>
                   <DatePicker
                     format="DD/MM/YYYY"
                     value={expiration_date}
+                    minDate={dayjs(currentDataAndTime)}
+                    disablePast
                     onChange={(newDate) => { setExpirationDate(newDate); }}
-                    minDate={dayjs()}
+
                   />
                 </LocalizationProvider>
                 </FormControl> 

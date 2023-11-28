@@ -73,7 +73,7 @@ function App() {
                 path="/student/applications"
                 element={<StudentApplications />}
               />
-              <Route path="/teacher" element={<TeacherPage />} />
+              <Route path="/teacher" element={<TeacherPage  currentDataAndTime={currentDataAndTime} />} />
               <Route
                 path="/teacher/addProposal"
                 element={<AddProposalTeacher />}
