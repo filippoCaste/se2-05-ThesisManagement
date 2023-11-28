@@ -12,7 +12,7 @@ import AlertDialog from '../components/AlertDialog';
 
 function TeacherPage(props) {
   const navigate = useNavigate();
-  const {handleMessage} = useContext(MessageContext);
+  const handleMessage = useContext(MessageContext);
   const { user } = useContext(UserContext);
   const [errorMsgAPI, setErrorMsgAPI] = useState('');
   const [listProposals, setListProposals] = useState([]);
@@ -70,7 +70,7 @@ function TeacherPage(props) {
     }
     await API_Proposal.deleteProposal(listProposals[index].p.id);
     setListProposals(listProposals.filter((_, i) => i !== index));
-    handleMessage("Deleted proposal", "success")
+    handleMessage("Deleted proposal", "success");
   }
   async function archiveProposal(index) {
     const acceptArchive = confirm('Are you sure to archive this proposal?');
@@ -78,8 +78,8 @@ function TeacherPage(props) {
       return;
     }
     await API_Proposal.archivedProposal(listProposals[index].p.id);
-    handleMessage("Archived proposal", "success")
     setListProposals(listProposals.filter((_, i) => i !== index));
+    handleMessage("Archived proposal", "success");
   }
 
   return (

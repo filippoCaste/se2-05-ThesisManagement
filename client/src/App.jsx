@@ -31,6 +31,7 @@ function App() {
     userAPI
       .getUserInfo()
       .then((userInfo) => {
+        console.log(userInfo);
         if (userInfo?.email[0] === 's') {
           setUser(new Student(userInfo));
           handleMessage('Student successfully logged in', 'success');

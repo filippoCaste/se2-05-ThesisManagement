@@ -11,7 +11,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@auth0/auth0-react": "^2.2.3",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.11.16",
@@ -22,8 +21,6 @@
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.4",
     "dayjs": "^1.11.10",
-    "jsonwebtoken": "^9.0.2",
-    "jwt-decode": "^4.0.0",
     "mui-image": "^1.0.7",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
