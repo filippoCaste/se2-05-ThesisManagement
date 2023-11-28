@@ -19,10 +19,18 @@ function TeacherPage(props)
    const { user } = useContext(UserContext);
    const [errorMsgAPI, setErrorMsgAPI] = useState('');
    const [listProposals, setListProposals]=useState([]);
-   //const [filterStatus,setFilterStatus]=useState('posted');
+   const [filterStatus,setFilterStatus]=useState('posted');
    const [openDialog, setOpenDialog] = useState(false);
+   const [openDialogApplication, setOpenDialogApplication] = useState(false);
    const [selectedItem, setSelectedItem] = useState(null);
    const [loading, setLoading] = useState(false);
+
+  async function createRow(p) {
+    const students = await API_Applications.getApplicationStudentsByProposalId(
+      p.id
+    );
+    return { p, students };
+  }
 
   async function createData(proposals) {
     const rows = await Promise.all(proposals.map((p) => createRow(p)));
@@ -37,6 +45,7 @@ function TeacherPage(props)
     setSelectedApplication(datum);
     setOpenDialogApplication(true);
   };  
+
    useEffect(() => { 
       const fetchData = async () => {
          if (user) {
@@ -48,52 +57,7 @@ function TeacherPage(props)
       }
 
       fetchData();
-   }, [user,currentDataAndTime]);
-
-   return(
-      <>
-      <br />  <br />  <br />  <br /> <br />
-
-      {/*<Typography variant="h5" align="center"> PAGES STATUS {filterStatus}  </Typography> <br />*/}
-
-      <Grid  container spacing={2}>
-         <Grid item xs={4}>
-            <Button variant="contained" color="primary" 
-            onClick={()=>navigate("/teacher/addProposal", {state:{currentDataAndTime}})} > INSERT NEW THESIS PROPOSAL </Button>  <br/> <br/>
-         </Grid> 
-         {/*<Grid item xs={4}>
-            <FormControl fullWidth>
-               <Typography variant="subtitle1" fontWeight="bold">  FILTER BY STATUS  </Typography>
-               <Select
-                  labelId="word-label"
-                  id="status-select"
-                  onChange={(ev) => { setFilterStatus(ev.target.value) }}
-               >
-                  {
-                     Array.from(["all", "posted", "active"]).map((status, index) => 
-                     (<MenuItem key={index} value={status}> {status} </MenuItem> ))
-                  }
-               </Select>
-            </FormControl>
-               </Grid> */}
-         
-
-         <CollapsibleTable listProposals={listProposals} onClick={handleClick}/>
-         {openDialog && (
-            <AlertDialog 
-               open={openDialog}
-               handleClose={() => {setLoading(false); setOpenDialog(false);}}
-               loading = {loading}
-               item={selectedItem}
-          />
-         )}
-      </Grid>
-      
-      </>
-
-   );
-
-   
+   }, [user, currentDataAndTime]);
 
   async function deleteProposal(index) {
     const acceptDelete = confirm('Are you sure to delete this proposal?');
@@ -117,7 +81,6 @@ function TeacherPage(props)
   return (
     <>
       <br /> <br /> <br /> <br /> <br />
-      {/*<Typography variant="h5" align="center"> PAGES STATUS {filterStatus}  </Typography> <br />*/}
       <Grid container spacing={2}>
         <Grid item xs={4}>
           <Button
