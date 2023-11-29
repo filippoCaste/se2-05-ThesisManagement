@@ -79,7 +79,7 @@ export const postProposal = async (req, res) => {
       || !isValidDateFormat(expiration_date)
       || !isSupervisorsObjValid(supervisors_obj)
     ) {
-      return res.status(400).send({ error: "Uncorrect fields" });
+      return res.status(400).json({ error: "Uncorrect fields" });
     } else {
       for(let kw of keywords) {
         kw = kw.trim();
@@ -133,15 +133,20 @@ export const deleteProposal = async (req, res) => {
   try {
     const proposalId = req.params.id;
     const teacherid = req.user.id;
-    
+
     const supervisorid = await getSupervisorByProposalId(proposalId);
-    
-    if (supervisorid && supervisorid == teacherid) {
-        const deletedProposalMessage = await deleteProposalById(proposalId);
-        if(deletedProposalMessage)
-          return res.json({ message: deletedProposalMessage });
-        else throw new Error(" couldn't delete the proposal")
-    }else {throw new Error(" teacher has no permissions!")}
+
+    if (!supervisorid || supervisorid !== teacherid) {
+      return res
+        .status(403)
+        .json({
+          error: "User does not have the permissions for this operation",
+        });
+    }
+    const deletedProposalMessage = await deleteProposalById(proposalId);
+    if (deletedProposalMessage)
+      return res.status(200).json({ message: deletedProposalMessage });
+    else res.status(400).json({ error: "Could not delete the proposal"});
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
@@ -199,7 +204,7 @@ export const updateProposal = async (req, res) => {
           || !isValidDateFormat(expiration_date)
           || !isSupervisorsObjValid(supervisors_obj)
       ) {
-      return res.status(400).send({error: "Uncorrect fields"});
+      return res.status(400).json({error: "Uncorrect fields"});
     } else {
       // add new keyword if not already in the database
       for (let kw of keywords) {

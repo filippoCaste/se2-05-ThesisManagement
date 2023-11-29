@@ -20,7 +20,7 @@ import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
 function Row(props) {
   const { row, isEvenRow, deleteProposal, index, onClick,onClickApplication, archiveProposal,isSM } = props;
   const [open, setOpen] = React.useState(false);
-  const {handleMessage} = useContext(MessageContext);
+  const handleMessage = useContext(MessageContext);
   const [statusChangeLoading, setStatusChangeLoading] = React.useState(false);
 
   //more actions mobile version
@@ -196,7 +196,7 @@ function Row(props) {
                             <TableCell style={{ width: '5%' }}>
                               <Button
                                 variant="outlined"
-                                onClick={() => changeStatusOfApplication(studentsRow, 'refused')}
+                                onClick={() => changeStatusOfApplication(studentsRow, 'rejected')}
                                 style={{
                                   fontSize: '12px',
                                   textTransform: 'none',

@@ -4,46 +4,212 @@ import * as services from "../../src/services/proposal.services.js";
 import * as teacherServices from "../../src/services/teacher.services.js";
 import * as keywords from "../../src/services/keyword.services.js";
 
-jest.mock("../../src/services/proposal.services.js");
+jest.mock("../../src/services/proposal.services", () => ({
+  getProposalsFromDB: jest.fn(),
+  getKeyWordsFromDB: jest.fn(),
+  getExtraInfoFromProposal: jest.fn(),
+  postNewProposal: jest.fn(),
+  getProposalById: jest.fn(),
+  updateProposalByProposalId: jest.fn(),
+  getProposalsByTeacherId: jest.fn(),
+  deleteProposalById: jest.fn(),
+  getSupervisorByProposalId: jest.fn(),
+}));
+
+jest.mock("../../src/services/keyword.services", () => ({
+  getKeywordByName: jest.fn(),
+  postKeyword: jest.fn(),
+}));
+
+jest.mock("../../src/services/teacher.services", () => ({
+  getTeacherById: jest.fn(),
+}));
 
 beforeEach(() => {
-    jest.clearAllMocks();
+  jest.clearAllMocks();
+});
+
+
+describe("getProposals", () => {
+  test("should return 400 error if cod_degree is not present", async () => {
+    const req = {
+      query: {},
+    };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    const next = jest.fn();
+
+    await controllers.getProposals(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({
+      error: "Request should contain a cod_degree",
+    });
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  test("should return 400 error if start_expiration_date is invalid", async () => {
+    const req = {
+      query: {
+        cod_degree: "test",
+        start_date: "test",
+      },
+    };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    const next = jest.fn();
+
+    await controllers.getProposals(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({
+      message: "Invalid start_expiration_date, format should be YYYY-MM-dd",
+    });
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  test("should return 400 error if end_expiration_date is invalid", async () => {
+    const req = {
+      query: {
+        cod_degree: "test",
+        end_date: "test",
+      },
+    };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    const next = jest.fn();
+
+    await controllers.getProposals(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({
+      message: "Invalid end_expiration_date, format should be YYYY-MM-dd",
+    });
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  test("should return 500 error if getProposalsFromDB throws an error", async () => {
+    const req = {
+      query: {
+        cod_degree: "test",
+      },
+    };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    const next = jest.fn();
+
+    services.getProposalsFromDB.mockImplementation(() => {
+      throw new Error("test");
+    });
+
+    await controllers.getProposals(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ error: "test" });
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  test("should return 200 and call getProposalsFromDB if cod_degree is present", async () => {
+    const req = {
+      query: {
+        cod_degree: "test",
+      },
+    };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    const next = jest.fn();
+
+    services.getProposalsFromDB.mockImplementation(() => {
+      return { proposals: [] };
+    });
+
+    await controllers.getProposals(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(services.getProposalsFromDB).toHaveBeenCalledWith(
+      "test",
+      [],
+      [],
+      undefined,
+      undefined,
+      undefined
+    );
+    expect(res.json).toHaveBeenCalledWith({ proposals: [] });
+  });
 });
 
 describe("postProposal", () => {
-    test("should return 200 if the proposal is created", async () => {
+    test("should return 201 if the proposal is created", async () => {
         const mockRequest = {
-            body: {
-                title: "DevOps proposal",
-                type:"Innovation that inspires",
-                description: "This is a DevOps proposal.",
-                level: "MSc",
-                expiration_date: "2023-12-22",
-                notes: "No additional notes",
-                required_knowledge: "Student must know the principle of software development.",
-                cod_degree: ["2"],
-                cod_group: "1",
-                supervisors_obj: {
-                    supervisor_id: 10000,
-                    co_supervisors: [
-                        10001,
-                        10002
-                        ]
-                },
-                keywords: [
-                    "Javascript"
-                ]
-            },
+            params: { proposalId: 1 },
+            body:{
+              title: "Computer vision techniques for mobile testing",
+              type: "External Thesis at company",
+              description:
+                "Many End-to-End (E2E) testing tools allow developers to create repeatable test scripts.",
+              level: "MSc",
+              cod_degree: [2],
+              cod_group: 1,
+              keywords: ["AI", "Computer Vision", "Mobile Testing"],
+              expiration_date: "2024-07-20",
+              supervisors_obj: {
+                supervisor_id: 10000,
+                co_supervisors: [10001],
+              },
+            }
         };
         const mockResponse = {
             status: jest.fn().mockReturnThis(),
             json: jest.fn(),
         };
 
-        jest.spyOn(services, "postNewProposal").mockResolvedValue();
+        keywords.getKeywordByName.mockResolvedValue("Test");
+        keywords.postKeyword.mockResolvedValue();
+        services.postNewProposal.mockResolvedValue();
 
         await controllers.postProposal(mockRequest, mockResponse);
         expect(mockResponse.status).toHaveBeenCalledWith(201);
+        expect(services.postNewProposal).toHaveBeenCalledTimes(1);
+    });
+
+    
+    test('should return 400 if some field type is incorrect', async () => {
+        const mockRequest = {
+          params: { proposalId: 1 },
+          body:{
+            title: "Computer vision techniques for mobile testing",
+            type: "External Thesis at company",
+            description:
+              "Many End-to-End (E2E) testing tools allow developers to create repeatable test scripts.",
+            level: "MSc",
+            cod_degree: ["error"],
+            cod_group: 1,
+            keywords: ["AI", "Computer Vision", "Mobile Testing"],
+            expiration_date: "2024-07-20",
+            supervisors_obj: {
+              supervisor_id: 10000,
+              co_supervisors: [10001],
+            },
+          }
+        };
+        const mockResponse = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn(),
+        };
+
+        await controllers.postProposal(mockRequest, mockResponse);
+        expect(mockResponse.status).toHaveBeenCalledWith(400);
+        expect(mockResponse.json).toHaveBeenCalledWith({ error: "Uncorrect fields" });
     });
 
     test('should return 500 if error' , async () => {
@@ -64,7 +230,7 @@ describe("postProposal", () => {
             json: jest.fn(),
         };
 
-        jest.spyOn(services, "postNewProposal").mockRejectedValue();
+        services.postNewProposal.mockRejectedValue();
 
         await controllers.postProposal(mockRequest, mockResponse);
         expect(mockResponse.status).toHaveBeenCalledWith(500);
@@ -143,8 +309,8 @@ describe("getProposalTeacherId", () => {
             title_group: "Elite"
         };
 
-        jest.spyOn(teacherServices, "getTeacherById").mockResolvedValue(mockTeacherData);
-        jest.spyOn(services, "getProposalsByTeacherId").mockResolvedValue(mockApplicationsData);
+        teacherServices.getTeacherById.mockResolvedValue(mockTeacherData);
+        services.getProposalsByTeacherId.mockResolvedValue(mockApplicationsData);
 
         await controllers.getProposalTeacherId(mockRequest, mockResponse);
         expect(mockResponse.json).toHaveBeenCalledWith(mockApplicationsData);
@@ -179,6 +345,7 @@ describe("getProposalTeacherId", () => {
         };
 
         jest.spyOn(teacherServices, "getTeacherById").mockResolvedValue(null);
+
 
         await controllers.getProposalTeacherId(mockRequest, mockResponse);
         expect(mockResponse.status).toHaveBeenCalledWith(400);
@@ -232,16 +399,18 @@ describe("updateProposal", () => {
       params: { proposalId: 1 },
       user: { id: 1 },
       body: {
-        title: "Test",
-        type: "Test",
-        level: "Test",
-        cod_degree: [1],
+        title: "Computer vision techniques for mobile testing",
+        type: "External Thesis at company",
+        description:
+          "Many End-to-End (E2E) testing tools allow developers to create repeatable test scripts.",
+        level: "MSc",
+        cod_degree: ["error"],
         cod_group: 1,
-        keywords: ["Test"],
-        expiration_date: "2021-12-31",
+        keywords: ["AI", "Computer Vision", "Mobile Testing"],
+        expiration_date: "2024-07-20",
         supervisors_obj: {
-          supervisor_id: 1,
-          co_supervisors: [2, 3],
+          supervisor_id: 10000,
+          co_supervisors: [10001],
         },
       },
     };
@@ -250,8 +419,10 @@ describe("updateProposal", () => {
       json: jest.fn(),
     };
 
-    jest.spyOn(keywords, "getKeywordByName").mockResolvedValue("Test");
-    jest.spyOn(services, "updateProposalByProposalId").mockImplementation(() => {throw 404});
+    keywords.getKeywordByName.mockResolvedValue("Test");
+    services.updateProposalByProposalId.mockImplementation(() => {
+      throw 404;
+    });
 
     await controllers.updateProposal(mockReq, mockRes);
 
@@ -261,29 +432,31 @@ describe("updateProposal", () => {
   
   test("should return 403 if proposal is not owned by the teacher", async () => {
     const mockReq = {
-        params: { proposalId: 1 },
-        user: { id: 1 },
-        body: {
-          title: "Test",
-          type: "Test",
-          level: "Test",
-          cod_degree: [1],
-          cod_group: 1,
-          keywords: ["Test"],
-          expiration_date: "2021-12-31",
-          supervisors_obj: {
-            supervisor_id: 1,
-            co_supervisors: [2, 3],
-          },
+      params: { proposalId: 1 },
+      user: { id: 1 },
+      body: {
+        title: "Computer vision techniques for mobile testing",
+        type: "External Thesis at company",
+        description:
+          "Many End-to-End (E2E) testing tools allow developers to create repeatable test scripts.",
+        level: "MSc",
+        cod_degree: ["error"],
+        cod_group: 1,
+        keywords: ["AI", "Computer Vision", "Mobile Testing"],
+        expiration_date: "2024-07-20",
+        supervisors_obj: {
+          supervisor_id: 10000,
+          co_supervisors: [10001],
         },
-      };
-      const mockRes = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
   
-      jest.spyOn(keywords, "getKeywordByName").mockResolvedValue("Test");
-      jest.spyOn(services, "updateProposalByProposalId").mockImplementation(() => {throw 403});
+      keywords.getKeywordByName.mockResolvedValue("Test");
+      services.updateProposalByProposalId.mockImplementation(() => {throw 403});
   
       await controllers.updateProposal(mockReq, mockRes);
   
@@ -293,53 +466,59 @@ describe("updateProposal", () => {
 
   test("should return 500 if error", async () => {
     const mockReq = {
-        params: { proposalId: 1 },
-        user: { id: 1 },
-        body: {
-          title: "Test",
-          type: "Test",
-          level: "Test",
-          cod_degree: [1],
-          cod_group: 1,
-          keywords: ["Test"],
-          expiration_date: "2021-12-31",
-          supervisors_obj: {
-            supervisor_id: 1,
-            co_supervisors: [2, 3],
-          },
+      params: { proposalId: 1 },
+      user: { id: 1 },
+      body: {
+        title: "Computer vision techniques for mobile testing",
+        type: "External Thesis at company",
+        description:
+          "Many End-to-End (E2E) testing tools allow developers to create repeatable test scripts.",
+        level: "MSc",
+        cod_degree: ["error"],
+        cod_group: 1,
+        keywords: ["AI", "Computer Vision", "Mobile Testing"],
+        expiration_date: "2024-07-20",
+        supervisors_obj: {
+          supervisor_id: 10000,
+          co_supervisors: [10001],
         },
-      };
-      const mockRes = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-  
-      jest.spyOn(keywords, "getKeywordByName").mockResolvedValue("Test");
-      jest.spyOn(services, "updateProposalByProposalId").mockImplementation(() => {throw Error("Unexpected error")});
-  
-      await controllers.updateProposal(mockReq, mockRes);
-  
-      expect(mockRes.status).toHaveBeenCalledWith(500);
-      expect(mockRes.json).toHaveBeenCalledWith({error: "Unexpected error"});
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    keywords.getKeywordByName.mockResolvedValue("Test");
+    services.updateProposalByProposalId.mockImplementation(() => {
+      throw Error("Unexpected error");
+    });
+
+    await controllers.updateProposal(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(500);
+    expect(mockRes.json).toHaveBeenCalledWith({ error: "Unexpected error" });
   });
 
   test("should return 200 if the proposal is updated", async () => {
     const mockReq = {
-        params: { proposalId: 1 },
-        user: { id: 1 },
-        body: {
-          title: "Test",
-          type: "Test",
-          level: "Test",
-          cod_degree: [1],
-          cod_group: 1,
-          keywords: ["Test"],
-          expiration_date: "2021-12-31",
-          supervisors_obj: {
-            supervisor_id: 1,
-            co_supervisors: [2, 3],
-          },
+      params: { proposalId: 1 },
+      user: { id: 1 },
+      body: {
+        title: "Computer vision techniques for mobile testing",
+        type: "External Thesis at company",
+        description:
+          "Many End-to-End (E2E) testing tools allow developers to create repeatable test scripts.",
+        level: "MSc",
+        cod_degree: ["error"],
+        cod_group: 1,
+        keywords: ["AI", "Computer Vision", "Mobile Testing"],
+        expiration_date: "2024-07-20",
+        supervisors_obj: {
+          supervisor_id: 10000,
+          co_supervisors: [10001],
         },
+      },
       };
       const mockRes = {
         status: jest.fn().mockReturnThis(),
@@ -347,12 +526,109 @@ describe("updateProposal", () => {
         send: jest.fn()
       };
   
-      jest.spyOn(keywords, "getKeywordByName").mockResolvedValue("Test");
-      jest.spyOn(services, "updateProposalByProposalId").mockImplementation(() => {Promise.resolve(true)});
+      keywords.getKeywordByName.mockResolvedValue("Test");
+      services.updateProposalByProposalId.mockResolvedValue(true);
   
       await controllers.updateProposal(mockReq, mockRes);
   
       expect(mockRes.status).toHaveBeenCalledWith(204);
       expect(mockRes.send).toHaveBeenCalled();
   });
+});
+
+describe("deleteProposal", () => {
+  test("should return 403 if proposal is not owned by the teacher", async () => {
+    const mockReq = {
+      params: { id: 1 },
+      user: { id: 1 },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    services.getSupervisorByProposalId.mockResolvedValue(null);
+
+    await controllers.deleteProposal(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(403);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "User does not have the permissions for this operation"});
+  });
+
+  test("should return 400 if error to delete proposal", async () => {
+    const mockReq = {
+      params: { id: 1 },
+      user: { id: 1 },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    services.getSupervisorByProposalId.mockResolvedValue(1);
+    services.deleteProposalById.mockResolvedValue(null);
+
+    await controllers.deleteProposal(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Could not delete the proposal"});
+  });
+
+  test("should return 400 if error to delete proposal", async () => {
+    const mockReq = {
+      params: { id: 1 },
+      user: { id: 1 },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    services.getSupervisorByProposalId.mockResolvedValue(1);
+    services.deleteProposalById.mockResolvedValue(null);
+
+    await controllers.deleteProposal(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Could not delete the proposal"});
+  });
+
+  test("should return 200 if proposal is deleted successfully", async () => {
+    const mockReq = {
+      params: { id: 1 },
+      user: { id: 1 },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    services.getSupervisorByProposalId.mockResolvedValue(1);
+    services.deleteProposalById.mockResolvedValue("Proposal deleted successfully");
+
+    await controllers.deleteProposal(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+    expect(mockRes.json).toHaveBeenCalledWith({message: "Proposal deleted successfully"});
+  });
+
+  test("should return 500 if delete proposal throws error", async () => {
+    const mockReq = {
+      params: { id: 1 },
+      user: { id: 1 },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    services.getSupervisorByProposalId.mockResolvedValue(1);
+    services.deleteProposalById.mockImplementation(() => {throw {message: "Unexpected error"}});
+
+    await controllers.deleteProposal(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(500);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Unexpected error"});
+  });
+
 });

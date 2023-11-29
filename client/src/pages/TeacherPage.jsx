@@ -14,6 +14,7 @@ import dayjs from 'dayjs';
 function TeacherPage(props)
 {  
    const {currentDataAndTime} = props;
+   const handleMessage = useContext(MessageContext);
 
    const navigate = useNavigate();
    const { user } = useContext(UserContext);
