@@ -45,12 +45,10 @@ export default function AlertDialog({
   const { user } = useContext(UserContext);
 
   useEffect(() => {
-    applicationsAPI.getApplicationStudentsByProposalId(item.id)
-      .then((res) => {
         applicationsAPI.getStudentApplications().then((response) => {
-          setIsAppliedProposal(response.filter((o) => o.status === 'accepted').length > 0 || res.filter((o) => o.student_id === user.id).length > 0);
-        });
-      }).catch(
+          setIsAppliedProposal(response.filter((o) => o.status !== 'rejected').length > 0);
+        })
+      .catch(
         (err) => {console.log(err);}
       )
   });
