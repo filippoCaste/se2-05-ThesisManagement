@@ -3,7 +3,6 @@ import * as controllers from "../../src/controllers/proposal.controller.js";
 import * as services from "../../src/services/proposal.services.js";
 import * as teacherServices from "../../src/services/teacher.services.js";
 import * as keywords from "../../src/services/keyword.services.js";
-import { expect } from "chai";
 
 jest.mock("../../src/services/proposal.services.js");
 
@@ -37,17 +36,17 @@ describe("postProposal", () => {
             },
         };
         const mockResponse = {
-            sendStatus: jest.fn().mockReturnThis(),
+            status: jest.fn().mockReturnThis(),
             json: jest.fn(),
         };
 
         jest.spyOn(services, "postNewProposal").mockResolvedValue();
 
         await controllers.postProposal(mockRequest, mockResponse);
-        expect(mockResponse.sendStatus).toHaveBeenCalledWith(200);
+        expect(mockResponse.status).toHaveBeenCalledWith(201);
     });
 
-    test('should return 400 if the level is not a number', async () => {
+    test('should return 400 if the level is a number', async () => {
         const mockRequest = {
             body: {
                 title: "DevOps proposal",
@@ -67,7 +66,7 @@ describe("postProposal", () => {
                         ]
                 },
                 keywords: [
-                    "Javascript"
+                    1
                 ]
             },
         };
