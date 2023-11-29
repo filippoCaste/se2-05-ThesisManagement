@@ -19,11 +19,13 @@ export default function AlertDialog({
   loading,
   isAppliedProposals,
 }) {
+  console.log(item);
   const {
     supervisorsInfo,
     supervisor_id,
     title,
     description,
+    keyword_names,
     notes,
     expiration_date,
     level,
@@ -67,6 +69,7 @@ export default function AlertDialog({
         }}
       >
         {renderField('Description', description)}
+        {renderField("Keywords", keyword_names)}
         {renderField('Notes', notes)}
         {renderField(
           'Expiration Date',
