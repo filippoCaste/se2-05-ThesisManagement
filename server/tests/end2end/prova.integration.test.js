@@ -1,21 +1,33 @@
 import { Builder, By, until } from 'selenium-webdriver';
 
-async function runEndToEndTest() {
-  const driver = await new Builder().forBrowser('chrome').build();
+let driver;
 
-  try {
-    await driver.get('http://localhost:5173/');
-    await driver.wait(until.urlContains('https://thesis-management-05.eu.auth0.com/u/login?state=hKFo2SBiM011TzNJZGNJQXBISFdVZmNpczc4NWR6RnFuVlpSOKFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIDEwdDh0Tjd1YU5FaENSU2F1NmE2MHFyb1RvSkh1WmpQo2NpZNkgYUxKbWNNa0RKa3BjOFJxbDhFZnhMVmw0TkQ5YVV5V3A'));
+const doLogin = async (username, password, role) => {
+    await driver.get("https://thesis-management-05.eu.auth0.com/u/login?state=hKFo2SB6Mkp6WnhDSzA0YWFuS3hweEdnU2o1eVVYeUFiWVlhS6Fur3VuaXZlcnNhbC1sb2dpbqN0aWTZIGNYeGl5b1RfeGlGZzQxVmlYVXIwUkN3TkJsemRFTkdUo2NpZNkgYUxKbWNNa0RKa3BjOFJxbDhFZnhMVmw0TkQ5YVV5V3A");
+    await driver.findElement(By.id('login')).click();
+    await driver.findElement(By.id('email')).sendKeys(username);
+    await driver.findElement(By.id('password')).sendKeys(password);
+    await driver.findElement(By.type('submit')).click();
+    await driver.get('http://localhost:5173/' + role);
+};
 
-    const elementoUsername = await driver.findElement(By.id('username'));
-    const elementoPassword = await driver.findElement(By.id('password'));
+describe('Student can see thesis proposal and details of the proosals', () => {
 
-    console.log('Test completato con successo!');
-    
+  beforeAll(async () => {
+    driver = await new Builder().forBrowser('chrome').build();
+  });
 
-  } finally {
+  afterAll(async () => {
     await driver.quit();
-  }
-}
+  });
 
-runEndToEndTest();
+  test('Student can see thesis proposal', async () => {
+    const table = await driver.findElement(By.id('table'));
+    expect(table).toBeTruthy();
+  });
+
+  test('Student can see details of the proposal', async () => {
+    
+  });
+
+});

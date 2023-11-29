@@ -150,7 +150,7 @@ export default function StickyHeadTable(props) {
   return (
     <Paper className="paperContainer">
       <TableContainer className="tableContainer">
-        <Table stickyHeader aria-label="sticky table">
+        <Table stickyHeader aria-label="sticky table" id={'table'}>
           <TableHead>
             <TableRow className="headerRow">
               {columns.map((column) => (

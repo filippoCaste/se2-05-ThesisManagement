@@ -40,6 +40,7 @@ export default function AlertDialog({
 
   return (
     <Dialog
+      className={'dialog'}
       open={open}
       onClose={handleClose}
       fullWidth
