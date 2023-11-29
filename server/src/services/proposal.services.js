@@ -243,6 +243,12 @@ export const postNewProposal = (
                     });
                   }
                 }
+              } else {
+                db.run(sqlSuper, [propId, supervisor_obj.supervisor_id, null, null], (err) => {
+                  if(err) {
+                    reject(err);
+                  }
+                });
               }
 
               if (supervisor_obj.external && supervisor_obj.external.length > 0) {
