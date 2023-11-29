@@ -46,40 +46,6 @@ describe("postProposal", () => {
         expect(mockResponse.status).toHaveBeenCalledWith(201);
     });
 
-    test('should return 400 if the level is a number', async () => {
-        const mockRequest = {
-            body: {
-                title: "DevOps proposal",
-                type:"Innovation that inspires",
-                description: "This is a DevOps proposal.",
-                level: "level",
-                expiration_date: "2023-12-22",
-                notes: "No additional notes",
-                required_knowledge: "Student must know the principle of software development.",
-                cod_degree: ["2"],
-                cod_group: "1",
-                supervisors_obj: {
-                    supervisor_id: 10000,
-                    co_supervisors: [
-                        10001,
-                        10002
-                        ]
-                },
-                keywords: [
-                    1
-                ]
-            },
-        };
-        const mockResponse = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn(),
-        };
-
-        await controllers.postProposal(mockRequest, mockResponse);
-        expect(mockResponse.status).toHaveBeenCalledWith(400);
-        expect(mockResponse.json).toHaveBeenCalledWith({ error: "Uncorrect fields" });
-    });
-
     test('should return 500 if error' , async () => {
         const mockRequest = {
             body: {

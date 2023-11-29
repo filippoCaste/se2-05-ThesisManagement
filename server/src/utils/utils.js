@@ -26,7 +26,7 @@ export function isValidDateFormat(dateString) {
 */
 export function isTextInputValid(values) {
   for(let text of values) {
-    const value = text.trim();
+    const value = text && text.trim();
     if (value === '' || !value) {
       console.log("The error is in value: " + text);
       return false;
@@ -42,7 +42,7 @@ export function isTextInputValid(values) {
  */
 export function isNumericInputValid(values) {
   for(let number of values) {
-    const value = parseInt(number);
+    const value = number && parseInt(number);
     if(isNaN(value) || ! value || number != value.toString()) {
       console.log("The error is in value: " + number);
       return false;
