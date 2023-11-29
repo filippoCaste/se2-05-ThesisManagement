@@ -21,17 +21,21 @@ export default function StickyHeadTable(props) {
   const { proposals, isAppliedProposals,drawerWidth } = props;
 
   const columns = [
-    { id: 'title', label: 'Title'},
-    { id: 'supervisor_id', label: 'Supervisor'},
+    { id: 'title', label: 'Title', minWidth: 450, maxWidth: 450 },
+    { id: 'supervisor_id', label: 'Supervisor', minWidth: 200, maxWidth: 200 },
     {
       id: 'expiration_date',
       label: 'Expiration Date',
+      minWidth: 150,
+      maxWidth: 150,
       format: (value) => dayjs(value).format('DD/MM/YYYY'),
     },
-    { id: 'keyword_names', label: 'Keywords'},
+    { id: 'keyword_names', label: 'Keywords', minWidth: 150, maxWidth: 150 },
     {
       id: 'button',
       label: 'Apply',
+      minWidth: 200,
+      maxWidth: 200,
       format: (value, row) => (
         <Button
           variant="outlined"
@@ -61,7 +65,8 @@ export default function StickyHeadTable(props) {
     columns.push({
       id: 'status',
       label: 'Status',
- 
+      minWidth: 150,
+      maxWidth: 150,
       format: (value, row) => (
         <Badge color={getColorByStatus(value)} badgeContent={value}></Badge>
       ),
@@ -143,9 +148,9 @@ export default function StickyHeadTable(props) {
   };
 
   return (
-    <Paper className="paperContainer" sx={{width:`100vw-${drawerWidth}`}}>
+    <Paper className="paperContainer" >
       <TableContainer className="tableContainer">
-        <Table stickyHeader aria-label="sticky table">
+        <Table stickyHeader aria-label="sticky table" >
           <TableHead>
             <TableRow className="headerRow">
               {columns.map((column,index) => (
