@@ -27,7 +27,7 @@ function MainDashboard(props) {
           handleClose={() => {
             setLoading(false);
             setOpenDialog(false);
-            console.log(selectedItem.id + ' ' + user.id);
+            //console.log(selectedItem.id + ' ' + user.id);
           }}
           handleApply={() => {
             setLoading(true);
@@ -44,7 +44,6 @@ function MainDashboard(props) {
           }}
           loading={loading}
           item={selectedItem}
-          isAppliedProposals={isAppliedProposals}
         />
       )}
       <StickyHeadTable
