@@ -475,6 +475,7 @@ export const updateProposalByProposalId = (proposalId, userId, proposal) => {
       else if (row.supervisor_id != userId) {
         reject(403);
       } else if(row.status === 'assigned') {
+        console.log("This proposal has been already assigned so it cannot be modified")
         reject(400);
       } else {
 

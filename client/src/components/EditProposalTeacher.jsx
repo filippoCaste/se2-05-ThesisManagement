@@ -4,11 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import {  useParams } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
 import Typography from '@mui/material/Typography';
 import { MessageContext, UserContext } from '../Contexts';
-import { FormControl, InputLabel, Select, MenuItem, Input, Container, IconButton,  Paper } from '@mui/material';
+import { FormControl, Select, MenuItem, Input, Container, IconButton,  Paper } from '@mui/material';
 
 import proposalAPI from '../services/proposals.api';
 import API_Degrees from '../services/degrees.api';
@@ -22,8 +20,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import Box from '@mui/material/Box';
-
 
 import dayjs from 'dayjs' ;
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -50,7 +46,7 @@ function formatDate(inputDate) {
 
 
 
-function EditProposalTeacher(props)
+function EditProposalTeacher()
 {
   const navigate= useNavigate();
   const handleMessage = useContext(MessageContext);
@@ -78,7 +74,7 @@ function EditProposalTeacher(props)
   const [level,setLevel]=useState('');
   const [expiration_date,setExpirationDate]=useState(null);
 
-   //DEGREE A TENDINA
+   // DEGREES dropdown menu
    const [selectedDegree, setSelectedDegree] = useState('');
    const [selectedDegreeList, setSelectedDegreeList] = useState([]);
  
@@ -100,7 +96,7 @@ function EditProposalTeacher(props)
     setSelectedDegreeList(updatedDegreeList);
   };
 
-  //CO SUPERVISORS A TENDINA
+  // CO-SUPERVISORS dropdown menu
   const [selectedCoSup, setSelectedCoSup] = useState('');
   const [selectedCoSupList, setSelectedCoSupList] = useState([]);
 
@@ -110,7 +106,7 @@ function EditProposalTeacher(props)
         if (selectedCoSup && !selectedCoSupList.includes(selectedCoSup)) 
         {
           setSelectedCoSupList([...selectedCoSupList, selectedCoSup]);
-          setSelectedCoSup(''); // Pulisce la selezione dopo l'aggiunta
+          setSelectedCoSup(''); // Cleans selection after adding the value
         }
       }
   };
@@ -122,7 +118,7 @@ function EditProposalTeacher(props)
     setSelectedCoSupList(updatedCoSupList);
   };
 
-  //KEWWORDS A TENDINA
+  //KEWWORDS dropdown menu
   const [newKeyword, setNewKeyword] = useState('');
   
   const [selectedKeyword, setSelectedKeyword] = useState('');
@@ -132,12 +128,12 @@ function EditProposalTeacher(props)
     if (selectedKeyword !== '') {
       if (!selectedKeywordList.includes(selectedKeyword)) {
         setSelectedKeywordList([...selectedKeywordList, selectedKeyword]);
-        setSelectedKeyword(''); // Pulisce la selezione dopo l'aggiunta
+        setSelectedKeyword(''); // clean after insertion
       }
     } else if (newKeyword !== '') {
-      // Aggiunge la nuova keyword
+      // adds a new keyword
       setSelectedKeywordList([...selectedKeywordList, newKeyword]);
-      setNewKeyword(''); // Pulisce l'input della nuova keyword dopo l'aggiunta
+      setNewKeyword(''); // clean after insertion
     }
   }
 
@@ -301,7 +297,7 @@ function EditProposalTeacher(props)
          if(corretto==true)
          {
 
-          let formatted_expiration = expiration_date.format("YYYY-MM-DD");
+          let formatted_expiration = dayjs(expiration_date).format("YYYY-MM-DD");
           let cod_group= user.cod_group;
           let supervisors_obj={"supervisor_id":  selectedSupervisor, 
             "co_supervisors":  array_only_id_co_supervisors, "external": listExternals}; 
@@ -310,11 +306,10 @@ function EditProposalTeacher(props)
           let supervisors_obj={"supervisor_id":  selectedSupervisor, 
             "co_supervisors":  array_only_id_co_supervisors, "external": listExternals}; */
 
-
            proposalAPI.updateProposal(proposalId,title,type,description,level,
             formatted_expiration,notes, required_knowledge, array_only_cod_degree, cod_group,
             supervisors_obj, selectedKeywordList)
-            .then(navigate("/teacher"))
+            .then(() => {console.log("ready to navigate"); navigate("/teacher")})
             .catch((err) => handleMessage(err,"warning"))
 
             /*
@@ -340,10 +335,8 @@ function EditProposalTeacher(props)
       
     <br /> <br /><br /><br /> <br /> <br />
 
-    <Typography variant="h5" align="center"> EDIT PROPOSAL OF THESIS:  { title }    </Typography> <br />
-    <Typography variant="h7"> TEACHER: {user.name} {user.surname} </Typography> <br />
-    <Typography variant="h7"> ID: {user.id} </Typography> <br /> <br />
-    
+    <Typography variant="h5" align="center"> EDIT PROPOSAL OF THESIS: <br /> { title }    </Typography> <br />
+    <Typography variant="h6"> TEACHER: {user.name} {user.surname}  (d{user.id}) </Typography> <br />
     <Typography variant="h7"> GROUP NAME    : {user?.group_name}   </Typography> <br />
     <Typography variant="h7"> COD DEPARTMENT: {user?.cod_department}         </Typography>
 
@@ -416,7 +409,7 @@ function EditProposalTeacher(props)
           <Paper elevation={3} style={{ padding: '16px' }}>
             <FormControl fullWidth>
               <Typography variant="h6" gutterBottom fontWeight="bold">
-                SELECT DEGREE  {level=='MSc'? "MASTER" : "BACHELOR"}
+                ADD DEGREE  {level=='MSc'? "MASTER" : "BACHELOR"}
               </Typography>
               <Select
                 labelId="degree-label"
@@ -442,9 +435,9 @@ function EditProposalTeacher(props)
               </Button>
 
               {/* Visualizza i co-supervisori selezionati */}
-              <Typography variant="h6" style={{ marginTop: '16px' }}>
-                Selected Degree
-              </Typography>
+              {selectedDegreeList.length != 0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
+                Added degrees
+              </Typography>}
               {selectedDegreeList.map((degree, index) => (
                 <Paper key={index} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
                   <Grid container alignItems="center">
@@ -478,7 +471,7 @@ function EditProposalTeacher(props)
       <Paper elevation={3} style={{ padding: '16px' }}>
         <FormControl fullWidth>
           <Typography variant="h6" gutterBottom fontWeight="bold">
-            SELECT CO-SUPERVISORS
+            ADD CO-SUPERVISORS
           </Typography>
           <Select
             labelId="cosup-label"
@@ -504,9 +497,9 @@ function EditProposalTeacher(props)
           </Button>
 
           {/* Visualizza i co-supervisori selezionati */}
-          <Typography variant="h6" style={{ marginTop: '16px' }}>
+          {selectedCoSupList.length != 0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
             Selected Co-Supervisors
-          </Typography>
+          </Typography>}
           {selectedCoSupList.map((coSupervisor, index) => (
             <Paper key={index} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
               <Grid container alignItems="center">
@@ -534,7 +527,7 @@ function EditProposalTeacher(props)
       <Paper elevation={3} style={{ padding: '16px' }}>
         <FormControl fullWidth>
           <Typography variant="h6" gutterBottom fontWeight="bold">
-            SELECT KEYWORDS
+            ADD KEYWORDS
           </Typography>
           <Select
             labelId="keyword-label"
@@ -571,9 +564,9 @@ function EditProposalTeacher(props)
           </Button>
 
           {/* Visualizza i co-supervisori selezionati */}
-          <Typography variant="h6" style={{ marginTop: '16px' }}>
-            Selected Keywords
-          </Typography>
+          {selectedKeywordList.length != 0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
+            Added Keywords
+          </Typography>}
           {selectedKeywordList.map((keyword, index) => (
             <Paper key={index} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
               <Grid container alignItems="center">
@@ -600,7 +593,7 @@ function EditProposalTeacher(props)
     <Grid item xs={4}>
       <Paper elevation={3} style={{ padding: '16px' }}>
         <Typography variant="h6" gutterBottom fontWeight="bold">
-          SELECT EXTERNALS
+          ADD EXTERNAL CO-SUPERVISORS
         </Typography>
 
         {/* Input for a new external entry */}
@@ -636,13 +629,13 @@ function EditProposalTeacher(props)
           onClick={handleAddExternal}
           style={{ marginTop: '16px' }}
         >
-          ADD EXTERNAL
+          ADD
         </Button>
 
         {/* Display selected external entries */}
-        <Typography variant="h6" style={{ marginTop: '16px' }}>
-          Selected Externals
-        </Typography>
+        {listExternals.length !=0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
+          Added external co-supervisors
+        </Typography>}
         {listExternals.map((external, index) => (
         <Paper key={index} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
           <Grid container alignItems="center">

@@ -43,8 +43,12 @@ export function isTextInputValid(values) {
  * @returns `true` if the input is okay, `false` otherwise
  */
 export function isNumericInputValid(values) {
-  return values.every((obj) => {
-    // Check if the value is an integer
-    return Object.values(obj).every((value) => Number.isInteger(value));
-  });
+  for (let number of values) {
+    const value = number && parseInt(number);
+    if (!value || isNaN(value) || number != value.toString()) {
+      console.log("The error is in value: " + number);
+      return false;
+    }
+    return true;
+  }
 }
