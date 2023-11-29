@@ -212,21 +212,6 @@ function AddProposalTeacher(props)
        let array_only_cod_degree= selectedDegreeList.map(d=>d.cod_degree);
        let array_only_id_co_supervisors= selectedCoSupList.map(co=>co.teacher_id);
 
-
-       console.log("COSA STO INVIANDO?");
-       console.log("title: ",title);
-       console.log("description: ",description);
-       console.log("required_knowledge: ",required_knowledge);
-       console.log("notes: ",notes);
-       console.log("type: ",type);
-       console.log("level: ",level);
-       console.log("expiration_date: ",expiration_date);
-       console.log("selectedDegreeList: ",array_only_cod_degree); 
-       console.log("selectedCoSupList: ",array_only_id_co_supervisors);
-       console.log("selectedKeywordList: ",selectedKeywordList);
-       console.log("listExternals: ",listExternals);
-       
-
        if(title=='') { campi_vuoti=campi_vuoti + " TITLE , "; corretto= false; }
        if(description=='') {campi_vuoti=campi_vuoti + " DESCRIPTION , "; corretto= false; }
        if(required_knowledge=='') { campi_vuoti=campi_vuoti + " REQUIRED KNOWLEDGE , "; corretto= false; }
@@ -336,6 +321,7 @@ function AddProposalTeacher(props)
                     < Select
                       labelId="word-label"
                       id="level-select"
+                      value={level}
                       onChange={(ev) => { setLevel(ev.target.value) }}
                     >
                       {

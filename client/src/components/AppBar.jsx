@@ -134,12 +134,11 @@ export default function PrimarySearchAppBar(props) {
 
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <IconButton
-              color="inherit">
+
                 <ClockCustomized currentDataAndTime={currentDataAndTime} setCurrentDataAndTime={setCurrentDataAndTime} open={openClock}
                 onOpen={handleClockOpen}
                 onClose={handleClockClose}/>
-            </IconButton>
+
             
               {!user ? (<IconButton
               size="large"

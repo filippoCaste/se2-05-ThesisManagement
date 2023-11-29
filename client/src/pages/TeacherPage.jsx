@@ -24,7 +24,7 @@ function TeacherPage(props)
    const [openDialogApplication, setOpenDialogApplication] = useState(false);
    const [selectedItem, setSelectedItem] = useState(null);
    const [loading, setLoading] = useState(false);
-
+  
   async function createRow(p) {
     const students = await API_Applications.getApplicationStudentsByProposalId(
       p.id
@@ -50,14 +50,34 @@ function TeacherPage(props)
       const fetchData = async () => {
          if (user) {
             const proposals = await API_Proposal.getProposalsByTeacherId(user.id);
-            const notExpiredProposals = proposals.filter((p) => dayjs(p?.expiration_date).isAfter(currentDataAndTime));
-            const data = await createData(notExpiredProposals);
+
+            proposals?.forEach(item => {
+              if (dayjs(item.expiration_date).isBefore(currentDataAndTime.subtract(1, 'day'))) {
+                item.status = "archived";
+              }
+            });
+
+            if(proposals){
+            const filteredProposal = proposals?.filter(row => row?.status === filterStatus);
+            //const notExpiredProposals = proposals.filter((p) => dayjs(p?.expiration_date).isAfter(currentDataAndTime));
+            const data = await createData(filteredProposal);
+
+            data?.forEach(item => {
+              if (item.p.status === "archived") {
+                  item.students.forEach(student => {
+                    if (student.status === 'pending') {
+                      student.status = 'rejected';
+                    }
+                  });
+              }
+            });
             setListProposals(data);
+            }
          }
       }
 
       fetchData();
-   }, [user, currentDataAndTime]);
+   }, [user, currentDataAndTime, filterStatus]);
 
   async function deleteProposal(index) {
     const acceptDelete = confirm('Are you sure to delete this proposal?');
@@ -107,7 +127,7 @@ function TeacherPage(props)
         
 
         <CollapsibleTable
-          listProposals={listProposals}
+          listProposals={ listProposals }
           onClick={handleClick}
           onClickApplication={handleClickApplication}
           deleteProposal={deleteProposal}

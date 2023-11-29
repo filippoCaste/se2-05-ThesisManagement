@@ -246,7 +246,6 @@ function CollapsibleTable(props) {
   const {listProposals,onClick,deleteProposal, archiveProposal,onClickApplication} = props;
   const theme = useTheme();
   const isSM = useMediaQuery(theme.breakpoints.down('md'));
-  console.log(isSM);
   return (
     <Table aria-label="collapsible table" >
       <TableHead>
@@ -270,7 +269,7 @@ function CollapsibleTable(props) {
       <TableBody>
         {listProposals.length > 0 ? (
           listProposals.map((row, index) => (
-            <Row key={row.id} row={row} isEvenRow={index % 2 === 0} isSM={isSM} onClick={onClick} onClickApplication={onClickApplication} index={index} deleteProposal={deleteProposal} archiveProposal={archiveProposal} />
+            <Row key={index} row={row} isEvenRow={index % 2 === 0} isSM={isSM} onClick={onClick} onClickApplication={onClickApplication} index={index} deleteProposal={deleteProposal} archiveProposal={archiveProposal} />
           ))
         ) : (
           <TableRow>

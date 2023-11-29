@@ -1,23 +1,14 @@
 import * as React from 'react';
-import { useEffect } from 'react';
 import Drawer from '@mui/material/Drawer';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import Link from '@mui/material/Link';
 import FilterComponent from './FilterComponent.jsx';
-
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
+
 import Box from '@mui/material/Box';
 
 export default function ResponsiveDrawer(props) {
   const {
     openSelectionsMobile,
-
     setSelectedLevels,
     setSelectedExpirationDate,
     selectedKeywords,

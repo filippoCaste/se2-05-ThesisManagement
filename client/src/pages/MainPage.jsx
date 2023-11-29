@@ -15,8 +15,7 @@ function MainPage(props) {
   const drawerWidth = '20vw';
   const [selectedLevels, setSelectedLevels] = useState([]);
   const [selectedExpirationDate, setSelectedExpirationDate] = useState(null);
-  const [selectedStartExpirationDate, setSelectedStartExpirationDate] =
-    useState(currentDataAndTime);
+  const [selectedStartExpirationDate, setSelectedStartExpirationDate] = useState(currentDataAndTime);
   const [selectedKeywords, setSelectedKeywords] = useState([]);
   const [selectedSupervisorId, setSelectedSupervisorId] = useState(null);
   const [filteredProposals, setFilteredProposals] = useState([]);

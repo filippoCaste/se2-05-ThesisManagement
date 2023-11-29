@@ -153,9 +153,9 @@ export default function StickyHeadTable(props) {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow className="headerRow">
-              {columns.map((column) => (
+              {columns.map((column,index) => (
                 <TableCell
-                  key={column.id}
+                  key={index}
                   align={column.align}
                   style={{ width: column.maxWidth }}
                   className="tableCell"
@@ -170,7 +170,7 @@ export default function StickyHeadTable(props) {
             {renderNoProposalsMessage()}
             {sortedProposals.map((row, index) => (
               <TableRow
-                key={row.code}
+                key={index}
                 hover
                 role="checkbox"
                 tabIndex={-1}

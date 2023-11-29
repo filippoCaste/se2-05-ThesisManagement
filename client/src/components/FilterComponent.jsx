@@ -69,7 +69,6 @@ export default function FilterComponent(props) {
           sx={{ width: '100%', mt: '5%' }}
         />
       </Box>
-
       <Box sx={{ mt: "10%" }}>
         <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'cursive' }}>
           Expiration Date:

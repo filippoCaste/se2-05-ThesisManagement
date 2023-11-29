@@ -216,7 +216,6 @@ export const updateProposal = async (req, res) => {
     }
 
   } catch(err) {
-    console.log(err);
     if(err == 404) {
       res.status(404).json({error: "Proposal not found"})
     } else if(err == 403) {
