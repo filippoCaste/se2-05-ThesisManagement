@@ -158,7 +158,7 @@ export const archiveProposal = async (req, res) => {
     const teacherid = req.user.id;
     
     if (
-      Number.isNaN(proposalId) || proposalId < 0
+      isNaN(proposalId) || proposalId < 0
     ) {
       return res.status(400).json({ error: "Uncorrect fields" });
     }
