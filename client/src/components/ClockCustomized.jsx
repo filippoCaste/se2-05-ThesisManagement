@@ -30,7 +30,6 @@ function ButtonField(props) {
       disabled={disabled}
       ref={ref}
       aria-label={ariaLabel}
-
       onClick={() => setOpen?.((prev) => !prev)}
     >
      <QueryBuilderOutlinedIcon fontSize='medium' sx={{fill:"white"}}/>

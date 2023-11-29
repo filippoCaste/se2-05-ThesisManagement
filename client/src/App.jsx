@@ -20,7 +20,7 @@ import StudentApplications from './pages/StudentApplications';
 function App() {
   const [message, setMessage] = useState('');
   const [user, setUser] = useState(null);
-  const [openSelectionsMobile, setOpenSelectionsMobile] = useState(false);
+  const [openSelectionsMobile, setOpenSelectionsMobile] = useState(true);
   const [currentDataAndTime, setCurrentDataAndTime] = useState(dayjs());
 
   const handleMessage = (messageContent, severity) => {

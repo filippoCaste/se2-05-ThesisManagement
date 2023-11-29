@@ -18,24 +18,20 @@ export default function StickyHeadTable(props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [orderBy, setOrderBy] = React.useState('');
   const [order, setOrder] = React.useState('asc');
-  const { proposals, isAppliedProposals } = props;
+  const { proposals, isAppliedProposals,drawerWidth } = props;
 
   const columns = [
-    { id: 'title', label: 'Title', minWidth: 450, maxWidth: 450 },
-    { id: 'supervisor_id', label: 'Supervisor', minWidth: 200, maxWidth: 200 },
+    { id: 'title', label: 'Title'},
+    { id: 'supervisor_id', label: 'Supervisor'},
     {
       id: 'expiration_date',
       label: 'Expiration Date',
-      minWidth: 150,
-      maxWidth: 150,
       format: (value) => dayjs(value).format('DD/MM/YYYY'),
     },
-    { id: 'keyword_names', label: 'Keywords', minWidth: 150, maxWidth: 150 },
+    { id: 'keyword_names', label: 'Keywords'},
     {
       id: 'button',
       label: 'Apply',
-      minWidth: 200,
-      maxWidth: 200,
       format: (value, row) => (
         <Button
           variant="outlined"
@@ -65,8 +61,7 @@ export default function StickyHeadTable(props) {
     columns.push({
       id: 'status',
       label: 'Status',
-      minWidth: 150,
-      maxWidth: 150,
+ 
       format: (value, row) => (
         <Badge color={getColorByStatus(value)} badgeContent={value}></Badge>
       ),
@@ -148,14 +143,14 @@ export default function StickyHeadTable(props) {
   };
 
   return (
-    <Paper className="paperContainer">
+    <Paper className="paperContainer" sx={{width:`100vw-${drawerWidth}`}}>
       <TableContainer className="tableContainer">
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow className="headerRow">
-              {columns.map((column) => (
+              {columns.map((column,index) => (
                 <TableCell
-                  key={column.id}
+                  key={index}
                   align={column.align}
                   style={{ width: column.maxWidth }}
                   className="tableCell"
@@ -170,7 +165,7 @@ export default function StickyHeadTable(props) {
             {renderNoProposalsMessage()}
             {sortedProposals.map((row, index) => (
               <TableRow
-                key={row.code}
+                key={index}
                 hover
                 role="checkbox"
                 tabIndex={-1}

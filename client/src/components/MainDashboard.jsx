@@ -49,6 +49,7 @@ function MainDashboard(props) {
       <StickyHeadTable
         proposals={proposals}
         onClick={handleCardClick}
+        drawerWidth={drawerWidth}
         isAppliedProposals={isAppliedProposals}
       />
     </>

@@ -1,23 +1,14 @@
 import * as React from 'react';
-import { useEffect } from 'react';
 import Drawer from '@mui/material/Drawer';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import Link from '@mui/material/Link';
 import FilterComponent from './FilterComponent.jsx';
-
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
+
 import Box from '@mui/material/Box';
 
 export default function ResponsiveDrawer(props) {
   const {
     openSelectionsMobile,
-
     setSelectedLevels,
     setSelectedExpirationDate,
     selectedKeywords,
@@ -31,6 +22,7 @@ export default function ResponsiveDrawer(props) {
     setSelectedStartExpirationDate,
     title,
     setTitle,
+    drawerWidth
   } = props;
 
 
@@ -50,20 +42,28 @@ export default function ResponsiveDrawer(props) {
     <Drawer
       variant="permanent"
       sx={{
-        width: { sm: '100vw', md: "30vw" },
         display: {
           sm: openSelectionsMobile ? 'block' : 'none',
-          md: 'block',
+          md: 'block'
         },
-        flexShrink: 0,
+         width: { xs:"100vw",sm: "100vw", md: `${drawerWidth}` },
         [`& .MuiDrawer-paper`]: {
-          width: { sm: '100vw', md: "30vw" },
+          width: {xs:"100vw" ,sm: "100vw", md: `${drawerWidth}` },
           boxSizing: 'border-box',
         },
       }}
     >
-      <Collapse in={{ sm: openSelectionsMobile, md: true }} timeout="auto" unmountOnExit>
-      <Box sx={{ overflow: 'hidden', mt: '15vh', mx: '2vw', position:"relative"}}>
+      <Collapse in={{ sm: openSelectionsMobile, md: true }} sx={{ mt: '15vh',mx:'3vh',}} timeout="auto" unmountOnExit>
+      <Box sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100%', 
+      overflow:"hidden",
+      position:"relative"
+      
+ }}>
 
 
             <FilterComponent
@@ -86,8 +86,8 @@ export default function ResponsiveDrawer(props) {
 
         <Link
           position="absolute"
-          bottom="1vh"
-          right="1vw"
+          bottom="2vh"
+          right="2vw"
           href="#"
           color="red"
           underline="none"

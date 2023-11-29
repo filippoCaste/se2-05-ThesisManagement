@@ -12,11 +12,10 @@ function MainPage(props) {
   const navigate = useNavigate();
   const { openSelectionsMobile, currentDataAndTime } = props;
   const { user } = useContext(UserContext);
-  const drawerWidth = '20vw';
+  const drawerWidth = "30vw";
   const [selectedLevels, setSelectedLevels] = useState([]);
   const [selectedExpirationDate, setSelectedExpirationDate] = useState(null);
-  const [selectedStartExpirationDate, setSelectedStartExpirationDate] =
-    useState(currentDataAndTime);
+  const [selectedStartExpirationDate, setSelectedStartExpirationDate] = useState(currentDataAndTime);
   const [selectedKeywords, setSelectedKeywords] = useState([]);
   const [selectedSupervisorId, setSelectedSupervisorId] = useState(null);
   const [filteredProposals, setFilteredProposals] = useState([]);
@@ -74,10 +73,9 @@ function MainPage(props) {
   }, [currentDataAndTime]);
 
   return (
-    <Box sx={{ display: 'inline-flex' }} mt={'15vh'} mx={'6vh'}>
+    <Box sx={{ display: 'inline-flex'}} mt={'15vh'} mx={'3vh'}>
       <ResponsiveDrawer
         openSelectionsMobile={openSelectionsMobile}
-        drawerWidth={drawerWidth}
         setSelectedLevels={setSelectedLevels}
         selectedExpirationDate={selectedExpirationDate}
         setSelectedExpirationDate={setSelectedExpirationDate}
@@ -91,6 +89,7 @@ function MainPage(props) {
         setSelectedStartExpirationDate={setSelectedStartExpirationDate}
         title={title}
         setTitle={setTitle}
+        drawerWidth={drawerWidth}
       />
       <Box>
         <Button
