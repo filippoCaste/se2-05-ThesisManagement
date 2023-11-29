@@ -39,6 +39,9 @@ const {
 
       if (response) {
         studentsRow.status = status;
+        await props.fetchProposals();
+        handleMessage("Proposal "+ status+" successfully.", "warning");
+
       }
     } catch (error) {
       handleMessage("Error changing status:"+ error,"warning");

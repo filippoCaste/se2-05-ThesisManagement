@@ -18,7 +18,7 @@ import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
 
 
 function Row(props) {
-  const { row, isEvenRow, deleteProposal, index, onClick,onClickApplication, archiveProposal,isSM } = props;
+  const { row, isEvenRow, deleteProposal, index, onClick,onClickApplication, archiveProposal,isSM, fetchProposals } = props;
   const [open, setOpen] = React.useState(false);
   const handleMessage = useContext(MessageContext);
   const [statusChangeLoading, setStatusChangeLoading] = React.useState(false);
@@ -48,6 +48,11 @@ function Row(props) {
 
       if (response) {
         studentsRow.status = status;
+        await fetchProposals();
+        handleMessage("Proposal "+ status+" successfully.", "warning");
+        if(status=='accepted'){
+          setOpen(false);
+        }
       }
     } catch (error) {
       handleMessage("Error changing status:"+ error,"warning");
@@ -243,7 +248,7 @@ function Row(props) {
 }
 
 function CollapsibleTable(props) {
-  const {listProposals,onClick,deleteProposal, archiveProposal,onClickApplication} = props;
+  const {listProposals,onClick,deleteProposal, archiveProposal,onClickApplication, fetchProposals} = props;
   const theme = useTheme();
   const isSM = useMediaQuery(theme.breakpoints.down('md'));
   return (
@@ -269,7 +274,7 @@ function CollapsibleTable(props) {
       <TableBody>
         {listProposals.length > 0 ? (
           listProposals.map((row, index) => (
-            <Row key={index} row={row} isEvenRow={index % 2 === 0} isSM={isSM} onClick={onClick} onClickApplication={onClickApplication} index={index} deleteProposal={deleteProposal} archiveProposal={archiveProposal} />
+            <Row key={index} row={row} isEvenRow={index % 2 === 0} isSM={isSM} onClick={onClick} onClickApplication={onClickApplication} index={index} deleteProposal={deleteProposal} archiveProposal={archiveProposal} fetchProposals={fetchProposals} />
           ))
         ) : (
           <TableRow>
