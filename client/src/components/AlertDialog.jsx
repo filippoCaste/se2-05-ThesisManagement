@@ -120,7 +120,7 @@ export default function AlertDialog({
           <CircularProgress color="primary" size={24} />
         ) : (
           handleApply &&
-          isAppliedProposals &&
+          !isAppliedProposals &&
            (
             <Button onClick={handleApply} color="primary" variant="contained" disabled={isAppliedProposal}>
               <Typography variant="button" sx={{ color: 'white' }}>
