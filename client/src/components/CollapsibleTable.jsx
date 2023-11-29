@@ -205,7 +205,7 @@ function Row(props) {
                             <TableCell style={{ width: '5%' }}>
                               <Button
                                 variant="outlined"
-                                onClick={() => changeStatusOfApplication(studentsRow, 'refused')}
+                                onClick={() => changeStatusOfApplication(studentsRow, 'rejected')}
                                 style={{
                                   fontSize: '12px',
                                   textTransform: 'none',

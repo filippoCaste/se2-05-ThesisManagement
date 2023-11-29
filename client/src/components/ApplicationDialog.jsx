@@ -82,7 +82,7 @@ const {
               </Typography>
             </Button>
         }
-            <Button  disabled={status != "submitted"} onClick={() => {changeStatusOfApplication(item, 'refused');handleClose();}} color="warning" variant="contained">
+            <Button  disabled={status != "submitted"} onClick={() => {changeStatusOfApplication(item, 'rejected');handleClose();}} color="warning" variant="contained">
                <Typography variant="button" sx={{ color: 'white' }}>
                   Refuse
                </Typography>
