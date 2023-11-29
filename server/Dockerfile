@@ -1,13 +1,11 @@
-FROM node:14 as server-builder
+FROM node:latest
 
-WORKDIR /usr/src/app/
+WORKDIR /app/server
 
 COPY package*.json ./
 RUN npm install
 
 COPY . .
-
-WORKDIR /usr/src/app/
 
 EXPOSE 3001
 
