@@ -10,6 +10,9 @@ import {
 } from '@mui/material';
 import dayjs from 'dayjs';
 import theme from '../theme';
+import {useState, useContext, useEffect } from 'react';
+import { UserContext } from '../Contexts';
+import applicationsAPI from '../services/applications.api';
 
 export default function AlertDialog({
   open,
@@ -39,6 +42,17 @@ export default function AlertDialog({
   const coSupervisors = supervisorsInfo?.filter(
     (supervisor) => supervisor.id !== supervisor_id
   );
+  const [isAppliedProposal, setIsAppliedProposal] = useState(false);
+  const { user } = useContext(UserContext);
+
+  useEffect(() => {
+    applicationsAPI.getApplicationStudentsByProposalId(item.id)
+      .then((response) => {
+        setIsAppliedProposal(response.filter((o) => o.student_id === user.id).length > 0);
+      }).catch(
+        (err) => {console.log(err);}
+      )
+  });
 
   return (
     <Dialog
@@ -105,8 +119,8 @@ export default function AlertDialog({
           <CircularProgress color="primary" size={24} />
         ) : (
           handleApply &&
-          !isAppliedProposals && (
-            <Button onClick={handleApply} color="primary" variant="contained">
+           (
+            <Button onClick={handleApply} color="primary" variant="contained" disabled={isAppliedProposal}>
               <Typography variant="button" sx={{ color: 'white' }}>
                 Apply
               </Typography>
