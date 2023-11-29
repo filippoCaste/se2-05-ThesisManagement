@@ -41,20 +41,20 @@ export default function ResponsiveDrawer(props) {
     <Drawer
       variant="permanent"
       sx={{
-        width: { sm: '100vw', md: "30vw" },
         display: {
           sm: openSelectionsMobile ? 'block' : 'none',
-          md: 'block',
+          md: 'block'
         },
-        flexShrink: 0,
+        width: { sm: "auto", md: "30vw" },
+        height: "auto",
         [`& .MuiDrawer-paper`]: {
-          width: { sm: '100vw', md: "30vw" },
+          width: { sm: "100vw", md: "30vw" },
           boxSizing: 'border-box',
         },
       }}
     >
-      <Collapse in={{ sm: openSelectionsMobile, md: true }} timeout="auto" unmountOnExit>
-      <Box sx={{ overflow: 'hidden', mt: '15vh', mx: '2vw', position:"relative"}}>
+      <Collapse in={{ sm: Boolean(openSelectionsMobile), md: true }} timeout="auto" unmountOnExit>
+      <Box sx={{ overflow: 'hidden', mt: '15vh', mx: '2vw', position:"relative", width:"flex",justifyContent:"center", alignItems:"center"}}>
 
 
             <FilterComponent
