@@ -22,6 +22,7 @@ export default function ResponsiveDrawer(props) {
     setSelectedStartExpirationDate,
     title,
     setTitle,
+    drawerWidth
   } = props;
 
 
@@ -45,16 +46,24 @@ export default function ResponsiveDrawer(props) {
           sm: openSelectionsMobile ? 'block' : 'none',
           md: 'block'
         },
-        width: { sm: "auto", md: "30vw" },
-        height: "auto",
+         width: { xs:"100vw",sm: "100vw", md: `${drawerWidth}` },
         [`& .MuiDrawer-paper`]: {
-          width: { sm: "100vw", md: "30vw" },
+          width: {xs:"100vw" ,sm: "100vw", md: `${drawerWidth}` },
           boxSizing: 'border-box',
         },
       }}
     >
-      <Collapse in={{ sm: Boolean(openSelectionsMobile), md: true }} timeout="auto" unmountOnExit>
-      <Box sx={{ overflow: 'hidden', mt: '15vh', mx: '2vw', position:"relative", width:"flex",justifyContent:"center", alignItems:"center"}}>
+      <Collapse in={{ sm: openSelectionsMobile, md: true }} sx={{ mt: '15vh',mx:'3vh',}} timeout="auto" unmountOnExit>
+      <Box sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100%', 
+      overflow:"hidden",
+      position:"relative"
+      
+ }}>
 
 
             <FilterComponent
@@ -77,8 +86,8 @@ export default function ResponsiveDrawer(props) {
 
         <Link
           position="absolute"
-          bottom="1vh"
-          right="1vw"
+          bottom="2vh"
+          right="2vw"
           href="#"
           color="red"
           underline="none"

@@ -54,6 +54,7 @@ export default function FilterComponent(props) {
         borderRadius: '8px',
         boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
         color: theme.palette.primary.main,
+        width:"100%"
       }}
     >
       <Box >
@@ -69,11 +70,11 @@ export default function FilterComponent(props) {
           sx={{ width: '100%', mt: '5%' }}
         />
       </Box>
-      <Box sx={{ mt: "10%" }}>
+      <Box sx={{ mt: "5%" }}>
         <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'cursive' }}>
           Expiration Date:
         </Typography>
-        <Box display="flex" sx={{ mt: '10%', flexDirection:'column' }}>
+        <Box display="flex" sx={{ mt: '5%', flexDirection:'column' }}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="From..."
@@ -105,14 +106,14 @@ export default function FilterComponent(props) {
         </Box>
       </Box>
 
-      <Box sx={{ mt: "10%" }} >
+      <Box sx={{ mt: "5%" }} >
         <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'cursive' }}>
           Keywords:
         </Typography>
         <CheckboxesTags array={availableKeywords} setSelectedArray={setSelectedKeywords} selectedArray={selectedKeywords}/>
       </Box>
 
-      <Box sx={{ mt: "10%" }}>
+      <Box sx={{ mt: "5%" }}>
         <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'cursive' }}>
           Supervisor:
         </Typography>
