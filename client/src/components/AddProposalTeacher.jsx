@@ -214,11 +214,11 @@ function AddProposalTeacher(props)
 
        if(title=='') { campi_vuoti=campi_vuoti + " TITLE , "; corretto= false; }
        if(description=='') {campi_vuoti=campi_vuoti + " DESCRIPTION , "; corretto= false; }
-       if(required_knowledge=='') { campi_vuoti=campi_vuoti + " REQUIRED KNOWLEDGE , "; corretto= false; }
+       //if(required_knowledge=='') { campi_vuoti=campi_vuoti + " REQUIRED KNOWLEDGE , "; corretto= false; }
        if(type=='') { campi_vuoti=campi_vuoti + " TYPE , "; corretto= false; }
        if(level=='') { campi_vuoti=campi_vuoti + " LEVEL , "; corretto= false; }
        if(array_only_cod_degree.length==0) {campi_vuoti=campi_vuoti + " DEGREE , "; corretto= false; }
-       if(array_only_id_co_supervisors.length==0) { campi_vuoti=campi_vuoti + " CO-SUPERVISORS , "; corretto= false; }
+       //if(array_only_id_co_supervisors.length==0) { campi_vuoti=campi_vuoti + " CO-SUPERVISORS , "; corretto= false; }
        if(selectedKeywordList.length==0) { campi_vuoti=campi_vuoti + " KEYWORDS , "; corretto= false; }
        if((expiration_date==null)) { campi_vuoti=campi_vuoti + " EXPIRATION DATE , "; corretto= false; }
        
