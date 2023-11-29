@@ -340,7 +340,7 @@ function EditProposalTeacher(props)
       
     <br /> <br /><br /><br /> <br /> <br />
 
-    <Typography variant="h5" align="center"> EDIT PROPOSAL OF THESIS  { proposalId }    </Typography> <br />
+    <Typography variant="h5" align="center"> EDIT PROPOSAL OF THESIS:  { title }    </Typography> <br />
     <Typography variant="h7"> TEACHER: {user.name} {user.surname} </Typography> <br />
     <Typography variant="h7"> ID: {user.id} </Typography> <br /> <br />
     

@@ -22,7 +22,6 @@ export default function AlertDialog({
   loading,
   isAppliedProposals,
 }) {
-  console.log(item);
   const {
     supervisorsInfo,
     supervisor_id,
@@ -47,8 +46,10 @@ export default function AlertDialog({
 
   useEffect(() => {
     applicationsAPI.getApplicationStudentsByProposalId(item.id)
-      .then((response) => {
-        setIsAppliedProposal(response.filter((o) => o.student_id === user.id).length > 0);
+      .then((res) => {
+        applicationsAPI.getStudentApplications().then((response) => {
+          setIsAppliedProposal(response.filter((o) => o.status === 'accepted').length > 0 || res.filter((o) => o.student_id === user.id).length > 0);
+        });
       }).catch(
         (err) => {console.log(err);}
       )

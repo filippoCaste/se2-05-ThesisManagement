@@ -57,21 +57,21 @@ function TeacherPage(props)
               }
             });
 
-            if(proposals){
-            const filteredProposal = proposals?.filter(row => row?.status === filterStatus);
-            //const notExpiredProposals = proposals.filter((p) => dayjs(p?.expiration_date).isAfter(currentDataAndTime));
-            const data = await createData(filteredProposal);
+            if(proposals) {
+              const filteredProposal = proposals?.filter(row => row?.status === filterStatus);
+              //const notExpiredProposals = proposals.filter((p) => dayjs(p?.expiration_date).isAfter(currentDataAndTime));
+              const data = await createData(filteredProposal);
 
-            data?.forEach(item => {
-              if (item.p.status === "archived") {
-                  item.students.forEach(student => {
-                    if (student.status === 'pending') {
-                      student.status = 'rejected';
-                    }
-                  });
-              }
-            });
-            setListProposals(data);
+              data?.forEach(item => {
+                if (item.p.status === "archived") {
+                    item.students.forEach(student => {
+                      if (student.status === 'pending') {
+                        student.status = 'rejected';
+                      }
+                    });
+                }
+              });
+              setListProposals(data);
             }
          }
       }
@@ -120,7 +120,8 @@ function TeacherPage(props)
                <Typography variant="subtitle1" fontWeight="bold">  Thesis Status  </Typography>
                <RadioGroup row value={filterStatus} onChange={(event) => setFilterStatus(event.target.value)}>
                   <FormControlLabel value="posted" control={<Radio />} label="Posted" />
-                  <FormControlLabel value="archived" control={<Radio />} label="Archived" />
+                  {/*<FormControlLabel value="archived" control={<Radio />} label="Archived" />*/}
+                  <FormControlLabel value="assigned" control={<Radio />} label="Assigned" />
                </RadioGroup>
             </FormControl>
         </Grid> 

@@ -20,8 +20,9 @@ import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
 function Row(props) {
   const { row, isEvenRow, deleteProposal, index, onClick,onClickApplication, archiveProposal,isSM } = props;
   const [open, setOpen] = React.useState(false);
-  const {handleMessage} = useContext(MessageContext);
+  const handleMessage = useContext(MessageContext);
   const [statusChangeLoading, setStatusChangeLoading] = React.useState(false);
+  const [proposalAccepted, setProposalAccepted] = React.useState(false);
 
   //more actions mobile version
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -48,6 +49,13 @@ function Row(props) {
 
       if (response) {
         studentsRow.status = status;
+        if (studentsRow.status === 'accepted') {
+          setProposalAccepted(true);
+          handleMessage("Application accepted successfully", "success");
+        }
+        else {
+          handleMessage("Application rejected successfully", "success");
+        }
       }
     } catch (error) {
       handleMessage("Error changing status:"+ error,"warning");
@@ -83,13 +91,13 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell style={{ width: '3.6%' }}>
-          <IconButton color='success' aria-label="edit" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"}>
+          <IconButton color='success' aria-label="edit" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"  || row.p.status === 'assigned' || proposalAccepted}>
             <ArchiveIcon />
           </IconButton>
         </TableCell>
         <TableCell style={{ width: '3%' }}> 
         <Link to={`/teacher/updateProposal/${row.p.id}`}>
-          <IconButton color='info' aria-label="edit" onClick={() => { }}>
+          <IconButton color='info' aria-label="edit" onClick={() => { }} disabled={proposalAccepted  || row.p.status === 'assigned'}>
             <EditIcon />
           </IconButton>
           </Link>
@@ -98,7 +106,8 @@ function Row(props) {
           <IconButton
             color="error"
             aria-label="delete"
-            onClick={() => deleteProposal(index)}>
+            onClick={() => deleteProposal(index)}
+            disabled={proposalAccepted || row.p.status === 'assigned'}>
             <DeleteIcon />
           </IconButton>
         </TableCell>
@@ -122,9 +131,9 @@ function Row(props) {
                     }}
                   >
                       <MenuItem style={{ color: "#007FFF" }} aria-label="show details" onClick={() => {onClick(row.p);handleClose();}}><DescriptionOutlinedIcon /></MenuItem>
-                      <MenuItem aria-label="archive" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"}><ArchiveIcon   color='success'/></MenuItem>
-                      <MenuItem aria-label="edit" onClick={() => {handleClose();}}><Link to={`/teacher/updateProposal/${row.p.id}`}><EditIcon color='info' /></Link></MenuItem>
-                      <MenuItem aria-label="delete" onClick={() => {deleteProposal(index);handleClose();}}><DeleteIcon color="error" /></MenuItem>
+                      <MenuItem aria-label="archive" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"  || row.p.status === 'assigned' || proposalAccepted}><ArchiveIcon   color='success'/></MenuItem>
+                      <MenuItem aria-label="edit" onClick={() => {handleClose();}} disabled={proposalAccepted  || row.p.status === 'assigned'}><Link to={`/teacher/updateProposal/${row.p.id}`}><EditIcon color='info' /></Link></MenuItem>
+                      <MenuItem aria-label="delete" onClick={() => {deleteProposal(index);handleClose();}} disabled={proposalAccepted || row.p.status === 'assigned'}><DeleteIcon color="error" /></MenuItem>
 
                       
                   </Menu>
