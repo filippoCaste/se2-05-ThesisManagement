@@ -79,6 +79,8 @@ export default function StickyHeadTable(props) {
         return 'secondary';
       case 'submitted':
         return 'primary';
+      case 'accepted':
+        return 'success';
       default:
         return 'action';
     }
