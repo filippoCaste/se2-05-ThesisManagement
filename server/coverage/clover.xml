@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1701253690397" clover="3.2.0">
-  <project timestamp="1701253690397" name="All files">
-    <metrics statements="565" coveredstatements="167" conditionals="245" coveredconditionals="72" methods="117" coveredmethods="19" elements="927" coveredelements="258" complexity="0" loc="565" ncloc="565" packages="5" files="15" classes="15"/>
+<coverage generated="1701259290009" clover="3.2.0">
+  <project timestamp="1701259290010" name="All files">
+    <metrics statements="565" coveredstatements="170" conditionals="249" coveredconditionals="78" methods="117" coveredmethods="19" elements="931" coveredelements="267" complexity="0" loc="565" ncloc="565" packages="5" files="15" classes="15"/>
     <package name="config">
       <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
       <file name="db.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/config/db.js">
@@ -11,7 +11,7 @@
       </file>
     </package>
     <package name="controllers">
-      <metrics statements="175" coveredstatements="122" conditionals="88" coveredconditionals="56" methods="17" coveredmethods="12"/>
+      <metrics statements="175" coveredstatements="123" conditionals="88" coveredconditionals="57" methods="17" coveredmethods="12"/>
       <file name="application.controller.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/controllers/application.controller.js">
         <metrics statements="41" coveredstatements="35" conditionals="21" coveredconditionals="20" methods="4" coveredmethods="3"/>
         <line num="5" count="1" type="stmt"/>
@@ -81,7 +81,7 @@
         <line num="10" count="1" type="stmt"/>
       </file>
       <file name="proposal.controller.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/controllers/proposal.controller.js">
-        <metrics statements="104" coveredstatements="66" conditionals="63" coveredconditionals="36" methods="8" coveredmethods="5"/>
+        <metrics statements="104" coveredstatements="67" conditionals="63" coveredconditionals="37" methods="8" coveredmethods="5"/>
         <line num="15" count="2" type="stmt"/>
         <line num="16" count="5" type="stmt"/>
         <line num="17" count="5" type="stmt"/>
@@ -100,10 +100,10 @@
         <line num="58" count="1" type="stmt"/>
         <line num="60" count="1" type="stmt"/>
         <line num="70" count="2" type="stmt"/>
-        <line num="71" count="4" type="stmt"/>
-        <line num="72" count="4" type="stmt"/>
-        <line num="75" count="4" type="cond" truecount="7" falsecount="1"/>
-        <line num="82" count="0" type="stmt"/>
+        <line num="71" count="3" type="stmt"/>
+        <line num="72" count="3" type="stmt"/>
+        <line num="75" count="3" type="cond" truecount="8" falsecount="0"/>
+        <line num="82" count="1" type="stmt"/>
         <line num="84" count="1" type="stmt"/>
         <line num="85" count="1" type="stmt"/>
         <line num="86" count="1" type="stmt"/>
@@ -112,7 +112,7 @@
         <line num="91" count="1" type="stmt"/>
         <line num="92" count="1" type="stmt"/>
         <line num="106" count="1" type="stmt"/>
-        <line num="109" count="4" type="stmt"/>
+        <line num="109" count="3" type="stmt"/>
         <line num="113" count="2" type="stmt"/>
         <line num="114" count="3" type="stmt"/>
         <line num="115" count="3" type="stmt"/>
@@ -604,27 +604,27 @@
       </file>
     </package>
     <package name="utils">
-      <metrics statements="18" coveredstatements="16" conditionals="15" coveredconditionals="14" methods="3" coveredmethods="3"/>
+      <metrics statements="18" coveredstatements="18" conditionals="19" coveredconditionals="19" methods="3" coveredmethods="3"/>
       <file name="utils.js" path="/home/giogiunta/se2-05-ThesisManagement/server/src/utils/utils.js">
-        <metrics statements="18" coveredstatements="16" conditionals="15" coveredconditionals="14" methods="3" coveredmethods="3"/>
+        <metrics statements="18" coveredstatements="18" conditionals="19" coveredconditionals="19" methods="3" coveredmethods="3"/>
         <line num="3" count="11" type="stmt"/>
         <line num="5" count="11" type="cond" truecount="2" falsecount="0"/>
         <line num="6" count="4" type="stmt"/>
         <line num="7" count="4" type="stmt"/>
         <line num="11" count="7" type="stmt"/>
         <line num="14" count="7" type="stmt"/>
-        <line num="28" count="13" type="stmt"/>
-        <line num="29" count="13" type="stmt"/>
-        <line num="30" count="11" type="cond" truecount="3" falsecount="1"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
+        <line num="28" count="12" type="stmt"/>
+        <line num="29" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="30" count="12" type="cond" truecount="4" falsecount="0"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
         <line num="34" count="11" type="stmt"/>
-        <line num="44" count="22" type="stmt"/>
-        <line num="45" count="21" type="stmt"/>
-        <line num="46" count="21" type="cond" truecount="5" falsecount="0"/>
+        <line num="44" count="20" type="stmt"/>
+        <line num="45" count="19" type="cond" truecount="2" falsecount="0"/>
+        <line num="46" count="19" type="cond" truecount="5" falsecount="0"/>
         <line num="47" count="5" type="stmt"/>
         <line num="48" count="5" type="stmt"/>
-        <line num="50" count="16" type="stmt"/>
+        <line num="50" count="14" type="stmt"/>
       </file>
     </package>
   </project>
