@@ -165,6 +165,21 @@ function AddProposalTeacher(props)
     updatedExternals.splice(index, 1);
     setListExternals(updatedExternals);
   };
+  const validateListExternals = (listExternals) => {
+    if (!listExternals || listExternals.length === 0) {
+      // If listExternals is not present or empty, consider it as valid
+      return true;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    let isValid = true;
+    listExternals.forEach((external, index) => {
+      if (!external.name || !external.surname || !external.email || !emailRegex.test(external.email)) {
+        // If any field is empty or email is in an invalid format
+        isValid = false;
+      }
+    });
+    return isValid;
+  };
   
 
     // USE EFFECT /////////////////////////////////////////////
@@ -218,7 +233,13 @@ function AddProposalTeacher(props)
        //if(array_only_id_co_supervisors.length==0) { campi_vuoti=campi_vuoti + " CO-SUPERVISORS , "; corretto= false; }
        if(selectedKeywordList.length==0) { campi_vuoti=campi_vuoti + " KEYWORDS , "; corretto= false; }
        if((expiration_date==null)) { campi_vuoti=campi_vuoti + " EXPIRATION DATE , "; corretto= false; }
-       
+
+      
+      const isListExternalsValid = validateListExternals(listExternals);
+      
+      if (!isListExternalsValid) {
+        campi_vuoti = campi_vuoti +" EXTERNAL WRONG FORMAT, "; corretto=false;
+      } 
 
        //messaggio errore campi vuoti
        if(corretto == false) 

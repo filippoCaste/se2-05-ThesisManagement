@@ -35,6 +35,7 @@ export default function AlertDialog({
     title_group,
     required_knowledge,
   } = item || {};
+  console.log(item);
   const mainSupervisor = supervisorsInfo?.find(
     (supervisor) => supervisor.id === supervisor_id
   );
