@@ -50,53 +50,31 @@ function TeacherPage(props)
   const fetchData = async () => {
     if (user) {
        const proposals = await API_Proposal.getProposalsByTeacherId(user.id);
-
+       
        proposals?.forEach(item => {
          if (dayjs(item.expiration_date).isBefore(currentDataAndTime.subtract(1, 'day'))) {
            item.status = "archived";
-           proposals?.forEach(item => {
-            if (dayjs(item.expiration_date).isBefore(currentDataAndTime.subtract(1, 'day'))) {
-              item.status = "archived";
-            }
-          });
+         }
+       });
 
-          if(proposals) {
-            const filteredProposal = proposals?.filter(row => row?.status === filterStatus);
-            //const notExpiredProposals = proposals.filter((p) => dayjs(p?.expiration_date).isAfter(currentDataAndTime));
-            const data = createData(filteredProposal);
+        const filteredProposal = proposals?.filter(row => row?.status === filterStatus);
 
-            data?.forEach(item => {
-              if (item.p.status === "archived") {
-                  item.students.forEach(student => {
-                    if (student.status === 'pending') {
-                      student.status = 'rejected';
-                    }
-                  });
-              }
-            });
-            setListProposals(data);
+        //const notExpiredProposals = proposals.filter((p) => dayjs(p?.expiration_date).isAfter(currentDataAndTime));
+        const data = await createData(filteredProposal);
+        data?.forEach(item => {
+          if (item.p.status === "archived") {
+              item.students.forEach(student => {
+                if (student.status === 'pending') {
+                  student.status = 'rejected';
+                }
+              });
           }
-         }
-       });
-
-       if(proposals){
-       const filteredProposal = proposals?.filter(row => row?.status === filterStatus);
-       //const notExpiredProposals = proposals.filter((p) => dayjs(p?.expiration_date).isAfter(currentDataAndTime));
-       const data = await createData(filteredProposal);
-
-       data?.forEach(item => {
-         if (item.p.status === "archived") {
-             item.students.forEach(student => {
-               if (student.status === 'pending') {
-                 student.status = 'rejected';
-               }
-             });
-         }
-       });
+        });
+        console.log(data)
        setListProposals(data);
        }
     }
-  }
+
 
    useEffect(() => { 
       fetchData();

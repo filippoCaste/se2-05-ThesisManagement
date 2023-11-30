@@ -96,6 +96,7 @@ function MainPage(props) {
           variant="contained"
           color="primary"
           onClick={() => navigate('/student/applications')}
+          sx={{mb: '2vh'}}
         >
           Browse Applied Proposals
         </Button>
