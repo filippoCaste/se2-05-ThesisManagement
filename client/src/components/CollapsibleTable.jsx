@@ -79,7 +79,7 @@ function Row(props) {
         <TableCell style={{ width: isSM ? '80%' : '25%' }} component="th" scope="row">{row.p.title}</TableCell>
         {!isSM ? 
         <>
-        <TableCell style={{ width: '10%' }}>{row.p.level === 'MSc' ? "Master of Science" : row.level === 'BSc' ? "Bachelor of Science" : ""}</TableCell>
+        <TableCell style={{ width: '10%' }}>{row.p.level === 'MSc' ? "Master of Science" : row.p.level === 'BSc' ? "Bachelor of Science" : ""}</TableCell>
         <TableCell style={{ width: '14%' }}>{row.p.title_degree}</TableCell>
         <TableCell style={{ width: '11%' }}>{dayjs(row.p.expiration_date).format("DD/MM/YYYY")}</TableCell>
         <TableCell style={{ width: '6%' }}>{row.p.status}</TableCell>
