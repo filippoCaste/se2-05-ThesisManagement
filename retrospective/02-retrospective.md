@@ -29,15 +29,12 @@ sections:
 
 <!-- > Please refine your DoD if required (you cannot remove items!) -->
 
-<!--
-Mainly the definition of DONE referred to passing the implemented unit tests as well as.
-On "Call the next user" and "See the next number" we instead focused on code review by 2 members of the team per story -->
 
 ### Detailed statistics
 
 | Story                  | # Tasks | Points | Hours est. | Hours actual |
 | ---------------------- | ------- | ------ | ---------- | ------------ |
-| #0                     | 23   |        |    37h15m   |    37h45m   |
+| #0                     | 23   |   -    |    37h15m   |    37h45m   |
 | Accept application |  3   |   2   |    4   |   4    |
 | Browse application decisions | 1     | 9   |   4h40m  |   
 | Browse proposals |  1    |   1   |   1   |   1h20m    |
@@ -72,26 +69,23 @@ On "Call the next user" and "See the next number" we instead focused on code rev
 ## ASSESSMENT
 
 - What caused your errors in estimation (if any)?
-> We decreased our error ratio, this means that in the trial sprint we had acquired more experience about estimation. Some errors are due to underestimation of the initialization of the repository, the setup of the web application and all the database by creating the structure and populate it with data.  
-> Some few differences between the estimation and the real situation come also from the fixes we needed to do in order to accomplish the clarifications in the FAQ.
+>Perhaps for this sprint we overestimated and didn't commit to enough stories. Seen that the previous one we worked more hours, we tried to have a more conservative approach to the number of hours, bumping up the number by a bit. 
+
 - What lessons did you learn (both positive and negative) in this sprint?
-> Communication is the most important part of the process. Organization should be prioritized.  
-> Creating a structured timeline that outlines tasks for team members to follow should be established before initiating any work. Prior to implementation, the team should reach a consensus on the API design.
+> We increased the number of SCRUM meetings, which resulted in better organization and discussion about each other works between us. We used a method of development that created bottlenecks, instead we should parallelize how each person works.
 
 - Which improvement goals set in the previous retrospective were you able to achieve?
->More scrum: they went as planned and it made clear an overview of the current workflow direction  
->Know what others do: it is better to define what the others do to not duplicate apis/tests or, more in general, part of the code.
-- Which ones you were not able to achieve? Why?
-> We organized better with the scrum meetings, but indeed it was not enough. We should try to organize real-life (i.e. not videocall) meetings and work coordinated.
-- Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
+> Defining everything before the start, at the sprint planning we took our time to discuss what was needed for the stories.
+> Doing more merges and fixing conflicts saved us time in the end of sprint, but still there should be more cooperation.
 
->1. Define everything before start, roles and the database architecture in the SCRUM planning phase.
->2. Some days before the demo, we have to do the merges, so that we have time to resolve all the conflicts that could appear.
->3. Team building to improve organization performance as well as team coordination.   
->4. Better communication among those working on their same assigned story. Making clear the timeline of each one could effectively make the difference to avoid any overlap of work by daily notification of the planned workflow.
+- Which ones you were not able to achieve? Why?
+> Still needs to improve communication. If we find bugs in the code open a GitHub issue and say to the others what we are going to work on.
+
+- Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
+> 1. Be up to date with the FAQ and telegram messages that could affect how we are working.
+> 2. Keep Readme file constantly updated with our code changes, so all of us can know the implementations faster.
+> 3. We should be more proactive towards helping the other.
 
 
 - One thing you are proud of as a Team!!  
-***All of us did his/her best, this is a good point!***  
-
->We are proud to have achieved some of the previous objectives, and we know we will be greater scrum by scrum!
+>At the end, we deliver a good product.
