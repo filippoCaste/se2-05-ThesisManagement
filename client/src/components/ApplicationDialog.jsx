@@ -40,7 +40,7 @@ const {
       if (response) {
         studentsRow.status = status;
         await props.fetchProposals();
-        handleMessage("Proposal "+ status+" successfully.", "warning");
+        handleMessage("Proposal "+ status+" successfully.", "success");
 
       }
     } catch (error) {
