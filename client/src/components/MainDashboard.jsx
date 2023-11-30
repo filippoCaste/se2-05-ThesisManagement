@@ -36,11 +36,12 @@ function MainDashboard(props) {
               selectedItem.id,
               user.id,
               dayjs().format('YYYY-MM-DD')
-            );
+            ).then(() => handleMessage('Successfully Applied', 'success'))
+            .catch((err) => handleMessage('Failed Applying '+ err, 'warning'));
 
             setOpenDialog(false);
             setLoading(false);
-            handleMessage('Successfully Applied', 'success');
+
           }}
           loading={loading}
           item={selectedItem}
