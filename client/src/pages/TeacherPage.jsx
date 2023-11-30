@@ -70,7 +70,7 @@ function TeacherPage(props)
               });
           }
         });
-        console.log(data)
+
        setListProposals(data);
        }
     }
