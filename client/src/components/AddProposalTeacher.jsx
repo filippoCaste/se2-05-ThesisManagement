@@ -3,11 +3,9 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
 import Typography from '@mui/material/Typography';
 import { MessageContext, UserContext } from '../Contexts';
-import { FormControl, InputLabel, Select, MenuItem, Input, Container, IconButton,  Paper } from '@mui/material';
+import { FormControl, Select, MenuItem, Input, Container, IconButton,  Paper } from '@mui/material';
 
 import proposalAPI from '../services/proposals.api';
 import API_Degrees from '../services/degrees.api';
@@ -21,7 +19,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import Box from '@mui/material/Box';
 
 
 import dayjs from 'dayjs' ;
@@ -261,12 +258,10 @@ function AddProposalTeacher(props)
       
     <br /> <br /><br /><br /> <br /> <br />
 
-    <Typography variant="h5" align="center"> INSERT A NEW PROPOSAL OF THESIS      </Typography> <br />
-    <Typography variant="h7"> TEACHER: {user.name} {user.surname} </Typography> <br />
-    <Typography variant="h7"> ID: {user.id} </Typography> <br /> <br />
-    
-    <Typography variant="h7"> GROUP NAME    : {user?.group_name}   </Typography> <br />
-    <Typography variant="h7"> COD DEPARTMENT: {user?.cod_department}         </Typography>
+       <Typography variant="h5" align="center"> INSERT A NEW THESIS PROPOSAL <br /> </Typography> <br />
+       <Typography variant="h6"> TEACHER: {user.name} {user.surname}  (d{user.id}) </Typography> <br />
+       <Typography variant="h7"> GROUP NAME    : {user?.group_name}   </Typography> <br />
+       <Typography variant="h7"> COD DEPARTMENT: {user?.cod_department}         </Typography>
 
     <br /> <br />
 
@@ -338,7 +333,7 @@ function AddProposalTeacher(props)
           <Paper elevation={3} style={{ padding: '16px' }}>
             <FormControl fullWidth>
               <Typography variant="h6" gutterBottom fontWeight="bold">
-                SELECT DEGREE  {level=='MSc'? "MASTER" : level=='BSc'? "BACHELOR" : ""}
+                ADD DEGREE  {level=='MSc'? "MASTER" : level=='BSc'? "BACHELOR" : ""}
               </Typography>
               <Select
                 labelId="degree-label"
@@ -364,9 +359,9 @@ function AddProposalTeacher(props)
               </Button>
 
               {/* Visualizza i co-supervisori selezionati */}
-              <Typography variant="h6" style={{ marginTop: '16px' }}>
-                Selected Degree
-              </Typography>
+              {selectedDegreeList.length!=0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
+                Added degrees
+              </Typography>}
               {selectedDegreeList.map((degree, index) => (
                 <Paper key={index} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
                   <Grid container alignItems="center">
@@ -400,7 +395,7 @@ function AddProposalTeacher(props)
       <Paper elevation={3} style={{ padding: '16px' }}>
         <FormControl fullWidth>
           <Typography variant="h6" gutterBottom fontWeight="bold">
-            SELECT CO-SUPERVISORS
+            ADD CO-SUPERVISORS
           </Typography>
           <Select
             labelId="cosup-label"
@@ -426,9 +421,9 @@ function AddProposalTeacher(props)
           </Button>
 
           {/* Visualizza i co-supervisori selezionati */}
-          <Typography variant="h6" style={{ marginTop: '16px' }}>
+          {selectedCoSupList.length != 0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
             Selected Co-Supervisors
-          </Typography>
+          </Typography>}
           {selectedCoSupList.map((coSupervisor, index) => (
             <Paper key={index} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
               <Grid container alignItems="center">
@@ -456,7 +451,7 @@ function AddProposalTeacher(props)
       <Paper elevation={3} style={{ padding: '16px' }}>
         <FormControl fullWidth>
           <Typography variant="h6" gutterBottom fontWeight="bold">
-            SELECT KEYWORDS
+            ADD KEYWORDS
           </Typography>
           <Select
             labelId="keyword-label"
@@ -493,9 +488,9 @@ function AddProposalTeacher(props)
           </Button>
 
           {/* Visualizza i co-supervisori selezionati */}
-          <Typography variant="h6" style={{ marginTop: '16px' }}>
-            Selected Keywords
-          </Typography>
+          {selectedKeywordList.length!=0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
+            Added keywords
+          </Typography>}
           {selectedKeywordList.map((keyword, index) => (
             <Paper key={index} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
               <Grid container alignItems="center">
@@ -522,7 +517,7 @@ function AddProposalTeacher(props)
     <Grid item xs={4}>
       <Paper elevation={3} style={{ padding: '16px' }}>
         <Typography variant="h6" gutterBottom fontWeight="bold">
-          SELECT EXTERNALS
+          ADD EXTERNAL CO-SUPERVISORS
         </Typography>
 
         {/* Input for a new external entry */}
@@ -562,9 +557,9 @@ function AddProposalTeacher(props)
         </Button>
 
         {/* Display selected external entries */}
-        <Typography variant="h6" style={{ marginTop: '16px' }}>
+        {listExternals.length != 0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
           Selected Externals
-        </Typography>
+        </Typography>}
         {listExternals.map((external, index) => (
         <Paper key={index} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
           <Grid container alignItems="center">

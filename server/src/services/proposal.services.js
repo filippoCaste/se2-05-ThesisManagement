@@ -243,13 +243,16 @@ export const postNewProposal = (
                     });
                   }
                 }
-              } else {
+              } 
+              // if(supervisor_obj.co_supervisors.length == 0) {
                 db.run(sqlSuper, [propId, supervisor_obj.supervisor_id, null, null], (err) => {
                   if(err) {
                     reject(err);
+                  } else {
+                    console.log("added supervisor")
                   }
                 });
-              }
+              // }
 
               if (supervisor_obj.external && supervisor_obj.external.length > 0) {
                 for (let ext of supervisor_obj.external) {
@@ -320,9 +323,9 @@ export const getProposalsByTeacherId = (teacherId) => {
   return new Promise((resolve, reject) => {
     const sql = "SELECT * " +
                 " FROM Proposals p, Groups g, Degrees d" +
-                " WHERE p.id IN(SELECT proposal_id FROM Supervisors WHERE supervisor_id = ? OR co_supervisor_id = ?) AND " +
+                " WHERE p.id IN(SELECT proposal_id FROM Supervisors WHERE supervisor_id = ?) AND " +
                 "g.cod_group = p.cod_group AND d.cod_degree = p.cod_degree ";
-    db.all(sql, [teacherId, teacherId], (err, rows) => {
+    db.all(sql, [teacherId], (err, rows) => {
       if (err) {
         return reject(err);
       }

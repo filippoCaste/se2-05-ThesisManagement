@@ -498,7 +498,7 @@ function EditProposalTeacher()
 
           {/* Visualizza i co-supervisori selezionati */}
           {selectedCoSupList.length != 0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
-            Selected Co-Supervisors
+            Added co-supervisors
           </Typography>}
           {selectedCoSupList.map((coSupervisor, index) => (
             <Paper key={index} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
@@ -565,7 +565,7 @@ function EditProposalTeacher()
 
           {/* Visualizza i co-supervisori selezionati */}
           {selectedKeywordList.length != 0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
-            Added Keywords
+            Added keywords
           </Typography>}
           {selectedKeywordList.map((keyword, index) => (
             <Paper key={index} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
