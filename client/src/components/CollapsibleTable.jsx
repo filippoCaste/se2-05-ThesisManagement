@@ -50,7 +50,7 @@ function Row(props) {
       if (response) {
         studentsRow.status = status;
         await fetchProposals();
-        handleMessage("Proposal "+ status+" successfully.", "warning");
+        handleMessage("Proposal "+ status+" successfully.", "success");
         if(status=='accepted'){
           setOpen(false);
         }

@@ -70,7 +70,7 @@ export const getProposalsFromDB = (
       LEFT JOIN Supervisors AS s ON s.proposal_id = p.id
       LEFT JOIN Degrees AS d ON p.cod_degree = d.cod_degree
       LEFT JOIN Groups AS g ON p.cod_group = g.cod_group
-      WHERE p.expiration_date >= date('now')
+      WHERE p.expiration_date >= date('now') AND p.status != 'accepted'
         ${levels}
         ${keywords}
         ${supervisor}
