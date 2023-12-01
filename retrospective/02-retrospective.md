@@ -34,9 +34,9 @@ sections:
 
 | Story                  | # Tasks | Points | Hours est. | Hours actual |
 | ---------------------- | ------- | ------ | ---------- | ------------ |
-| #0                     | 23   |   -    |    37h15m   |    37h45m   |
-| Accept application |  3   |   2   |    4   |   4    |
-| Browse application decisions | 1     | 9   |   4h40m  |   
+| #0                     | 23      |   -    |    37h15m  |    37h45m    |
+| Accept application     |  3      |   2    |    4       |   4          |
+| Browse application decisions |2  | 1      | 9          |   4h40m      |   
 | Browse proposals |  1    |   1   |   1   |   1h20m    |
 | Update proposal  |  3    |   2  |    12   |   14     |
 | Delete proposal  |  3  |  1 |  7  |  7h15m  |
