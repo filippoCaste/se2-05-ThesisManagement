@@ -121,7 +121,7 @@ function TeacherPage(props)
                <Typography variant="subtitle1" fontWeight="bold">  Thesis Status  </Typography>
                <RadioGroup row value={filterStatus} onChange={(event) => setFilterStatus(event.target.value)}>
                   <FormControlLabel value="posted" control={<Radio />} label="Posted" />
-                  {/*<FormControlLabel value="archived" control={<Radio />} label="Archived" />*/}
+                  <FormControlLabel value="archived" control={<Radio />} label="Archived" />
                   <FormControlLabel value="assigned" control={<Radio />} label="Assigned" />
                </RadioGroup>
             </FormControl>
