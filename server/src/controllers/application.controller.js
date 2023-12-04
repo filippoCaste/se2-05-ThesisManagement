@@ -1,6 +1,6 @@
 "use strict";
 import { changeStatus, createApplicationInDb, getApplicationsByProposalId, getApplicationsByStudentId } from "../services/application.services.js";
-import { getProposalInfoByID, getSupervisorByProposalId } from "../services/proposal.services.js";
+import { getProposalInfoByID } from "../services/proposal.services.js";
 import { getTeacherById } from "../services/teacher.services.js";
 import { sendMail } from "../utils/emailSender.js";
 import { isValidDateFormat } from "../utils/utils.js";
@@ -32,8 +32,6 @@ export const createApplication = async (req, res) => {
     await sendEmailToTeacher(application);
     return res.status(200).json(application);
   } catch (error) {
-    if (error.scheduledError != undefined)
-      return res.status(400).json({ error: error.scheduledError.message });
     return res.status(500).json({ error: error.message });
   }
 };
@@ -96,6 +94,6 @@ export const sendEmailToTeacher = async (application) => {
       `A new application has been submitted for your proposal with title:\n${proposal.title}`
     );
   } catch (error) {
-   console.log(error); 
+    console.log(error); 
   }
 };

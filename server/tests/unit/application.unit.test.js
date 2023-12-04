@@ -192,6 +192,25 @@ describe("sendEmailToTeacher", () => {
 
     expect(sendMail).not.toHaveBeenCalled();
   });
+
+  test("should log error", async () => {
+    const mockApplication = {
+      proposal_id: 123,
+      student_id: 321,
+      submission_date: "2023-05-15",
+    };
+    const mockTeacher = {
+      email: "email@example.com",
+    };
+    proposals.getProposalInfoByID.mockRejectedValue(new Error("error"));
+    console.log = jest.fn();
+
+    await controllers.sendEmailToTeacher(mockApplication, mockTeacher);
+
+    expect(teacher.getTeacherById).not.toHaveBeenCalled();
+    expect(sendMail).not.toHaveBeenCalled();
+    expect(console.log).toHaveBeenCalled();
+  });
 });
 
 describe('getApplicationsProposalId', () => {
