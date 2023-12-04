@@ -74,7 +74,7 @@ function AddProposalTeacher(props)
   const [notes,setNotes]=useState('');
   const [type,setType]=useState('');
   const [level,setLevel]=useState('');
-  const [expiration_date,setExpirationDate]=useState(currentDataAndTime? currentDataAndTime:  dayjs());
+  const [expirationDate,setExpirationDate]=useState(currentDataAndTime? currentDataAndTime:  dayjs());
 
    //DEGREE A TENDINA
    const [selectedDegree, setSelectedDegree] = useState('');
@@ -232,7 +232,7 @@ function AddProposalTeacher(props)
        if(array_only_cod_degree.length==0) {campi_vuoti=campi_vuoti + " DEGREE , "; corretto= false; }
        //if(array_only_id_co_supervisors.length==0) { campi_vuoti=campi_vuoti + " CO-SUPERVISORS , "; corretto= false; }
        if(selectedKeywordList.length==0) { campi_vuoti=campi_vuoti + " KEYWORDS , "; corretto= false; }
-       if((expiration_date==null)) { campi_vuoti=campi_vuoti + " EXPIRATION DATE , "; corretto= false; }
+       if((expirationDate==null)) { campi_vuoti=campi_vuoti + " EXPIRATION DATE , "; corretto= false; }
 
       
       const isListExternalsValid = validateListExternals(listExternals);
@@ -252,7 +252,7 @@ function AddProposalTeacher(props)
          if(corretto==true)
          {
 
-          let formatted_expiration = expiration_date.format("YYYY-MM-DD");
+          let formatted_expiration = expirationDate.format("YYYY-MM-DD");
           let cod_group= user.cod_group;
           let supervisors_obj={"supervisor_id":  selectedSupervisor, 
             "co_supervisors":  array_only_id_co_supervisors, "external": listExternals};
@@ -318,7 +318,7 @@ function AddProposalTeacher(props)
                   <Typography variant="subtitle1" fontWeight="bold"> EXPIRATION DATE </Typography>
                   <DatePicker
                     format="DD/MM/YYYY"
-                    value={expiration_date}
+                    value={expirationDate}
                     minDate={dayjs(currentDataAndTime)}
                     disablePast
                     onChange={(newDate) => { setExpirationDate(newDate); }}

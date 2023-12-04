@@ -3,7 +3,7 @@ import theme from './theme.jsx';
 import dayjs from 'dayjs';
 import { ThemeProvider } from '@mui/material/styles';
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
 import AppNavBar from './components/AppBar.jsx';
