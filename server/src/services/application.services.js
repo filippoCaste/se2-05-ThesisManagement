@@ -234,4 +234,25 @@ export const getApplicationsByStudentId = (studentId) => {
   });
 };
 
+export const getStudentEmailByApplicationId = (applicationId) => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      SELECT Students.email
+      FROM Applications
+      JOIN Students ON Applications.student_id = Students.id
+      WHERE Applications.application_id = ?;
+    `;
 
+    db.get(sql, [applicationId], (err, row) => {
+      if (err) {
+        return reject(err);
+      }
+
+      if (row && row.email) {
+        resolve(row.email);
+      } else {
+        reject("No email were found"); // Return null if email not found for the applicationId
+      }
+    });
+  });
+};

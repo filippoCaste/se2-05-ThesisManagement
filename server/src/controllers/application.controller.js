@@ -1,7 +1,7 @@
 "use strict";
 import { changeStatus, createApplicationInDb, getApplicationsByProposalId, getApplicationsByStudentId } from "../services/application.services.js";
 import { isValidDateFormat } from "../utils/utils.js";
-
+import {sendNotificationApplicationDecisionByApplicationId} from "../services/notification.services.js";
 export const createApplication = async (req, res) => {
   const { proposal_id, student_id, submission_date } = req.body;
   if (!proposal_id) {
@@ -65,8 +65,8 @@ export const changeStatusOfApplication = async (req, res) => {
       res.status(400).json({error: "Incorrect fields"})
     }
 
-    await changeStatus(applicationId, req.user.id, status);
-
+    //await changeStatus(applicationId, req.user.id, status);
+    await sendNotificationApplicationDecisionByApplicationId(applicationId,"Application" + applicationId +"got" + status);
     res.status(204).send();
 
   } catch(err) {
@@ -79,3 +79,4 @@ export const changeStatusOfApplication = async (req, res) => {
     }
   }
 }
+
