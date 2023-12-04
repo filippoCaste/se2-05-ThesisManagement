@@ -12,11 +12,14 @@ import Button from '@mui/material/Button';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import '../App.css';
 import Badge from '@mui/material/Badge';
+import TableSortLabel  from '@mui/material/TableSortLabel';
+import { Box } from '@mui/material';
+import { visuallyHidden } from '@mui/utils';
 
 export default function StickyHeadTable(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [orderBy, setOrderBy] = React.useState('');
+  const [orderBy, setOrderBy] = React.useState('Title');
   const [order, setOrder] = React.useState('asc');
   const { proposals, isAppliedProposals,drawerWidth } = props;
 
@@ -116,21 +119,6 @@ export default function StickyHeadTable(props) {
     return proposals;
   }, [proposals, orderBy, order]);
 
-  const renderSortArrow = (columnId, columnName) => {
-    if (columnId === 'button') {
-      return null;
-    }
-    return (
-      <span>
-        {columnName}
-        {orderBy === columnId && (
-          <span style={{ marginLeft: '5px' }}>
-            {order === 'asc' ? '↑' : '↓'}
-          </span>
-        )}
-      </span>
-    );
-  };
 
   const renderNoProposalsMessage = () => {
     if (sortedProposals.length === 0) {
@@ -153,21 +141,34 @@ export default function StickyHeadTable(props) {
     <Paper className="paperContainer" >
       <TableContainer className="tableContainer">
         <Table stickyHeader aria-label="sticky table" >
-          <TableHead>
-            <TableRow className="headerRow">
-              {columns.map((column,index) => (
-                <TableCell
-                  key={index}
-                  align={column.align}
-                  style={{ width: column.maxWidth }}
-                  className="tableCell"
-                  onClick={() => handleRequestSort(column.id)}
+        <TableHead>
+          <TableRow className="headerRow">
+            {columns.map((column, index) => (
+              <TableCell
+                key={index}
+                align={column.align}
+                style={{ width: column.maxWidth }}
+                sortDirection={orderBy === column.id ? order : false}
+              >
+                {column.label!= "Apply" ? 
+                <TableSortLabel
+                  active="true"
+                  direction={orderBy === column.id ? order : 'asc'}
+                  onClick={() => handleRequestSort(column.id)} // Utilizza una funzione di callback
                 >
-                  <b>{renderSortArrow(column.id, column.label)}</b>
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
+                  {column.label}
+                  {orderBy === column.id ? (
+                    <Box component="span" sx={visuallyHidden}>
+                      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                    </Box>
+                  ) : null}
+                </TableSortLabel>
+                : <>{column.label}</>}
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+
           <TableBody>
             {renderNoProposalsMessage()}
             {sortedProposals.map((row, index) => (
