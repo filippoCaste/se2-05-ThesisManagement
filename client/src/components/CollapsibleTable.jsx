@@ -15,6 +15,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
+import TableSortLabel  from '@mui/material/TableSortLabel';
 
 
 function Row(props) {
@@ -253,29 +254,102 @@ function CollapsibleTable(props) {
   const {listProposals,onClick,deleteProposal, archiveProposal,onClickApplication, fetchProposals} = props;
   const theme = useTheme();
   const isSM = useMediaQuery(theme.breakpoints.down('md'));
+
+
+   ///SORTING
+   const [orderBy, setOrderBy] = React.useState('Title');
+   const [order, setOrder] = React.useState('asc');
+ 
+   const handleRequestSort = (property) => {
+     const isAsc = orderBy === property && order === 'asc';
+     setOrder(isAsc ? 'desc' : 'asc');
+     setOrderBy(property);
+   };
+ 
+   const sortedProposals = React.useMemo(() => {
+     if (orderBy && order) {
+
+       return listProposals.slice().sort((a, b) => {
+         const aValue = a.p[orderBy];
+         const bValue = b.p[orderBy];
+         if (order === 'asc') {
+           return aValue < bValue ? -1 : 1;
+         } else {
+           return aValue > bValue ? -1 : 1;
+         }
+       });
+     }
+     return listProposals;
+   }, [listProposals, orderBy, order]);
+ 
+ 
+
   return (
     <Table aria-label="collapsible table" >
       <TableHead>
         <TableRow>
           <TableCell style={{ width: '5%' }} />
-          <TableCell style={{ width: isSM ? "80%": "25%"}}><b>Title</b></TableCell>
+          <TableCell style={{ width: isSM ? "80%": "25%"}} sortDirection={orderBy === "title" ? order : false}>
+            
+          <TableSortLabel
+                  active={true}
+                  direction={orderBy === "title" ? order : 'asc'}
+                  onClick={() => handleRequestSort("title")} // Utilizza una funzione di callback
+                >
+            <b>Title</b>
+            </TableSortLabel>
+            
+            </TableCell>
           {!isSM? 
           <>
-          <TableCell style={{ width: '10%' }}><b>Level</b></TableCell>
-          <TableCell style={{ width: '14%' }}><b>Title Degree</b></TableCell>
-          <TableCell style={{ width: '11%' }}><b>Expiration Date</b></TableCell>
-          <TableCell style={{ width: '6%' }}><b>Status</b></TableCell>
+          <TableCell style={{ width: '10%' }} sortDirection={orderBy === "level" ? order : false}>
+            <TableSortLabel
+              active={true}
+              direction={orderBy === "level" ? order : 'asc'}
+              onClick={() => handleRequestSort("level")}
+            >
+              <b>Level</b>
+            </TableSortLabel>
+          </TableCell>
+          <TableCell style={{ width: '14%' }} sortDirection={orderBy === "title_degree" ? order : false}>
+            <TableSortLabel
+              active={true}
+              direction={orderBy === "title_degree" ? order : 'asc'}
+              onClick={() => handleRequestSort("title_degree")}
+            >
+              <b>Title Degree</b>
+            </TableSortLabel>
+          </TableCell>
+          <TableCell style={{ width: '11%' }} sortDirection={orderBy === "expiration_date" ? order : false}>
+            <TableSortLabel
+              active={true}
+              direction={orderBy === "expiration_date" ? order : 'asc'}
+              onClick={() => handleRequestSort("expiration_date")}
+            >
+              <b>Expiration Date</b>
+            </TableSortLabel>
+          </TableCell>
+          <TableCell style={{ width: '6%' }} sortDirection={orderBy === "status" ? order : false}>
+            <TableSortLabel
+              active={true}
+              direction={orderBy === "status" ? order : 'asc'}
+              onClick={() => handleRequestSort("status")}
+            >
+              <b>Status</b>
+            </TableSortLabel>
+          </TableCell>
           <TableCell style={{ width: '3.6%' }}><b>See details</b></TableCell>
           <TableCell style={{ width: '3.6%' }}><b>Archive</b></TableCell>
           <TableCell style={{ width: '3.6%' }}><b>Edit</b></TableCell>
           <TableCell style={{ width: '3.6%' }}><b>Delete</b></TableCell>
+
           </>
           :<><TableCell style={{ width: '15%' }}><b>Actions</b></TableCell></> }
         </TableRow>
       </TableHead>
       <TableBody>
-        {listProposals.length > 0 ? (
-          listProposals.map((row, index) => (
+        {sortedProposals.length > 0 ? (
+          sortedProposals.map((row, index) => (
             <Row key={index} row={row} isEvenRow={index % 2 === 0} isSM={isSM} onClick={onClick} onClickApplication={onClickApplication} index={index} deleteProposal={deleteProposal} archiveProposal={archiveProposal} fetchProposals={fetchProposals} />
           ))
         ) : (
