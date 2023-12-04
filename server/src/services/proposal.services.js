@@ -138,17 +138,28 @@ export const getKeyWordsFromDB = () => {
 
 export const getProposalInfoByID = (proposal_id) => {
   return new Promise((resolve, reject) => {
-    const proposalSearchSQL = `SELECT id,
-          title, 
-          description, 
-          expiration_date, 
-          cod_degree, 
-          level, 
-          notes, 
-          cod_group, 
-          required_knowledge 
-      FROM Proposals 
-      WHERE id = ?;`;
+    const proposalSearchSQL = `SELECT p.id,
+        p.title,
+        p.description,
+        p.expiration_date,
+        p.cod_degree,
+        d.title_degree,
+        p.level,
+        p.notes,
+        p.cod_group,
+        g.title_group,
+        p.required_knowledge,
+        s.supervisor_id,
+        s.co_supervisor_id,
+        s.external_supervisor,
+        group_concat(DISTINCT k.name) as keyword_names
+      FROM Proposals as p
+      LEFT JOIN ProposalKeywords AS pk ON p.id = pk.proposal_id
+      LEFT JOIN Keywords AS k ON k.id = pk.keyword_id
+      LEFT JOIN Supervisors AS s ON s.proposal_id = p.id
+      LEFT JOIN Degrees AS d ON p.cod_degree = d.cod_degree
+      LEFT JOIN Groups AS g ON p.cod_group = g.cod_group
+      WHERE p.id = ?;`;
     db.all(proposalSearchSQL, [proposal_id], (err, rows) => {
       if (err) {
         return reject(err);
