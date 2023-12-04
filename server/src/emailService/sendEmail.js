@@ -9,13 +9,12 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: true,
   auth: {
-    type: "login", // default
     user: process.env.USER,
-    //pass: process.env.APP_PASSWORD,
-    clientId: process.env.OAUTH_CLIENT_ID,
-    clientSecret: process.env.OAUTH_CLIENT_SECRET,
-    refreshToken: process.env.OAUTH_REFRESH_TOKEN,
-    accessToken: process.env.OAUTH_ACCESS_TOKEN
+    pass: process.env.APP_PASSWORD,
+    //clientId: process.env.OAUTH_CLIENT_ID,
+    //clientSecret: process.env.OAUTH_CLIENT_SECRET,
+    //refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+    //accessToken: process.env.OAUTH_ACCESS_TOKEN
   }
 });
 
