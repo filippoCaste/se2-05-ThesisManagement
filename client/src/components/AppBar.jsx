@@ -107,7 +107,7 @@ export default function PrimarySearchAppBar(props) {
 
 
   return (
-    <Box position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, overflow:"none", top:0, left:0, height:"15vh"}}>
+    <Box position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, top:0, left:0, height:"15vh"}}>
       <AppBar sx={{backgroundColor:"#003049"}}>
         <Toolbar  >
           <IconButton

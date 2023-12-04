@@ -152,7 +152,7 @@ export default function StickyHeadTable(props) {
               >
                 {column.label!= "Apply" ? 
                 <TableSortLabel
-                  active="true"
+                  active={true}
                   direction={orderBy === column.id ? order : 'asc'}
                   onClick={() => handleRequestSort(column.id)} // Utilizza una funzione di callback
                 >
