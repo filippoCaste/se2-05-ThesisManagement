@@ -10,6 +10,7 @@ import { MessageContext, UserContext } from '../Contexts';
 import CollapsibleTable from '../components/CollapsibleTable';
 import AlertDialog from '../components/AlertDialog';
 import dayjs from 'dayjs';
+import ConfirmationDialog from '../components/ConfirmationDialog';
 
 function TeacherPage(props)
 {  
@@ -25,6 +26,11 @@ function TeacherPage(props)
    const [openDialogApplication, setOpenDialogApplication] = useState(false);
    const [selectedItem, setSelectedItem] = useState(null);
    const [loading, setLoading] = useState(false);
+
+   const [confirmation, setConfirmation] = useState(false);
+   const [index, setIndex] = useState(null); // used for the confirmation procedure
+   const [message, setMessage] = useState(null);
+   const [operation, setOperation] = useState(null);
   
   async function createRow(p) {
     const students = await API_Applications.getApplicationStudentsByProposalId(
@@ -80,23 +86,66 @@ function TeacherPage(props)
       fetchData();
    }, [user, currentDataAndTime, filterStatus]);
 
-  async function deleteProposal(index) {
-    const acceptDelete = confirm('Are you sure to delete this proposal?');
-    if (!acceptDelete) {
-      return;
-    }
-    await API_Proposal.deleteProposal(listProposals[index].p.id);
-    setListProposals(listProposals.filter((_, i) => i !== index));
-    handleMessage("Deleted proposal", "success");
+  async function deleteProposal(ind) {
+    setIndex(ind);
+    setMessage("Are you sure you want to delete this thesis proposal?");
+    setOperation('delete');
+    setConfirmation(true);
   }
-  async function archiveProposal(index) {
-    const acceptArchive = confirm('Are you sure to archive this proposal?');
-    if (!acceptArchive) {
-      return;
+  async function archiveProposal(ind) {
+    setIndex(ind);
+    setMessage("Are you sure you want to archive this thesis proposal?");
+    setOperation('archive');
+  }
+
+  const customConfirmation = (message, operation) => {
+    return (
+      operation.toLowerCase()==='delete' 
+                          ? <ConfirmationDialog message={message} operation={operation} onClose={handleCloseDialog} open={confirmation} onConfirm={handleDeleteConfirmation} />
+                          : <ConfirmationDialog message={message} operation={operation} onClose={handleCloseDialog} open={confirmation} onConfirm={handleArchiveConfirmation} />
+    )
+  }
+
+  const handleCloseDialog = () => {
+    setConfirmation(false);
+  }
+
+  const handleDeleteConfirmation = async (result) => {
+    if (result) {
+      try {
+        await API_Proposal.deleteProposal(listProposals[index].p.id);
+        setListProposals(listProposals.filter((_, i) => i !== index));
+      } catch(err) {
+        console.error('Error deleting proposal:', err);
+        handleMessage("Error deleting proposal", "error");
+      } finally {
+        setIndex(null);
+        setOperation(null);
+        setMessage(null);
+        handleMessage("Proposal successfully deleted", "success");
+      }
+    } else {
+      setConfirmation(false);
     }
-    await API_Proposal.archivedProposal(listProposals[index].p.id);
-    setListProposals(listProposals.filter((_, i) => i !== index));
-    handleMessage("Archived proposal", "success");
+  }
+
+  const handleArchiveConfirmation = async (result) => {
+    if (result) {
+      try {
+        await API_Proposal.archivedProposal(listProposals[index].p.id);
+        setListProposals(listProposals.filter((_, i) => i !== index));
+      } catch(err) {
+        console.error('Error archiving proposal:', err);
+        handleMessage("Error archiving proposal", "error");
+      } finally {
+        setIndex(null);
+        setOperation(null);
+        setMessage(null);
+        handleMessage("Proposal successfully archived", "success");
+      }
+    } else {
+      setConfirmation(false);
+    }
   }
 
   return (
@@ -127,7 +176,8 @@ function TeacherPage(props)
             </FormControl>
         </Grid> 
         
-
+        {confirmation && customConfirmation(message, operation)}
+        
         <CollapsibleTable
           listProposals={ listProposals }
           fetchProposals={fetchData}

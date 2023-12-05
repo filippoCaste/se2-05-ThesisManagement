@@ -579,6 +579,12 @@ Official palette:
 
 #### Components
 - `AlertDialog.jsx`: Is a popup window that displays the information about a thesis or a student.
+- `ConfirmationDialog.jsx`: Is a popup window that asks for confirmation. To correctly work, it is necessary to pass ALL the following properties:
+  - `open`: boolean;
+  - `onClose`: what to do when the popup is closed;
+  - `onConfirm`: returns `true` if the operation is *completed*, `false` otherwise;
+  - `message`: the message to display ("Are you sure you want to...");
+  - `operation`: the operation to be performed ("send", "apply", ...) [this text is displayed in the button label];
 
 ### Student
 - `MainPage.jsx`: Is the main page of the student. It is the one displayed right after logging in.

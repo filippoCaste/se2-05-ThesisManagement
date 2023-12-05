@@ -3,37 +3,54 @@ import { UserContext } from '../Contexts';
 import { useNavigate } from 'react-router-dom';
 import { Alert, Button, Grid, IconButton, TextField, Tooltip, Typography } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
+import ConfirmationDialog from './ConfirmationDialog';
 
 function ProposalStudent() {
 	const navigate = useNavigate();
 	const { user } = useContext(UserContext);
 	const [errorMsg, setErrorMsg] = useState('');
 	const [infoMsg, setInfoMsg] = useState('');
+	const [confirmation, setConfirmation] = useState(false);
 
-	const handleSubmit = (proposalObj) => {
-		console.log(proposalObj)
-		const { title, type, description, notes, teacherEmail } = proposalObj;
-		if (title == '' || type == '' || description == '' || teacherEmail == '') {
-			// the form is not completely filled
-			setErrorMsg("Please fill all mandatory fields");
-		} else {
-			// call the api
+	const [title, setTitle] = useState('');
+	const [description, setDescription] = useState('');
+	const [notes, setNotes] = useState('');
+	const [type, setType] = useState('');
+	const [teacherEmail, setTeacherEmail] = useState('');
 
-			// display info
-			setInfoMsg("The request has been correctly sent.\nYou are being redirected to the theses proposals page.");
-			// set timeout
-			setTimeout(() => {
-				navigate('/student');
-			}, 3000);
-			// navigate back
-		}
-	}
+	const handleMessage = useContext(MessageContext);
 
 	const handleCancel = () => {
-		setInfoMsg("Cancel request.\nYou are being redirected to the theses proposals page.");
-		setTimeout(() => {
+		navigate('/student');
+	}
+
+	const handleOpenDialog = () => {
+		if (title == '' || type == '' || description == '' || teacherEmail == '') {
+			// the form is not completely filled
+			setErrorMsg("Please fill all mandatory fields:\n" + (title == '' ? "\t- title\n" : '\n') + (type == '' ? "\t- type\n" : '\n') + (description == '' ? "\t- description\n" : '\n') + (teacherEmail== '' ? "\t- teacher contact\n" : ''));
+		} else {
+			setConfirmation(true);
+		}
+	}
+	const handleCloseDialog = () => {
+		setConfirmation(false);
+	}
+
+	const handleConfirmation = (result) => {
+		if (result) {
+			// User clicked "Confirm"
+			// call the api
+			
+			// display info
+			// setInfoMsg("The request has been correctly sent.\nYou are being redirected to the theses proposals page.");
+			console.log("Successfully executed")
+
+			handleMessage("Thesis request sent successfully", "success");
 			navigate('/student');
-		}, 3000);	
+			// navigate back
+		} else {
+			setConfirmation(false);
+		}
 	}
 
 	return (
@@ -43,15 +60,23 @@ function ProposalStudent() {
 				<Grid item xs={12} sx={{ mt: '2vh', mx: '4vh' }}>
 
 					<h1 align='center'>Request thesis work</h1>
+
+					{confirmation && <ConfirmationDialog operation={"Send"} message={"Are you sure you want to send this thesis request?"} 
+					open={confirmation}
+        			onClose={handleCloseDialog}
+        			onConfirm={handleConfirmation}
+      				/> }
+
+					<InsertNewProposalStudent user={user} handleOpenDialog={handleOpenDialog} handleCancel={handleCancel} 
+						title={title} description={description} type={type} notes={notes} teacherEmail={teacherEmail}
+						setTitle={setTitle} setDescription={setDescription} setType={setType} setNotes={setNotes} setTeacherEmail={setTeacherEmail}
+						errorMsg={errorMsg} setErrorMsg={setErrorMsg}
+					/> <br/>
+					
 					{infoMsg && <Alert variant='outlined' color='info' onClose={() => setInfoMsg('')}>
 						{infoMsg}
 					</Alert>}
 
-					{errorMsg && <Alert variant='filled' color='error' onClose={() => setErrorMsg('')}>
-						{errorMsg}
-					</Alert>}
-
-					<InsertNewProposalStudent user={user} handleSubmit={handleSubmit} handleCancel={handleCancel} />
 				</Grid>
 				<br/>
 			</Grid>
@@ -60,13 +85,9 @@ function ProposalStudent() {
 }
 
 function InsertNewProposalStudent(props) {
-	const { user, handleSubmit, handleCancel } = props;
-
-	const [title, setTitle] = useState('');
-	const [description, setDescription] = useState('');
-	const [notes, setNotes] = useState('');
-	const [type, setType] = useState('');
-	const [teacherEmail, setTeacherEmail] = useState('');
+	const { user, handleOpenDialog, handleCancel } = props;
+	const { title, description, notes, type, teacherEmail, errorMsg } = props;
+	const { setTitle, setDescription, setNotes, setType, setTeacherEmail, setErrorMsg } = props;
 
 	return (
 			<form>
@@ -146,12 +167,19 @@ function InsertNewProposalStudent(props) {
 						value={user?.email} />
 					</Grid>
 				</Grid>
+
+				<br />
+
+				{errorMsg && <Alert variant='filled' color='error' onClose={() => setErrorMsg('')}>
+					{errorMsg}
+				</Alert>}
+
 				
 				<br /><br />
 				<Button
 					variant='contained'
 					color='primary'
-					onClick={() => handleSubmit({ title, type, description, notes, teacherEmail })}
+				onClick={() => handleOpenDialog()}
 				>
 					SUBMIT / SEND REQUEST
 				</Button>
