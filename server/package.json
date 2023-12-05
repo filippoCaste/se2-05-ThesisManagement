@@ -26,10 +26,13 @@
     "fs": "^0.0.1-security",
     "jest": "^29.7.0",
     "jest-extended": "^4.0.2",
+    "mime-types": "^2.1.35",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
     "npx": "^10.2.2",
     "passport": "^0.6.0",
     "passport-saml": "^3.2.4",
+    "path": "^0.12.7",
     "selenium-webdriver": "^4.15.0",
     "sqlite3": "^5.1.6",
     "supertest": "^6.3.3"
