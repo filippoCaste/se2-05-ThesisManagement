@@ -259,94 +259,105 @@ function ProposalTeacher(props)
       },[])
 
 
-    //HANDLER SUBMIT
+  //VALIDATE INPUT FORM
+  function validateInput(title, description, type, level, selectedDegreeList, 
+                          selectedKeywordList, expirationDate) 
+  {
+    let errors = [];
+
+    if (!title) errors.push("TITLE");
+    if (!description) errors.push("DESCRIPTION");
+    if (!type) errors.push("TYPE");
+    if (!level) errors.push("LEVEL");
+    if (selectedDegreeList.length === 0) errors.push("DEGREE");
+    if (selectedKeywordList.length === 0) errors.push("KEYWORDS");
+    if (!expirationDate) errors.push("EXPIRATION DATE");
+
+    return errors;
+  }
+  
+  function displayErrorMessage(errors) 
+  {
+    if (errors.length > 0) 
+    {
+        const errorMessage = "ATTENTION: " + errors.join(", ") + " EMPTY";
+        handleMessage(errorMessage, "warning");
+        return true; // Input is not correct
+    }
+    return false; // Input is correct
+  }
+
+
+
+  //HANDLER SUBMIT
   function handleSubmit(event) 
   {
     event.preventDefault();
 
-       
-       ////////controllo input ////////////////////////
-       let corretto= true;
+    let array_only_cod_degree= selectedDegreeList.map(d=>d.cod_degree);
+    let array_only_id_co_supervisors= selectedCoSupList.map(co=>co.teacher_id);
 
-       let campi_vuoti=' ';
-       let array_only_cod_degree= selectedDegreeList.map(d=>d.cod_degree);
-       let array_only_id_co_supervisors= selectedCoSupList.map(co=>co.teacher_id);
+    let inputErrors =
+      validateInput(title,description,type,level, array_only_cod_degree, selectedKeywordList, expirationDate);
 
-       if(title=='') { campi_vuoti=campi_vuoti + " TITLE , "; corretto= false; }
-       if(description=='') {campi_vuoti=campi_vuoti + " DESCRIPTION , "; corretto= false; }
-       if(type=='') { campi_vuoti=campi_vuoti + " TYPE , "; corretto= false; }
-       if(level=='') { campi_vuoti=campi_vuoti + " LEVEL , "; corretto= false; }
-       if(array_only_cod_degree.length==0) {campi_vuoti=campi_vuoti + " DEGREE , "; corretto= false; }
-       if(selectedKeywordList.length==0) { campi_vuoti=campi_vuoti + " KEYWORDS , "; corretto= false; }
-       if((expirationDate==null)) { campi_vuoti=campi_vuoti + " EXPIRATION DATE , "; corretto= false; }
+      
+    if(displayErrorMessage(inputErrors) == true) 
+    {
+      return;
+    }
 
-  
-
-       //messaggio errore campi vuoti
-       if(corretto == false) 
-       {
-           handleMessage("ATTENTION: "+campi_vuoti+" EMPTY ", "warning");
-       }
-
-       
-         ////////SE INPUT CORRETTO //////////////////////////////////
-         if(corretto==true)
-         {
-
-          let formatted_expiration = expirationDate.format("YYYY-MM-DD");
-          let cod_group= user.cod_group;
-          let supervisors_obj={"supervisor_id":  selectedSupervisor, 
-            "co_supervisors":  array_only_id_co_supervisors, "external": listExternals};
-
-          //MESSAGGIO DI SICUREZZA
-                           
-          let acceptMessage={"add": 'Are you sure to create this new thesis ?',
-                            "edit": 'Are you sure to edit this thesis ?',
-                            "copy": 'Are you sure to create this new thesis ?'
-                            } 
-
-          const accept = confirm(acceptMessage[typeOperation]);
-          if (!accept) {
-            return;
-          }  
-          
-
-          //ADD PROPOSAL  
-          if(typeOperation=="add")
-          {
-            proposalAPI.postProposal(title,type,description,level, formatted_expiration,notes,
-                required_knowledge, array_only_cod_degree,cod_group,supervisors_obj,selectedKeywordList)
-                .then(navigate("/teacher"))
-                .catch((err) => handleMessage(err,"warning"));
-            
-          }
-
-          //UPDATE PROPOSAL  
-          if(typeOperation=="edit")
-          {
-
-            proposalAPI.updateProposal(proposalId,title,type,description,level,
-                formatted_expiration,notes, required_knowledge, array_only_cod_degree, cod_group,
-                supervisors_obj, selectedKeywordList)
-                .then(() => {navigate("/teacher")})
-                .catch((err) => handleMessage(err,"warning"))  
-          }
-
-          //COPY PROPOSAL
-          if(typeOperation=="copy")
-          {
-            proposalAPI.postProposal(title,type,description,level, formatted_expiration,notes,
-                required_knowledge, array_only_cod_degree,cod_group,supervisors_obj,selectedKeywordList)
-                .then(navigate("/teacher"))
-                .catch((err) => handleMessage(err,"warning"));
-          }
-          
-        }
-         
-         
     
-    
-  }   
+    ////////SE INPUT CORRETTO //////////////////////////////////
+
+    let formatted_expiration = expirationDate.format("YYYY-MM-DD");
+    let cod_group= user.cod_group;
+    let supervisors_obj={"supervisor_id":  selectedSupervisor, 
+      "co_supervisors":  array_only_id_co_supervisors, "external": listExternals};
+
+    //MESSAGGIO DI SICUREZZA
+                      
+    let acceptMessage={"add": 'Are you sure to create this new thesis ?',
+                      "edit": 'Are you sure to edit this thesis ?',
+                      "copy": 'Are you sure to create this new thesis ?'
+                      } 
+
+    const accept = confirm(acceptMessage[typeOperation]);
+    if (!accept) {
+      return;
+    }  
+      
+
+    //ADD PROPOSAL  
+    if(typeOperation=="add")
+    {
+      proposalAPI.postProposal(title,type,description,level, formatted_expiration,notes,
+          required_knowledge, array_only_cod_degree,cod_group,supervisors_obj,selectedKeywordList)
+          .then(navigate("/teacher"))
+          .catch((err) => handleMessage(err,"warning"));
+      
+    }
+
+    //UPDATE PROPOSAL  
+    if(typeOperation=="edit")
+    {
+
+      proposalAPI.updateProposal(proposalId,title,type,description,level,
+          formatted_expiration,notes, required_knowledge, array_only_cod_degree, cod_group,
+          supervisors_obj, selectedKeywordList)
+          .then(() => {navigate("/teacher")})
+          .catch((err) => handleMessage(err,"warning"))  
+    }
+
+    //COPY PROPOSAL
+    if(typeOperation=="copy")
+    {
+      proposalAPI.postProposal(title,type,description,level, formatted_expiration,notes,
+          required_knowledge, array_only_cod_degree,cod_group,supervisors_obj,selectedKeywordList)
+          .then(navigate("/teacher"))
+          .catch((err) => handleMessage(err,"warning"));
+    }
+   
+}   
        
 
   //INVIO FORM ///////////////////////////////////////////////////////////////////////////////////
@@ -439,7 +450,7 @@ function ProposalTeacher(props)
           <Paper elevation={3} style={{ padding: '16px' }}>
             <FormControl fullWidth>
               <Typography variant="h6" gutterBottom fontWeight="bold">
-                ADD DEGREE  {level=='MSc'? "MASTER" : level=='BSc'? "BACHELOR" : ""}
+                ADD DEGREE  {level=='MSc'? "MASTER" : "BACHELOR" }
               </Typography>
               <Select
                 labelId="degree-label"
