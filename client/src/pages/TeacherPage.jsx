@@ -10,6 +10,7 @@ import { MessageContext, UserContext } from '../Contexts';
 import CollapsibleTable from '../components/CollapsibleTable';
 import AlertDialog from '../components/AlertDialog';
 import dayjs from 'dayjs';
+import ApplicationDialog from '../components/ApplicationDialog';
 
 function TeacherPage(props)
 {  
@@ -25,6 +26,7 @@ function TeacherPage(props)
    const [openDialogApplication, setOpenDialogApplication] = useState(false);
    const [selectedItem, setSelectedItem] = useState(null);
    const [loading, setLoading] = useState(false);
+    const [selectedApplication, setSelectedApplication] = useState(null);
   
   async function createRow(p) {
     const students = await API_Applications.getApplicationStudentsByProposalId(
