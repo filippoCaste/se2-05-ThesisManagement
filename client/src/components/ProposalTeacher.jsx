@@ -156,8 +156,51 @@ function ProposalTeacher(props)
   };
 
   const handleAddExternal = () => {
-    setListExternals([...listExternals, formExternal]);
-    setFormExternal({ name: '', surname: '', email: '' });
+    //controllo campi name, surname e email
+    let name= formExternal.name;
+    let surname= formExternal.surname;
+    let email=formExternal.email;
+    let corretto= true;
+    let i;
+
+    //name
+    for (i = 0; ((i < name.length) && (corretto==true)); i++) 
+    {
+      if (!isNaN(parseInt(name[i]))) 
+      {
+        corretto = false;
+        handleMessage("ATTENTION NAME: "+name+" CAN'T CONTAIN NUMBER ", "warning");
+      }
+    }
+
+    //surname
+     for (i = 0; ((i < surname.length)&&(corretto==true)); i++) 
+     {
+       if (!isNaN(parseInt(surname[i]))) 
+       {
+         corretto = false;
+         handleMessage("ATTENTION SURNAME: "+surname+" CAN'T CONTAIN NUMBER ", "warning");
+       }
+     }
+ 
+    //controllo email
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$/; 
+    if((corretto == true) && (emailRegex.test(email)==false))
+    {
+        corretto= false;
+        handleMessage("ATTENTION EMAIL NOT VALID ", "warning");
+    }
+     
+    if(corretto==true)
+    {
+      setListExternals([...listExternals, formExternal]);
+      setFormExternal({ name: '', surname: '', email: '' });  
+    }
+    else
+    {
+       return;
+    }
+
   };
 
   const handleRemoveClickExternal = (index) => {
@@ -165,21 +208,7 @@ function ProposalTeacher(props)
     updatedExternals.splice(index, 1);
     setListExternals(updatedExternals);
   };
-  const validateListExternals = (listExternals) => {
-    if (!listExternals || listExternals.length === 0) {
-      // If listExternals is not present or empty, consider it as valid
-      return true;
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    let isValid = true;
-    listExternals.forEach((external, index) => {
-      if (!external.name || !external.surname || !external.email || !emailRegex.test(external.email)) {
-        // If any field is empty or email is in an invalid format
-        isValid = false;
-      }
-    });
-    return isValid;
-  };
+
   
 
     // USE EFFECT /////////////////////////////////////////////
@@ -292,12 +321,7 @@ function ProposalTeacher(props)
        if(selectedKeywordList.length==0) { campi_vuoti=campi_vuoti + " KEYWORDS , "; corretto= false; }
        if((expirationDate==null)) { campi_vuoti=campi_vuoti + " EXPIRATION DATE , "; corretto= false; }
 
-      
-      const isListExternalsValid = validateListExternals(listExternals);
-      
-      if (!isListExternalsValid) {
-        campi_vuoti = campi_vuoti +" EXTERNAL WRONG FORMAT, "; corretto=false;
-      } 
+  
 
        //messaggio errore campi vuoti
        if(corretto == false) 
@@ -675,6 +699,7 @@ function ProposalTeacher(props)
           color="primary"
           onClick={handleAddExternal}
           style={{ marginTop: '16px' }}
+          disabled={!formExternal.name || !formExternal.surname || !formExternal.email}
         >
           ADD EXTERNAL
         </Button>
