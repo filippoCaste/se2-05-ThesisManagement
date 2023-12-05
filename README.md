@@ -30,10 +30,11 @@
       - [`Applications`](#applications)
   - [Client main pages](#client-main-pages)
     - [General](#general)
-    - [Student](#student)
       - [Components](#components)
-    - [Teacher](#teacher)
+    - [Student](#student)
       - [Components](#components-1)
+    - [Teacher](#teacher)
+      - [Components](#components-2)
 
 ## Login credentials
 |username|password|
@@ -570,17 +571,28 @@
 - submission_date: TEXT
 
 ## Client main pages
+Official palette:
+![Palette for the Thesis management application](client/public/img/Palette.png)
 ### General
 - `InitialPage.jsx`: Contains the redirect mechanisms to the login page to be performed with SAML2.0 technologies.
 - `NotFoundPage.jsx`: Landing page in case the url is incorrect.
+
+#### Components
+- `AlertDialog.jsx`: Is a popup window that displays the information about a thesis or a student.
+
 ### Student
 - `MainPage.jsx`: Is the main page of the student. It is the one displayed right after logging in.
+- `StudentApplications.jsx`: It is the page from which the user can navigate through the list of his applications to the theses proposals.
 
 #### Components
 - `ProposalStudent.jsx`: It is the component through which the student can propose a thesis work to the secretary and to a professor.
+- `FilterComponent.jsx`: It is the component through which the student can filter the theses in the page in which they are displayed.
+- `MainDashboard.jsx`: render the `TableComponent.jsx`.
+- `TableComponent.jsx`: It is the component used both for showing the proposals available on the website and for showing the application status made by students.
 
 ### Teacher
 - `TeacherPage.jsx`: Is the main page of the teacher. It is displayed right after the login, and within the page the teacher can check the status of her proposals (archived, applications received) and inserting a new one by clicking on the button.
 
 #### Components
 - `ProposalTeacher.jsx`: It is the component through which the teacher can add a new thesis proposal from scratch or starting by an existing one, and it also handles the editing/updating part of an existing proposal (if it has not been assigned to any student).
+- `CollapsibleTable.jsx`: It is the component in which the proposals of the teacher (logged in) are shown. From that list it is possible to access the informations related to that proposal, executing some actions (archive, edit, delete) and see the list of applications made by students to that proposal.

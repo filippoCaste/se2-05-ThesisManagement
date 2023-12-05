@@ -11,7 +11,6 @@ function ProposalStudent() {
 	const [infoMsg, setInfoMsg] = useState('');
 
 	const handleSubmit = (proposalObj) => {
-		// display message "Correctly submitted"
 		console.log(proposalObj)
 		const { title, type, description, notes, teacherEmail } = proposalObj;
 		if (title == '' || type == '' || description == '' || teacherEmail == '') {
