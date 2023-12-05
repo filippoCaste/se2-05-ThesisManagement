@@ -4,6 +4,7 @@ import { Box, Collapse, Button, IconButton, Table, TableBody, TableCell, TableHe
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import EditIcon from '@mui/icons-material/Edit';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import ArchiveIcon from '@mui/icons-material/Archive';
@@ -109,6 +110,13 @@ function Row(props) {
             <DeleteIcon />
           </IconButton>
         </TableCell>
+        <TableCell style={{ width: '3%' }}> 
+        <Link to={`/teacher/copyProposal/${row.p.id}`}>
+          <IconButton aria-label="copy" onClick={() => { }} disabled={proposalAccepted  || row.p.status === 'assigned'}>
+            <ContentCopyIcon />
+          </IconButton>
+          </Link>
+        </TableCell>
         </>
         :
         <>
@@ -132,8 +140,8 @@ function Row(props) {
                       <MenuItem aria-label="archive" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"  || row.p.status === 'assigned' || proposalAccepted}><ArchiveIcon   color='success'/></MenuItem>
                       <MenuItem aria-label="edit" onClick={() => {handleClose();}} disabled={proposalAccepted  || row.p.status === 'assigned'}><Link to={`/teacher/updateProposal/${row.p.id}`}><EditIcon color='info' /></Link></MenuItem>
                       <MenuItem aria-label="delete" onClick={() => {deleteProposal(index);handleClose();}} disabled={proposalAccepted || row.p.status === 'assigned'}><DeleteIcon color="error" /></MenuItem>
-
-                      
+                      <MenuItem aria-label="copy" onClick={() => {handleClose();}} disabled={proposalAccepted  || row.p.status === 'assigned'}><Link to={`/teacher/copyProposal/${row.p.id}`}><ContentCopyIcon  /></Link></MenuItem>
+                    
                   </Menu>
         </IconButton>
       </TableCell>
@@ -269,6 +277,7 @@ function CollapsibleTable(props) {
           <TableCell style={{ width: '3.6%' }}><b>Archive</b></TableCell>
           <TableCell style={{ width: '3.6%' }}><b>Edit</b></TableCell>
           <TableCell style={{ width: '3.6%' }}><b>Delete</b></TableCell>
+          <TableCell style={{ width: '3.6%' }}><b>Copy</b></TableCell>
           </>
           :<><TableCell style={{ width: '15%' }}><b>Actions</b></TableCell></> }
         </TableRow>

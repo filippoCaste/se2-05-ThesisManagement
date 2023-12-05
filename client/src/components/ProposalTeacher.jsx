@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {  useParams } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -44,27 +45,26 @@ function formatDate(inputDate) {
   return formattedDate;
 }
 
-
-
-function AddProposalTeacher(props)
+function ProposalTeacher(props)
 {
-  const {currentDataAndTime} = props;
-  const navigate= useNavigate();
-  const handleMessage = useContext(MessageContext);
-  dayjs.extend(customParseFormat);
+    const {currentDataAndTime} = props;
+    const navigate= useNavigate();
+    const handleMessage = useContext(MessageContext);
+    dayjs.extend(customParseFormat);
 
-  const { user } = useContext(UserContext);
-  const [teachersList, SetTeachersList]=useState('');
-  const [degreesList, SetDegreesList]=useState('');
-  const [selectedSupervisor, setSelectedSupervisor] = useState(user?.id);
-  const [keywordsList, SetKeywordsList]=useState(''); //prese dal DB
+    const {proposalId}= useParams(); //PROPOSAL ID
+    let typeOperation= props.typeOperation;
+
+    const { user } = useContext(UserContext);
+    const [teachersList, SetTeachersList]=useState('');
+    const [degreesList, SetDegreesList]=useState('');
+    const [selectedSupervisor, setSelectedSupervisor] = useState(user?.id);
+    const [keywordsList, SetKeywordsList]=useState(''); //prese dal DB
+    const [leggiDegree, setLeggiDegree]=useState(false);
 
 
-  ///////////////////////////////////////////////////////////
-
-
-
-  //Proposal Fields (By Slide 8)
+    // PROPOSAL FIELDS
+    //Proposal Fields (By Slide 8)
 
   //ID TEACHER FALSO, VERRA PRESO DAL COOKIE DI SESSIONE DOPO L'ACCESSO
   
@@ -183,29 +183,87 @@ function AddProposalTeacher(props)
   
 
     // USE EFFECT /////////////////////////////////////////////
-  
+
     useEffect(()=>{
-      setSelectedDegreeList([]);
+        setSelectedDegreeList([]);
+  
+      },[level])
 
-    },[level])
+     
+    useEffect(()=>{
+        if((degreesList.length > 0) && ((typeOperation=="edit")||(typeOperation=="copy")))
+        {
+            proposalAPI.getProposalByProposalId(proposalId)
+            .then((p)=>{
+                    setTitle(()=>(p.title));
+                    setDescription(()=>(p.description));
+                    setType(()=>(p.type));
+                    setExpirationDate(()=>(dayjs(p.expiration_date)));
+                    setRequired_knowledge(()=>(p.required_knowledge));
+                    setNotes(()=>(p.notes));
+                    setLevel(()=>(p.level));
+        
+                    // Verifica se p.cod_degree è un array
+                    let lista_codici_degree;
+                    if((Array.isArray(p.cod_degree))==false)
+                    {
+                        lista_codici_degree=[p.cod_degree];
+                    }    
+                    else
+                    {
+                        lista_codici_degree=p.cod_degree;
+                    }    
+                    
+                    let lista=[];
+                    lista_codici_degree.forEach(codice_degree=>{
+                        
+                        degreesList.forEach(d=>{
+                            if(codice_degree == d.cod_degree)
+                            {
+                                lista.push(d);
+                            }
+                        })   
+                        
+                    })
+                    setSelectedDegreeList(()=>(lista));
+        
+                    // Rinomina il campo 'id' in 'teacher_id' 
+                    p.coSupervisors.forEach(obj => { obj.teacher_id = obj.id; delete obj.id; });
+                    setSelectedCoSupList(()=>(p.coSupervisors));
+        
+                    setSelectedKeywordList(()=>(p.keywords));
+        
+                    if(p.externalSupervisors != undefined)
+                    {
+                        setListExternals(()=>(p.externalSupervisors));
+                    }
+                    
+            })
+            .catch((err) => handleMessage(err,"warning"))
+        }
+        
+        },[degreesList]);        
 
 
-  useEffect(()=>{
-    API_Degrees.getAllDegrees()
-    .then((d) => SetDegreesList(d))
-    .catch((err) => handleMessage(err,"warning"));
 
-    API_Teachers.getAllTeachers()
-    .then((t) => SetTeachersList(t))
-    .catch((err) => handleMessage(err,"warning"));
+    useEffect(()=>{
 
-    API_Keywords.getAllKeywords()
-    .then((k) => SetKeywordsList(k))
-    .catch((err) => handleMessage(err,"warning"));
+        API_Degrees.getAllDegrees()
+        .then((d) => {SetDegreesList(d); setLeggiDegree(()=>true); }  )
+        .catch((err) => handleMessage(err,"warning"))
+    
+        API_Teachers.getAllTeachers()
+        .then((t) => SetTeachersList(t))
+        .catch((err) => handleMessage(err,"warning"))
+    
+        API_Keywords.getAllKeywords()
+        .then((k) => SetKeywordsList(k))
+        .catch((err) => handleMessage(err,"warning"))
+    
+      },[])
 
-  },[])
-       
-  //HANDLER SUBMIT
+
+    //HANDLER SUBMIT
   function handleSubmit(event) 
   {
     event.preventDefault();
@@ -257,29 +315,74 @@ function AddProposalTeacher(props)
           let supervisors_obj={"supervisor_id":  selectedSupervisor, 
             "co_supervisors":  array_only_id_co_supervisors, "external": listExternals};
 
+          //MESSAGGIO DI SICUREZZA
+                           
+          let acceptMessage={"add": 'Are you sure to create this new thesis ?',
+                            "edit": 'Are you sure to edit this thesis ?',
+                            "copy": 'Are you sure to create this new thesis ?'
+                            } 
+
+          const accept = confirm(acceptMessage[typeOperation]);
+          if (!accept) {
+            return;
+          }  
+          
+
+          //ADD PROPOSAL  
+          if(typeOperation=="add")
+          {
             proposalAPI.postProposal(title,type,description,level, formatted_expiration,notes,
-              required_knowledge, array_only_cod_degree,cod_group,supervisors_obj,selectedKeywordList)
-              .then(navigate("/teacher"))
-              .catch((err) => handleMessage(err,"warning"));
-        
-         }
+                required_knowledge, array_only_cod_degree,cod_group,supervisors_obj,selectedKeywordList)
+                .then(navigate("/teacher"))
+                .catch((err) => handleMessage(err,"warning"));
+            
+          }
+
+          //UPDATE PROPOSAL  
+          if(typeOperation=="edit")
+          {
+
+            proposalAPI.updateProposal(proposalId,title,type,description,level,
+                formatted_expiration,notes, required_knowledge, array_only_cod_degree, cod_group,
+                supervisors_obj, selectedKeywordList)
+                .then(() => {navigate("/teacher")})
+                .catch((err) => handleMessage(err,"warning"))  
+          }
+
+          //COPY PROPOSAL
+          if(typeOperation=="copy")
+          {
+            proposalAPI.postProposal(title,type,description,level, formatted_expiration,notes,
+                required_knowledge, array_only_cod_degree,cod_group,supervisors_obj,selectedKeywordList)
+                .then(navigate("/teacher"))
+                .catch((err) => handleMessage(err,"warning"));
+          }
+          
+        }
          
          
       }
     
-   }   
+  }   
        
 
-  //INVIO FORM
+  //INVIO FORM ///////////////////////////////////////////////////////////////////////////////////
   const [invioForm,setInvioForm]=useState(false);
-
-
-   return (
+  return (
     <Container>
       
     <br /> <br /><br /><br /> <br /> <br />
 
-       <Typography variant="h5" align="center"> INSERT A NEW THESIS PROPOSAL <br /> </Typography> <br />
+
+    {typeOperation === "add" ? (
+    <> <Typography variant="h5" align="center">  INSERT A NEW THESIS PROPOSAL <br /> </Typography> <br /> </> ) : (<></>)}
+
+    {typeOperation === "edit" ? (
+    <>   <Typography variant="h5" align="center"> EDIT PROPOSAL OF THESIS: <br /> { title } </Typography> <br /> </> ) : (<></>)}
+
+    {typeOperation === "copy" ? (
+    <>   <Typography variant="h5" align="center"> COPY PROPOSAL OF THESIS: <br /> { title } </Typography> <br /> </> ) : (<></>)}
+
        <Typography variant="h6"> TEACHER: {user.name} {user.surname}  (d{user.id}) </Typography> <br />
        <Typography variant="h7"> GROUP NAME    : {user?.group_name}   </Typography> <br />
        <Typography variant="h7"> COD DEPARTMENT: {user?.cod_department}         </Typography>
@@ -287,7 +390,6 @@ function AddProposalTeacher(props)
     <br /> <br />
 
     <form onSubmit={handleSubmit}>
-
              
         <Typography variant="subtitle1" fontWeight="bold">   TITLE </Typography>
           <TextField  name="title" variant="filled" fullWidth
@@ -308,7 +410,7 @@ function AddProposalTeacher(props)
 
               <Grid item xs={4}>
                   <Typography variant="subtitle1" fontWeight="bold"> TYPE </Typography>     
-                  <TextField  name="type" variant="filled"  fullWidth
+                  <TextField  name="type" variant="outlined"  fullWidth
                   value={type}  onChange={ev=>setType(ev.target.value)}/>  <br /> <br />
               </Grid>
                   
@@ -613,16 +715,26 @@ function AddProposalTeacher(props)
 
     <br />
 
-        <Button variant="contained" color="primary" type="submit" onClick={()=>{setInvioForm(true); handleMessage("Added Proposal","success")}}> ADD PROPOSAL </Button>
+        { typeOperation=="add"?
+        <Button variant="contained" color="primary" type="submit" onClick={()=>{setInvioForm(true); 
+            handleMessage("Added Proposal","success")}}> ADD PROPOSAL </Button>  : <></> }
+
+        { typeOperation=="edit"?    
+           <Button variant="contained" color="primary" type="submit" onClick={()=>{setInvioForm(true); 
+            handleMessage("Update Proposal","success")}}> UPDATE PROPOSAL </Button> : <></> }
+            
+        { typeOperation=="copy"?    
+           <Button variant="contained" color="primary" type="submit" onClick={()=>{setInvioForm(true); 
+            handleMessage("Copy Proposal","success")}}> ADD PROPOSAL </Button> : <></> }
+
         {' '} <Button variant="contained" color="error" onClick={()=>{navigate('/teacher');handleMessage("Undone insert proposal","success");} }> CANCEL </Button>
       
       </form>
    
       </Container>
-      
+
   );
 
 }
 
-
-export default AddProposalTeacher;
+export default ProposalTeacher;
