@@ -1,7 +1,5 @@
-import React from 'react';
-import { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {  useParams } from 'react-router-dom';
+import { React,useState, useEffect, useContext } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -26,24 +24,6 @@ import dayjs from 'dayjs' ;
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 
-function formatDate(inputDate) {
-  // Divide la stringa della data in giorno, mese e anno
-  var parts = inputDate.split('/');
-  if (parts.length !== 3) {
-    // La stringa della data non è nel formato corretto
-    return null;
-  }
-
-  // Estrai giorno, mese e anno
-  var day = parts[0];
-  var month = parts[1];
-  var year = parts[2];
-
-  // Formatta la data nel formato "yyyy-mm-dd"
-  var formattedDate = year + '-' + month + '-' + day;
-
-  return formattedDate;
-}
 
 function ProposalTeacher(props)
 {
@@ -60,13 +40,8 @@ function ProposalTeacher(props)
     const [degreesList, SetDegreesList]=useState('');
     const [selectedSupervisor, setSelectedSupervisor] = useState(user?.id);
     const [keywordsList, SetKeywordsList]=useState(''); //prese dal DB
-    const [leggiDegree, setLeggiDegree]=useState(false);
 
 
-    // PROPOSAL FIELDS
-    //Proposal Fields (By Slide 8)
-
-  //ID TEACHER FALSO, VERRA PRESO DAL COOKIE DI SESSIONE DOPO L'ACCESSO
   
   const [title,setTitle]=useState('');
   const [description,setDescription]=useState('');
@@ -160,47 +135,39 @@ function ProposalTeacher(props)
     let name= formExternal.name;
     let surname= formExternal.surname;
     let email=formExternal.email;
-    let corretto= true;
     let i;
 
     //name
-    for (i = 0; ((i < name.length) && (corretto==true)); i++) 
+    for (i = 0; (i < name.length); i++) 
     {
       if (!isNaN(parseInt(name[i]))) 
       {
-        corretto = false;
         handleMessage("ATTENTION NAME: "+name+" CAN'T CONTAIN NUMBER ", "warning");
+        return;
       }
     }
 
     //surname
-     for (i = 0; ((i < surname.length)&&(corretto==true)); i++) 
+     for (i = 0; (i < surname.length); i++) 
      {
        if (!isNaN(parseInt(surname[i]))) 
        {
-         corretto = false;
-         handleMessage("ATTENTION SURNAME: "+surname+" CAN'T CONTAIN NUMBER ", "warning");
+          handleMessage("ATTENTION SURNAME: "+surname+" CAN'T CONTAIN NUMBER ", "warning");
+          return;
        }
      }
  
     //controllo email
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$/; 
-    if((corretto == true) && (emailRegex.test(email)==false))
+    if(emailRegex.test(email)==false)
     {
-        corretto= false;
         handleMessage("ATTENTION EMAIL NOT VALID ", "warning");
+        return;  
     }
      
-    if(corretto==true)
-    {
-      setListExternals([...listExternals, formExternal]);
-      setFormExternal({ name: '', surname: '', email: '' });  
-    }
-    else
-    {
-       return;
-    }
-
+    setListExternals([...listExternals, formExternal]);
+    setFormExternal({ name: '', surname: '', email: '' });  
+    
   };
 
   const handleRemoveClickExternal = (index) => {
@@ -278,7 +245,7 @@ function ProposalTeacher(props)
     useEffect(()=>{
 
         API_Degrees.getAllDegrees()
-        .then((d) => {SetDegreesList(d); setLeggiDegree(()=>true); }  )
+        .then((d) => {SetDegreesList(d);  }  )
         .catch((err) => handleMessage(err,"warning"))
     
         API_Teachers.getAllTeachers()
@@ -297,13 +264,7 @@ function ProposalTeacher(props)
   {
     event.preventDefault();
 
-    if(invioForm==true)
-    {
        
-        setInvioForm(false); // Istruzioni provvisori aggiunte perchè quando si preme su add del campo di testo 
-                             // co supervisors venive anche inviato il form
-                             // soluzione provvisoria, da correggere meglio
-
        ////////controllo input ////////////////////////
        let corretto= true;
 
@@ -313,11 +274,9 @@ function ProposalTeacher(props)
 
        if(title=='') { campi_vuoti=campi_vuoti + " TITLE , "; corretto= false; }
        if(description=='') {campi_vuoti=campi_vuoti + " DESCRIPTION , "; corretto= false; }
-       //if(required_knowledge=='') { campi_vuoti=campi_vuoti + " REQUIRED KNOWLEDGE , "; corretto= false; }
        if(type=='') { campi_vuoti=campi_vuoti + " TYPE , "; corretto= false; }
        if(level=='') { campi_vuoti=campi_vuoti + " LEVEL , "; corretto= false; }
        if(array_only_cod_degree.length==0) {campi_vuoti=campi_vuoti + " DEGREE , "; corretto= false; }
-       //if(array_only_id_co_supervisors.length==0) { campi_vuoti=campi_vuoti + " CO-SUPERVISORS , "; corretto= false; }
        if(selectedKeywordList.length==0) { campi_vuoti=campi_vuoti + " KEYWORDS , "; corretto= false; }
        if((expirationDate==null)) { campi_vuoti=campi_vuoti + " EXPIRATION DATE , "; corretto= false; }
 
@@ -385,13 +344,13 @@ function ProposalTeacher(props)
         }
          
          
-      }
+    
     
   }   
        
 
   //INVIO FORM ///////////////////////////////////////////////////////////////////////////////////
-  const [invioForm,setInvioForm]=useState(false);
+  
   return (
     <Container>
       
@@ -741,15 +700,15 @@ function ProposalTeacher(props)
     <br />
 
         { typeOperation=="add"?
-        <Button variant="contained" color="primary" type="submit" onClick={()=>{setInvioForm(true); 
+        <Button variant="contained" color="primary" type="submit" onClick={()=>{ 
             handleMessage("Added Proposal","success")}}> ADD PROPOSAL </Button>  : <></> }
 
         { typeOperation=="edit"?    
-           <Button variant="contained" color="primary" type="submit" onClick={()=>{setInvioForm(true); 
+           <Button variant="contained" color="primary" type="submit" onClick={()=>{
             handleMessage("Update Proposal","success")}}> UPDATE PROPOSAL </Button> : <></> }
             
         { typeOperation=="copy"?    
-           <Button variant="contained" color="primary" type="submit" onClick={()=>{setInvioForm(true); 
+           <Button variant="contained" color="primary" type="submit" onClick={()=>{ 
             handleMessage("Copy Proposal","success")}}> ADD PROPOSAL </Button> : <></> }
 
         {' '} <Button variant="contained" color="error" onClick={()=>{navigate('/teacher');handleMessage("Undone insert proposal","success");} }> CANCEL </Button>
