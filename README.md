@@ -28,7 +28,12 @@
       - [`Supervisors`](#supervisors)
       - [`Proposals`](#proposals)
       - [`Applications`](#applications)
-  - [Main React Components](#main-react-components)
+  - [Client main pages](#client-main-pages)
+    - [General](#general)
+    - [Student](#student)
+      - [Components](#components)
+    - [Teacher](#teacher)
+      - [Components](#components-1)
 
 ## Login credentials
 |username|password|
@@ -564,17 +569,18 @@
 - status: TEXT (DEFAULT 'submitted', OTHERS 'accepted', 'refused')
 - submission_date: TEXT
 
-## Main React Components
+## Client main pages
+### General
+- `InitialPage.jsx`: Contains the redirect mechanisms to the login page to be performed with SAML2.0 technologies.
+- `NotFoundPage.jsx`: Landing page in case the url is incorrect.
+### Student
+- `MainPage.jsx`: Is the main page of the student. It is the one displayed right after logging in.
 
-`Pages`:
-<!-- 
-- `MainPage` (in `MainPage.jsx`): It is the main page and index of the application.
-- `LoginPage` (in `LoginPage.jsx`): shows the Login page where user can perform authentication. Can be reached by clicking the Login button in the AppBar.
-- `SignUpPage` (in `SignupPage.jsx`): shows the Signup page where user can create a new account. Can be reached by clicking the Signup button in the LoginPage.
+#### Components
+- `ProposalStudent.jsx`: It is the component through which the student can propose a thesis work to the secretary and to a professor.
 
-- `NotFoundPage` (in `NotFoundPage.jsx`): shows the 404 page not found page. Can be reached by typing any other route in the browser.
+### Teacher
+- `TeacherPage.jsx`: Is the main page of the teacher. It is displayed right after the login, and within the page the teacher can check the status of her proposals (archived, applications received) and inserting a new one by clicking on the button.
 
-`Components`:
-
-- `AppBar` (in `AppBar.jsx`): shows the AppBar with the application name (with link to "/" by clicking on it), the name of user logged in, the login/logout button. Params passed: app title, user object, handleLogout, function for the admin to change the app title.
-- `CustomSnackbar` (in `CustomSnackbar.jsx`): shows the snackbar with a message on the bottom left corner. Present in all pages. Passed param: message. -->
+#### Components
+- `ProposalTeacher.jsx`: It is the component through which the teacher can add a new thesis proposal from scratch or starting by an existing one, and it also handles the editing/updating part of an existing proposal (if it has not been assigned to any student).
