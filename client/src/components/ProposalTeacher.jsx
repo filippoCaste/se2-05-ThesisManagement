@@ -49,7 +49,8 @@ function ProposalTeacher(props)
   const [notes,setNotes]=useState('');
   const [type,setType]=useState('');
   const [level,setLevel]=useState('');
-  const [expirationDate,setExpirationDate]=useState(currentDataAndTime? currentDataAndTime:  dayjs());
+  const [expirationDate, setExpirationDate] = useState(currentDataAndTime || dayjs());
+
 
    //DEGREE A TENDINA
    const [selectedDegree, setSelectedDegree] = useState('');
@@ -159,7 +160,7 @@ function ProposalTeacher(props)
  
     //controllo email
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$/; 
-    if(emailRegex.test(email)==false)
+    if(!emailRegex.test(email))
     {
         handleMessage("ATTENTION EMAIL NOT VALID ", "warning");
         return;  
@@ -201,7 +202,7 @@ function ProposalTeacher(props)
         
                     // Verifica se p.cod_degree è un array
                     let lista_codici_degree;
-                    if((Array.isArray(p.cod_degree))==false)
+                    if(!(Array.isArray(p.cod_degree)))
                     {
                         lista_codici_degree=[p.cod_degree];
                     }    
@@ -301,7 +302,7 @@ function ProposalTeacher(props)
       validateInput(title,description,type,level, array_only_cod_degree, selectedKeywordList, expirationDate);
 
       
-    if(displayErrorMessage(inputErrors) == true) 
+    if(displayErrorMessage(inputErrors)) 
     {
       return;
     }
