@@ -257,8 +257,8 @@ function CollapsibleTable(props) {
 
 
    ///SORTING
-   const [orderBy, setOrderBy] = React.useState('Title');
-   const [order, setOrder] = React.useState('asc');
+   const [orderBy, setOrderBy] = React.useState('expiration_date');
+   const [order, setOrder] = React.useState('desc');
  
    const handleRequestSort = (property) => {
      const isAsc = orderBy === property && order === 'asc';
@@ -273,8 +273,10 @@ function CollapsibleTable(props) {
          const aValue = a.p[orderBy];
          const bValue = b.p[orderBy];
          if (order === 'asc') {
+          if(orderBy === "expiration_date") return dayjs(aValue).isAfter(bValue) ? -1 : 1;
            return aValue < bValue ? -1 : 1;
          } else {
+           if(orderBy === "expiration_date") return dayjs(aValue).isBefore(bValue) ? -1 : 1;
            return aValue > bValue ? -1 : 1;
          }
        });
@@ -293,7 +295,12 @@ function CollapsibleTable(props) {
             
           <TableSortLabel
                   active={true}
-                  direction={orderBy === "title" ? order : 'asc'}
+                  sx={{
+                    '&.Mui-active .MuiTableSortLabel-icon': {
+                      color: orderBy==="title" ? theme.palette.secondary.main: "none"
+                    },
+                  }}
+                  direction={orderBy === "title" ? order : 'desc'}
                   onClick={() => handleRequestSort("title")} // Utilizza una funzione di callback
                 >
             <b>Title</b>
@@ -302,11 +309,16 @@ function CollapsibleTable(props) {
             </TableCell>
           {!isSM? 
           <>
-          <TableCell style={{ width: '10%' }} sortDirection={orderBy === "level" ? order : false}>
+          <TableCell style={{ width: '10%' }}  sortDirection={orderBy === "level" ? order : false}>
             <TableSortLabel
               active={true}
-              direction={orderBy === "level" ? order : 'asc'}
+              direction={orderBy === "level" ? order : 'desc'}
               onClick={() => handleRequestSort("level")}
+              sx={{
+                '&.Mui-active .MuiTableSortLabel-icon': {
+                  color: orderBy==="level" ? theme.palette.secondary.main: "none"
+                },
+              }}
             >
               <b>Level</b>
             </TableSortLabel>
@@ -314,8 +326,13 @@ function CollapsibleTable(props) {
           <TableCell style={{ width: '14%' }} sortDirection={orderBy === "title_degree" ? order : false}>
             <TableSortLabel
               active={true}
-              direction={orderBy === "title_degree" ? order : 'asc'}
+              direction={orderBy === "title_degree" ? order : 'desc'}
               onClick={() => handleRequestSort("title_degree")}
+              sx={{
+                '&.Mui-active .MuiTableSortLabel-icon': {
+                  color: orderBy==="title_degree" ? theme.palette.secondary.main: "none"
+                },
+              }}
             >
               <b>Title Degree</b>
             </TableSortLabel>
@@ -323,8 +340,13 @@ function CollapsibleTable(props) {
           <TableCell style={{ width: '11%' }} sortDirection={orderBy === "expiration_date" ? order : false}>
             <TableSortLabel
               active={true}
-              direction={orderBy === "expiration_date" ? order : 'asc'}
+              direction={orderBy === "expiration_date" ? order : 'desc'}
               onClick={() => handleRequestSort("expiration_date")}
+              sx={{
+                '&.Mui-active .MuiTableSortLabel-icon': {
+                  color: orderBy==="expiration_date" ? theme.palette.secondary.main: "none"
+                },
+              }}
             >
               <b>Expiration Date</b>
             </TableSortLabel>
@@ -332,8 +354,13 @@ function CollapsibleTable(props) {
           <TableCell style={{ width: '6%' }} sortDirection={orderBy === "status" ? order : false}>
             <TableSortLabel
               active={true}
-              direction={orderBy === "status" ? order : 'asc'}
+              direction={orderBy === "status" ? order : 'desc'}
               onClick={() => handleRequestSort("status")}
+              sx={{
+                '&.Mui-active .MuiTableSortLabel-icon': {
+                  color: orderBy==="status" ? theme.palette.secondary.main: "none"
+                },
+              }}
             >
               <b>Status</b>
             </TableSortLabel>

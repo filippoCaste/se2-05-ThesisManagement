@@ -15,13 +15,15 @@ import Badge from '@mui/material/Badge';
 import TableSortLabel  from '@mui/material/TableSortLabel';
 import { Box } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
+import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
 
 export default function StickyHeadTable(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [orderBy, setOrderBy] = React.useState('Title');
-  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('expiration_date');
+  const [order, setOrder] = React.useState('desc');
   const { proposals, isAppliedProposals,drawerWidth } = props;
+  const theme = useTheme();
 
   const columns = [
     { id: 'title', label: 'Title', minWidth: 450, maxWidth: 450 },
@@ -100,7 +102,7 @@ export default function StickyHeadTable(props) {
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    setOrder(isAsc ? 'asc' : 'desc');
     setOrderBy(property);
   };
 
@@ -110,10 +112,12 @@ export default function StickyHeadTable(props) {
         const aValue = a[orderBy];
         const bValue = b[orderBy];
         if (order === 'asc') {
-          return aValue < bValue ? -1 : 1;
-        } else {
-          return aValue > bValue ? -1 : 1;
-        }
+          if(orderBy === "expiration_date") return dayjs(aValue).isAfter(bValue) ? -1 : 1;
+           return aValue < bValue ? -1 : 1;
+         } else {
+           if(orderBy === "expiration_date") return dayjs(aValue).isBefore(bValue) ? -1 : 1;
+           return aValue > bValue ? -1 : 1;
+         }
       });
     }
     return proposals;
@@ -153,8 +157,13 @@ export default function StickyHeadTable(props) {
                 {column.label!= "Apply" ? 
                 <TableSortLabel
                   active={true}
-                  direction={orderBy === column.id ? order : 'asc'}
+                  direction={orderBy === column.id ? order : 'desc'}
                   onClick={() => handleRequestSort(column.id)} // Utilizza una funzione di callback
+                  sx={{
+                    '&.Mui-active .MuiTableSortLabel-icon': {
+                      color: orderBy === column.id ? theme.palette.secondary.main: "none"
+                    },
+                  }}
                 >
                   {column.label}
                   {orderBy === column.id ? (
