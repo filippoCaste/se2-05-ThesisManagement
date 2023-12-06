@@ -12,6 +12,10 @@ jest.mock('../../src/services/application.services.js', () => ({
     changeStatus: jest.fn(),
 }));
 
+jest.mock('../../src/services/notification.services.js', () => ({
+    sendNotificationApplicationDecision: jest.fn(),
+}));
+
 describe('createApplication', () => {
     it('should return 400 if proposal_id is missing', async () => {
         const req = { body: { student_id: '123', submission_date: '2023-05-15' } };

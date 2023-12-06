@@ -68,7 +68,7 @@ export const changeStatusOfApplication = async (req, res) => {
     await changeStatus(applicationId, req.user.id, status);
 
 
-  await sendNotificationApplicationDecision(applicationId,status);
+   await sendNotificationApplicationDecision(applicationId,status);
     res.status(204).send();
 
   } catch(err) {
