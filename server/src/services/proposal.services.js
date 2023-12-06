@@ -637,7 +637,7 @@ export const getAllInfoByProposalId = (proposalId, userId) => {
 export const archiveExpiredProposals = () => {
   return new Promise((resolve, reject) => {
     const now = new Date().toISOString();
-    const sql = 'UPDATE Proposals SET status = "archived" WHERE expiration_date <= ?';
+    const sql = 'UPDATE Proposals SET status = "archived" WHERE expiration_date < ?';
     db.run(sql, [now], (err) => {
       if (err) {
         return reject(err);
