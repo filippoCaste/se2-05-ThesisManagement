@@ -63,7 +63,31 @@ function Row(props) {
     }
   };
 
-
+  const RenderTableHeader = () => {
+    return (
+      <TableHead>
+        <TableRow>
+          {!isSM? 
+          <>                      
+          <TableCell style={{ width: '5%' }}><b>Id</b></TableCell>
+          <TableCell style={{ width: '20%' }}><b>Name</b></TableCell>
+          <TableCell style={{ width: '15%' }}><b>Email</b></TableCell>
+          <TableCell style={{ width: '20%' }}><b>Title Degree</b></TableCell>
+          <TableCell style={{ width: '15%' }}><b>Enrollment Year</b></TableCell>
+          <TableCell style={{ width: '10%' }}><b>Nationality</b></TableCell>
+          <TableCell style={{ width: '15%' }}><b>Submission Date</b></TableCell>
+          <TableCell style={{ width: '5%' }} />
+          <TableCell style={{ width: '5%' }} />
+          </>:
+          <>
+          <TableCell style={{ width: '90%' }}><b>Name</b></TableCell>
+          <TableCell style={{ width: '10%' }}><b>Show more</b></TableCell>
+          </>
+          }
+        </TableRow>
+    </TableHead>
+    );
+  };
 
   return (
     <React.Fragment>
@@ -149,27 +173,7 @@ function Row(props) {
               </Typography>
               {row.students.length > 0 ? (
                 <Table size="small" aria-label="purchases">
-                  <TableHead>
-                    <TableRow>
-                      {!isSM? 
-                      <>                      
-                      <TableCell style={{ width: '5%' }}><b>Id</b></TableCell>
-                      <TableCell style={{ width: '20%' }}><b>Name</b></TableCell>
-                      <TableCell style={{ width: '15%' }}><b>Email</b></TableCell>
-                      <TableCell style={{ width: '20%' }}><b>Title Degree</b></TableCell>
-                      <TableCell style={{ width: '15%' }}><b>Enrollment Year</b></TableCell>
-                      <TableCell style={{ width: '10%' }}><b>Nationality</b></TableCell>
-                      <TableCell style={{ width: '15%' }}><b>Submission Date</b></TableCell>
-                      <TableCell style={{ width: '5%' }} />
-                      <TableCell style={{ width: '5%' }} />
-                      </>:
-                      <>
-                      <TableCell style={{ width: '90%' }}><b>Name</b></TableCell>
-                      <TableCell style={{ width: '10%' }}><b>Show more</b></TableCell>
-                      </>
-                      }
-                    </TableRow>
-                  </TableHead>
+                  <RenderTableHeader/>
                   <TableBody>
                     {row.students.map((studentsRow) => (
                       <TableRow key={studentsRow.student_id}>
