@@ -185,53 +185,56 @@ export default function StickyHeadTable(props) {
     </TableHead>
   );
   
-
+  const RenderTableBody = () => (
+    <>
+    {sortedProposals.map((row, index) => (
+      <TableRow
+        key={index}
+        hover
+        role="checkbox"
+        tabIndex={-1}
+        className={`proposalRow ${
+          index % 2 === 0 ? 'proposalRowOdd' : ''
+        }`}
+      >
+        {columns.map((column) => (
+          <TableCell
+            key={column.id}
+            align={column.align}
+            style={{
+              width: column.maxWidth,
+              whiteSpace: 'normal',
+              maxHeight: '100px',
+              padding: '8px',
+            }}
+          >
+            {column.id === 'supervisor_id'
+              ? `${
+                  row.supervisorsInfo.find(
+                    (supervisor) => supervisor.id === row.supervisor_id
+                  )?.name
+                } ${
+                  row.supervisorsInfo.find(
+                    (supervisor) => supervisor.id === row.supervisor_id
+                  )?.surname
+                }`
+              : column.format
+              ? column.format(row[column.id], row)
+              : row[column.id]}
+          </TableCell>
+        ))}
+      </TableRow>
+    ))}
+    </>
+  );
   return (
     <Paper className="paperContainer" >
       <TableContainer className="tableContainer">
         <Table stickyHeader aria-label="sticky table" >
-
           {RenderTableHeader()}
           <TableBody>
             {renderNoProposalsMessage()}
-            {sortedProposals.map((row, index) => (
-              <TableRow
-                key={index}
-                hover
-                role="checkbox"
-                tabIndex={-1}
-                className={`proposalRow ${
-                  index % 2 === 0 ? 'proposalRowOdd' : ''
-                }`}
-              >
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{
-                      width: column.maxWidth,
-                      whiteSpace: 'normal',
-                      maxHeight: '100px',
-                      padding: '8px',
-                    }}
-                  >
-                    {column.id === 'supervisor_id'
-                      ? `${
-                          row.supervisorsInfo.find(
-                            (supervisor) => supervisor.id === row.supervisor_id
-                          )?.name
-                        } ${
-                          row.supervisorsInfo.find(
-                            (supervisor) => supervisor.id === row.supervisor_id
-                          )?.surname
-                        }`
-                      : column.format
-                      ? column.format(row[column.id], row)
-                      : row[column.id]}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
+            {RenderTableBody()}
           </TableBody>
         </Table>
       </TableContainer>
