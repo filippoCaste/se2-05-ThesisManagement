@@ -41,7 +41,6 @@ function Row(props) {
   };
   /////
 
-
   const changeStatusOfApplication = async (studentsRow, status) => {
     try {
       setStatusChangeLoading(true);
@@ -63,7 +62,7 @@ function Row(props) {
     }
   };
 
-  const RenderTableHeader = () => {
+  const RenderTableStudentHeader = () => {
     return (
       <TableHead>
         <TableRow>
@@ -87,6 +86,77 @@ function Row(props) {
         </TableRow>
     </TableHead>
     );
+  };
+
+  const RenderTableStudentBody = () => {
+    <TableBody>
+    {row.students.map((studentsRow) => (
+      <TableRow key={studentsRow.student_id}>
+      {!isSM? 
+      <>   
+        <TableCell style={{ width: '5%' }} component="th" scope="row">{studentsRow.student_id}</TableCell>
+        <TableCell style={{ width: '20%' }}>{studentsRow.student_name + " " + studentsRow.student_surname}</TableCell>
+        <TableCell style={{ width: '15%' }}>{studentsRow.student_email}</TableCell>
+        <TableCell style={{ width: '20%' }}>{studentsRow.student_title_degree}</TableCell>
+        <TableCell style={{ width: '15%' }}>{studentsRow.student_enrollment_year}</TableCell>
+        <TableCell style={{ width: '10%' }}>{studentsRow.student_nationality}</TableCell>
+        <TableCell style={{ width: '15%' }}>{dayjs(studentsRow.submission_date).format("DD/MM/YYYY")}</TableCell>
+        {studentsRow.status === 'submitted' ? (
+          <>
+            <TableCell style={{ width: '5%' }}>
+              <Button
+                variant="outlined"
+                onClick={() => changeStatusOfApplication(studentsRow, 'accepted')}
+                style={{
+                  fontSize: '12px',
+                  textTransform: 'none',
+                  color: 'white',
+                  borderRadius: '4px',
+                  border: '1px solid #35682D',
+                  backgroundColor: '#35682D',
+                }}
+                disabled={statusChangeLoading}
+              >
+                Accept
+              </Button>
+            </TableCell>
+            <TableCell style={{ width: '5%' }}>
+              <Button
+                variant="outlined"
+                onClick={() => changeStatusOfApplication(studentsRow, 'rejected')}
+                style={{
+                  fontSize: '12px',
+                  textTransform: 'none',
+                  color: 'white',
+                  borderRadius: '4px',
+                  border: '1px solid #FF0000',
+                  backgroundColor: '#FF0000',
+                }}
+                disabled={statusChangeLoading}
+              >
+                Reject
+              </Button>
+            </TableCell>
+          </>
+        ) : (
+          <TableCell colSpan={2} style={{ width: '10%' }}>
+            <Chip label={studentsRow.status} color={studentsRow.status === 'accepted' ? "success" : "error"} />
+          </TableCell>
+        )}
+        </>:
+        <>
+      <TableCell style={{ width: '90%' }}>{studentsRow.student_name + " " + studentsRow.student_surname}</TableCell>
+      <TableCell style={{ width: '10%' }}>
+      <IconButton style={{ color: "#007FFF" }} aria-label="show details" onClick={() => onClickApplication(studentsRow)}>
+        <DescriptionOutlinedIcon />
+      </IconButton>
+      </TableCell>
+        
+        </>
+        }
+      </TableRow>
+    ))}
+  </TableBody>
   };
 
   return (
@@ -173,75 +243,8 @@ function Row(props) {
               </Typography>
               {row.students.length > 0 ? (
                 <Table size="small" aria-label="purchases">
-                  {RenderTableHeader()}
-                  <TableBody>
-                    {row.students.map((studentsRow) => (
-                      <TableRow key={studentsRow.student_id}>
-                      {!isSM? 
-                      <>   
-                        <TableCell style={{ width: '5%' }} component="th" scope="row">{studentsRow.student_id}</TableCell>
-                        <TableCell style={{ width: '20%' }}>{studentsRow.student_name + " " + studentsRow.student_surname}</TableCell>
-                        <TableCell style={{ width: '15%' }}>{studentsRow.student_email}</TableCell>
-                        <TableCell style={{ width: '20%' }}>{studentsRow.student_title_degree}</TableCell>
-                        <TableCell style={{ width: '15%' }}>{studentsRow.student_enrollment_year}</TableCell>
-                        <TableCell style={{ width: '10%' }}>{studentsRow.student_nationality}</TableCell>
-                        <TableCell style={{ width: '15%' }}>{dayjs(studentsRow.submission_date).format("DD/MM/YYYY")}</TableCell>
-                        {studentsRow.status === 'submitted' ? (
-                          <>
-                            <TableCell style={{ width: '5%' }}>
-                              <Button
-                                variant="outlined"
-                                onClick={() => changeStatusOfApplication(studentsRow, 'accepted')}
-                                style={{
-                                  fontSize: '12px',
-                                  textTransform: 'none',
-                                  color: 'white',
-                                  borderRadius: '4px',
-                                  border: '1px solid #35682D',
-                                  backgroundColor: '#35682D',
-                                }}
-                                disabled={statusChangeLoading}
-                              >
-                                Accept
-                              </Button>
-                            </TableCell>
-                            <TableCell style={{ width: '5%' }}>
-                              <Button
-                                variant="outlined"
-                                onClick={() => changeStatusOfApplication(studentsRow, 'rejected')}
-                                style={{
-                                  fontSize: '12px',
-                                  textTransform: 'none',
-                                  color: 'white',
-                                  borderRadius: '4px',
-                                  border: '1px solid #FF0000',
-                                  backgroundColor: '#FF0000',
-                                }}
-                                disabled={statusChangeLoading}
-                              >
-                                Reject
-                              </Button>
-                            </TableCell>
-                          </>
-                        ) : (
-                          <TableCell colSpan={2} style={{ width: '10%' }}>
-                            <Chip label={studentsRow.status} color={studentsRow.status === 'accepted' ? "success" : "error"} />
-                          </TableCell>
-                        )}
-                        </>:
-                        <>
-                      <TableCell style={{ width: '90%' }}>{studentsRow.student_name + " " + studentsRow.student_surname}</TableCell>
-                      <TableCell style={{ width: '10%' }}>
-                      <IconButton style={{ color: "#007FFF" }} aria-label="show details" onClick={() => onClickApplication(studentsRow)}>
-                        <DescriptionOutlinedIcon />
-                      </IconButton>
-                      </TableCell>
-                        
-                        </>
-                        }
-                      </TableRow>
-                    ))}
-                  </TableBody>
+                  {RenderTableStudentHeader()}
+                  {RenderTableStudentBody()}
                 </Table>
               ) : (
                 <Typography>No students apply</Typography>
@@ -288,110 +291,118 @@ function CollapsibleTable(props) {
      return listProposals;
    }, [listProposals, orderBy, order]);
  
- 
+  const RenderTableProposalHeader = () => {
+    return (
+          <TableHead>
+          <TableRow>
+            <TableCell style={{ width: '5%' }} />
+            <TableCell style={{ width: isSM ? "80%": "25%"}} sortDirection={orderBy === "title" ? order : false}>
+              
+            <TableSortLabel
+                    active={true}
+                    sx={{
+                      '&.Mui-active .MuiTableSortLabel-icon': {
+                        color: orderBy==="title" ? theme.palette.secondary.main: "none"
+                      },
+                    }}
+                    direction={orderBy === "title" ? order : 'desc'}
+                    onClick={() => handleRequestSort("title")} // Utilizza una funzione di callback
+                  >
+              <b>Title</b>
+              </TableSortLabel>
+              
+              </TableCell>
+            {!isSM? 
+            <>
+            <TableCell style={{ width: '10%' }}  sortDirection={orderBy === "level" ? order : false}>
+              <TableSortLabel
+                active={true}
+                direction={orderBy === "level" ? order : 'desc'}
+                onClick={() => handleRequestSort("level")}
+                sx={{
+                  '&.Mui-active .MuiTableSortLabel-icon': {
+                    color: orderBy==="level" ? theme.palette.secondary.main: "none"
+                  },
+                }}
+              >
+                <b>Level</b>
+              </TableSortLabel>
+            </TableCell>
+            <TableCell style={{ width: '14%' }} sortDirection={orderBy === "title_degree" ? order : false}>
+              <TableSortLabel
+                active={true}
+                direction={orderBy === "title_degree" ? order : 'desc'}
+                onClick={() => handleRequestSort("title_degree")}
+                sx={{
+                  '&.Mui-active .MuiTableSortLabel-icon': {
+                    color: orderBy==="title_degree" ? theme.palette.secondary.main: "none"
+                  },
+                }}
+              >
+                <b>Title Degree</b>
+              </TableSortLabel>
+            </TableCell>
+            <TableCell style={{ width: '11%' }} sortDirection={orderBy === "expiration_date" ? order : false}>
+              <TableSortLabel
+                active={true}
+                direction={orderBy === "expiration_date" ? order : 'desc'}
+                onClick={() => handleRequestSort("expiration_date")}
+                sx={{
+                  '&.Mui-active .MuiTableSortLabel-icon': {
+                    color: orderBy==="expiration_date" ? theme.palette.secondary.main: "none"
+                  },
+                }}
+              >
+                <b>Expiration Date</b>
+              </TableSortLabel>
+            </TableCell>
+            <TableCell style={{ width: '6%' }} sortDirection={orderBy === "status" ? order : false}>
+              <TableSortLabel
+                active={true}
+                direction={orderBy === "status" ? order : 'desc'}
+                onClick={() => handleRequestSort("status")}
+                sx={{
+                  '&.Mui-active .MuiTableSortLabel-icon': {
+                    color: orderBy==="status" ? theme.palette.secondary.main: "none"
+                  },
+                }}
+              >
+                <b>Status</b>
+              </TableSortLabel>
+            </TableCell>
+            <TableCell style={{ width: '3.6%' }}><b>See details</b></TableCell>
+            <TableCell style={{ width: '3.6%' }}><b>Archive</b></TableCell>
+            <TableCell style={{ width: '3.6%' }}><b>Edit</b></TableCell>
+            <TableCell style={{ width: '3.6%' }}><b>Delete</b></TableCell>
 
+            </>
+            :<><TableCell style={{ width: '15%' }}><b>Actions</b></TableCell></> }
+          </TableRow>
+        </TableHead>);
+  }
+
+  const RenderTableProposalBody = () => {
+    return (
+    <TableBody>
+    {sortedProposals.length > 0 ? (
+      sortedProposals.map((row, index) => (
+        <Row key={index} row={row} isEvenRow={index % 2 === 0} isSM={isSM} onClick={onClick} onClickApplication={onClickApplication} index={index} deleteProposal={deleteProposal} archiveProposal={archiveProposal} fetchProposals={fetchProposals} />
+      ))
+    ) : (
+      <TableRow>
+        <TableCell />
+        <TableCell colSpan={9} >
+          No thesis available
+        </TableCell>
+      </TableRow>
+    )}
+  </TableBody>);
+  }
+  
   return (
     <Table aria-label="collapsible table" >
-      <TableHead>
-        <TableRow>
-          <TableCell style={{ width: '5%' }} />
-          <TableCell style={{ width: isSM ? "80%": "25%"}} sortDirection={orderBy === "title" ? order : false}>
-            
-          <TableSortLabel
-                  active={true}
-                  sx={{
-                    '&.Mui-active .MuiTableSortLabel-icon': {
-                      color: orderBy==="title" ? theme.palette.secondary.main: "none"
-                    },
-                  }}
-                  direction={orderBy === "title" ? order : 'desc'}
-                  onClick={() => handleRequestSort("title")} // Utilizza una funzione di callback
-                >
-            <b>Title</b>
-            </TableSortLabel>
-            
-            </TableCell>
-          {!isSM? 
-          <>
-          <TableCell style={{ width: '10%' }}  sortDirection={orderBy === "level" ? order : false}>
-            <TableSortLabel
-              active={true}
-              direction={orderBy === "level" ? order : 'desc'}
-              onClick={() => handleRequestSort("level")}
-              sx={{
-                '&.Mui-active .MuiTableSortLabel-icon': {
-                  color: orderBy==="level" ? theme.palette.secondary.main: "none"
-                },
-              }}
-            >
-              <b>Level</b>
-            </TableSortLabel>
-          </TableCell>
-          <TableCell style={{ width: '14%' }} sortDirection={orderBy === "title_degree" ? order : false}>
-            <TableSortLabel
-              active={true}
-              direction={orderBy === "title_degree" ? order : 'desc'}
-              onClick={() => handleRequestSort("title_degree")}
-              sx={{
-                '&.Mui-active .MuiTableSortLabel-icon': {
-                  color: orderBy==="title_degree" ? theme.palette.secondary.main: "none"
-                },
-              }}
-            >
-              <b>Title Degree</b>
-            </TableSortLabel>
-          </TableCell>
-          <TableCell style={{ width: '11%' }} sortDirection={orderBy === "expiration_date" ? order : false}>
-            <TableSortLabel
-              active={true}
-              direction={orderBy === "expiration_date" ? order : 'desc'}
-              onClick={() => handleRequestSort("expiration_date")}
-              sx={{
-                '&.Mui-active .MuiTableSortLabel-icon': {
-                  color: orderBy==="expiration_date" ? theme.palette.secondary.main: "none"
-                },
-              }}
-            >
-              <b>Expiration Date</b>
-            </TableSortLabel>
-          </TableCell>
-          <TableCell style={{ width: '6%' }} sortDirection={orderBy === "status" ? order : false}>
-            <TableSortLabel
-              active={true}
-              direction={orderBy === "status" ? order : 'desc'}
-              onClick={() => handleRequestSort("status")}
-              sx={{
-                '&.Mui-active .MuiTableSortLabel-icon': {
-                  color: orderBy==="status" ? theme.palette.secondary.main: "none"
-                },
-              }}
-            >
-              <b>Status</b>
-            </TableSortLabel>
-          </TableCell>
-          <TableCell style={{ width: '3.6%' }}><b>See details</b></TableCell>
-          <TableCell style={{ width: '3.6%' }}><b>Archive</b></TableCell>
-          <TableCell style={{ width: '3.6%' }}><b>Edit</b></TableCell>
-          <TableCell style={{ width: '3.6%' }}><b>Delete</b></TableCell>
-
-          </>
-          :<><TableCell style={{ width: '15%' }}><b>Actions</b></TableCell></> }
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {sortedProposals.length > 0 ? (
-          sortedProposals.map((row, index) => (
-            <Row key={index} row={row} isEvenRow={index % 2 === 0} isSM={isSM} onClick={onClick} onClickApplication={onClickApplication} index={index} deleteProposal={deleteProposal} archiveProposal={archiveProposal} fetchProposals={fetchProposals} />
-          ))
-        ) : (
-          <TableRow>
-            <TableCell />
-            <TableCell colSpan={9} >
-              No thesis available
-            </TableCell>
-          </TableRow>
-        )}
-      </TableBody>
+      {RenderTableProposalHeader()}
+      {RenderTableProposalBody()}
     </Table>
   );
 }
