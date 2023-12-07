@@ -148,46 +148,50 @@ export default function StickyHeadTable(props) {
     return null;
   };
 
-  const RenderTableHeader = () => {
-    <TableRow className="headerRow">
-    {columns.map((column, index) => (
-      <TableCell
-        key={index}
-        align={column.align}
-        style={{ width: column.maxWidth }}
-        sortDirection={orderBy === column.id ? order : false}
-      >
-        {column.label!= "Apply" ? 
-        <TableSortLabel
-          active={true}
-          direction={orderBy === column.id ? order : 'desc'}
-          onClick={() => handleRequestSort(column.id)} // Utilizza una funzione di callback
-          sx={{
-            '&.Mui-active .MuiTableSortLabel-icon': {
-              color: orderBy === column.id ? theme.palette.secondary.main: "none"
-            },
-          }}
-        >
-          {column.label}
-          {orderBy === column.id ? (
-            <Box component="span" sx={visuallyHidden}>
-              {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-            </Box>
-          ) : null}
-        </TableSortLabel>
-        : <>{column.label}</>}
-      </TableCell>
-    ))}
-  </TableRow>
-  }
+  const RenderTableHeader = () => (
+    <TableHead>
+      <TableRow className="headerRow">
+        {columns?.map((column, index) => (
+          <TableCell
+            key={index}
+            align={column.align}
+            style={{ width: column.maxWidth }}
+            sortDirection={orderBy === column.id ? order : false}
+          >
+            {column.label !== 'Apply' ? (
+              <TableSortLabel
+                active={true}
+                direction={orderBy === column.id ? order : 'desc'}
+                onClick={() => handleRequestSort(column.id)}
+                sx={{
+                  '&.Mui-active .MuiTableSortLabel-icon': {
+                    color: orderBy === column.id ? theme.palette.secondary.main : 'none',
+                  },
+                }}
+              >
+                {column.label}
+                {orderBy === column.id ? (
+                  <Box component="span" sx={visuallyHidden}>
+                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            ) : (
+              <>{column.label}</>
+            )}
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+  
 
   return (
     <Paper className="paperContainer" >
       <TableContainer className="tableContainer">
         <Table stickyHeader aria-label="sticky table" >
-        <TableHead>
-          <RenderTableHeader/>
-        </TableHead>
+
+          {RenderTableHeader()}
           <TableBody>
             {renderNoProposalsMessage()}
             {sortedProposals.map((row, index) => (

@@ -173,7 +173,7 @@ function Row(props) {
               </Typography>
               {row.students.length > 0 ? (
                 <Table size="small" aria-label="purchases">
-                  <RenderTableHeader/>
+                  {RenderTableHeader()}
                   <TableBody>
                     {row.students.map((studentsRow) => (
                       <TableRow key={studentsRow.student_id}>
