@@ -16,7 +16,6 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
 import TableSortLabel  from '@mui/material/TableSortLabel';
-import PropTypes from 'prop-types';
 
 
 function Row(props) {
@@ -256,15 +255,6 @@ function CollapsibleTable(props) {
   const theme = useTheme();
   const isSM = useMediaQuery(theme.breakpoints.down('md'));
 
-  
-  CollapsibleTable.propTypes = {  // code smell fixed
-    listProposals: PropTypes.array.isRequired,
-    onClick: PropTypes.func.isRequired,
-    deleteProposal: PropTypes.func.isRequired,
-    archiveProposal: PropTypes.func.isRequired,
-    onClickApplication: PropTypes.func.isRequired,
-    fetchProposals: PropTypes.func.isRequired,
-  };
 
    ///SORTING
    const [orderBy, setOrderBy] = React.useState('expiration_date');

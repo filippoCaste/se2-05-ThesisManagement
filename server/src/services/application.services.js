@@ -251,7 +251,7 @@ export const getStudentEmailByApplicationId = (applicationId) => {
       if (row && row.email) {
         resolve(row.email);
       } else {
-        reject("No email were found"); // Return null if email not found for the applicationId
+        reject(new Error("No email were found")); // Return null if email not found for the applicationId
       }
     });
   });
