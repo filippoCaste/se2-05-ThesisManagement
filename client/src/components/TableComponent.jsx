@@ -16,6 +16,7 @@ import TableSortLabel  from '@mui/material/TableSortLabel';
 import { Box } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
+import PropTypes from 'prop-types';
 
 
 export default function StickyHeadTable(props) {
@@ -25,6 +26,11 @@ export default function StickyHeadTable(props) {
   const [order, setOrder] = React.useState('desc');
   const { proposals, isAppliedProposals,drawerWidth } = props;
   const theme = useTheme();
+
+  //slice 
+  StickyHeadTable.propTypes = {
+    proposals: PropTypes.array.isRequired,
+  };
 
   const columns = [
     { id: 'title', label: 'Title', minWidth: 450, maxWidth: 450 },
