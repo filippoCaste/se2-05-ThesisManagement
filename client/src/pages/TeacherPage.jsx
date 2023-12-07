@@ -11,6 +11,7 @@ import CollapsibleTable from '../components/CollapsibleTable';
 import AlertDialog from '../components/AlertDialog';
 import dayjs from 'dayjs';
 import ApplicationDialog from '../components/ApplicationDialog';
+import careerAPI from '../services/careers.api';
 
 function TeacherPage(props)
 {  
@@ -19,14 +20,14 @@ function TeacherPage(props)
 
    const navigate = useNavigate();
    const { user } = useContext(UserContext);
-   const [errorMsgAPI, setErrorMsgAPI] = useState('');
    const [listProposals, setListProposals]=useState([]);
    const [filterStatus,setFilterStatus]=useState('posted');
    const [openDialog, setOpenDialog] = useState(false);
    const [openDialogApplication, setOpenDialogApplication] = useState(false);
    const [selectedItem, setSelectedItem] = useState(null);
    const [loading, setLoading] = useState(false);
-    const [selectedApplication, setSelectedApplication] = useState(null);
+   const [selectedApplication, setSelectedApplication] = useState(null);
+   const [studentExams, setStudentExams] = useState([]);
   
   async function createRow(p) {
     const students = await API_Applications.getApplicationStudentsByProposalId(
@@ -46,6 +47,9 @@ function TeacherPage(props)
    };
   const handleClickApplication = (datum) => {
     setSelectedApplication(datum);
+    careerAPI.getCareerByStudentId(datum.student_id).then((res) => {
+      setStudentExams(res);
+    });
     setOpenDialogApplication(true);
   };  
 
@@ -75,8 +79,7 @@ function TeacherPage(props)
 
        setListProposals(data);
        }
-    }
-
+    };
 
    useEffect(() => { 
       fetchData();
@@ -156,9 +159,9 @@ function TeacherPage(props)
               setLoading(false);
               setOpenDialogApplication(false);
             }}
-            loading={loading}
             item={selectedApplication}
-            fetchProposals={fetchData}
+            //fetchProposals={fetchData}
+            studentExams={studentExams}
           />
         )}
       </Grid>
@@ -167,3 +170,4 @@ function TeacherPage(props)
 }
 
 export default TeacherPage;
+

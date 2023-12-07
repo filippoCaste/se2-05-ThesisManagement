@@ -6,19 +6,52 @@ import {
   DialogContent,
   DialogTitle,
   Typography,
-  CircularProgress,
+  useMediaQuery
 } from '@mui/material';
 import dayjs from 'dayjs';
 import theme from '../theme';
-import { MessageContext } from '../Contexts';
-import { useContext } from 'react';
-import applicationsAPI from '../services/applications.api';
+import StickyHeadTable from './TableComponent';
 
+function renderField(label, value) {
+  if (label === "Level") {
+    return (
+      <Typography variant="body1" gutterBottom sx={{ color: theme.palette.text.primary }}>
+        <strong>{label}:</strong> {value === "MSc" ? "Master of Science" : value === "BSc" ? "Bachelor of Science" : ""}
+      </Typography>
+    );
+  }
+
+  return (
+    <Typography variant="body1" gutterBottom sx={{ color: theme.palette.text.primary }}>
+      <strong>{label}:</strong> {value}
+    </Typography>
+  );
+}
+
+function StudentInformation(student_id, student_email, student_title_degree, student_enrollment_year, student_nationality, submission_date, status) {
+  return (
+    <>
+      {renderField("Id", student_id)}
+      {renderField("Email", student_email)}
+      {renderField("Title Degree", student_title_degree)}
+      {renderField("Enrollment Year", student_enrollment_year)}
+      {renderField("Nationality", student_nationality)}
+      {renderField("Submission Date", dayjs(submission_date).format("DD/MM/YYYY"))}
+      {renderField("Status", status)}
+    </>
+  );
+};
 
 export default function ApplicationDialog(props) {
-const {open, handleClose, item, loading} = props;
-const handleMessage = useContext(MessageContext);
-const [statusChangeLoading, setStatusChangeLoading] = React.useState(false);
+const {open, handleClose, item, studentExams} = props;
+const isSM = useMediaQuery(theme.breakpoints.down('md'));
+const columns = [
+  { id: 'cod_course', label: 'Course code', width: '25%' },
+  { id: 'title_course', label: 'Course Title', width: '50%' },
+  { id: 'cfu', label: 'Cfu', width: '5%' },
+  { id: 'grade', label: 'Grade', width: '5%' },
+  { id: 'date', label: 'Date', width: '15%', format: (value) => dayjs(value).format('DD/MM/YYYY') },
+];
 const {
     student_name,
     student_surname,
@@ -27,28 +60,24 @@ const {
     student_id,
     student_nationality,
     student_title_degree,
-    student_submission_date,
+    submission_date,
     status,
-  } = item || {};  
+  } = item || {}; 
+  const [isStudentInformation, setIsStudentInformation] = React.useState(true);
+  const [openPdf, setOpenPdf] = React.useState(false);
 
-  const changeStatusOfApplication = async (studentsRow, status) => {
-    try {
-      setStatusChangeLoading(true);
+  const handleClick = () => {
+    setIsStudentInformation(!isStudentInformation);
+  }
 
-      const response = await applicationsAPI.changeStatusOfApplication(studentsRow.application_id, status);
-
-      if (response) {
-        studentsRow.status = status;
-        await props.fetchProposals();
-        handleMessage("Proposal "+ status+" successfully.", "success");
-
-      }
-    } catch (error) {
-      handleMessage("Error changing status:"+ error,"warning");
-    } finally {
-      setStatusChangeLoading(false);
+  React.useEffect(() => {
+    if (openPdf) {
+      const pdfUrl = `http://localhost:3001/server/students_CV/s318082_20_CV.pdf`;
+      window.open(pdfUrl, '_blank');
+      setOpenPdf(false);
     }
-  };
+  }, [openPdf, student_id]);
+
   return (
     <Dialog
       open={open}
@@ -63,34 +92,34 @@ const {
     >
       <DialogTitle sx={{ borderBottom: `1px solid ${theme.palette.secondary.main}`, color: theme.palette.primary.main }}>
         <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-        {student_name} {student_surname}
+        s{student_id} - {student_name} {student_surname}
         </Typography>
       </DialogTitle>
       <DialogContent sx={{ padding: '20px', backgroundColor: theme.palette.background.default }}>
-        {renderField("Id", student_id)}
-        {renderField("Email", student_email)}
-        {renderField("Title Degree", student_title_degree)}
-        {renderField("Enrollment Year", student_enrollment_year)}
-        {renderField("Nationality", student_nationality)}
-        {renderField("Submission Date", dayjs(student_submission_date).format("DD/MM/YYYY"))}
-        {renderField("Status", status)}
+      {
+        !isSM ? (
+          <StickyHeadTable columns={columns} rows={studentExams} noDataMessage={'No exams passed'} />
+        ) : isStudentInformation ? (
+          StudentInformation(student_id, student_email, student_title_degree, student_enrollment_year, student_nationality, submission_date, status)
+        ) : (
+          <StickyHeadTable columns={columns} rows={studentExams} noDataMessage={'No exams passed'} />
+        )
+      } 
       </DialogContent>
       <DialogActions sx={{ padding: '20px', borderTop: `1px solid ${theme.palette.secondary.main}`, justifyContent: 'space-between' }}>
-        {loading ? (
-          <CircularProgress color="primary" size={24} />
-        ) : 
-         <Button disabled={status != "submitted"} onClick={() => {changeStatusOfApplication(item, 'accepted');handleClose();}} color="primary" variant="contained">
-              <Typography variant="button" sx={{ color: 'white' }}>
-                Accept
-              </Typography>
-            </Button>
-        }
-            <Button  disabled={status != "submitted"} onClick={() => {changeStatusOfApplication(item, 'rejected');handleClose();}} color="warning" variant="contained">
-               <Typography variant="button" sx={{ color: 'white' }}>
-                  Refuse
-               </Typography>
-            </Button>
-            <Button onClick={handleClose} color="secondary">
+        {isSM ? 
+        <Button color="secondary">
+            <Typography onClick={handleClick} variant="button" sx={{ color: theme.palette.secondary.main }}>
+              Student{isStudentInformation ? " Career     " : " Information"}
+            </Typography>
+        </Button>
+        : <></> }
+        <Button onClick={() => setOpenPdf(true)} variant="contained">
+          <Typography variant="button">
+            Show Student CV
+          </Typography>
+        </Button>
+        <Button onClick={handleClose} color="secondary">
           <Typography variant="button" sx={{ color: theme.palette.secondary.main }}>
             Close
           </Typography>
@@ -99,21 +128,5 @@ const {
     </Dialog>
   );
 
-  function renderField(label, value) {
-    if (label === "Level") {
-      return (
-        <Typography variant="body1" gutterBottom sx={{ color: theme.palette.text.primary }}>
-          <strong>{label}:</strong> {value === "MSc" ? "Master of Science" : value === "BSc" ? "Bachelor of Science" : ""}
-        </Typography>
-      );
-    }
-
-
-    return (
-      <Typography variant="body1" gutterBottom sx={{ color: theme.palette.text.primary }}>
-        <strong>{label}:</strong> {value}
-      </Typography>
-    );
-  }
-
 }
+

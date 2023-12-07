@@ -6,6 +6,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import applicationsAPI from '../services/applications.api';
 import { Link } from "react-router-dom";
@@ -18,7 +19,7 @@ import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
 
 
 function Row(props) {
-  const { row, isEvenRow, deleteProposal, index, onClick,onClickApplication, archiveProposal,isSM, fetchProposals } = props;
+  const { row, isEvenRow, deleteProposal, index, onClick, onClickApplication, archiveProposal, isSM, fetchProposals } = props;
   const [open, setOpen] = React.useState(false);
   const handleMessage = useContext(MessageContext);
   const [statusChangeLoading, setStatusChangeLoading] = React.useState(false);
@@ -153,18 +154,21 @@ function Row(props) {
                       {!isSM? 
                       <>                      
                       <TableCell style={{ width: '5%' }}><b>Id</b></TableCell>
-                      <TableCell style={{ width: '20%' }}><b>Name</b></TableCell>
+                      <TableCell style={{ width: '18%' }}><b>Name</b></TableCell>
                       <TableCell style={{ width: '15%' }}><b>Email</b></TableCell>
                       <TableCell style={{ width: '20%' }}><b>Title Degree</b></TableCell>
-                      <TableCell style={{ width: '15%' }}><b>Enrollment Year</b></TableCell>
-                      <TableCell style={{ width: '10%' }}><b>Nationality</b></TableCell>
-                      <TableCell style={{ width: '15%' }}><b>Submission Date</b></TableCell>
+                      <TableCell style={{ width: '12%' }}><b>Enrollment Year</b></TableCell>
+                      <TableCell style={{ width: '7%' }}><b>Nationality</b></TableCell>
+                      <TableCell style={{ width: '12%' }}><b>Submission Date</b></TableCell>
+                      <TableCell style={{ width: '10%' }} ><b>Show more</b></TableCell>
                       <TableCell style={{ width: '5%' }} />
                       <TableCell style={{ width: '5%' }} />
                       </>:
                       <>
-                      <TableCell style={{ width: '90%' }}><b>Name</b></TableCell>
-                      <TableCell style={{ width: '10%' }}><b>Show more</b></TableCell>
+                      <TableCell style={{ width: '75%' }}><b>Name</b></TableCell>
+                      <TableCell style={{ width: '15%' }}><b>Show more</b></TableCell>
+                      <TableCell style={{ width: '5%' }} />
+                      <TableCell style={{ width: '5%' }} />
                       </>
                       }
                     </TableRow>
@@ -175,12 +179,17 @@ function Row(props) {
                       {!isSM? 
                       <>   
                         <TableCell style={{ width: '5%' }} component="th" scope="row">{studentsRow.student_id}</TableCell>
-                        <TableCell style={{ width: '20%' }}>{studentsRow.student_name + " " + studentsRow.student_surname}</TableCell>
+                        <TableCell style={{ width: '18%' }}>{studentsRow.student_name + " " + studentsRow.student_surname}</TableCell>
                         <TableCell style={{ width: '15%' }}>{studentsRow.student_email}</TableCell>
                         <TableCell style={{ width: '20%' }}>{studentsRow.student_title_degree}</TableCell>
-                        <TableCell style={{ width: '15%' }}>{studentsRow.student_enrollment_year}</TableCell>
-                        <TableCell style={{ width: '10%' }}>{studentsRow.student_nationality}</TableCell>
-                        <TableCell style={{ width: '15%' }}>{dayjs(studentsRow.submission_date).format("DD/MM/YYYY")}</TableCell>
+                        <TableCell style={{ width: '12%' }}>{studentsRow.student_enrollment_year}</TableCell>
+                        <TableCell style={{ width: '7%' }}>{studentsRow.student_nationality}</TableCell>
+                        <TableCell style={{ width: '12%' }}>{dayjs(studentsRow.submission_date).format("DD/MM/YYYY")}</TableCell>
+                        <TableCell style={{ width: '10%' }}>
+                          <IconButton style={{ color: "#007FFF" }} aria-label="show details" onClick={() => onClickApplication(studentsRow)}>
+                            <UnfoldMoreOutlinedIcon />
+                          </IconButton>
+                        </TableCell>
                         {studentsRow.status === 'submitted' ? (
                           <>
                             <TableCell style={{ width: '5%' }}>
@@ -225,13 +234,54 @@ function Row(props) {
                         )}
                         </>:
                         <>
-                      <TableCell style={{ width: '90%' }}>{studentsRow.student_name + " " + studentsRow.student_surname}</TableCell>
-                      <TableCell style={{ width: '10%' }}>
-                      <IconButton style={{ color: "#007FFF" }} aria-label="show details" onClick={() => onClickApplication(studentsRow)}>
-                        <DescriptionOutlinedIcon />
-                      </IconButton>
+                      <TableCell style={{ width: '75%' }}>{studentsRow.student_name + " " + studentsRow.student_surname}</TableCell>
+                      <TableCell style={{ width: '15%' }}>
+                        <IconButton style={{ color: "#007FFF" }} aria-label="show details" onClick={() => onClickApplication(studentsRow)}>
+                          <DescriptionOutlinedIcon />
+                        </IconButton>
                       </TableCell>
-                        
+                      {studentsRow.status === 'submitted' ? (
+                          <>
+                            <TableCell style={{ width: '5%' }}>
+                              <Button
+                                variant="outlined"
+                                onClick={() => changeStatusOfApplication(studentsRow, 'accepted')}
+                                style={{
+                                  fontSize: '12px',
+                                  textTransform: 'none',
+                                  color: 'white',
+                                  borderRadius: '4px',
+                                  border: '1px solid #35682D',
+                                  backgroundColor: '#35682D',
+                                }}
+                                disabled={statusChangeLoading}
+                              >
+                                Accept
+                              </Button>
+                            </TableCell>
+                            <TableCell style={{ width: '5%' }}>
+                              <Button
+                                variant="outlined"
+                                onClick={() => changeStatusOfApplication(studentsRow, 'rejected')}
+                                style={{
+                                  fontSize: '12px',
+                                  textTransform: 'none',
+                                  color: 'white',
+                                  borderRadius: '4px',
+                                  border: '1px solid #FF0000',
+                                  backgroundColor: '#FF0000',
+                                }}
+                                disabled={statusChangeLoading}
+                              >
+                                Reject
+                              </Button>
+                            </TableCell>
+                          </>
+                        ) : (
+                          <TableCell colSpan={2} style={{ width: '10%' }}>
+                            <Chip label={studentsRow.status} color={studentsRow.status === 'accepted' ? "success" : "error"} />
+                          </TableCell>
+                        )}
                         </>
                         }
                       </TableRow>
