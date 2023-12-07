@@ -108,7 +108,7 @@ export default function StickyHeadTable(props) {
 
   const sortedProposals = React.useMemo(() => {
     if (orderBy && order) {
-      return proposals.slice().sort((a, b) => {
+      return proposals?.slice().sort((a, b) => {
         const aValue = a[orderBy];
         const bValue = b[orderBy];
         if (order === 'asc') {
