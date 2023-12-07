@@ -4,6 +4,7 @@ import applicationsAPI from '../services/applications.api';
 import { MessageContext, UserContext } from '../Contexts';
 import dayjs from 'dayjs';
 import StickyHeadTable from './TableComponent';
+import careerAPI from '../services/careers.api';
 
 function MainDashboard(props) {
   const { proposals, openSelectionMobile, drawerWidth, isAppliedProposals } =
@@ -27,17 +28,27 @@ function MainDashboard(props) {
           handleClose={() => {
             setLoading(false);
             setOpenDialog(false);
-            //console.log(selectedItem.id + ' ' + user.id);
           }}
-          handleApply={() => {
+          handleApply={(selectedFile) => {
             setLoading(true);
 
-            applicationsAPI.createApplication(
-              selectedItem.id,
-              user.id,
-              dayjs().format('YYYY-MM-DD')
-            ).then(() => handleMessage('Successfully Applied', 'success'))
-            .catch((err) => handleMessage('Failed Applying '+ err, 'warning'));
+            if(selectedFile) {
+              careerAPI.uploadFile(selectedFile, selectedItem.id, user.id).then(() => {
+                applicationsAPI.createApplication(
+                  selectedItem.id,
+                  user.id,
+                  dayjs().format('YYYY-MM-DD')
+                ).then(() => handleMessage('Successfully Applied', 'success'))
+                .catch((err) => handleMessage('Failed Applying '+ err, 'warning'));
+              }).catch((err) => handleMessage('Failed Applying '+ err, 'warning'));
+            } else {
+              applicationsAPI.createApplication(
+                selectedItem.id,
+                user.id,
+                dayjs().format('YYYY-MM-DD')
+              ).then(() => handleMessage('Successfully Applied', 'success'))
+              .catch((err) => handleMessage('Failed Applying '+ err, 'warning'));
+            }
 
             setOpenDialog(false);
             setLoading(false);
@@ -45,6 +56,7 @@ function MainDashboard(props) {
           }}
           loading={loading}
           item={selectedItem}
+          isAppliedProposals={isAppliedProposals}
         />
       )}
       <StickyHeadTable

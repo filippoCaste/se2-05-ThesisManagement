@@ -11,13 +11,3 @@ export const getCareerByStudentId = async (req, res) => {
     }
 };
 
-/*export const getPDF = async (req, res) => {
-    try {
-        const studentId = req.params.studentId;
-        const applicationId = req.params.applicationId;
-        const result = await getPDFFile(studentId, applicationId);
-        return res.json(result);
-    } catch (err) {
-        return res.status(500).json({ error: err.message });
-    }
-};*/
