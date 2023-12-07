@@ -227,6 +227,20 @@ export default function StickyHeadTable(props) {
     ))}
     </>
   );
+
+  const RenderTablePagination = () => (
+    <TablePagination
+    rowsPerPageOptions={[10, 25, 100]}
+    component="div"
+    count={proposals.length}
+    rowsPerPage={rowsPerPage}
+    page={page}
+    onPageChange={handleChangePage}
+    onRowsPerPageChange={handleChangeRowsPerPage}
+    style={{ borderTop: '1px solid rgba(224, 224, 224, 1)' }}
+  />
+  );
+
   return (
     <Paper className="paperContainer" >
       <TableContainer className="tableContainer">
@@ -238,16 +252,7 @@ export default function StickyHeadTable(props) {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={proposals.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        style={{ borderTop: '1px solid rgba(224, 224, 224, 1)' }}
-      />
+            {RenderTablePagination()}
     </Paper>
   );
 }
