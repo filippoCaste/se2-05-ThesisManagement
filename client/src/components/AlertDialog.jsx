@@ -13,6 +13,21 @@ import theme from '../theme';
 import {useState, useContext, useEffect } from 'react';
 import { UserContext } from '../Contexts';
 import applicationsAPI from '../services/applications.api';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { styled } from '@mui/material/styles';
+
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
+
 
 export default function AlertDialog({
   open,
@@ -98,6 +113,12 @@ export default function AlertDialog({
 
         {renderField('Group', title_group)}
         {renderField('Required Knowledge', required_knowledge)}
+        {isAppliedProposals && 
+          <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} disabled={isAppliedProposal}>
+            Upload file
+            <VisuallyHiddenInput type="file" />
+          </Button>
+        }
       </DialogContent>
       <DialogActions
         sx={{

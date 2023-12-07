@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import dayjs from 'dayjs';
 import theme from '../theme';
-import StickyHeadTable from './TableComponent';
+import StickyHeadTable from './GenericTable';
 
 function renderField(label, value) {
   if (label === "Level") {
@@ -69,14 +69,6 @@ const {
   const handleClick = () => {
     setIsStudentInformation(!isStudentInformation);
   }
-
-  React.useEffect(() => {
-    if (openPdf) {
-      const pdfUrl = `http://localhost:3001/server/students_CV/s318082_20_CV.pdf`;
-      window.open(pdfUrl, '_blank');
-      setOpenPdf(false);
-    }
-  }, [openPdf, student_id]);
 
   return (
     <Dialog
