@@ -333,7 +333,7 @@ function ProposalTeacher(props)
     {
       proposalAPI.postProposal(title,type,description,level, formatted_expiration,notes,
           required_knowledge, array_only_cod_degree,cod_group,supervisors_obj,selectedKeywordList)
-          .then(navigate("/teacher"))
+          .then(()=>navigate('/teacher'))
           .catch((err) => handleMessage(err,"warning"));
       
     }
@@ -345,7 +345,7 @@ function ProposalTeacher(props)
       proposalAPI.updateProposal(proposalId,title,type,description,level,
           formatted_expiration,notes, required_knowledge, array_only_cod_degree, cod_group,
           supervisors_obj, selectedKeywordList)
-          .then(() => {navigate("/teacher")})
+          .then(()=>navigate('/teacher'))
           .catch((err) => handleMessage(err,"warning"))  
     }
 
@@ -354,7 +354,7 @@ function ProposalTeacher(props)
     {
       proposalAPI.postProposal(title,type,description,level, formatted_expiration,notes,
           required_knowledge, array_only_cod_degree,cod_group,supervisors_obj,selectedKeywordList)
-          .then(navigate("/teacher"))
+          .then(()=>navigate('/teacher'))
           .catch((err) => handleMessage(err,"warning"));
     }
    

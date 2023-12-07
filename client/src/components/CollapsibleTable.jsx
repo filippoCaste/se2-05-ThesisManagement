@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { Box, Collapse, Button, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Typography, Chip,useMediaQuery  } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -19,6 +20,8 @@ import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
 
 
 function Row(props) {
+  const navigate = useNavigate();
+  
   const { row, isEvenRow, deleteProposal, index, onClick,onClickApplication, archiveProposal,isSM, fetchProposals } = props;
   const [open, setOpen] = React.useState(false);
   const handleMessage = useContext(MessageContext);
@@ -95,11 +98,11 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell style={{ width: '3%' }}> 
-        <Link to={`/teacher/updateProposal/${row.p.id}`}>
-          <IconButton color='info' aria-label="edit" onClick={() => { }} disabled={proposalAccepted  || row.p.status === 'assigned'}>
+          <IconButton color='info' aria-label="edit" 
+          onClick={() => navigate(`/teacher/updateProposal/${row.p.id}`)} disabled={proposalAccepted  || row.p.status === 'assigned'}>
             <EditIcon />
           </IconButton>
-          </Link>
+          
         </TableCell>
         <TableCell style={{ width: '3.6%' }}>
           <IconButton
@@ -111,11 +114,11 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell style={{ width: '3%' }}> 
-        <Link to={`/teacher/copyProposal/${row.p.id}`}>
-          <IconButton aria-label="copy" onClick={() => { }} disabled={proposalAccepted  || row.p.status === 'assigned'}>
+          <IconButton aria-label="copy" 
+          onClick={() => navigate(`/teacher/copyProposal/${row.p.id}`)}
+           disabled={proposalAccepted  || row.p.status === 'assigned'}>
             <ContentCopyIcon />
           </IconButton>
-          </Link>
         </TableCell>
         </>
         :
@@ -136,12 +139,12 @@ function Row(props) {
                       'aria-labelledby': 'basic-button',
                     }}
                   >
-                      <MenuItem style={{ color: "#007FFF" }} aria-label="show details" onClick={() => {onClick(row.p);handleClose();}}><DescriptionOutlinedIcon /></MenuItem>
-                      <MenuItem aria-label="archive" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"  || row.p.status === 'assigned' || proposalAccepted}><ArchiveIcon   color='success'/></MenuItem>
-                      <MenuItem aria-label="edit" onClick={() => {handleClose();}} disabled={proposalAccepted  || row.p.status === 'assigned'}><Link to={`/teacher/updateProposal/${row.p.id}`}><EditIcon color='info' /></Link></MenuItem>
-                      <MenuItem aria-label="delete" onClick={() => {deleteProposal(index);handleClose();}} disabled={proposalAccepted || row.p.status === 'assigned'}><DeleteIcon color="error" /></MenuItem>
-                      <MenuItem aria-label="copy" onClick={() => {handleClose();}} disabled={proposalAccepted  || row.p.status === 'assigned'}><Link to={`/teacher/copyProposal/${row.p.id}`}><ContentCopyIcon  /></Link></MenuItem>
-                    
+        <MenuItem style={{ color: "#007FFF" }} aria-label="show details" onClick={() => {onClick(row.p);handleClose();}}><DescriptionOutlinedIcon /></MenuItem>
+        <MenuItem aria-label="archive" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"  || row.p.status === 'assigned' || proposalAccepted}><ArchiveIcon   color='success'/></MenuItem>
+        <MenuItem aria-label="edit" onClick={() => {handleClose();}} disabled={proposalAccepted  || row.p.status === 'assigned'}><Link to={`/teacher/updateProposal/${row.p.id}`}><EditIcon color='info' /></Link></MenuItem>
+        <MenuItem aria-label="delete" onClick={() => {deleteProposal(index);handleClose();}} disabled={proposalAccepted || row.p.status === 'assigned'}><DeleteIcon color="error" /></MenuItem>
+        <MenuItem aria-label="copy" onClick={() => {handleClose();}} disabled={proposalAccepted  || row.p.status === 'assigned'}><Link to={`/teacher/copyProposal/${row.p.id}`}><ContentCopyIcon  /></Link></MenuItem>
+      
                   </Menu>
         </IconButton>
       </TableCell>
