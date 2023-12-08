@@ -1,7 +1,8 @@
 # Thesis Management 
 
 - [Thesis Management](#thesis-management)
-  - [Login credentials](#login-credentials)
+  - [Run instructions](#run-instructions)
+  - [Login credentials (main users)](#login-credentials-main-users)
   - [API Server](#api-server)
     - [`/api/proposals`:](#apiproposals)
     - [`/api/degrees`:](#apidegrees)
@@ -36,13 +37,23 @@
     - [Teacher](#teacher)
       - [Components](#components-2)
 
-## Login credentials
+## Run instructions
+In order to run the application you need to open two terminals and run:
+- `cd client; npm install; npm run dev` in the first one;
+- `cd server; npm install; node index.js` in the other one.
+
+## Login credentials (main users)
 |username|password|
 |---|---|
 |d10000@polito.it | 10000 |
 |d10001@polito.it | 10001 |
+|d10002@polito.it | 10002 |
 |s308692@studenti.polito.it | 308692 |
 |s318082@studenti.polito.it | 318082 |
+|s312121@studenti.polito.it | 312121 |
+|s314948@studenti.polito.it | 314948 |
+|s309164@studenti.polito.it | 309164 |
+|s312401@studenti.polito.it | 312401 |
 
 ## API Server
 
@@ -480,7 +491,7 @@
 - `getKeywordByName(keywordName)`: if exists, it returns a keyword with the specified name (path: `services/keyword.services.js`)
 
 ## Database Tables
-
+The database can be found in: `./server/database.db`.
 ### Tables
 #### `ProposalKeywords`
 - proposal_id: INTEGER (NOT NULL)
@@ -585,6 +596,10 @@ Official palette:
   - `onConfirm`: returns `true` if the operation is *completed*, `false` otherwise;
   - `message`: the message to display ("Are you sure you want to...");
   - `operation`: the operation to be performed ("send", "apply", ...) [this text is displayed in the button label];
+- `ClockCustomized.jsx`: implements the logic of the virtual clock which allows move forward in the time to see the status of the system in a future day (with the current data).
+- `CustomSnackbar.jsx`
+- `ChipsCustomized.jsx`
+- `Autocomplete.jsx`
 
 ### Student
 - `MainPage.jsx`: Is the main page of the student. It is the one displayed right after logging in.
