@@ -1,16 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useNavigate, Link } from 'react-router-dom';
 import dayjs from 'dayjs';
+
 import { Box, Collapse, Button, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Typography, Chip,useMediaQuery  } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import EditIcon from '@mui/icons-material/Edit';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import applicationsAPI from '../services/applications.api';
+
 import { MessageContext } from '../Contexts';
 import { useContext } from 'react';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -22,19 +20,14 @@ import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
 function Row(props) {
   const navigate = useNavigate();
   
-  const { row } = props;
-  const { id, status } = row.p;
-
-  const {isEvenRow, deleteProposal, index, onClick,onClickApplication, archiveProposal,isSM, fetchProposals } = props;
+  const { row, isEvenRow, deleteProposal, index, onClick,onClickApplication, archiveProposal,isSM, fetchProposals } = props;
   const [open, setOpen] = React.useState(false);
   const handleMessage = useContext(MessageContext);
   const [statusChangeLoading, setStatusChangeLoading] = React.useState(false);
   const [proposalAccepted, setProposalAccepted] = React.useState(false);
-
   //more actions mobile version
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openActions = Boolean(anchorEl);
-
   const handleClick = (event) => {
     if (anchorEl === event.currentTarget) {
       setAnchorEl(null);
@@ -46,14 +39,10 @@ function Row(props) {
     setAnchorEl(null);
   };
   /////
-
-
   const changeStatusOfApplication = async (studentsRow, status) => {
     try {
       setStatusChangeLoading(true);
-
       const response = await applicationsAPI.changeStatusOfApplication(studentsRow.application_id, status);
-
       if (response) {
         studentsRow.status = status;
         await fetchProposals();
@@ -68,9 +57,6 @@ function Row(props) {
       setStatusChangeLoading(false);
     }
   };
-
-
-
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderTop: "3px solid #ddd", backgroundColor: isEvenRow ? '#f5f5f5' : '#ffffff' } }}>
@@ -102,8 +88,7 @@ function Row(props) {
         </TableCell>
         <TableCell style={{ width: '3%' }}> 
           <IconButton color='info' aria-label="edit" 
-          onClick={() => navigate(`/teacher/updateProposal/${id}`)} 
-          disabled={proposalAccepted  || status === 'assigned'}>
+          onClick={() => navigate(`/teacher/updateProposal/${row.p.id}`)} disabled={proposalAccepted  || row.p.status === 'assigned'}>
             <EditIcon />
           </IconButton>
           
@@ -119,8 +104,8 @@ function Row(props) {
         </TableCell>
         <TableCell style={{ width: '3%' }}> 
           <IconButton aria-label="copy" 
-          onClick={() => navigate(`/teacher/copyProposal/${id}`)}
-           disabled={proposalAccepted  || status === 'assigned'}>
+          onClick={() => navigate(`/teacher/copyProposal/${row.p.id}`)}
+           disabled={proposalAccepted  || row.p.status === 'assigned'}>
             <ContentCopyIcon />
           </IconButton>
         </TableCell>
@@ -147,9 +132,9 @@ function Row(props) {
         <MenuItem aria-label="archive" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"  || row.p.status === 'assigned' || proposalAccepted}><ArchiveIcon   color='success'/></MenuItem>
         <MenuItem aria-label="edit" onClick={() => {handleClose();}} disabled={proposalAccepted  || row.p.status === 'assigned'}><Link to={`/teacher/updateProposal/${row.p.id}`}><EditIcon color='info' /></Link></MenuItem>
         <MenuItem aria-label="delete" onClick={() => {deleteProposal(index);handleClose();}} disabled={proposalAccepted || row.p.status === 'assigned'}><DeleteIcon color="error" /></MenuItem>
-        <MenuItem aria-label="copy" onClick={() => {handleClose();}} disabled={proposalAccepted  || status === 'assigned'}> <Link to={`/teacher/copyProposal/${id}`}><ContentCopyIcon  /></Link></MenuItem>
+        <MenuItem aria-label="copy" onClick={() => {handleClose();}} disabled={proposalAccepted  || row.p.status === 'assigned'}><Link to={`/teacher/copyProposal/${row.p.id}`}><ContentCopyIcon  /></Link></MenuItem>
       
-        </Menu>
+                  </Menu>
         </IconButton>
       </TableCell>
       </>}
@@ -263,7 +248,6 @@ function Row(props) {
     </React.Fragment>
   );
 }
-
 function CollapsibleTable(props) {
   const {listProposals,onClick,deleteProposal, archiveProposal,onClickApplication, fetchProposals} = props;
   const theme = useTheme();
@@ -306,17 +290,4 @@ function CollapsibleTable(props) {
     </Table>
   );
 }
-
-CollapsibleTable.propTypes = {
-  row: PropTypes.shape
-  ({
-    p: PropTypes.shape
-    ({
-      id: PropTypes.number.isRequired,
-      status: PropTypes.string.isRequired,
-    }).isRequired,
-  })
-  .isRequired,
-};
-
 export default CollapsibleTable;
