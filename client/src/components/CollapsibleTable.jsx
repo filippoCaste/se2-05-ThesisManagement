@@ -90,11 +90,12 @@ function Row(props) {
   };
 
   const RenderTableStudentBody = () => {
+    return (
     <TableBody>
     {row.students.map((studentsRow) => (
       <TableRow key={studentsRow.student_id}>
-      {!isSM? 
-      <>   
+      {!isSM ? 
+        <>   
         <TableCell style={{ width: '5%' }} component="th" scope="row">{studentsRow.student_id}</TableCell>
         <TableCell style={{ width: '20%' }}>{studentsRow.student_name + " " + studentsRow.student_surname}</TableCell>
         <TableCell style={{ width: '15%' }}>{studentsRow.student_email}</TableCell>
@@ -152,12 +153,11 @@ function Row(props) {
         <DescriptionOutlinedIcon />
       </IconButton>
       </TableCell>
-        
         </>
         }
       </TableRow>
     ))}
-  </TableBody>
+  </TableBody>);
   };
 
   return (
