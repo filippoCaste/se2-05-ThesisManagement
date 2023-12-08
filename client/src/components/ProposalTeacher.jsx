@@ -687,7 +687,7 @@ function ProposalTeacher(props)
           Selected Externals
         </Typography>}
         {listExternals.map((external, index) => (
-        <Paper key={index} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
+        <Paper key={external.email} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
           <Grid container alignItems="center">
             <Grid item xs={10}>
               <Typography variant="body1">

@@ -1,21 +1,21 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import dayjs from 'dayjs';
-
 import { Box, Collapse, Button, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Typography, Chip,useMediaQuery  } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import EditIcon from '@mui/icons-material/Edit';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import applicationsAPI from '../services/applications.api';
-
 import { MessageContext } from '../Contexts';
 import { useContext } from 'react';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
-
 
 function Row(props) {
   const navigate = useNavigate();
