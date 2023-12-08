@@ -1,4 +1,5 @@
 import { React,useState, useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
 import { useNavigate, useParams } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
@@ -27,19 +28,19 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 function ProposalTeacher(props)
 {
-    const {currentDataAndTime} = props;
+    const {currentDataAndTime, typeOperation} = props;
+
     const navigate= useNavigate();
     const handleMessage = useContext(MessageContext);
     dayjs.extend(customParseFormat);
 
     const {proposalId}= useParams(); //PROPOSAL ID
-    let typeOperation= props.typeOperation;
 
     const { user } = useContext(UserContext);
-    const [teachersList, SetTeachersList]=useState('');
-    const [degreesList, SetDegreesList]=useState('');
+    const [teachersList, setTeachersList]=useState('');
+    const [degreesList, setDegreesList]=useState('');
     const [selectedSupervisor, setSelectedSupervisor] = useState(user?.id);
-    const [keywordsList, SetKeywordsList]=useState(''); //prese dal DB
+    const [keywordsList, setKeywordsList]=useState(''); //prese dal DB
 
 
   
@@ -245,16 +246,17 @@ function ProposalTeacher(props)
 
     useEffect(()=>{
 
+
         API_Degrees.getAllDegrees()
-        .then((d) => {SetDegreesList(d);  }  )
+        .then((d) => {setDegreesList(d); }  )
         .catch((err) => handleMessage(err,"warning"))
     
         API_Teachers.getAllTeachers()
-        .then((t) => SetTeachersList(t))
+        .then((t) => setTeachersList(t))
         .catch((err) => handleMessage(err,"warning"))
     
         API_Keywords.getAllKeywords()
-        .then((k) => SetKeywordsList(k))
+        .then((k) => {setKeywordsList(k); } )
         .catch((err) => handleMessage(err,"warning"))
     
       },[])
@@ -361,6 +363,11 @@ function ProposalTeacher(props)
 }   
        
 
+ let array_sigle_degree=[
+                          {id: "1", sigla:'MSc', valore:"Master of Science"},
+                          {id: "2", sigla:'BSc', valore:"Bachelor of Science"} 
+                        ];
+
   //INVIO FORM ///////////////////////////////////////////////////////////////////////////////////
   
   return (
@@ -437,11 +444,11 @@ function ProposalTeacher(props)
                       value={level}
                       onChange={(ev) => { setLevel(ev.target.value) }}
                     >
-                      {
-                        Array.from(['MSc', 'BSc']).map((el, index) =>
-                        (el === 'MSc' ? <MenuItem key={index} value={'MSc'}> Master of Science </MenuItem> 
-                                      : <MenuItem key={index} value={'BSc'}> Bachelor of Science </MenuItem>))
-                      }
+                       {
+                        array_sigle_degree.map((el, index) =>
+                        <MenuItem key={el.id} value={el.sigla}> {el.valore}</MenuItem> ) 
+                        
+                      }                   
                     </Select>
                   </FormControl> 
             </Grid>
@@ -461,7 +468,7 @@ function ProposalTeacher(props)
                 input={<Input id="select-multiple" />}
               >
                 {Array.from(degreesList).filter(d=>d.level_degree == level).map((degree, index) => (
-                  <MenuItem key={index} value={degree}>
+                  <MenuItem key={degree.cod_degree} value={degree}>
                     {degree.title_degree}
                   </MenuItem>
                 ))}
@@ -481,7 +488,7 @@ function ProposalTeacher(props)
                 Added degrees
               </Typography>}
               {selectedDegreeList.map((degree, index) => (
-                <Paper key={index} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
+                <Paper key={degree.cod_degree} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
                   <Grid container alignItems="center">
                     <Grid item xs={10}>
                       <Typography variant="body1">{degree.title_degree} </Typography>
@@ -523,7 +530,7 @@ function ProposalTeacher(props)
             input={<Input id="select-multiple" />}
           >
             {Array.from(teachersList).filter(t => t.teacher_id != user.id).map((teacher, index) => (
-              <MenuItem key={index} value={teacher}>
+              <MenuItem key={teacher.teacher_id} value={teacher}>
                 {teacher.name} {teacher.surname} - {teacher.teacher_id}
               </MenuItem>
             ))}
@@ -543,7 +550,7 @@ function ProposalTeacher(props)
             Selected Co-Supervisors
           </Typography>}
           {selectedCoSupList.map((coSupervisor, index) => (
-            <Paper key={index} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
+            <Paper key={coSupervisor.teacher_id} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
               <Grid container alignItems="center">
                 <Grid item xs={10}>
                   <Typography variant="body1">{coSupervisor.name} {coSupervisor.surname} - {coSupervisor.teacher_id}</Typography>
@@ -579,7 +586,7 @@ function ProposalTeacher(props)
             input={<Input id="select-multiple" />}
           >
            {Array.from(keywordsList).map((k, index) => (
-            <MenuItem key={index} value={k.name}>
+            <MenuItem key={k.id} value={k.name}>
               {k.name}
             </MenuItem>
           ))}
@@ -610,7 +617,7 @@ function ProposalTeacher(props)
             Added keywords
           </Typography>}
           {selectedKeywordList.map((keyword, index) => (
-            <Paper key={index} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
+            <Paper key={keyword.id} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
               <Grid container alignItems="center">
                 <Grid item xs={10}>
                   <Typography variant="body1">{keyword}</Typography>
@@ -732,5 +739,12 @@ function ProposalTeacher(props)
   );
 
 }
+
+
+ProposalTeacher.propTypes = {
+  typeOperation: PropTypes.string.isRequired,
+  
+};
+
 
 export default ProposalTeacher;
