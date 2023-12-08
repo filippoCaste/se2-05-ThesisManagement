@@ -1,6 +1,7 @@
 import request from "supertest";
 import * as controllers from "../../src/controllers/application.controller.js";
 import * as services from "../../src/services/application.services.js";
+import { sendNotificationApplicationDecision } from "../../src/services/notification.services.js";
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -169,21 +170,26 @@ describe('changeStatus', () => {
     test("should return 400 if status is missing", async () => {
         const req = { body: { status: undefined }, params: { applicationId: 1 } };
         const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+        sendNotificationApplicationDecision.mockImplementation(() => {});
 
         await controllers.changeStatusOfApplication(req, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({ error: "Incorrect fields" });
+        expect(sendNotificationApplicationDecision).not.toHaveBeenCalled();
+
     });
 
     test("should return 400 if status is not valid", async () => {
         const req = { body: { status: "other" }, params: { applicationId: 1 } };
         const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+        sendNotificationApplicationDecision.mockImplementation(() => {});
 
         await controllers.changeStatusOfApplication(req, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({ error: "Incorrect fields" });
+        expect(sendNotificationApplicationDecision).not.toHaveBeenCalled();
     });
 
     test("should return 404 if proposal is not found", async () => {
@@ -193,11 +199,13 @@ describe('changeStatus', () => {
         };
         const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
         services.changeStatus.mockImplementation(() => {throw 404});
+        sendNotificationApplicationDecision.mockImplementation(() => {});
 
         await controllers.changeStatusOfApplication(req, res);
 
         expect(res.status).toHaveBeenCalledWith(404);
         expect(res.json).toHaveBeenCalledWith({ error: "Proposal not found" });
+        expect(sendNotificationApplicationDecision).not.toHaveBeenCalled();
     });
 
     test("should return 403 if user is not the supervisor of the proposal", async () => {
@@ -207,11 +215,13 @@ describe('changeStatus', () => {
         };
         const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
         services.changeStatus.mockImplementation(() => {throw 403});
-
+        sendNotificationApplicationDecision.mockImplementation(() => {});
+        
         await controllers.changeStatusOfApplication(req, res);
 
         expect(res.status).toHaveBeenCalledWith(403);
         expect(res.json).toHaveBeenCalledWith({ error: "You cannot access this resource" });
+        expect(sendNotificationApplicationDecision).not.toHaveBeenCalled();
     });
 
     test("should return 500 if an error occurs during database operation", async () => {
@@ -221,11 +231,13 @@ describe('changeStatus', () => {
         };
         const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
         services.changeStatus.mockImplementation(() => {throw Error("Database error")});
+        sendNotificationApplicationDecision.mockImplementation(() => {});
 
         await controllers.changeStatusOfApplication(req, res);
 
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.json).toHaveBeenCalledWith({ error: "Database error" });
+        expect(sendNotificationApplicationDecision).not.toHaveBeenCalled();
     });
 
     test("should return 204 if everything is OK", async () => {
@@ -235,10 +247,13 @@ describe('changeStatus', () => {
         };
         const res = { status: jest.fn().mockReturnThis(), json: jest.fn(), send: jest.fn() };
         services.changeStatus.mockResolvedValue(true);
-
+        sendNotificationApplicationDecision.mockImplementation(() => {});
+        
         await controllers.changeStatusOfApplication(req, res);
 
         expect(res.status).toHaveBeenCalledWith(204);
         expect(res.send).toHaveBeenCalled();
+        expect(sendNotificationApplicationDecision).not.toHaveBeenCalled();
     });
 });
+
