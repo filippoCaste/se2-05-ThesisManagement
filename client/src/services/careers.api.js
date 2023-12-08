@@ -40,11 +40,28 @@ const uploadFile = async (file, proposalId, studentId) => {
       console.error('Upload failed:', error);
       return false;
     }
-  };
+};
+
+const downloadFile = async (proposalId, studentId) => {
+    try {
+        const response = await fetch(SERVER_URL + `/api/careers/download/student/${studentId}/proposal/${proposalId}`, {
+        method: "GET",
+        credentials: 'include',
+        });
+        if (response.ok) {
+            console.log(response.json());
+        } else {
+            const message = await response.text();
+            throw new Error("Career error: " + message);
+        }
+    } catch (error) {
+        throw new Error("Network Error: " + error.message);
+    }
+};
   
 
 const careerAPI = {
-    getCareerByStudentId, uploadFile
+    getCareerByStudentId, uploadFile, downloadFile
 };
 
 export default careerAPI;

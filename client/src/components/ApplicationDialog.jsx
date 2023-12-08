@@ -11,6 +11,7 @@ import {
 import dayjs from 'dayjs';
 import theme from '../theme';
 import StickyHeadTable from './GenericTable';
+import careerAPI from '../services/careers.api';
 
 function renderField(label, value) {
   if (label === "Level") {
@@ -68,7 +69,7 @@ const {
 
   const handleClick = () => {
     setIsStudentInformation(!isStudentInformation);
-  }
+  };
 
   return (
     <Dialog
@@ -106,7 +107,7 @@ const {
             </Typography>
         </Button>
         : <></> }
-        <Button onClick={() => setOpenPdf(true)} variant="contained">
+        <Button onClick={handleViewPdf} variant="contained">
           <Typography variant="button">
             Show Student CV
           </Typography>

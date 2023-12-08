@@ -14,7 +14,8 @@ const createApplication = async (proposal_id, student_id, submission_date) => {
       body: JSON.stringify(data),
     });
     if (response.ok) {
-      return true;
+      const application = await response.json();
+      return application.id;
     } else {
       const message = await response.text();
       throw new Error("Application error: " + message);

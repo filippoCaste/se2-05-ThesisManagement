@@ -31,24 +31,19 @@ function MainDashboard(props) {
           }}
           handleApply={(selectedFile) => {
             setLoading(true);
-
-            if(selectedFile) {
-              careerAPI.uploadFile(selectedFile, selectedItem.id, user.id).then(() => {
-                applicationsAPI.createApplication(
-                  selectedItem.id,
-                  user.id,
-                  dayjs().format('YYYY-MM-DD')
-                ).then(() => handleMessage('Successfully Applied', 'success'))
-                .catch((err) => handleMessage('Failed Applying '+ err, 'warning'));
-              }).catch((err) => handleMessage('Failed Applying '+ err, 'warning'));
-            } else {
-              applicationsAPI.createApplication(
-                selectedItem.id,
-                user.id,
-                dayjs().format('YYYY-MM-DD')
-              ).then(() => handleMessage('Successfully Applied', 'success'))
-              .catch((err) => handleMessage('Failed Applying '+ err, 'warning'));
-            }
+            applicationsAPI.createApplication(
+              selectedItem.id,
+              user.id,
+              dayjs().format('YYYY-MM-DD')
+            ).then((id) => {
+              if(selectedFile) {
+                careerAPI.uploadFile(selectedFile, id, user.id).then(() => {
+                  handleMessage('Successfully Applied', 'success');
+                }).catch((err) => handleMessage('Failed Applying '+ err, 'warning'));
+              } else {
+                handleMessage('Successfully Applied', 'success');
+              }
+            }).catch((err) => handleMessage('Failed Applying '+ err, 'warning'));
 
             setOpenDialog(false);
             setLoading(false);
