@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useNavigate, Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { Box, Collapse, Button, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Typography, Chip,useMediaQuery  } from '@mui/material';
@@ -21,7 +22,10 @@ import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
 function Row(props) {
   const navigate = useNavigate();
   
-  const { row, isEvenRow, deleteProposal, index, onClick,onClickApplication, archiveProposal,isSM, fetchProposals } = props;
+  const { row } = props;
+  const { id, status } = row.p;
+
+  const {isEvenRow, deleteProposal, index, onClick,onClickApplication, archiveProposal,isSM, fetchProposals } = props;
   const [open, setOpen] = React.useState(false);
   const handleMessage = useContext(MessageContext);
   const [statusChangeLoading, setStatusChangeLoading] = React.useState(false);
@@ -98,7 +102,8 @@ function Row(props) {
         </TableCell>
         <TableCell style={{ width: '3%' }}> 
           <IconButton color='info' aria-label="edit" 
-          onClick={() => navigate(`/teacher/updateProposal/${row.p.id}`)} disabled={proposalAccepted  || row.p.status === 'assigned'}>
+          onClick={() => navigate(`/teacher/updateProposal/${id}`)} 
+          disabled={proposalAccepted  || status === 'assigned'}>
             <EditIcon />
           </IconButton>
           
@@ -114,8 +119,8 @@ function Row(props) {
         </TableCell>
         <TableCell style={{ width: '3%' }}> 
           <IconButton aria-label="copy" 
-          onClick={() => navigate(`/teacher/copyProposal/${row.p.id}`)}
-           disabled={proposalAccepted  || row.p.status === 'assigned'}>
+          onClick={() => navigate(`/teacher/copyProposal/${id}`)}
+           disabled={proposalAccepted  || status === 'assigned'}>
             <ContentCopyIcon />
           </IconButton>
         </TableCell>
@@ -142,9 +147,9 @@ function Row(props) {
         <MenuItem aria-label="archive" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"  || row.p.status === 'assigned' || proposalAccepted}><ArchiveIcon   color='success'/></MenuItem>
         <MenuItem aria-label="edit" onClick={() => {handleClose();}} disabled={proposalAccepted  || row.p.status === 'assigned'}><Link to={`/teacher/updateProposal/${row.p.id}`}><EditIcon color='info' /></Link></MenuItem>
         <MenuItem aria-label="delete" onClick={() => {deleteProposal(index);handleClose();}} disabled={proposalAccepted || row.p.status === 'assigned'}><DeleteIcon color="error" /></MenuItem>
-        <MenuItem aria-label="copy" onClick={() => {handleClose();}} disabled={proposalAccepted  || row.p.status === 'assigned'}><Link to={`/teacher/copyProposal/${row.p.id}`}><ContentCopyIcon  /></Link></MenuItem>
+        <MenuItem aria-label="copy" onClick={() => {handleClose();}} disabled={proposalAccepted  || status === 'assigned'}> <Link to={`/teacher/copyProposal/${id}`}><ContentCopyIcon  /></Link></MenuItem>
       
-                  </Menu>
+        </Menu>
         </IconButton>
       </TableCell>
       </>}
@@ -301,5 +306,17 @@ function CollapsibleTable(props) {
     </Table>
   );
 }
+
+CollapsibleTable.propTypes = {
+  row: PropTypes.shape
+  ({
+    p: PropTypes.shape
+    ({
+      id: PropTypes.number.isRequired,
+      status: PropTypes.string.isRequired,
+    }).isRequired,
+  })
+  .isRequired,
+};
 
 export default CollapsibleTable;
