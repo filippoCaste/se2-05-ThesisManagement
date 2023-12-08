@@ -577,4 +577,18 @@
 `Components`:
 
 - `AppBar` (in `AppBar.jsx`): shows the AppBar with the application name (with link to "/" by clicking on it), the name of user logged in, the login/logout button. Params passed: app title, user object, handleLogout, function for the admin to change the app title.
-- `CustomSnackbar` (in `CustomSnackbar.jsx`): shows the snackbar with a message on the bottom left corner. Present in all pages. Passed param: message. -->
+- `CustomSnackbar` (in `CustomSnackbar.jsx`): shows the snackbar with a message on the bottom left corner. Present in all pages. Passed param: message. 
+- `AlertDialog`: displays detailed proposal information and handles application submission based on user interaction.
+- `ApplicationDialog`: shows a student's application details and enables status changes, facilitating acceptance or rejection of the submission.
+- `CheckboxesTags`: shows a selectable array interface with checkboxes, enabling users to pick from a list of options and manage selected values dynamically. Passed params: array,selectedArray and setSelectedArray
+- `ChipsArray`: shows a set of chips that allow selection and deselection of items. Passed params: array,selectedArray and setSelectedArray
+- `ClockCustomized`: shows a customized clock picker. Props are currentDateAndTime and setCurrentDateAndTime
+- `CollapsibleTable`: renders a table listing proposals with collapsible rows to display proposal details, student applications, and action buttons. Props are  listProposals including the proposals , onClick that select the proposal and shows a dialog with infos ,deleteProposal, archiveProposal,onClickApplication that shows the selected application , fetchProposals 
+- `CustomSnackBar`: a snackbar component that displays alert messages with options to close. Props include message which has property text and type
+- `EditProposalTeacher`: is a form that allows to modify a proposal only possible by teacher.
+- `FilterComponent`: sidebar to filter the proposals. Filter by title, expirationDate, startExpirationDate (min currentDataAndTime), Keywords, supervisor and 
+- `MainDashboard`: student table to show the list of visible proposals
+- `ResponsiveDrawer`: groups reset all option for the FilterComponent
+- `SupervisorMenu`: component menu listing the supervisors available. Props are the supervisors, the id of the supervisor clicked.
+- `TableComponent`: table showing the list the proposals with the related applications for that teacher.
+-->
