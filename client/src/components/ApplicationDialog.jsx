@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import {
   Button,
   Dialog,
@@ -64,11 +65,28 @@ const {
     submission_date,
     status,
   } = item || {}; 
-  const [isStudentInformation, setIsStudentInformation] = React.useState(true);
-  const [openPdf, setOpenPdf] = React.useState(false);
+  const [isStudentInformation, setIsStudentInformation] = useState(true);
+  const [pdf, setPdf] = useState(null);
+  const [fileExists, setFileExists] = useState(false);
+
+  useEffect(() => {
+    careerAPI.downloadFile(item.application_id, student_id).then((res) => {
+      if(res.fileExists === true) {
+        setFileExists(res.fileExists);
+        setPdf(res.fileUrl);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    }, [item.application_id, student_id]);
 
   const handleClick = () => {
     setIsStudentInformation(!isStudentInformation);
+  };
+
+  const handleShowCV = () => {
+    window.open(pdf, '_blank');
   };
 
   return (
@@ -107,7 +125,7 @@ const {
             </Typography>
         </Button>
         : <></> }
-        <Button onClick={handleViewPdf} variant="contained">
+        <Button onClick={handleShowCV} variant="contained" disabled={!fileExists}>
           <Typography variant="button">
             Show Student CV
           </Typography>

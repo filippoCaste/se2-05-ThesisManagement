@@ -14,8 +14,8 @@ export const getCareerByStudentId = async (req, res) => {
 export const getFile = async (req, res) => {
     try {
         const studentId = req.params.studentId;
-        const proposalId = req.params.proposalId;
-        const result = await getStudentCV(studentId, proposalId);
+        const applicationId = req.params.applicationId;
+        const result = await getStudentCV(studentId, applicationId);
         return res.json(result);
     } catch (err) {
         return res.status(500).json({ error: err.message });

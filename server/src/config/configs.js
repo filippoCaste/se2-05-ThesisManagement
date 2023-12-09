@@ -58,7 +58,7 @@ export const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const fileExtension = path.extname(file.originalname);
-    const fileName = `s${req.params.studentId}_${req.params.proposalId}_CV${fileExtension}`;
+    const fileName = `s${req.params.studentId}_${req.params.applicationId}_CV${fileExtension}`;
     cb(null, fileName);
   },
 });

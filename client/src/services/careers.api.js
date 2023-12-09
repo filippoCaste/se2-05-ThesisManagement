@@ -19,12 +19,12 @@ const getCareerByStudentId = async (studentId) => {
     }
 };
 
-const uploadFile = async (file, proposalId, studentId) => {
+const uploadFile = async (file, applicationId, studentId) => {
     try {
       const formData = new FormData();
       formData.append('pdfFile', file);
 
-      const response = await fetch(SERVER_URL + `/api/careers/upload/student/${studentId}/proposal/${proposalId}`, {
+      const response = await fetch(SERVER_URL + `/api/careers/upload/student/${studentId}/application/${applicationId}`, {
         method: 'POST',
         body: formData,
         credentials: 'include',
@@ -42,14 +42,15 @@ const uploadFile = async (file, proposalId, studentId) => {
     }
 };
 
-const downloadFile = async (proposalId, studentId) => {
+const downloadFile = async (applicationId, studentId) => {
     try {
-        const response = await fetch(SERVER_URL + `/api/careers/download/student/${studentId}/proposal/${proposalId}`, {
+        const response = await fetch(SERVER_URL + `/api/careers/download/student/${studentId}/application/${applicationId}`, {
         method: "GET",
         credentials: 'include',
         });
         if (response.ok) {
-            console.log(response.json());
+            const file = await response.json();
+            return file;
         } else {
             const message = await response.text();
             throw new Error("Career error: " + message);

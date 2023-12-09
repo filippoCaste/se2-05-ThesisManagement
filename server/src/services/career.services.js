@@ -19,8 +19,8 @@ const getDirname = importMetaUrl => {
     return path.dirname(__filename);
 };
 
-export const getStudentCV = (studentId, proposalId) => {
-    const fileName = `s${studentId}_${proposalId}_CV.pdf`;
+export const getStudentCV = (studentId, applicationId) => {
+    const fileName = `s${studentId}_${applicationId}_CV.pdf`;
     const currentModuleDir = getDirname(import.meta.url);
     const filesFolder = path.join(currentModuleDir, `../../public/students_CV/`);
   

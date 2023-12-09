@@ -10,7 +10,7 @@ const router = Router();
 
 router.get("/student/:studentId", isLoggedIn, getCareerByStudentId);
 
-router.post("/upload/student/:studentId/proposal/:proposalId", upload.single('pdfFile'), (req, res) => {
+router.post("/upload/student/:studentId/application/:applicationId", upload.single('pdfFile'), (req, res) => {
     try {
       const file = req.file;
       return res.status(200).json({ message: 'File uploaded successfully.', file });
@@ -19,6 +19,6 @@ router.post("/upload/student/:studentId/proposal/:proposalId", upload.single('pd
     }
 });
 
-router.get("/download/student/:studentId/proposal/:proposalId", getFile);
+router.get("/download/student/:studentId/application/:applicationId", getFile);
 
 export { router };
