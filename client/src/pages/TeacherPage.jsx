@@ -92,13 +92,6 @@ function TeacherPage(props)
        const proposals = await API_Proposal.getProposalsByTeacherId(user.id);
        updateExpiredStatus(proposals);
 
-       /*
-       proposals?.forEach(item => {
-         if (dayjs(item.expiration_date).isBefore(currentDataAndTime.subtract(1, 'day'))) {
-           item.status = "archived";
-         }
-       });*/
-
 
        const isTitleMatch = (row) => filterTitle === '' || row?.title.toLowerCase().includes(filterTitle.toLowerCase());
        const isLevelMatch = (row) => filterLevel === '' || row?.level === filterLevel;
@@ -109,15 +102,7 @@ function TeacherPage(props)
         isTitleMatch(row) && isLevelMatch(row) && isDegreeMatch(row) && isStatusMatch(row)
       );
 
-       /*
-       let filteredProposal= proposals?.filter(row =>  
-          (filterTitle === '' || row?.title.toLowerCase().includes(filterTitle.toLowerCase()))
-          && (filterLevel === '' || row?.level === filterLevel)
-          && (filterDegree === '' || row?.title_degree === filterDegree)
-          && (filterStatus === '' || row?.status === filterStatus ) 
-          );
-        */  
-
+      
         const titoli= filteredProposal.map(p=> ({id: p.id, title: p.title}));
         setListTitles(titoli);  
 
@@ -138,19 +123,6 @@ function TeacherPage(props)
 
         const data = await createData(filteredProposal);
         data?.forEach(item => {updateArchivedStatus(item); });
-
-        /*
-        const data = await createData(filteredProposal);
-        data?.forEach(item => {
-          if (item.p.status === "archived") {
-              item.students.forEach(student => {
-                if (student.status === 'pending') {
-                  student.status = 'rejected';
-                }
-              });
-          }
-        });
-        */
 
        setListProposals(data);
        }
