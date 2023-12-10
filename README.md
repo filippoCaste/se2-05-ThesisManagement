@@ -149,6 +149,37 @@ In order to run the application you need to open two terminals and run:
     ]
     ```
 
+   - POST `/userRequest`
+  - Description: Retrieve a list of proposals based on specified filters.
+  - Query Parameters:
+    - `student_id (required):` The student's id that is creating the proposal.
+    - `teacher_id`: The id of the teacher that the student is planning to do the thesis. It can be null.
+    - `co_supervisors_ids`: The ids of the co-supervisors that the student is planning to do the thesis.
+    - `title`: The title of the proposal that the student is requesting.
+    - `description`: The description of the proposal that the student is requesting.
+    - `type`: The type of the proposal that the student is requesting.
+    - `notes`: The notes of the proposal that the student is requesting.
+  - Response:
+    - 200 OK: Successfully retrieves and returns a list of proposals.
+    - 400 Bad Request: Indicates missing or invalid parameters.
+    - 500 Internal Server Error: Indicates an error during processing.
+    ```json
+    // the response
+      {
+        "id": 5,
+        "student_id": 113,
+        "teacher_id": 10000,
+        "co_supervisors_ids": [
+            10001,
+            10002
+        ],
+        "title": "This is the title of the proposal",
+        "description": "Very long text describing the proposal",
+        "notes": "This is a note for the teacher.",
+        "type": "submitted"
+    }, 
+    ``` 
+
 - GET `/teachers/:id`
   - request body content: none
   - response: 

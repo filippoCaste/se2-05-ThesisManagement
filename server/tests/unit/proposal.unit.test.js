@@ -1,6 +1,6 @@
-import request from "supertest";
 import * as controllers from "../../src/controllers/proposal.controller.js";
 import * as services from "../../src/services/proposal.services.js";
+import * as proposalRequestServices from "../../src/services/proposalRequest.services.js";
 import * as teacherServices from "../../src/services/teacher.services.js";
 import * as keywords from "../../src/services/keyword.services.js";
 
@@ -23,6 +23,10 @@ jest.mock("../../src/services/keyword.services", () => ({
 
 jest.mock("../../src/services/teacher.services", () => ({
   getTeacherById: jest.fn(),
+}));
+
+jest.mock("../../src/services/proposalRequest.services", () => ({
+  createProposalRequest: jest.fn(),
 }));
 
 beforeEach(() => {
@@ -631,4 +635,190 @@ describe("deleteProposal", () => {
     expect(mockRes.json).toHaveBeenCalledWith({error: "Unexpected error"});
   });
 
+});
+
+describe("createStudentProposalRequest", () => {
+  test("should return 400 if student or teacher ids are not numbers", async () => {
+    const mockReq = {
+      body: {
+        student_id: "not number",
+        teacher_id: "not number",
+        title: "Test",
+        description: "Test",
+        notes: "Test",
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Student and teacher id should be a number"});
+  });
+
+  test("should return 400 if title or description are empty strings", async () => {
+    const mockReq = {
+      body: {
+        student_id: 1,
+        teacher_id: 1,
+        title: "",
+        description: "",
+        notes: "Test",
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Title and description should be not empty strings"});
+  });
+
+  test("should return 400 if teacher does not exist", async () => {
+    const mockReq = {
+      body: {
+        student_id: 1,
+        teacher_id: 1,
+        title: "Test",
+        description: "Test",
+        notes: "Test",
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    teacherServices.getTeacherById.mockResolvedValue(null);
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Teacher not found"});
+  });
+
+  test("should return 400 if co-supervisors ids are not numbers", async () => {
+    const mockReq = {
+      body: {
+        student_id: 1,
+        teacher_id: 1,
+        title: "Test",
+        description: "Test",
+        notes: "Test",
+        co_supervisors_ids: ["not number"],
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    teacherServices.getTeacherById.mockResolvedValue({});
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Co-supervisors ids should be an array of numbers"});
+  });
+
+  test("should return 400 if co-supervisor does not exist", async () => {
+    const mockReq = {
+      body: {
+        student_id: 1,
+        teacher_id: 1,
+        title: "Test",
+        description: "Test",
+        notes: "Test",
+        co_supervisors_ids: [1],
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    teacherServices.getTeacherById.mockResolvedValueOnce({});
+    teacherServices.getTeacherById.mockResolvedValueOnce(null);
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Co-supervisor with id 1 not found"});
+  });
+
+  test("should return 500 if createProposalRequest throws error", async () => {
+    const mockReq = {
+      body: {
+        student_id: 1,
+        teacher_id: 1,
+        title: "Test",
+        description: "Test",
+        notes: "Test",
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    teacherServices.getTeacherById.mockResolvedValue({});
+
+    proposalRequestServices.createProposalRequest.mockImplementation(() => {
+      throw new Error("Unexpected error");
+    });
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(500);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Unexpected error"});
+  });
+
+  test("should return 200 if proposal request is created successfully", async () => {
+    const mockReq = {
+      body: {
+        student_id: 1,
+        teacher_id: 1,
+        title: "Test",
+        description: "Test",
+        notes: "Test",
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    teacherServices.getTeacherById.mockResolvedValue({});
+
+    proposalRequestServices.createProposalRequest.mockResolvedValue({
+      id: 1,
+      student_id: 1,
+      teacher_id: 1,
+      co_supervisors_ids: undefined,
+      title: "Test",
+      description: "Test",
+      notes: "Test",
+      type: "submitted",
+    });
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+    expect(mockRes.json).toHaveBeenCalledWith({
+      id: 1,
+      student_id: 1,
+      teacher_id: 1,
+      co_supervisors_ids: undefined,
+      title: "Test",
+      description: "Test",
+      notes: "Test",
+      type: "submitted",
+    });
+  });
 });
