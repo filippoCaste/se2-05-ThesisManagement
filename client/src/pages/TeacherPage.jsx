@@ -4,15 +4,11 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import { Grid, FormControl, RadioGroup, FormControlLabel, Radio, Select, MenuItem, Input } from '@mui/material';
-import TextField from '@mui/material/TextField';
 import API_Proposal from '../services/proposals.api';
 import API_Applications from '../services/applications.api';
 import { MessageContext, UserContext } from '../Contexts';
 import CollapsibleTable from '../components/CollapsibleTable';
 import AlertDialog from '../components/AlertDialog';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import API_Degrees from '../services/degrees.api';
 import dayjs from 'dayjs' ;
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -79,29 +75,71 @@ function TeacherPage(props)
 
   const [listTitles,setListTitles]=useState('');
 
+
   const fetchData = async () => {
-    if (user) {
+
+    if (user) 
+    {
+      
+       const updateExpiredStatus = (proposals) => {
+         proposals?.forEach(item => {
+           if (dayjs(item.expiration_date).isBefore(currentDataAndTime.subtract(1, 'day'))) {
+             item.status = "archived";
+           }
+         });
+       };
+
        const proposals = await API_Proposal.getProposalsByTeacherId(user.id);
-       
+       updateExpiredStatus(proposals);
+
+       /*
        proposals?.forEach(item => {
          if (dayjs(item.expiration_date).isBefore(currentDataAndTime.subtract(1, 'day'))) {
            item.status = "archived";
          }
-       });
+       });*/
 
 
+       const isTitleMatch = (row) => filterTitle === '' || row?.title.toLowerCase().includes(filterTitle.toLowerCase());
+       const isLevelMatch = (row) => filterLevel === '' || row?.level === filterLevel;
+       const isDegreeMatch = (row) => filterDegree === '' || row?.title_degree === filterDegree;
+       const isStatusMatch = (row) => filterStatus === '' || row?.status === filterStatus;
 
+       let filteredProposal = proposals?.filter(row =>
+        isTitleMatch(row) && isLevelMatch(row) && isDegreeMatch(row) && isStatusMatch(row)
+      );
+
+       /*
        let filteredProposal= proposals?.filter(row =>  
           (filterTitle === '' || row?.title.toLowerCase().includes(filterTitle.toLowerCase()))
           && (filterLevel === '' || row?.level === filterLevel)
           && (filterDegree === '' || row?.title_degree === filterDegree)
           && (filterStatus === '' || row?.status === filterStatus ) 
           );
+        */  
 
-        const titoli= filteredProposal.map(p=>p.title);
+        const titoli= filteredProposal.map(p=> ({id: p.id, title: p.title}));
         setListTitles(titoli);  
+
     
-        //const notExpiredProposals = proposals.filter((p) => dayjs(p?.expiration_date).isAfter(currentDataAndTime));
+        const updateStudentStatus = (students) => {
+          students.forEach(student => {
+            if (student.status === 'pending') {
+              student.status = 'rejected';
+            }
+          });
+        };
+        
+        const updateArchivedStatus = (item) => {
+          if (item.p.status === 'archived') {
+            updateStudentStatus(item.students);
+          }
+        };
+
+        const data = await createData(filteredProposal);
+        data?.forEach(item => {updateArchivedStatus(item); });
+
+        /*
         const data = await createData(filteredProposal);
         data?.forEach(item => {
           if (item.p.status === "archived") {
@@ -112,6 +150,7 @@ function TeacherPage(props)
               });
           }
         });
+        */
 
        setListProposals(data);
        }
@@ -120,7 +159,7 @@ function TeacherPage(props)
 
     useEffect(() => { 
       API_Degrees.getAllDegrees()
-      .then((d) => {setDegreesList(d); console.log(d);}  )
+      .then((d) => {setDegreesList(d); }  )
       .catch((err) => handleMessage(err,"warning"))
     },[]);
 
@@ -196,7 +235,7 @@ function TeacherPage(props)
            style={{ width: '100%'}}
            className="form-text-input" /><datalist id="titleSuggestions">
           {Array.from(listTitles).map((titolo, index) => (
-            <option key={index} value={titolo} />
+            <option key={titolo.id} value={titolo.title} />
           ))}
         </datalist>
         </Grid>  
