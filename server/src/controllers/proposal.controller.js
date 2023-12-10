@@ -11,6 +11,7 @@ import {
 import { isNumericInputValid, isTextInputValid, isValidDateFormat } from "../utils/utils.js";
 import { getTeacherById } from "../services/teacher.services.js";
 import { getKeywordByName, postKeyword } from "../services/keyword.services.js";
+import { createProposalRequest } from "../services/proposalRequest.services.js";
 
 export const getProposals = async (req, res, next) => {
   try {
@@ -256,3 +257,57 @@ function isSupervisorsObjValid(supervisors_obj) {
   array.push(supervisors_obj.supervisor_id)
   return isNumericInputValid(array);
 }
+
+export const createStudentProposalRequest = async (req, res) => {
+  try {
+    const {
+      student_id,
+      teacher_id,
+      title,
+      description,
+      notes,
+      co_supervisors_ids,
+    } = req.body;
+    console.log(req.body);
+    if (!isNumericInputValid([student_id, teacher_id])) {
+      return res
+        .status(400)
+        .json({ error: "Student and teacher id should be a number" });
+    }
+    if (!isTextInputValid([title, description])) {
+      return res.status(400).json({
+        error: "Title and description should be not empty strings",
+      });
+    }
+    const teacher = await getTeacherById(teacher_id);
+    if (!teacher) {
+      return res.status(400).json({ error: "Teacher not found" });
+    }
+    if (co_supervisors_ids && co_supervisors_ids.length > 0) {
+      if (!isNumericInputValid(co_supervisors_ids)) {
+        return res.status(400).json({
+          error: "Co-supervisors ids should be an array of numbers",
+        });
+      }
+      for (let id of co_supervisors_ids) {
+        const co_supervisor = await getTeacherById(id);
+        if (!co_supervisor) {
+          return res.status(400).json({
+            error: `Co-supervisor with id ${id} not found`,
+          });
+        }
+      }
+    }
+    const proposalRequested = await createProposalRequest(
+      student_id,
+      teacher_id,
+      co_supervisors_ids,
+      title,
+      description,
+      notes
+    );
+    return res.status(200).json(proposalRequested);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
