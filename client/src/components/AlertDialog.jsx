@@ -10,11 +10,17 @@ import {
 } from '@mui/material';
 import dayjs from 'dayjs';
 import theme from '../theme';
-import {useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { UserContext, MessageContext } from '../Contexts';
 import applicationsAPI from '../services/applications.api';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -28,6 +34,16 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
+export function RenderFieldTable({ label, value }) {
+  return (
+    <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+      <TableCell align="center" component="th" scope="row">
+        {label}
+      </TableCell>
+      <TableCell align="center">{value}</TableCell>
+    </TableRow>
+  );
+}
 
 export default function AlertDialog({
   open,
@@ -62,19 +78,23 @@ export default function AlertDialog({
   const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
-        applicationsAPI.getStudentApplications().then((response) => {
-          setIsAppliedProposal(response.filter((o) => o.status !== 'rejected').length > 0);
-        })
-      .catch(
-        (err) => {console.log(err);}
-      )
+    applicationsAPI
+      .getStudentApplications()
+      .then((response) => {
+        setIsAppliedProposal(
+          response.filter((o) => o.status !== 'rejected').length > 0
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
 
   const handleFileChange = (files) => {
     if (files.length > 0) {
       const selectedFile = files[0];
       const fileExtension = selectedFile.name.split('.').pop().toLowerCase();
-  
+
       if (fileExtension === 'pdf') {
         setSelectedFile(selectedFile);
       } else {
@@ -82,7 +102,7 @@ export default function AlertDialog({
         files = null;
       }
     }
-  };  
+  };
 
   return (
     <Dialog
@@ -112,29 +132,54 @@ export default function AlertDialog({
           backgroundColor: theme.palette.background.default,
         }}
       >
-        {renderField('Description', description)}
-        {renderField("Keywords", keyword_names)}
-        {renderField('Notes', notes)}
-        {renderField(
-          'Expiration Date',
-          dayjs(expiration_date).format('DD/MM/YYYY')
-        )}
-        {renderField('Level', level)}
-        {renderField('Degree', title_degree)}
+        <TableContainer component={Paper} sx={{ mt: '1.5rem', mb: '1rem' }}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableBody>
+              <RenderFieldTable label="Description" value={description} />
+              <RenderFieldTable label="Keywords" value={keyword_names} />
+              <RenderFieldTable label="Notes" value={notes} />
+              <RenderFieldTable
+                label="Expiration Date"
+                value={dayjs(expiration_date).format('DD/MM/YYYY')}
+              />
+              <RenderFieldTable label="Level" value={level} />
+              <RenderFieldTable label="Degree" value={title_degree} />
+              {mainSupervisor && (
+                <RenderFieldTable
+                  label="Supervisor"
+                  value={`${mainSupervisor.name} ${mainSupervisor.surname} (${mainSupervisor.email})`}
+                />
+              )}
+              {coSupervisors?.map((supervisor, index) => (
+                <RenderFieldTable
+                  label="Co-Supervisor"
+                  value={`${supervisor.name} ${supervisor.surname} (${supervisor.email})`}
+                />
+              ))}
+              <RenderFieldTable label="Group" value={title_group} />
+              <RenderFieldTable
+                label="Required Knowledge"
+                value={required_knowledge}
+              />
+            </TableBody>
+          </Table>
+        </TableContainer>
 
-        {mainSupervisor && renderSupervisor('Supervisor', mainSupervisor)}
-        {coSupervisors?.map((supervisor, index) =>
-          renderSupervisor('Co-Supervisor', supervisor, index)
-        )}
-
-        {renderField('Group', title_group)}
-        {renderField('Required Knowledge', required_knowledge)}
-        {!isAppliedProposals && 
-          <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} disabled={isAppliedProposal}>
+        {!isAppliedProposals && (
+          <Button
+            component="label"
+            variant="contained"
+            startIcon={<CloudUploadIcon />}
+            disabled={isAppliedProposal}
+          >
             Upload file
-            <VisuallyHiddenInput type="file" accept=".pdf" onChange={(e) => handleFileChange(e.target.files)}/>
+            <VisuallyHiddenInput
+              type="file"
+              accept=".pdf"
+              onChange={(e) => handleFileChange(e.target.files)}
+            />
           </Button>
-        }
+        )}
         {!isAppliedProposals && selectedFile && (
           <Typography variant="body1" gutterBottom>
             <strong>Selected file:</strong> {selectedFile.name}
@@ -160,9 +205,13 @@ export default function AlertDialog({
           <CircularProgress color="primary" size={24} />
         ) : (
           handleApply &&
-          !isAppliedProposals &&
-           (
-            <Button onClick={() => handleApply(selectedFile)} color="primary" variant="contained" disabled={isAppliedProposal}>
+          !isAppliedProposals && (
+            <Button
+              onClick={() => handleApply(selectedFile)}
+              color="primary"
+              variant="contained"
+              disabled={isAppliedProposal}
+            >
               <Typography variant="button" sx={{ color: 'white' }}>
                 Apply
               </Typography>
