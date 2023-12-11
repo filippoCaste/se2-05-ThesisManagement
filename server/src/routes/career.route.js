@@ -1,24 +1,17 @@
 "use strict";
 import { Router } from 'express';
-import { getCareerByStudentId, getFile } from '../controllers/career.controller.js';
+import { getCareerByStudentId, getFile, uploadFile } from '../controllers/career.controller.js';
 import multer from 'multer';
-import { isLoggedIn, isTeacher, storage } from '../config/configs.js';
+import { isTeacher, storage, isStudent } from '../config/configs.js';
 
 const upload = multer({ storage: storage });
 
 const router = Router();
 
-router.get("/student/:studentId", isLoggedIn, getCareerByStudentId);
+router.get("/student/:studentId", isTeacher, getCareerByStudentId);
 
-router.post("/upload/student/:studentId/application/:applicationId", upload.single('pdfFile'), (req, res) => {
-    try {
-      const file = req.file;
-      return res.status(200).json({ message: 'File uploaded successfully.', file });
-    } catch (error) {
-      return res.status(400).json({ error: 'Error uploading file.', details: error.message });
-    }
-});
+router.post("/upload/student/:studentId/application/:applicationId", isStudent, upload.single('pdfFile'), uploadFile);
 
-router.get("/download/student/:studentId/application/:applicationId", getFile);
+router.get("/download/student/:studentId/application/:applicationId", isTeacher, getFile);
 
 export { router };

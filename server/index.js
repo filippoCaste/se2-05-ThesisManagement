@@ -18,6 +18,8 @@ import passport from "passport";
 import session from "express-session";
 import morgan from "morgan";
 import {strategy} from "./src/config/configs.js";
+import { Student } from "./src/models/Student.js";
+import { Teacher } from "./src/models/Teacher.js";
 
 passport.use(strategy);
 
@@ -28,9 +30,9 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(async function (id, done) {
   let user = await getUserById(id.slice(1));
   if(user.role == 'student')
-    user = await getStudentById(user.id);
+    user = Student.fromResult(await getStudentById(user.id));
   else if(user.role == 'teacher')
-    user = await getTeacherById(user.id);
+    user = Teacher.fromTeachersResult(await getTeacherById(user.id));
   else 
     done(err, null);
 

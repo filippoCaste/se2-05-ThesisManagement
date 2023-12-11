@@ -129,7 +129,7 @@ export default function AlertDialog({
 
         {renderField('Group', title_group)}
         {renderField('Required Knowledge', required_knowledge)}
-        {!isAppliedProposals && 
+        {handleApply && !isAppliedProposals && 
           <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} disabled={isAppliedProposal}>
             Upload file
             <VisuallyHiddenInput type="file" accept=".pdf" onChange={(e) => handleFileChange(e.target.files)}/>

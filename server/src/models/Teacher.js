@@ -1,12 +1,12 @@
 export class Teacher {
-  constructor(id, name, surname, email, password, cod_degree, cod_group) {
+  constructor(id, name, surname, email, cod_department, cod_group) {
     this.id = id;
     this.name = name;
     this.surname = surname;
     this.email = email;
-    this.password = password;
-    this.cod_degree = cod_degree;
+    this.cod_department = cod_department;
     this.cod_group = cod_group;
+    this.role = "teacher";
   }
 
   // Used to send the Teacher object to the client
@@ -16,9 +16,9 @@ export class Teacher {
       name: this.name,
       surname: this.surname,
       email: this.email,
-      password: this.password,
-      cod_degree: this.cod_degree,
+      cod_department: this.cod_department,
       cod_group: this.cod_group,
+      role: this.role,
     };
   };
 
@@ -29,8 +29,7 @@ export class Teacher {
       json.name,
       json.surname,
       json.email,
-      json.password,
-      json.cod_degree,
+      json.cod_department,
       json.cod_group
     );
   };
@@ -41,8 +40,7 @@ export class Teacher {
       result.name,
       result.surname,
       result.email,
-      result.password,
-      result.cod_degree,
+      result.cod_department,
       result.cod_group
     );
   };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
   Button,
   Dialog,
@@ -13,6 +13,7 @@ import dayjs from 'dayjs';
 import theme from '../theme';
 import StickyHeadTable from './GenericTable';
 import careerAPI from '../services/careers.api';
+import { MessageContext } from '../Contexts';
 
 function renderField(label, value) {
   if (label === "Level") {
@@ -48,7 +49,7 @@ export default function ApplicationDialog(props) {
 const {open, handleClose, item, studentExams} = props;
 const isSM = useMediaQuery(theme.breakpoints.down('md'));
 const columns = [
-  { id: 'cod_course', label: 'Course code', width: '25%' },
+  { id: 'cod_course', label: 'Course Code', width: '25%' },
   { id: 'title_course', label: 'Course Title', width: '50%' },
   { id: 'cfu', label: 'Cfu', width: '5%' },
   { id: 'grade', label: 'Grade', width: '5%' },
@@ -68,6 +69,7 @@ const {
   const [isStudentInformation, setIsStudentInformation] = useState(true);
   const [pdf, setPdf] = useState(null);
   const [fileExists, setFileExists] = useState(false);
+  const handleMessage = useContext(MessageContext);
 
   useEffect(() => {
     careerAPI.downloadFile(item.application_id, student_id).then((res) => {
@@ -76,9 +78,7 @@ const {
         setPdf(res.fileUrl);
       }
     })
-    .catch((err) => {
-      console.log(err);
-    })
+    .catch((err) => handleMessage(err,"warning"));
     }, [item.application_id, student_id]);
 
   const handleClick = () => {
