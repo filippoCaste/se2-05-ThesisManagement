@@ -4,7 +4,7 @@ import applicationsAPI from '../services/applications.api';
 import { MessageContext, UserContext } from '../Contexts';
 import dayjs from 'dayjs';
 import StickyHeadTable from './TableComponent';
-import careerAPI from '../services/careers.api';
+import careerAPI from '../services/career.api';
 
 function MainDashboard(props) {
   const { proposals, openSelectionMobile, drawerWidth, isAppliedProposals } =

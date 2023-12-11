@@ -12,7 +12,7 @@ import {
 import dayjs from 'dayjs';
 import theme from '../theme';
 import StickyHeadTable from './GenericTable';
-import careerAPI from '../services/careers.api';
+import careerAPI from '../services/career.api';
 import { MessageContext } from '../Contexts';
 
 function renderField(label, value) {

@@ -11,7 +11,7 @@ import CollapsibleTable from '../components/CollapsibleTable';
 import AlertDialog from '../components/AlertDialog';
 import dayjs from 'dayjs';
 import ApplicationDialog from '../components/ApplicationDialog';
-import careerAPI from '../services/careers.api';
+import careerAPI from '../services/career.api';
 
 function TeacherPage(props)
 {  

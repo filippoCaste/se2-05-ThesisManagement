@@ -14,14 +14,13 @@ export const getStudentCareer = (studentId) => {
     });
 };
 
-const getDirname = importMetaUrl => {
-    const __filename = new URL(importMetaUrl).pathname;
-    return path.dirname(__filename);
+const getDirname = (filename) => {
+  return path.dirname(filename);
 };
 
 export const getStudentCV = (studentId, applicationId) => {
     const fileName = `s${studentId}_${applicationId}_CV.pdf`;
-    const currentModuleDir = getDirname(import.meta.url);
+    const currentModuleDir = getDirname(__filename);
     const filesFolder = path.join(currentModuleDir, `../../public/students_CV/`);
   
     return new Promise((resolve, reject) => {

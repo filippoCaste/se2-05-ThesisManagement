@@ -24,7 +24,7 @@ export const uploadFile = async (req, res) => {
             return res.status(400).json({ error: 'File must be a pdf.' });
         return res.status(200).json({ message: 'File uploaded successfully.', file });
     } catch (error) {
-        return res.status(400).json({ error: 'Error uploading file.', details: error.message });
+        return res.status(500).json({ error: 'Error uploading file.', details: error.message });
     }
 }
 
