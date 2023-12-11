@@ -77,9 +77,11 @@ function TeacherPage(props)
 
 
   const fetchData = async () => {
+    console.log("user: ",user);
 
     if (user) 
     {
+      
       
        const updateExpiredStatus = (proposals) => {
          proposals?.forEach(item => {
@@ -90,6 +92,7 @@ function TeacherPage(props)
        };
 
        const proposals = await API_Proposal.getProposalsByTeacherId(user.id);
+
        updateExpiredStatus(proposals);
 
 

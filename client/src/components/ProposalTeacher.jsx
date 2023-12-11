@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { MessageContext, UserContext } from '../Contexts';
 import { FormControl, Select, MenuItem, Input, Container, IconButton,  Paper } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
 
 import proposalAPI from '../services/proposals.api';
 import API_Degrees from '../services/degrees.api';
@@ -82,9 +83,18 @@ function ProposalTeacher(props)
   const handleAddClickCoSupervisor = () => {
       if(selectedCoSup != '')
       {
-        if (selectedCoSup && !selectedCoSupList.includes(selectedCoSup)) 
+        
+        //Estraggo l'oggetto teacher completo partendo dalla sua email
+        let array_teacher=Array.from(teachersList);
+        let newSelectCoSup= array_teacher.filter(t=> t.email==selectedCoSup);
+
+        let selectedCoSupObject = { ...newSelectCoSup[0] };
+        const isCoSupervisorAlreadySelected = selectedCoSupList
+        .some(t => t.teacher_id === selectedCoSupObject.teacher_id);
+       
+        if(selectedCoSupObject && !isCoSupervisorAlreadySelected)
         {
-          setSelectedCoSupList([...selectedCoSupList, selectedCoSup]);
+          setSelectedCoSupList([...selectedCoSupList, selectedCoSupObject]);
           setSelectedCoSup(''); // Pulisce la selezione dopo l'aggiunta
         }
       }
@@ -202,28 +212,28 @@ function ProposalTeacher(props)
                     setLevel(()=>(p.level));
         
                     // Verifica se p.cod_degree è un array
-                    let lista_codici_degree;
+                    let list_cod_degree;
                     if(!(Array.isArray(p.cod_degree)))
                     {
-                        lista_codici_degree=[p.cod_degree];
+                        list_cod_degree=[p.cod_degree];
                     }    
                     else
                     {
-                        lista_codici_degree=p.cod_degree;
+                        list_cod_degree=p.cod_degree;
                     }    
                     
-                    let lista=[];
-                    lista_codici_degree.forEach(codice_degree=>{
+                    let list=[];
+                    list_cod_degree.forEach(codice_degree=>{
                         
                         degreesList.forEach(d=>{
                             if(codice_degree == d.cod_degree)
                             {
-                                lista.push(d);
+                                list.push(d);
                             }
                         })   
                         
                     })
-                    setSelectedDegreeList(()=>(lista));
+                    setSelectedDegreeList(()=>(list));
         
                     // Rinomina il campo 'id' in 'teacher_id' 
                     p.coSupervisors.forEach(obj => { obj.teacher_id = obj.id; delete obj.id; });
@@ -522,20 +532,18 @@ function ProposalTeacher(props)
           <Typography variant="h6" gutterBottom fontWeight="bold">
             ADD CO-SUPERVISORS
           </Typography>
-          <Select
-            labelId="cosup-label"
-            id="cosup-select"
-            value={selectedCoSup}
-            onChange={(event) => setSelectedCoSup(event.target.value)}
-            input={<Input id="select-multiple" />}
-          >
-            {Array.from(teachersList).filter(t => t.teacher_id != user.id).map((teacher, index) => (
-              <MenuItem key={teacher.teacher_id} value={teacher}>
-                {teacher.name} {teacher.surname} - {teacher.teacher_id}
-              </MenuItem>
-            ))}
-          </Select>
-
+          
+          <input 
+            type="text"  list="teacherSuggestions"  placeholder="Insert Co Supervisor"
+           value={selectedCoSup}  onChange={(event) => setSelectedCoSup(event.target.value)}
+           style={{ width: '100%'}}
+           className="form-text-input" />
+          <datalist id="teacherSuggestions">
+          {Array.from(teachersList).filter(t => t.teacher_id != user.id).map((teacher, index) => (
+            <option key={teacher.teacher_id} value={teacher.email} />
+          ))}
+         </datalist>
+         
           <Button
             variant="contained"
             color="primary"
@@ -553,7 +561,7 @@ function ProposalTeacher(props)
             <Paper key={coSupervisor.teacher_id} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
               <Grid container alignItems="center">
                 <Grid item xs={10}>
-                  <Typography variant="body1">{coSupervisor.name} {coSupervisor.surname} - {coSupervisor.teacher_id}</Typography>
+                  <Typography variant="body1">{coSupervisor.email} </Typography>
                 </Grid>
                 <Grid item xs={2}>
                   <IconButton
