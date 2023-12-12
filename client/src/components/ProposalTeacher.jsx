@@ -15,16 +15,12 @@ import API_Teachers from '../services/teachers.api';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-
 import dayjs from 'dayjs' ;
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-
-
 
 function ProposalTeacher(props)
 {
@@ -42,8 +38,6 @@ function ProposalTeacher(props)
     const [selectedSupervisor, setSelectedSupervisor] = useState(user?.id);
     const [keywordsList, setKeywordsList]=useState(''); //prese dal DB
 
-
-  
   const [title,setTitle]=useState('');
   const [description,setDescription]=useState('');
   const [required_knowledge,setRequired_knowledge]=useState('');
@@ -53,7 +47,7 @@ function ProposalTeacher(props)
   const [expirationDate, setExpirationDate] = useState(currentDataAndTime || dayjs());
 
 
-   //DEGREE A TENDINA
+   //DEGREE DROPDOWN MENU
    const [selectedDegree, setSelectedDegree] = useState('');
    const [selectedDegreeList, setSelectedDegreeList] = useState([]);
  
@@ -63,7 +57,7 @@ function ProposalTeacher(props)
          if (selectedDegree && !selectedDegreeList.includes(selectedDegree)) 
          {
            setSelectedDegreeList([...selectedDegreeList, selectedDegree]);
-           setSelectedDegree(''); // Pulisce la selezione dopo l'aggiunta
+           setSelectedDegree(''); // Clean the selection
          }
        }
    };
@@ -75,7 +69,7 @@ function ProposalTeacher(props)
     setSelectedDegreeList(updatedDegreeList);
     };
 
-  //CO SUPERVISORS A TENDINA
+  //CO SUPERVISORS DROPDOWN MENU
   const [selectedCoSup, setSelectedCoSup] = useState('');
   const [selectedCoSupList, setSelectedCoSupList] = useState([]);
 
@@ -85,7 +79,7 @@ function ProposalTeacher(props)
         if (selectedCoSup && !selectedCoSupList.includes(selectedCoSup)) 
         {
           setSelectedCoSupList([...selectedCoSupList, selectedCoSup]);
-          setSelectedCoSup(''); // Pulisce la selezione dopo l'aggiunta
+          setSelectedCoSup(''); // Clean the selection
         }
       }
   };
@@ -98,7 +92,7 @@ function ProposalTeacher(props)
   };
 
 
-  //KEWWORDS A TENDINA
+  //KEWWORDS DROPDOWN MENU
   const [newKeyword, setNewKeyword] = useState('');
   
   const [selectedKeyword, setSelectedKeyword] = useState('');
@@ -108,12 +102,12 @@ function ProposalTeacher(props)
     if (selectedKeyword !== '') {
       if (!selectedKeywordList.includes(selectedKeyword)) {
         setSelectedKeywordList([...selectedKeywordList, selectedKeyword]);
-        setSelectedKeyword(''); // Pulisce la selezione dopo l'aggiunta
+        setSelectedKeyword(''); // Clean the selection
       }
     } else if (newKeyword !== '') {
-      // Aggiunge la nuova keyword
+      // Add the new keyword
       setSelectedKeywordList([...selectedKeywordList, newKeyword]);
-      setNewKeyword(''); // Pulisce l'input della nuova keyword dopo l'aggiunta
+      setNewKeyword(''); // Clean the input after new keyword has been added
     }
   }
 
@@ -133,7 +127,7 @@ function ProposalTeacher(props)
   };
 
   const handleAddExternal = () => {
-    //controllo campi name, surname e email
+    //check fields: name, surname, email
     let name= formExternal.name;
     let surname= formExternal.surname;
     let email=formExternal.email;
@@ -159,7 +153,7 @@ function ProposalTeacher(props)
        }
      }
  
-    //controllo email
+    // email check
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$/; 
     if(!emailRegex.test(email))
     {
@@ -201,31 +195,31 @@ function ProposalTeacher(props)
                     setNotes(()=>(p.notes));
                     setLevel(()=>(p.level));
         
-                    // Verifica se p.cod_degree è un array
-                    let lista_codici_degree;
+                    // Check if p.cod_degree is an array
+                    let list_cod_degree;
                     if(!(Array.isArray(p.cod_degree)))
                     {
-                        lista_codici_degree=[p.cod_degree];
+                        list_cod_degree=[p.cod_degree];
                     }    
                     else
                     {
-                        lista_codici_degree=p.cod_degree;
+                        list_cod_degree=p.cod_degree;
                     }    
                     
-                    let lista=[];
-                    lista_codici_degree.forEach(codice_degree=>{
+                    let list=[];
+                    list_cod_degree.forEach(codice_degree=>{
                         
                         degreesList.forEach(d=>{
                             if(codice_degree == d.cod_degree)
                             {
-                                lista.push(d);
+                                list.push(d);
                             }
                         })   
                         
                     })
-                    setSelectedDegreeList(()=>(lista));
+                    setSelectedDegreeList(()=>(list));
         
-                    // Rinomina il campo 'id' in 'teacher_id' 
+                    // Field 'id' renamed to 'teacher_id' 
                     p.coSupervisors.forEach(obj => { obj.teacher_id = obj.id; delete obj.id; });
                     setSelectedCoSupList(()=>(p.coSupervisors));
         
@@ -310,14 +304,12 @@ function ProposalTeacher(props)
     }
 
     
-    ////////SE INPUT CORRETTO //////////////////////////////////
+    ////////IF CORRECT INPUT //////////////////////////////////
 
     let formatted_expiration = expirationDate.format("YYYY-MM-DD");
     let cod_group= user.cod_group;
     let supervisors_obj={"supervisor_id":  selectedSupervisor, 
       "co_supervisors":  array_only_id_co_supervisors, "external": listExternals};
-
-    //MESSAGGIO DI SICUREZZA
                       
     let acceptMessage={"add": 'Are you sure to create this new thesis ?',
                       "edit": 'Are you sure to edit this thesis ?',
@@ -363,12 +355,12 @@ function ProposalTeacher(props)
 }   
        
 
- let array_sigle_degree=[
-                          {id: "1", sigla:'MSc', valore:"Master of Science"},
-                          {id: "2", sigla:'BSc', valore:"Bachelor of Science"} 
+ let array_cod_degree=[
+                          {id: "1", short:'MSc', long:"Master of Science"},
+                          {id: "2", short:'BSc', long:"Bachelor of Science"} 
                         ];
 
-  //INVIO FORM ///////////////////////////////////////////////////////////////////////////////////
+  //SEND FORM ///////////////////////////////////////////////////////////////////////////////////
   
   return (
     <Container>
@@ -445,8 +437,8 @@ function ProposalTeacher(props)
                       onChange={(ev) => { setLevel(ev.target.value) }}
                     >
                        {
-                        array_sigle_degree.map((el, index) =>
-                        <MenuItem key={el.id} value={el.sigla}> {el.valore}</MenuItem> ) 
+                        array_cod_degree.map((el, index) =>
+                        <MenuItem key={el.id} value={el.short}> {el.long}</MenuItem> ) 
                         
                       }                   
                     </Select>
@@ -483,7 +475,7 @@ function ProposalTeacher(props)
                 ADD
               </Button>
 
-              {/* Visualizza i co-supervisori selezionati */}
+              {/* Selected co-supervisors */}
               {selectedDegreeList.length!=0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
                 Added degrees
               </Typography>}
@@ -545,7 +537,7 @@ function ProposalTeacher(props)
             ADD
           </Button>
 
-          {/* Visualizza i co-supervisori selezionati */}
+          {/* View selected co-supervisors */}
           {selectedCoSupList.length != 0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
             Selected Co-Supervisors
           </Typography>}
@@ -592,7 +584,7 @@ function ProposalTeacher(props)
           ))}
           </Select>
 
-          {/* Input per una nuova keyword */}
+          {/* Input form for new keyword (i.e. not in the db) */}
           <TextField
             label="New Keyword"
             variant="outlined"
@@ -602,7 +594,7 @@ function ProposalTeacher(props)
             style={{ marginTop: '16px' }}
           />
 
-          {/* Pulsante per aggiungere la nuova keyword o selezionare quella esistente */}
+          {/* Button to add the new keyword */}
           <Button
             variant="contained"
             color="primary"
@@ -612,7 +604,7 @@ function ProposalTeacher(props)
             ADD
           </Button>
 
-          {/* Visualizza i co-supervisori selezionati */}
+          {/* View selected co-supervisors */}
           {selectedKeywordList.length!=0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
             Added keywords
           </Typography>}
@@ -645,7 +637,7 @@ function ProposalTeacher(props)
           ADD EXTERNAL CO-SUPERVISORS
         </Typography>
 
-        {/* Input for a new external entry */}
+        {/* Input for external co-supervisors contacts */}
         <TextField
           label="Name"
           variant="outlined"
@@ -671,7 +663,7 @@ function ProposalTeacher(props)
           style={{ marginTop: '16px' }}
         />
 
-        {/* Button to add the new external entry */}
+        {/* Button to add the external co-supervisor */}
         <Button
           variant="contained"
           color="primary"
@@ -682,7 +674,7 @@ function ProposalTeacher(props)
           ADD EXTERNAL
         </Button>
 
-        {/* Display selected external entries */}
+        {/* Display selected external co-supervisor */}
         {listExternals.length != 0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
           Selected Externals
         </Typography>}
