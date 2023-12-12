@@ -8,8 +8,8 @@ import {
   archiveProposalByProposalId,
   updateProposalByProposalId
 } from "../services/proposal.services.js";
-import { isNumericInputValid, isTextInputValid, isValidDateFormat } from "../utils/utils.js";
-import { getTeacherById } from "../services/teacher.services.js";
+import { isEmailInputValid, isNumericInputValid, isTextInputValid, isValidDateFormat } from "../utils/utils.js";
+import { getTeacherByEmail, getTeacherById } from "../services/teacher.services.js";
 import { getKeywordByName, postKeyword } from "../services/keyword.services.js";
 import { createProposalRequest } from "../services/proposalRequest.services.js";
 
@@ -261,53 +261,60 @@ function isSupervisorsObjValid(supervisors_obj) {
 export const createStudentProposalRequest = async (req, res) => {
   try {
     const {
-      student_id,
-      teacher_id,
+      teacherEmail,
       title,
       description,
       notes,
-      co_supervisors_ids,
+      coSupervisorsEmails,
     } = req.body;
+
     console.log(req.body);
-    if (!isNumericInputValid([student_id, teacher_id])) {
-      return res
-        .status(400)
-        .json({ error: "Student and teacher id should be a number" });
+
+    let co_supervisors_ids;
+
+    if(!isEmailInputValid([teacherEmail])) {
+      return res.status(400).json({
+        error: "Teacher email is not correct",
+      });
     }
     if (!isTextInputValid([title, description])) {
       return res.status(400).json({
         error: "Title and description should be not empty strings",
       });
     }
-    const teacher = await getTeacherById(teacher_id);
+    const teacher = await getTeacherByEmail(teacherEmail);
     if (!teacher) {
       return res.status(400).json({ error: "Teacher not found" });
     }
-    if (co_supervisors_ids && co_supervisors_ids.length > 0) {
-      if (!isNumericInputValid(co_supervisors_ids)) {
+    if (coSupervisorsEmails && coSupervisorsEmails.length > 0) {
+      co_supervisors_ids = [];
+      if (!isEmailInputValid([...coSupervisorsEmails])) {
         return res.status(400).json({
-          error: "Co-supervisors ids should be an array of numbers",
+          error: "Co-supervisors ids should be an array of emails",
         });
       }
-      for (let id of co_supervisors_ids) {
-        const co_supervisor = await getTeacherById(id);
+      for (let email of coSupervisorsEmails) {
+        const co_supervisor = await getTeacherByEmail(email);
         if (!co_supervisor) {
           return res.status(400).json({
-            error: `Co-supervisor with id ${id} not found`,
+            error: `Co-supervisor with email ${email} not found`,
           });
+        } else {
+          co_supervisors_ids.push(co_supervisor.id);
         }
       }
     }
-    const proposalRequested = await createProposalRequest(
-      student_id,
-      teacher_id,
+    await createProposalRequest(
+      req.user.id,
+      teacher.id,
       co_supervisors_ids,
       title,
       description,
       notes
     );
-    return res.status(200).json(proposalRequested);
+    return res.status(201).json();
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error.message });
   }
 };
