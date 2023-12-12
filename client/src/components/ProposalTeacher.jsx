@@ -1,4 +1,4 @@
-import { React,useState, useEffect, useContext } from 'react';
+import React, {useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate, useParams } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
@@ -8,6 +8,7 @@ import { MessageContext, UserContext } from '../Contexts';
 import { FormControl, Select, MenuItem, Input, Container, IconButton,  Paper, Avatar } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 
+
 import proposalAPI from '../services/proposals.api';
 import API_Degrees from '../services/degrees.api';
 import API_Keywords from '../services/keywords.api';
@@ -16,15 +17,12 @@ import API_Teachers from '../services/teachers.api';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-
 import dayjs from 'dayjs' ;
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-
 
 
 function ProposalTeacher(props)
@@ -40,11 +38,9 @@ function ProposalTeacher(props)
     const { user } = useContext(UserContext);
     const [teachersList, setTeachersList]=useState('');
     const [degreesList, setDegreesList]=useState('');
-    const [selectedSupervisor, setSelectedSupervisor] = useState(user?.id);
+    const selectedSupervisor = user?.id;
     const [keywordsList, setKeywordsList]=useState(''); //prese dal DB
 
-
-  
   const [title,setTitle]=useState('');
   const [description,setDescription]=useState('');
   const [required_knowledge,setRequired_knowledge]=useState('');
@@ -54,7 +50,7 @@ function ProposalTeacher(props)
   const [expirationDate, setExpirationDate] = useState(currentDataAndTime || dayjs());
 
 
-   //DEGREE A TENDINA
+   //DEGREE DROPDOWN MENU
    const [selectedDegree, setSelectedDegree] = useState('');
    const [selectedDegreeList, setSelectedDegreeList] = useState([]);
  
@@ -64,7 +60,7 @@ function ProposalTeacher(props)
          if (selectedDegree && !selectedDegreeList.includes(selectedDegree)) 
          {
            setSelectedDegreeList([...selectedDegreeList, selectedDegree]);
-           setSelectedDegree(''); // Pulisce la selezione dopo l'aggiunta
+           setSelectedDegree(''); // Clean the selection
          }
        }
    };
@@ -76,7 +72,7 @@ function ProposalTeacher(props)
     setSelectedDegreeList(updatedDegreeList);
     };
 
-  //CO SUPERVISORS A TENDINA
+  //CO SUPERVISORS DROPDOWN MENU
   const [selectedCoSup, setSelectedCoSup] = useState('');
   const [selectedCoSupList, setSelectedCoSupList] = useState([]);
 
@@ -96,6 +92,7 @@ function ProposalTeacher(props)
         {
           setSelectedCoSupList([...selectedCoSupList, selectedCoSupObject]);
           setSelectedCoSup('');  // Clean the selection
+
         }
       }
   };
@@ -108,7 +105,7 @@ function ProposalTeacher(props)
   };
 
 
-  //KEWWORDS A TENDINA
+  //KEWWORDS DROPDOWN MENU
   const [newKeyword, setNewKeyword] = useState('');
   
   const [selectedKeyword, setSelectedKeyword] = useState('');
@@ -118,12 +115,12 @@ function ProposalTeacher(props)
     if (selectedKeyword !== '') {
       if (!selectedKeywordList.includes(selectedKeyword)) {
         setSelectedKeywordList([...selectedKeywordList, selectedKeyword]);
-        setSelectedKeyword(''); // Pulisce la selezione dopo l'aggiunta
+        setSelectedKeyword(''); // Clean the selection
       }
     } else if (newKeyword !== '') {
-      // Aggiunge la nuova keyword
+      // Add the new keyword
       setSelectedKeywordList([...selectedKeywordList, newKeyword]);
-      setNewKeyword(''); // Pulisce l'input della nuova keyword dopo l'aggiunta
+      setNewKeyword(''); // Clean the input after new keyword has been added
     }
   }
 
@@ -143,7 +140,7 @@ function ProposalTeacher(props)
   };
 
   const handleAddExternal = () => {
-    //controllo campi name, surname e email
+    //check fields: name, surname, email
     let name= formExternal.name;
     let surname= formExternal.surname;
     let email=formExternal.email;
@@ -154,7 +151,7 @@ function ProposalTeacher(props)
     {
       if (!isNaN(parseInt(name[i]))) 
       {
-        handleMessage("ATTENTION NAME: "+name+" CAN'T CONTAIN NUMBER ", "warning");
+        handleMessage("ATTENTION NAME: "+name+" CAN'T CONTAIN NUMBERS ", "warning");
         return;
       }
     }
@@ -169,7 +166,7 @@ function ProposalTeacher(props)
        }
      }
  
-    //controllo email
+    // email check
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$/; 
     if(!emailRegex.test(email))
     {
@@ -235,7 +232,7 @@ function ProposalTeacher(props)
                     })
                     setSelectedDegreeList(()=>(list));
         
-                    // Rinomina il campo 'id' in 'teacher_id' 
+                    // Field 'id' renamed to 'teacher_id' 
                     p.coSupervisors.forEach(obj => { obj.teacher_id = obj.id; delete obj.id; });
                     setSelectedCoSupList(()=>(p.coSupervisors));
         
@@ -320,14 +317,12 @@ function ProposalTeacher(props)
     }
 
     
-    ////////SE INPUT CORRETTO //////////////////////////////////
+    ////////IF CORRECT INPUT //////////////////////////////////
 
     let formatted_expiration = expirationDate.format("YYYY-MM-DD");
     let cod_group= user.cod_group;
     let supervisors_obj={"supervisor_id":  selectedSupervisor, 
       "co_supervisors":  array_only_id_co_supervisors, "external": listExternals};
-
-    //MESSAGGIO DI SICUREZZA
                       
     let acceptMessage={"add": 'Are you sure to create this new thesis ?',
                       "edit": 'Are you sure to edit this thesis ?',
@@ -373,12 +368,12 @@ function ProposalTeacher(props)
 }   
        
 
- let array_sigle_degree=[
-                          {id: "1", sigla:'MSc', valore:"Master of Science"},
-                          {id: "2", sigla:'BSc', valore:"Bachelor of Science"} 
+ let array_cod_degree=[
+                          {id: "1", short:'MSc', long:"Master of Science"},
+                          {id: "2", short:'BSc', long:"Bachelor of Science"} 
                         ];
 
-  //INVIO FORM ///////////////////////////////////////////////////////////////////////////////////
+  //SEND FORM ///////////////////////////////////////////////////////////////////////////////////
   
   return (
     <Container>
@@ -387,17 +382,30 @@ function ProposalTeacher(props)
 
 
     {typeOperation === "add" ? (
-    <> <Typography variant="h5" align="center">  INSERT A NEW THESIS PROPOSAL <br /> </Typography> <br /> </> ) : (<></>)}
+        <> <Typography variant="h4" align="center">  INSERT A NEW THESIS PROPOSAL <br /> </Typography> <br /> </> ) : (<></>)}
 
     {typeOperation === "edit" ? (
-    <>   <Typography variant="h5" align="center"> EDIT PROPOSAL OF THESIS: <br /> { title } </Typography> <br /> </> ) : (<></>)}
+    <>   <Typography variant="h4" align="center"> EDIT PROPOSAL OF THESIS: <br /> { title } </Typography> <br /> </> ) : (<></>)}
 
     {typeOperation === "copy" ? (
-    <>   <Typography variant="h5" align="center"> COPY PROPOSAL OF THESIS: <br /> { title } </Typography> <br /> </> ) : (<></>)}
+    <>   <Typography variant="h4" align="center"> COPY PROPOSAL OF THESIS: <br /> { title } </Typography> <br /> </> ) : (<></>)}
 
-       <Typography variant="h6"> TEACHER: {user.name} {user.surname}  (d{user.id}) </Typography> <br />
+       {/* <Typography variant="h5"> TEACHER: {user.name} {user.surname}  (d{user.id}) </Typography> <br />
        <Typography variant="h7"> GROUP NAME    : {user?.group_name}   </Typography> <br />
-       <Typography variant="h7"> COD DEPARTMENT: {user?.cod_department}         </Typography>
+       <Typography variant="h7"> COD DEPARTMENT: {user?.cod_department}         </Typography> */}
+
+      <Grid container spacing={3}>
+        <Grid item md={1}>
+          <Avatar sx={{ width: 61, height: 61, bgcolor:'#FCBF49' }}>  {/* or secondary #F77F00 */}
+            {String(user?.name).charAt(0)}{String(user?.surname).charAt(0)}
+          </Avatar>
+        </Grid>
+        <Grid item md={4}>
+          <Typography>{user?.name}  {user?.surname}  ({user?.id})</Typography>
+          <Typography>Deparment: {user?.cod_department}</Typography>
+          <Typography>Group: {user?.group_name}</Typography>
+        </Grid>
+      </Grid>
 
     <br /> <br />
 
@@ -407,16 +415,16 @@ function ProposalTeacher(props)
           <TextField  name="title" variant="filled" fullWidth
           value={title}  onChange={ev=>setTitle(ev.target.value)}/>  <br /> <br /> 
 
-        <Typography variant="subtitle2" fontWeight="bold"> DESCRIPTION </Typography>
+        <Typography variant="subtitle1" fontWeight="bold"> DESCRIPTION </Typography>
         <TextField  name="description" variant="outlined"  fullWidth  multiline
            rows={7} value={description}  onChange={ev=>setDescription(ev.target.value)}   />  <br />  <br /> 
 
           <Grid container spacing={2}> 
               <Grid item xs={4}>
                 <FormControl fullWidth>  
-                <Typography variant="subtitle1" fontWeight="bold">  SUPERVISORD ID  </Typography>
+                <Typography variant="subtitle1" fontWeight="bold">  SUPERVISOR  </Typography>
                   <TextField name="supervisor" variant="outlined" fullWidth
-                  value={selectedSupervisor}  onChange={ev=>setSelectedSupervisor(ev.target.value)} disabled /> 
+                  value={"d"+user?.id} disabled /> 
                 </FormControl> 
               </Grid>
 
@@ -455,8 +463,8 @@ function ProposalTeacher(props)
                       onChange={(ev) => { setLevel(ev.target.value) }}
                     >
                        {
-                        array_sigle_degree.map((el, index) =>
-                        <MenuItem key={el.id} value={el.sigla}> {el.valore}</MenuItem> ) 
+                        array_cod_degree.map((el, index) =>
+                        <MenuItem key={el.id} value={el.short}> {el.long}</MenuItem> ) 
                         
                       }                   
                     </Select>
@@ -464,16 +472,17 @@ function ProposalTeacher(props)
             </Grid>
           </Grid>   <br/> <br/>
 
-          <Grid item xs={4}>
-          <Paper elevation={3} style={{ padding: '16px' }}>
+          {level!=='' && <><Grid item xs={4}>
+          <Paper elevation={3} style={{ padding: '1rem' }}>
             <FormControl fullWidth>
-              <Typography variant="h6" gutterBottom fontWeight="bold">
+              <Typography variant="subtitle1" gutterBottom fontWeight="bold">
                 ADD DEGREE  {level=='MSc'? "MASTER" : "BACHELOR" }
               </Typography>
               <Select
                 labelId="degree-label"
                 id="degree-select"
                 value={selectedDegree}
+                disabled={level===''}
                 onChange={(event) => setSelectedDegree(event.target.value)}
                 input={<Input id="select-multiple" />}
               >
@@ -488,17 +497,17 @@ function ProposalTeacher(props)
                 variant="contained"
                 color="primary"
                 onClick={handleAddClickDegree}
-                style={{ marginTop: '16px' }}
+                style={{ marginTop: '1rem' }}
               >
                 ADD
               </Button>
 
-              {/* Visualizza i co-supervisori selezionati */}
-              {selectedDegreeList.length!=0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
+              {/* Selected co-supervisors */}
+              {selectedDegreeList.length!=0 && <Typography variant="h6" style={{ marginTop: '1rem' }}>
                 Added degrees
               </Typography>}
               {selectedDegreeList.map((degree, index) => (
-                <Paper key={degree.cod_degree} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
+                <Paper key={degree.cod_degree} elevation={1} style={{ padding: '0.5rem', marginTop: '0.5rem' }}>
                   <Grid container alignItems="center">
                     <Grid item xs={10}>
                       <Typography variant="body1">{degree.title_degree} </Typography>
@@ -517,7 +526,7 @@ function ProposalTeacher(props)
               ))}
             </FormControl>
           </Paper>
-        </Grid> <br/> <br/>
+        </Grid> <br/> <br/> </>}
 
 
           <Typography variant="subtitle5" fontWeight="bold"> REQUIRED KNOWLEDGE </Typography>
@@ -527,9 +536,9 @@ function ProposalTeacher(props)
       <br />  <br /> 
 
       <Grid item xs={4}>
-      <Paper elevation={3} style={{ padding: '16px' }}>
+      <Paper elevation={3} style={{ padding: '1rem' }}>
         <FormControl fullWidth>
-          <Typography variant="h6" gutterBottom fontWeight="bold">
+          <Typography variant="subtitle1" gutterBottom fontWeight="bold">
             ADD CO-SUPERVISORS
           </Typography>
           
@@ -548,17 +557,17 @@ function ProposalTeacher(props)
             variant="contained"
             color="primary"
             onClick={handleAddClickCoSupervisor}
-            style={{ marginTop: '16px' }}
+            style={{ marginTop: '1rem' }}
           >
             ADD
           </Button>
 
-          {/* Visualizza i co-supervisori selezionati */}
-          {selectedCoSupList.length != 0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
+          {/* View selected co-supervisors */}
+          {selectedCoSupList.length != 0 && <Typography variant="h6" style={{ marginTop: '1rem' }}>
             Selected Co-Supervisors
           </Typography>}
           {selectedCoSupList.map((coSupervisor, index) => (
-            <Paper key={coSupervisor.teacher_id} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
+            <Paper key={coSupervisor.teacher_id} elevation={1} style={{ padding: '0.5rem', marginTop: '0.5rem' }}>
               <Grid container alignItems="center">
                 <Grid item xs={10}>
                   <Typography variant="body1">{coSupervisor.email} </Typography>
@@ -581,9 +590,9 @@ function ProposalTeacher(props)
 
 
     <Grid item xs={4}>
-      <Paper elevation={3} style={{ padding: '16px' }}>
+      <Paper elevation={3} style={{ padding: '1rem' }}>
         <FormControl fullWidth>
-          <Typography variant="h6" gutterBottom fontWeight="bold">
+          <Typography variant="subtitle1" gutterBottom fontWeight="bold">
             ADD KEYWORDS
           </Typography>
           <Select
@@ -600,32 +609,32 @@ function ProposalTeacher(props)
           ))}
           </Select>
 
-          {/* Input per una nuova keyword */}
+          {/* Input form for new keyword (i.e. not in the db) */}
           <TextField
             label="New Keyword"
             variant="outlined"
             fullWidth
             value={newKeyword}
             onChange={(event) => setNewKeyword(event.target.value)}
-            style={{ marginTop: '16px' }}
+            style={{ marginTop: '1rem' }}
           />
 
-          {/* Pulsante per aggiungere la nuova keyword o selezionare quella esistente */}
+          {/* Button to add the new keyword */}
           <Button
             variant="contained"
             color="primary"
             onClick={handleAddClickKeyword}
-            style={{ marginTop: '16px' }}
+            style={{ marginTop: '1rem' }}
           >
             ADD
           </Button>
 
-          {/* Visualizza i co-supervisori selezionati */}
-          {selectedKeywordList.length!=0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
+          {/* View selected co-supervisors */}
+          {selectedKeywordList.length!=0 && <Typography variant="h6" style={{ marginTop: '1rem' }}>
             Added keywords
           </Typography>}
           {selectedKeywordList.map((keyword, index) => (
-            <Paper key={keyword.id} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
+            <Paper key={keyword.id} elevation={1} style={{ padding: '0.5rem', marginTop: '0.5rem' }}>
               <Grid container alignItems="center">
                 <Grid item xs={10}>
                   <Typography variant="body1">{keyword}</Typography>
@@ -648,19 +657,19 @@ function ProposalTeacher(props)
 
     {/* EXTERNALS */}
     <Grid item xs={4}>
-      <Paper elevation={3} style={{ padding: '16px' }}>
-        <Typography variant="h6" gutterBottom fontWeight="bold">
+      <Paper elevation={3} style={{ padding: '1rem' }}>
+        <Typography variant="subtitle1" gutterBottom fontWeight="bold">
           ADD EXTERNAL CO-SUPERVISORS
         </Typography>
 
-        {/* Input for a new external entry */}
+        {/* Input for external co-supervisors contacts */}
         <TextField
           label="Name"
           variant="outlined"
           fullWidth
           value={formExternal.name}
           onChange={handleInputChangeExternal('name')}
-          style={{ marginTop: '16px' }}
+          style={{ marginTop: '1rem' }}
         />
         <TextField
           label="Surname"
@@ -668,7 +677,7 @@ function ProposalTeacher(props)
           fullWidth
           value={formExternal.surname}
           onChange={handleInputChangeExternal('surname')}
-          style={{ marginTop: '16px' }}
+          style={{ marginTop: '1rem' }}
         />
         <TextField
           label="Email"
@@ -676,26 +685,26 @@ function ProposalTeacher(props)
           fullWidth
           value={formExternal.email}
           onChange={handleInputChangeExternal('email')}
-          style={{ marginTop: '16px' }}
+          style={{ marginTop: '1rem' }}
         />
 
-        {/* Button to add the new external entry */}
+        {/* Button to add the external co-supervisor */}
         <Button
           variant="contained"
           color="primary"
           onClick={handleAddExternal}
-          style={{ marginTop: '16px' }}
+          style={{ marginTop: '1rem' }}
           disabled={!formExternal.name || !formExternal.surname || !formExternal.email}
         >
           ADD EXTERNAL
         </Button>
 
-        {/* Display selected external entries */}
-        {listExternals.length != 0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
+        {/* Display selected external co-supervisor */}
+        {listExternals.length != 0 && <Typography variant="h6" style={{ marginTop: '1rem' }}>
           Selected Externals
         </Typography>}
         {listExternals.map((external, index) => (
-        <Paper key={external.email} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
+        <Paper key={external.email} elevation={1} style={{ padding: '0.5rem', marginTop: '0.5rem' }}>
           <Grid container alignItems="center">
             <Grid item xs={10}>
               <Typography variant="body1">
