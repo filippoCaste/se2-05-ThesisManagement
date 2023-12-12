@@ -6,7 +6,7 @@ const SERVER_URL = "http://localhost:3001";
  * @param {Object} studentRequest 
  * - `title`
  * - `type`
- * - `desciption`
+ * - `description`
  * - `notes`
  * - `teacherEmail`
  * - `coSupervisorEmails[]`

@@ -28,6 +28,8 @@
       - [`Students`](#students)
       - [`Supervisors`](#supervisors)
       - [`Proposals`](#proposals)
+      - [`ProposalRequests`](#proposalrequests)
+      - [`ProposalRequestCoSupervisors`](#proposalrequestcosupervisors)
       - [`Applications`](#applications)
   - [Client main pages](#client-main-pages)
     - [General](#general)
@@ -264,6 +266,26 @@ In order to run the application you need to open two terminals and run:
     }
   ]
 }
+```
+- POST `/request`
+  - request body content: 
+    - see below
+  - response: 
+    - 201 Created
+    - 400 Errors in the body object
+    - 500 Internal Server Error: Indicates an error during processing.
+```json
+{
+  "title": "A title",
+  "type": "Research",
+  "description": "A description related to the activity",
+  "notes": "Some additional notes about the thesis work",
+  "teacherEmail": "john.doe@polito.it",
+  "coSupervisorEmails": [
+    "mario.rossi@polito.it",
+    "giuseppe.verdi@polito.it"
+  ]
+} 
 ```
 
 ### `/api/degrees`:
@@ -573,6 +595,19 @@ The database can be found in: `./server/database.db`.
   - other values:
     - `assigned`: if a student application has been accepted
     - `archived`: if the proposal has been archived or has expired
+
+#### `ProposalRequests`
+- id: INTEGER
+- student_id: INTEGER
+- teacher_id: INTEGER
+- title: TEXT
+- description: TEXT
+- notes: TEXT
+- type: TEXT
+
+#### `ProposalRequestCoSupervisors`
+- proposal_request_id: INTEGER
+- co_supervisor_id: INTEGER
 
 #### `Applications`
 - application_id: INTEGER (AI)
