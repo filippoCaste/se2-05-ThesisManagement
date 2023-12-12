@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { MessageContext, UserContext } from '../Contexts';
-import { FormControl, Select, MenuItem, Input, Container, IconButton,  Paper } from '@mui/material';
+import { FormControl, Select, MenuItem, Input, Container, IconButton,  Paper, Avatar } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 
 import proposalAPI from '../services/proposals.api';
@@ -95,7 +95,7 @@ function ProposalTeacher(props)
         if(selectedCoSupObject && !isCoSupervisorAlreadySelected)
         {
           setSelectedCoSupList([...selectedCoSupList, selectedCoSupObject]);
-          setSelectedCoSup(''); // Pulisce la selezione dopo l'aggiunta
+          setSelectedCoSup('');  // Clean the selection
         }
       }
   };
@@ -211,7 +211,7 @@ function ProposalTeacher(props)
                     setNotes(()=>(p.notes));
                     setLevel(()=>(p.level));
         
-                    // Verifica se p.cod_degree è un array
+                    // Check if p.cod_degree is an array
                     let list_cod_degree;
                     if(!(Array.isArray(p.cod_degree)))
                     {
