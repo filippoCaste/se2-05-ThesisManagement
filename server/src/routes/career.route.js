@@ -12,6 +12,6 @@ router.get("/student/:studentId", isTeacher, getCareerByStudentId);
 
 router.post("/upload/student/:studentId/application/:applicationId", isStudent, upload.single('pdfFile'), uploadFile);
 
-router.get("/download/student/:studentId/application/:applicationId", isTeacher, getFile);
+router.get("/download/student/:studentId/application/:applicationId", getFile);
 
 export { router };
