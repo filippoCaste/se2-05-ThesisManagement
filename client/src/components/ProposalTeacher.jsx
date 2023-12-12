@@ -1,11 +1,12 @@
-import { React,useState, useEffect, useContext } from 'react';
+import React, {useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate, useParams } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { MessageContext, UserContext } from '../Contexts';
-import { FormControl, Select, MenuItem, Input, Container, IconButton,  Paper } from '@mui/material';
+import { FormControl, Select, MenuItem, Input, Container, IconButton,  Paper, Icon, Avatar, Tooltip } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
 
 import proposalAPI from '../services/proposals.api';
 import API_Degrees from '../services/degrees.api';
@@ -22,6 +23,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs' ;
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
+import SchoolIcon from '@mui/icons-material/School';
+
 function ProposalTeacher(props)
 {
     const {currentDataAndTime, typeOperation} = props;
@@ -35,7 +38,7 @@ function ProposalTeacher(props)
     const { user } = useContext(UserContext);
     const [teachersList, setTeachersList]=useState('');
     const [degreesList, setDegreesList]=useState('');
-    const [selectedSupervisor, setSelectedSupervisor] = useState(user?.id);
+    const selectedSupervisor = user?.id;
     const [keywordsList, setKeywordsList]=useState(''); //prese dal DB
 
   const [title,setTitle]=useState('');
@@ -369,17 +372,30 @@ function ProposalTeacher(props)
 
 
     {typeOperation === "add" ? (
-    <> <Typography variant="h5" align="center">  INSERT A NEW THESIS PROPOSAL <br /> </Typography> <br /> </> ) : (<></>)}
+        <> <Typography variant="h4" align="center">  INSERT A NEW THESIS PROPOSAL <br /> </Typography> <br /> </> ) : (<></>)}
 
     {typeOperation === "edit" ? (
-    <>   <Typography variant="h5" align="center"> EDIT PROPOSAL OF THESIS: <br /> { title } </Typography> <br /> </> ) : (<></>)}
+    <>   <Typography variant="h4" align="center"> EDIT PROPOSAL OF THESIS: <br /> { title } </Typography> <br /> </> ) : (<></>)}
 
     {typeOperation === "copy" ? (
-    <>   <Typography variant="h5" align="center"> COPY PROPOSAL OF THESIS: <br /> { title } </Typography> <br /> </> ) : (<></>)}
+    <>   <Typography variant="h4" align="center"> COPY PROPOSAL OF THESIS: <br /> { title } </Typography> <br /> </> ) : (<></>)}
 
-       <Typography variant="h6"> TEACHER: {user.name} {user.surname}  (d{user.id}) </Typography> <br />
+       {/* <Typography variant="h5"> TEACHER: {user.name} {user.surname}  (d{user.id}) </Typography> <br />
        <Typography variant="h7"> GROUP NAME    : {user?.group_name}   </Typography> <br />
-       <Typography variant="h7"> COD DEPARTMENT: {user?.cod_department}         </Typography>
+       <Typography variant="h7"> COD DEPARTMENT: {user?.cod_department}         </Typography> */}
+
+      <Grid container spacing={3}>
+        <Grid item md={1}>
+          <Avatar sx={{ width: 61, height: 61, bgcolor:'#FCBF49' }}>  {/* or secondary #F77F00 */}
+            {String(user?.name).charAt(0)}{String(user?.surname).charAt(0)}
+          </Avatar>
+        </Grid>
+        <Grid item md={4}>
+          <Typography>{user?.name}  {user?.surname}  ({user?.id})</Typography>
+          <Typography>Deparment: {user?.cod_department}</Typography>
+          <Typography>Group: {user?.group_name}</Typography>
+        </Grid>
+      </Grid>
 
     <br /> <br />
 
@@ -389,16 +405,16 @@ function ProposalTeacher(props)
           <TextField  name="title" variant="filled" fullWidth
           value={title}  onChange={ev=>setTitle(ev.target.value)}/>  <br /> <br /> 
 
-        <Typography variant="subtitle2" fontWeight="bold"> DESCRIPTION </Typography>
+        <Typography variant="subtitle1" fontWeight="bold"> DESCRIPTION </Typography>
         <TextField  name="description" variant="outlined"  fullWidth  multiline
            rows={7} value={description}  onChange={ev=>setDescription(ev.target.value)}   />  <br />  <br /> 
 
           <Grid container spacing={2}> 
               <Grid item xs={4}>
                 <FormControl fullWidth>  
-                <Typography variant="subtitle1" fontWeight="bold">  SUPERVISORD ID  </Typography>
+                <Typography variant="subtitle1" fontWeight="bold">  SUPERVISOR  </Typography>
                   <TextField name="supervisor" variant="outlined" fullWidth
-                  value={selectedSupervisor}  onChange={ev=>setSelectedSupervisor(ev.target.value)} disabled /> 
+                  value={"d"+user?.id} disabled /> 
                 </FormControl> 
               </Grid>
 
@@ -446,16 +462,17 @@ function ProposalTeacher(props)
             </Grid>
           </Grid>   <br/> <br/>
 
-          <Grid item xs={4}>
+          {level!=='' && <><Grid item xs={4}>
           <Paper elevation={3} style={{ padding: '1rem' }}>
             <FormControl fullWidth>
-              <Typography variant="h6" gutterBottom fontWeight="bold">
+              <Typography variant="subtitle1" gutterBottom fontWeight="bold">
                 ADD DEGREE  {level=='MSc'? "MASTER" : "BACHELOR" }
               </Typography>
               <Select
                 labelId="degree-label"
                 id="degree-select"
                 value={selectedDegree}
+                disabled={level===''}
                 onChange={(event) => setSelectedDegree(event.target.value)}
                 input={<Input id="select-multiple" />}
               >
@@ -499,7 +516,7 @@ function ProposalTeacher(props)
               ))}
             </FormControl>
           </Paper>
-        </Grid> <br/> <br/>
+        </Grid> <br/> <br/> </>}
 
 
           <Typography variant="subtitle5" fontWeight="bold"> REQUIRED KNOWLEDGE </Typography>
@@ -511,7 +528,7 @@ function ProposalTeacher(props)
       <Grid item xs={4}>
       <Paper elevation={3} style={{ padding: '1rem' }}>
         <FormControl fullWidth>
-          <Typography variant="h6" gutterBottom fontWeight="bold">
+          <Typography variant="subtitle1" gutterBottom fontWeight="bold">
             ADD CO-SUPERVISORS
           </Typography>
           <Select
@@ -567,7 +584,7 @@ function ProposalTeacher(props)
     <Grid item xs={4}>
       <Paper elevation={3} style={{ padding: '1rem' }}>
         <FormControl fullWidth>
-          <Typography variant="h6" gutterBottom fontWeight="bold">
+          <Typography variant="subtitle1" gutterBottom fontWeight="bold">
             ADD KEYWORDS
           </Typography>
           <Select
@@ -633,7 +650,7 @@ function ProposalTeacher(props)
     {/* EXTERNALS */}
     <Grid item xs={4}>
       <Paper elevation={3} style={{ padding: '1rem' }}>
-        <Typography variant="h6" gutterBottom fontWeight="bold">
+        <Typography variant="subtitle1" gutterBottom fontWeight="bold">
           ADD EXTERNAL CO-SUPERVISORS
         </Typography>
 
