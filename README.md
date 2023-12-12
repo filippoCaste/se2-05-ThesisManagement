@@ -11,6 +11,7 @@
     - [`/api/keywords`:](#apikeywords)
     - [`/api/applications`:](#apiapplications)
     - [`/api/levels`:](#apilevels)
+     - [`/api/career`:](#apicareer)
     - [Others](#others)
       - [Keywords](#keywords)
   - [Database Tables](#database-tables)
@@ -467,6 +468,62 @@
 ] 
 ```
 
+### `/api/career`:
+- GET `/student/:studentId`
+  - request body content: none
+  - response:
+    - 200 OK (success) with career informations
+    - 400 Bad Request (error) with an error message
+    - 500 Internal Server Error: indicates an error during processing
+```json
+[
+  {
+    "id": 318082,
+    "cod_course": "03RUMPQ",
+    "title_course": "Urbanism",
+    "cfu": 10,
+    "grade": 30,
+    "date": "2023-12-01"
+  },
+]
+```
+
+- POST `/upload/student/:studentId/application/:applicationId`
+  - request body content: 
+    - `formData`
+  - response:
+    - 200 OK (success) with a successful message and the file uploaded successfully
+    - 400 Bad Request (error) with an error message
+    - 500 Internal Server Error: indicates an error during processing
+```json
+[
+  {
+    "message": "File uploaded successfully.",
+    file
+  }
+]
+```
+
+- GET `/download/student/:studentId/application/:applicationId`
+  - request body content: none
+  - response: 
+    - 200 OK (success) with information if the file exists and in case of it exists the file url
+    - 400 Bad Request (error) with an error message
+    - 500 Internal Server Error: indicates an error during processing
+```json
+[
+  {
+    "fileExists": true,
+    "fileUrl": "http://localhost:3001/students_CV/${file}"
+  }
+]
+//or
+[
+  {
+    "fileExists": false
+  }
+] 
+```
 
 ### Others
 #### Keywords
