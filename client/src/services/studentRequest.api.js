@@ -14,7 +14,6 @@ const SERVER_URL = "http://localhost:3001";
  */
 const postStudentRequest = async (studentRequest) => {
     try {
-
         const response = await fetch(SERVER_URL + "/api/proposals/request", {
             method: "POST",
             credentials: 'include',

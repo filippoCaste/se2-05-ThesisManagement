@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { MessageContext, UserContext } from '../Contexts';
 import { useNavigate } from 'react-router-dom';
-import { Alert, Button, Grid, IconButton, Paper, TextField, Tooltip, Typography } from '@mui/material';
+import { Alert, Button, Grid, IconButton, TextField, Tooltip, Typography } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -11,8 +11,8 @@ import studentRequestAPI from '../services/studentRequest.api';
 function ProposalStudent() {
 	const navigate = useNavigate();
 	const { user } = useContext(UserContext);
-	const [errorMsg, setErrorMsg] = useState('');
-	const [infoMsg, setInfoMsg] = useState('');
+	const [errorMsg, setErrorMsg] = useState(null);
+	const [infoMsg, setInfoMsg] = useState(null);
 	const [confirmation, setConfirmation] = useState(false);
 
 	const [title, setTitle] = useState('');
@@ -32,7 +32,12 @@ function ProposalStudent() {
 	const handleOpenDialog = () => {
 		if (title == '' || type == '' || description == '' || teacherEmail == '') {
 			// the form is not completely filled
-			setErrorMsg("Please fill all mandatory fields:\n" + (title == '' ? "\t- title\n" : '\n') + (type == '' ? "\t- type\n" : '\n') + (description == '' ? "\t- description\n" : '\n') + (teacherEmail== '' ? "\t- teacher contact\n" : ''));
+			setErrorMsg(<><p>Please fill all mandatory fields:</p> <ul>
+							{title === '' ? <li>Title</li> : null}
+							{type === '' ? <li>Type</li>: null}
+							{description === '' ? <li>Description</li>: null}
+							{teacherEmail === '' ? <li>Teacher contact</li> : null}
+							</ul></>);
 		} else {
 			setConfirmation(true);
 		}
@@ -41,18 +46,21 @@ function ProposalStudent() {
 		setConfirmation(false);
 	}
 
-	const handleConfirmation = (result) => {
+	const handleConfirmation =  async (result) => {
 		if (result) {
 			// User clicked "Confirm"
 			// call the api
 			const requestProposal = {
 				title, type, description, notes, teacherEmail, coSupervisorEmails: coSupervisors
 			}
-			studentRequestAPI.postStudentRequest(requestProposal);
+			try {
+				await studentRequestAPI.postStudentRequest(requestProposal);
+			} catch(err) {
+				console.log(err)
+				setErrorMsg("Emails are not correct.");
+				return;
+			}
 			// display info
-			// setInfoMsg("The request has been correctly sent.\nYou are being redirected to the theses proposals page.");
-			console.log("Successfully executed")
-
 			handleMessage("Thesis request sent successfully", "success");
 			navigate('/student');
 			// navigate back
@@ -62,7 +70,6 @@ function ProposalStudent() {
 	}
 
 	return (
-		<>
 			<Grid container mt="10%">
 				<Grid item xs={12} sx={{ mt: '2vh', mx: '4vh' }}>
 
@@ -80,14 +87,13 @@ function ProposalStudent() {
 						errorMsg={errorMsg} setErrorMsg={setErrorMsg}
 					/> <br/>
 					
-					{infoMsg && <Alert variant='outlined' color='info' onClose={() => setInfoMsg('')}>
+					{infoMsg && <Alert severity='info' variant='outlined' color='info' onClose={() => setInfoMsg(null)}>
 						{infoMsg}
 					</Alert>}
 
 				</Grid>
 				<br/>
 			</Grid>
-		</>
 	);
 }
 
@@ -218,11 +224,8 @@ function InsertNewProposalStudent(props) {
 								),
 							}}
 						/>
-					
 						{warning && <Alert severity='warning' onClose={() => setWarning(false)}>The contact must be a valid email</Alert>}
 					</Grid>
-
-					
 
 					{coSupervisors.length !== 0 && (
 						<>
@@ -251,9 +254,9 @@ function InsertNewProposalStudent(props) {
 				</Grid>
 			<br /> <br />
 
-				{errorMsg && <Alert variant='filled' color='error' onClose={() => setErrorMsg('')}>
+				{errorMsg && <Alert severity='error' variant='filled' onClose={() => setErrorMsg(null)}>
 					{errorMsg}
-				</Alert> && <br/>}
+				</Alert>}
 
 				<br />
 				<Button

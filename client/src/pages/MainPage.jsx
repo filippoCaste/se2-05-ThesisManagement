@@ -107,7 +107,7 @@ function MainPage(props) {
           onClick={() => navigate('/student/proposal')}
           sx={{ mb: '2vh' }}
         >
-          Create a New Proposal TBC
+          Create a New Proposal
         </Button>
         <br />
         <MainDashboard
