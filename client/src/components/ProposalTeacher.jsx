@@ -138,7 +138,7 @@ function ProposalTeacher(props)
     {
       if (!isNaN(parseInt(name[i]))) 
       {
-        handleMessage("ATTENTION NAME: "+name+" CAN'T CONTAIN NUMBER ", "warning");
+        handleMessage("ATTENTION NAME: "+name+" CAN'T CONTAIN NUMBERS ", "warning");
         return;
       }
     }
@@ -447,7 +447,7 @@ function ProposalTeacher(props)
           </Grid>   <br/> <br/>
 
           <Grid item xs={4}>
-          <Paper elevation={3} style={{ padding: '16px' }}>
+          <Paper elevation={3} style={{ padding: '1rem' }}>
             <FormControl fullWidth>
               <Typography variant="h6" gutterBottom fontWeight="bold">
                 ADD DEGREE  {level=='MSc'? "MASTER" : "BACHELOR" }
@@ -470,17 +470,17 @@ function ProposalTeacher(props)
                 variant="contained"
                 color="primary"
                 onClick={handleAddClickDegree}
-                style={{ marginTop: '16px' }}
+                style={{ marginTop: '1rem' }}
               >
                 ADD
               </Button>
 
               {/* Selected co-supervisors */}
-              {selectedDegreeList.length!=0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
+              {selectedDegreeList.length!=0 && <Typography variant="h6" style={{ marginTop: '1rem' }}>
                 Added degrees
               </Typography>}
               {selectedDegreeList.map((degree, index) => (
-                <Paper key={degree.cod_degree} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
+                <Paper key={degree.cod_degree} elevation={1} style={{ padding: '0.5rem', marginTop: '0.5rem' }}>
                   <Grid container alignItems="center">
                     <Grid item xs={10}>
                       <Typography variant="body1">{degree.title_degree} </Typography>
@@ -509,7 +509,7 @@ function ProposalTeacher(props)
       <br />  <br /> 
 
       <Grid item xs={4}>
-      <Paper elevation={3} style={{ padding: '16px' }}>
+      <Paper elevation={3} style={{ padding: '1rem' }}>
         <FormControl fullWidth>
           <Typography variant="h6" gutterBottom fontWeight="bold">
             ADD CO-SUPERVISORS
@@ -532,17 +532,17 @@ function ProposalTeacher(props)
             variant="contained"
             color="primary"
             onClick={handleAddClickCoSupervisor}
-            style={{ marginTop: '16px' }}
+            style={{ marginTop: '1rem' }}
           >
             ADD
           </Button>
 
           {/* View selected co-supervisors */}
-          {selectedCoSupList.length != 0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
+          {selectedCoSupList.length != 0 && <Typography variant="h6" style={{ marginTop: '1rem' }}>
             Selected Co-Supervisors
           </Typography>}
           {selectedCoSupList.map((coSupervisor, index) => (
-            <Paper key={coSupervisor.teacher_id} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
+            <Paper key={coSupervisor.teacher_id} elevation={1} style={{ padding: '0.5rem', marginTop: '0.5rem' }}>
               <Grid container alignItems="center">
                 <Grid item xs={10}>
                   <Typography variant="body1">{coSupervisor.name} {coSupervisor.surname} - {coSupervisor.teacher_id}</Typography>
@@ -565,7 +565,7 @@ function ProposalTeacher(props)
 
 
     <Grid item xs={4}>
-      <Paper elevation={3} style={{ padding: '16px' }}>
+      <Paper elevation={3} style={{ padding: '1rem' }}>
         <FormControl fullWidth>
           <Typography variant="h6" gutterBottom fontWeight="bold">
             ADD KEYWORDS
@@ -591,7 +591,7 @@ function ProposalTeacher(props)
             fullWidth
             value={newKeyword}
             onChange={(event) => setNewKeyword(event.target.value)}
-            style={{ marginTop: '16px' }}
+            style={{ marginTop: '1rem' }}
           />
 
           {/* Button to add the new keyword */}
@@ -599,17 +599,17 @@ function ProposalTeacher(props)
             variant="contained"
             color="primary"
             onClick={handleAddClickKeyword}
-            style={{ marginTop: '16px' }}
+            style={{ marginTop: '1rem' }}
           >
             ADD
           </Button>
 
           {/* View selected co-supervisors */}
-          {selectedKeywordList.length!=0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
+          {selectedKeywordList.length!=0 && <Typography variant="h6" style={{ marginTop: '1rem' }}>
             Added keywords
           </Typography>}
           {selectedKeywordList.map((keyword, index) => (
-            <Paper key={keyword.id} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
+            <Paper key={keyword.id} elevation={1} style={{ padding: '0.5rem', marginTop: '0.5rem' }}>
               <Grid container alignItems="center">
                 <Grid item xs={10}>
                   <Typography variant="body1">{keyword}</Typography>
@@ -632,7 +632,7 @@ function ProposalTeacher(props)
 
     {/* EXTERNALS */}
     <Grid item xs={4}>
-      <Paper elevation={3} style={{ padding: '16px' }}>
+      <Paper elevation={3} style={{ padding: '1rem' }}>
         <Typography variant="h6" gutterBottom fontWeight="bold">
           ADD EXTERNAL CO-SUPERVISORS
         </Typography>
@@ -644,7 +644,7 @@ function ProposalTeacher(props)
           fullWidth
           value={formExternal.name}
           onChange={handleInputChangeExternal('name')}
-          style={{ marginTop: '16px' }}
+          style={{ marginTop: '1rem' }}
         />
         <TextField
           label="Surname"
@@ -652,7 +652,7 @@ function ProposalTeacher(props)
           fullWidth
           value={formExternal.surname}
           onChange={handleInputChangeExternal('surname')}
-          style={{ marginTop: '16px' }}
+          style={{ marginTop: '1rem' }}
         />
         <TextField
           label="Email"
@@ -660,7 +660,7 @@ function ProposalTeacher(props)
           fullWidth
           value={formExternal.email}
           onChange={handleInputChangeExternal('email')}
-          style={{ marginTop: '16px' }}
+          style={{ marginTop: '1rem' }}
         />
 
         {/* Button to add the external co-supervisor */}
@@ -668,18 +668,18 @@ function ProposalTeacher(props)
           variant="contained"
           color="primary"
           onClick={handleAddExternal}
-          style={{ marginTop: '16px' }}
+          style={{ marginTop: '1rem' }}
           disabled={!formExternal.name || !formExternal.surname || !formExternal.email}
         >
           ADD EXTERNAL
         </Button>
 
         {/* Display selected external co-supervisor */}
-        {listExternals.length != 0 && <Typography variant="h6" style={{ marginTop: '16px' }}>
+        {listExternals.length != 0 && <Typography variant="h6" style={{ marginTop: '1rem' }}>
           Selected Externals
         </Typography>}
         {listExternals.map((external, index) => (
-        <Paper key={external.email} elevation={1} style={{ padding: '8px', marginTop: '8px' }}>
+        <Paper key={external.email} elevation={1} style={{ padding: '0.5rem', marginTop: '0.5rem' }}>
           <Grid container alignItems="center">
             <Grid item xs={10}>
               <Typography variant="body1">
