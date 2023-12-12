@@ -5,8 +5,7 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { MessageContext, UserContext } from '../Contexts';
-import { FormControl, Select, MenuItem, Input, Container, IconButton,  Paper, Icon, Avatar, Tooltip } from '@mui/material';
-import InfoIcon from '@mui/icons-material/Info';
+import { FormControl, Select, MenuItem, Input, Container, IconButton,  Paper, Avatar } from '@mui/material';
 
 import proposalAPI from '../services/proposals.api';
 import API_Degrees from '../services/degrees.api';
@@ -23,7 +22,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs' ;
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
-import SchoolIcon from '@mui/icons-material/School';
 
 function ProposalTeacher(props)
 {
