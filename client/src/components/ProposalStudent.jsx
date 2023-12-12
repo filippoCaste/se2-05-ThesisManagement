@@ -1,9 +1,12 @@
 import React, { useContext, useState } from 'react';
-import { UserContext } from '../Contexts';
+import { MessageContext, UserContext } from '../Contexts';
 import { useNavigate } from 'react-router-dom';
-import { Alert, Button, Grid, IconButton, TextField, Tooltip, Typography } from '@mui/material';
+import { Alert, Button, Grid, IconButton, Paper, TextField, Tooltip, Typography } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ConfirmationDialog from './ConfirmationDialog';
+import studentRequestAPI from '../services/studentRequest.api';
 
 function ProposalStudent() {
 	const navigate = useNavigate();
@@ -17,6 +20,8 @@ function ProposalStudent() {
 	const [notes, setNotes] = useState('');
 	const [type, setType] = useState('');
 	const [teacherEmail, setTeacherEmail] = useState('');
+	const [coSupervisor, setCoSupervisor] = useState('');
+	const [coSupervisors, setCoSupervisors] = useState([]);
 
 	const handleMessage = useContext(MessageContext);
 
@@ -40,7 +45,10 @@ function ProposalStudent() {
 		if (result) {
 			// User clicked "Confirm"
 			// call the api
-			
+			const requestProposal = {
+				title, type, description, notes, teacherEmail, coSupervisorEmails: coSupervisors
+			}
+			studentRequestAPI.postStudentRequest(requestProposal);
 			// display info
 			// setInfoMsg("The request has been correctly sent.\nYou are being redirected to the theses proposals page.");
 			console.log("Successfully executed")
@@ -55,11 +63,10 @@ function ProposalStudent() {
 
 	return (
 		<>
-			<br /> <br /> <br /> <br /> <br />
-			<Grid container>
+			<Grid container mt="10%">
 				<Grid item xs={12} sx={{ mt: '2vh', mx: '4vh' }}>
 
-					<h1 align='center'>Request thesis work</h1>
+					<h1>Request thesis work</h1>
 
 					{confirmation && <ConfirmationDialog operation={"Send"} message={"Are you sure you want to send this thesis request?"} 
 					open={confirmation}
@@ -68,8 +75,8 @@ function ProposalStudent() {
       				/> }
 
 					<InsertNewProposalStudent user={user} handleOpenDialog={handleOpenDialog} handleCancel={handleCancel} 
-						title={title} description={description} type={type} notes={notes} teacherEmail={teacherEmail}
-						setTitle={setTitle} setDescription={setDescription} setType={setType} setNotes={setNotes} setTeacherEmail={setTeacherEmail}
+						title={title} description={description} type={type} notes={notes} teacherEmail={teacherEmail} coSupervisor={coSupervisor} coSupervisors={coSupervisors}
+						setTitle={setTitle} setDescription={setDescription} setType={setType} setNotes={setNotes} setTeacherEmail={setTeacherEmail} setCoSupervisor={setCoSupervisor} setCoSupervisors={setCoSupervisors}
 						errorMsg={errorMsg} setErrorMsg={setErrorMsg}
 					/> <br/>
 					
@@ -86,8 +93,32 @@ function ProposalStudent() {
 
 function InsertNewProposalStudent(props) {
 	const { user, handleOpenDialog, handleCancel } = props;
-	const { title, description, notes, type, teacherEmail, errorMsg } = props;
-	const { setTitle, setDescription, setNotes, setType, setTeacherEmail, setErrorMsg } = props;
+	const { title, description, notes, type, teacherEmail, coSupervisor, coSupervisors, errorMsg } = props;
+	const { setTitle, setDescription, setNotes, setType, setTeacherEmail, setCoSupervisor, setCoSupervisors, setErrorMsg } = props;
+
+	const [warning, setWarning] = useState(false);
+
+	function addCoSupervisorEmail(email) {
+		// check that it is an email
+		const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+		const regex = new RegExp(pattern);
+		if(!regex.test(email)) {
+			setWarning(true);	
+			return;	
+		}
+		if (!coSupervisors.includes(email)) {
+			setCoSupervisors([...coSupervisors, email]);
+			setCoSupervisor('');
+			setWarning(false);
+		}
+	}
+
+	function handleRemoveCoSupEmail(index) {
+		// removes one element starting from the index position
+		let newCoSupervisors = [...coSupervisors];
+		newCoSupervisors.splice(index, 1);
+		setCoSupervisors([...newCoSupervisors]);
+	}
 
 	return (
 			<form>
@@ -156,8 +187,8 @@ function InsertNewProposalStudent(props) {
 					<Grid item xs={12} md={6}>
 					{/* PROFESSOR CONTACT */}
 					<Typography variant="subtitle5" fontWeight="bold"> TEACHER CONTACT </Typography>
-					<TextField name="teacherEmail" variant="filled" fullWidth placeholder='ex: d99999@polito.it'
-						value={teacherEmail} onChange={ev => setTeacherEmail(ev.target.value)} />  <br /> <br />
+					<TextField type='email' name="teacherEmail" variant="filled" fullWidth placeholder='ex: john.doe@polito.it'
+						value={teacherEmail} onChange={ev => setTeacherEmail(ev.target.value)} />  
 					</Grid>
 
 					<Grid item xs={12} md={6}>
@@ -166,22 +197,71 @@ function InsertNewProposalStudent(props) {
 					<TextField name="studentEmail" variant="filled" fullWidth disabled
 						value={user?.email} />
 					</Grid>
+					<br/>
 				</Grid>
+			<br />
+				<Grid container spacing={3}>
+					<Grid item xs={12} md={6}>
+						{/* CO-SUPERVISOR CONTACTS */}
+						<Typography variant="subtitle5" fontWeight="bold"> CO-SUPERVISOR CONTACTS </Typography> <br />
+						<TextField type='email' fullWidth name="coSupervisorEmail" variant="filled" placeholder='ex: john.doe@polito.it'
+							value={coSupervisor} onChange={ev => setCoSupervisor(ev.target.value)}
+							InputProps={{
+								endAdornment: (
+									<IconButton
+										color="primary"
+										aria-label="add"
+										onClick={() => addCoSupervisorEmail(coSupervisor)}
+									>
+										<AddCircleIcon />
+									</IconButton>
+								),
+							}}
+						/>
+					
+						{warning && <Alert severity='warning' onClose={() => setWarning(false)}>The contact must be a valid email</Alert>}
+					</Grid>
 
-				<br />
+					
+
+					{coSupervisors.length !== 0 && (
+						<>
+						<Grid item xs={12}>
+							<Typography variant='h6'>Requested Co-Supervisors</Typography>
+						</Grid>
+
+							{coSupervisors.map((coSupEmail, index) => (
+								<>
+									<Grid item xs={10} md={5}>
+										<Typography variant="body1">{coSupEmail} </Typography>
+									</Grid>
+									<Grid item xs={2} md={1}>
+										<IconButton
+											color="primary"
+											aria-label="delete"
+											onClick={() => handleRemoveCoSupEmail(index)}
+										>
+											<DeleteIcon />
+										</IconButton>
+									</Grid>
+								</>
+							))}
+						</>
+					)}
+				</Grid>
+			<br /> <br />
 
 				{errorMsg && <Alert variant='filled' color='error' onClose={() => setErrorMsg('')}>
 					{errorMsg}
-				</Alert>}
+				</Alert> && <br/>}
 
-				
-				<br /><br />
+				<br />
 				<Button
 					variant='contained'
 					color='primary'
 				onClick={() => handleOpenDialog()}
 				>
-					SUBMIT / SEND REQUEST
+					SEND REQUEST
 				</Button>
 				{' '}
 				<Button
@@ -194,7 +274,6 @@ function InsertNewProposalStudent(props) {
 
 			</form>
 	);
-
 }
 
 export default ProposalStudent;
