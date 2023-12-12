@@ -2,8 +2,8 @@ import { db } from "../config/db.js";
 import { Student } from "../models/Student.js";
 import { getProposalInfoByID } from "./proposal.services.js";
 import { Application } from "../models/Application.js";
-import { Proposal } from "../models/Proposal.js";
 import { getExtraInfoFromProposal } from "./proposal.services.js";
+
 export const createApplicationInDb = async (
   proposal_id,
   student_id,
@@ -28,7 +28,7 @@ export const createApplicationInDb = async (
       )
     }
 
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     
     try {
       const sql = `INSERT INTO Applications (proposal_id, student_id, submission_date) VALUES (?, ?, ?)`;

@@ -1,15 +1,16 @@
 import React from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { Box, Collapse, Button, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Typography, Chip,useMediaQuery  } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import EditIcon from '@mui/icons-material/Edit';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import applicationsAPI from '../services/applications.api';
-import { Link } from "react-router-dom";
 import { MessageContext } from '../Contexts';
 import { useContext } from 'react';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -17,18 +18,16 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
 
-
 function Row(props) {
+  const navigate = useNavigate();
   const { row, isEvenRow, deleteProposal, index, onClick, onClickApplication, archiveProposal, isSM, fetchProposals } = props;
   const [open, setOpen] = React.useState(false);
   const handleMessage = useContext(MessageContext);
   const [statusChangeLoading, setStatusChangeLoading] = React.useState(false);
   const [proposalAccepted, setProposalAccepted] = React.useState(false);
-
   //more actions mobile version
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openActions = Boolean(anchorEl);
-
   const handleClick = (event) => {
     if (anchorEl === event.currentTarget) {
       setAnchorEl(null);
@@ -40,14 +39,10 @@ function Row(props) {
     setAnchorEl(null);
   };
   /////
-
-
   const changeStatusOfApplication = async (studentsRow, status) => {
     try {
       setStatusChangeLoading(true);
-
       const response = await applicationsAPI.changeStatusOfApplication(studentsRow.application_id, status);
-
       if (response) {
         studentsRow.status = status;
         await fetchProposals();
@@ -62,9 +57,6 @@ function Row(props) {
       setStatusChangeLoading(false);
     }
   };
-
-
-
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderTop: "3px solid #ddd", backgroundColor: isEvenRow ? '#f5f5f5' : '#ffffff' } }}>
@@ -95,11 +87,11 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell style={{ width: '3%' }}> 
-        <Link to={`/teacher/updateProposal/${row.p.id}`}>
-          <IconButton color='info' aria-label="edit" onClick={() => { }} disabled={proposalAccepted  || row.p.status === 'assigned'}>
+          <IconButton color='info' aria-label="edit" 
+          onClick={() => navigate(`/teacher/updateProposal/${row.p.id}`)} disabled={proposalAccepted  || row.p.status === 'assigned'}>
             <EditIcon />
           </IconButton>
-          </Link>
+          
         </TableCell>
         <TableCell style={{ width: '3.6%' }}>
           <IconButton
@@ -108,6 +100,13 @@ function Row(props) {
             onClick={() => deleteProposal(index)}
             disabled={proposalAccepted || row.p.status === 'assigned'}>
             <DeleteIcon />
+          </IconButton>
+        </TableCell>
+        <TableCell style={{ width: '3%' }}> 
+          <IconButton aria-label="copy" 
+          onClick={() => navigate(`/teacher/copyProposal/${row.p.id}`)}
+           disabled={proposalAccepted  || row.p.status === 'assigned'}>
+            <ContentCopyIcon />
           </IconButton>
         </TableCell>
         </>
@@ -129,12 +128,12 @@ function Row(props) {
                       'aria-labelledby': 'basic-button',
                     }}
                   >
-                      <MenuItem style={{ color: "#007FFF" }} aria-label="show details" onClick={() => {onClick(row.p);handleClose();}}><DescriptionOutlinedIcon /></MenuItem>
-                      <MenuItem aria-label="archive" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"  || row.p.status === 'assigned' || proposalAccepted}><ArchiveIcon   color='success'/></MenuItem>
-                      <MenuItem aria-label="edit" onClick={() => {handleClose();}} disabled={proposalAccepted  || row.p.status === 'assigned'}><Link to={`/teacher/updateProposal/${row.p.id}`}><EditIcon color='info' /></Link></MenuItem>
-                      <MenuItem aria-label="delete" onClick={() => {deleteProposal(index);handleClose();}} disabled={proposalAccepted || row.p.status === 'assigned'}><DeleteIcon color="error" /></MenuItem>
-
-                      
+        <MenuItem style={{ color: "#007FFF" }} aria-label="show details" onClick={() => {onClick(row.p);handleClose();}}><DescriptionOutlinedIcon /></MenuItem>
+        <MenuItem aria-label="archive" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"  || row.p.status === 'assigned' || proposalAccepted}><ArchiveIcon   color='success'/></MenuItem>
+        <MenuItem aria-label="edit" onClick={() => {handleClose();}} disabled={proposalAccepted  || row.p.status === 'assigned'}><Link to={`/teacher/updateProposal/${row.p.id}`}><EditIcon color='info' /></Link></MenuItem>
+        <MenuItem aria-label="delete" onClick={() => {deleteProposal(index);handleClose();}} disabled={proposalAccepted || row.p.status === 'assigned'}><DeleteIcon color="error" /></MenuItem>
+        <MenuItem aria-label="copy" onClick={() => {handleClose();}} disabled={proposalAccepted  || row.p.status === 'assigned'}><Link to={`/teacher/copyProposal/${row.p.id}`}><ContentCopyIcon  /></Link></MenuItem>
+      
                   </Menu>
         </IconButton>
       </TableCell>
@@ -298,7 +297,6 @@ function Row(props) {
     </React.Fragment>
   );
 }
-
 function CollapsibleTable(props) {
   const {listProposals,onClick,deleteProposal, archiveProposal,onClickApplication, fetchProposals} = props;
   const theme = useTheme();
@@ -319,6 +317,7 @@ function CollapsibleTable(props) {
           <TableCell style={{ width: '3.6%' }}><b>Archive</b></TableCell>
           <TableCell style={{ width: '3.6%' }}><b>Edit</b></TableCell>
           <TableCell style={{ width: '3.6%' }}><b>Delete</b></TableCell>
+          <TableCell style={{ width: '3.6%' }}><b>Copy</b></TableCell>
           </>
           :<><TableCell style={{ width: '15%' }}><b>Actions</b></TableCell></> }
         </TableRow>
@@ -340,5 +339,4 @@ function CollapsibleTable(props) {
     </Table>
   );
 }
-
 export default CollapsibleTable;
