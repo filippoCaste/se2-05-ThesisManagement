@@ -14,27 +14,25 @@ export const getStudentCareer = (studentId) => {
     });
 };
 
-const getDirname = (filename) => {
-  return path.dirname(filename);
+const getDirname = (importMetaUrl) => {
+  return path.dirname(new URL(importMetaUrl).pathname);
 };
 
 export const getStudentCV = (studentId, applicationId) => {
     const fileName = `s${studentId}_${applicationId}_CV.pdf`;
-    const currentModuleDir = getDirname(__filename);
+    const currentModuleDir = getDirname(import.meta.url);
     const filesFolder = path.join(currentModuleDir, `../../public/students_CV/`);
   
     return new Promise((resolve, reject) => {
-        let obj = { fileExists : false };
       fs.readdir(filesFolder, (err, files) => {
         if (err) {
           reject(err);
         } else {
-          const fileUrl = files.map(file => `http://localhost:3001/students_CV/${file}`);
-          const file = fileUrl.filter(file => file.includes(fileName));
-          if (file.length !== 0) {
-            obj = { fileExists : true, fileUrl: file[0] };
+          const fileUrl = files.filter(file => file.includes(fileName)).map(file => `http://localhost:3001/students_CV/${file}`);
+          if (fileUrl.length !== 0) {
+           resolve({ fileUrl: fileUrl[0] });
           }
-          resolve(obj);
+          resolve(null);
         }
       });
     });

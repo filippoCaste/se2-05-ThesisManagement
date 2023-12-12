@@ -42,7 +42,9 @@ export const getFile = async (req, res) => {
         if(isNaN(applicationId))
             return res.status(400).json({ error: 'Application id must be a number.' });
         const result = await getStudentCV(studentId, applicationId);
-        return res.status(200).json(result);
+        if(result)
+            return res.status(200).json(result);
+        return res.status(404).json({ error: 'File not found.' });
     } catch (err) {
         return res.status(500).json({ error: err.message });
     }

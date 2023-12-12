@@ -7,8 +7,7 @@
     "start": "concurrently \"nodemon index.js\" \"npm run test:coverage\"",
     "test": "jest --passWithNoTests",
     "test:coverage": "jest --runInBand --coverage --colors",
-    "test:unit": "npx jest --runInBand --coverage --testPathPattern=tests/unit/.* --colors",
-    "test:integration": "npx jest --runInBand --coverage --testPathPattern=tests/integration/.* --colors"
+    "test:unit": "npx jest --runInBand --coverage --testPathPattern=tests/unit/.* --colors"
   },
   "author": "",
   "license": "ISC",
