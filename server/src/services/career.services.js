@@ -14,13 +14,9 @@ export const getStudentCareer = (studentId) => {
     });
 };
 
-const getDirname = (importMetaUrl) => {
-  return path.dirname(new URL(importMetaUrl).pathname);
-};
-
 export const getStudentCV = (studentId, applicationId) => {
     const fileName = `s${studentId}_${applicationId}_CV.pdf`;
-    const currentModuleDir = getDirname(import.meta.url);
+    const currentModuleDir = path.dirname(new URL(import.meta.url).pathname);
     const filesFolder = path.join(currentModuleDir, `../../public/students_CV/`);
   
     return new Promise((resolve, reject) => {
