@@ -132,9 +132,7 @@ function InsertNewProposalStudent(props) {
 					<Grid item xs={12} md={6}>
 						<Typography display='inline' variant="subtitle1" fontWeight="bold"> TITLE </Typography>
 					<Tooltip title={
-									<React.Fragment>
 										<Typography color="inherit">The title should emphasize the topic of the thesis work and the technologies used.</Typography>
-									</React.Fragment>
 								}>
 							<IconButton>
 								<InfoIcon fontSize='small'/>
@@ -147,9 +145,7 @@ function InsertNewProposalStudent(props) {
 					<Grid item xs={12} md={6}>
 						<Typography display='inline' variant="subtitle1" fontWeight="bold"> TYPE </Typography>
 						<Tooltip title={
-							<React.Fragment>
 								<Typography color="inherit">The type refers on the type of activity you will perform, such as <em>Research</em>, <em>Internship</em>, <em>Laboratory</em>, ...</Typography>
-							</React.Fragment>
 						}>
 							<IconButton>
 								<InfoIcon fontSize='small' />
@@ -163,9 +159,7 @@ function InsertNewProposalStudent(props) {
 
 			<Typography display='inline' variant="subtitle1" fontWeight="bold"> DESCRIPTION </Typography> 
 				<Tooltip title={
-					<React.Fragment>
 						<Typography color="inherit">Insert a description of the thesis work in general and try to specify which will be your contribution.</Typography>
-					</React.Fragment>
 				}>
 
 				<IconButton>
@@ -177,9 +171,7 @@ function InsertNewProposalStudent(props) {
 
 				<Typography display='inline' variant="subtitle5" fontWeight="bold"> NOTES </Typography>
 				<Tooltip title={
-					<React.Fragment>
 						<Typography color="inherit">Add any additional notes that can be useful to evaluate you request.</Typography>
-					</React.Fragment>
 				}>
 
 					<IconButton>
