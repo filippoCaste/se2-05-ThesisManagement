@@ -17,7 +17,6 @@ export const createProposalRequest = async (
       [student_id, teacher_id, title, description, notes],
       function (err) {
         if (err) {
-          console.log("Error in first query")
           reject(err);
         }
 
@@ -28,7 +27,6 @@ export const createProposalRequest = async (
           for (let id of co_supervisors_ids) {
             db.run(sql2, [this.lastID, id], (err) => {
               if (err) {
-                console.log("Error in the second query")
                 reject(err);
               }
             });

@@ -268,8 +268,6 @@ export const createStudentProposalRequest = async (req, res) => {
       coSupervisorsEmails,
     } = req.body;
 
-    console.log(req.body);
-
     let co_supervisors_ids;
 
     if(!isEmailInputValid([teacherEmail])) {
@@ -304,7 +302,7 @@ export const createStudentProposalRequest = async (req, res) => {
         }
       }
     }
-    await createProposalRequest(
+    const result = await createProposalRequest(
       req.user.id,
       teacher.id,
       co_supervisors_ids,
@@ -312,7 +310,7 @@ export const createStudentProposalRequest = async (req, res) => {
       description,
       notes
     );
-    return res.status(201).json();
+    return res.status(201).json(result);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });
