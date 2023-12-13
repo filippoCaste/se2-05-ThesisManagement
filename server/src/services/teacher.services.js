@@ -49,3 +49,30 @@ export const getTeacherById = (teacher_id) => {
         });
     });
 }
+
+export const getTeacherByEmail = (teacher_email) => {
+
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT T.id as id, T.name as name, T.surname as surname, T.email as email, T.cod_group as cod_group, G.title_group as title_group, G.cod_department as cod_department " +
+            "FROM Teachers T, Groups G WHERE T.email = ?";
+        db.get(sql, [teacher_email], (err, row) => {
+            if (err) {
+                reject(err);
+            }
+            if (row) {
+                const teacher = {
+                    id: row.id,
+                    surname: row.surname,
+                    name: row.name,
+                    email: row.email,
+                    cod_group: row.cod_group,
+                    cod_department: row.cod_department,
+                    group_name: row.title_group
+                };
+                resolve(teacher);
+            } else {
+                resolve(undefined)
+            }
+        });
+    });
+}
