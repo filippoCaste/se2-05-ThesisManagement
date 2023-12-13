@@ -4,10 +4,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "concurrently \"nodemon index.js\" \"npm run test:coverage\"",
+    "start": "concurrently \"nodemon index.js\" \"npm run test:e2e\"",
     "test": "jest --passWithNoTests",
     "test:coverage": "jest --runInBand --coverage --colors",
-    "test:unit": "npx jest --runInBand --coverage --testPathPattern=tests/unit/.* --colors"
+    "test:unit": "npx jest --runInBand --coverage --testPathPattern=tests/unit/.* --colors",
+    "test:e2e": "npx jest tests/end2end"
   },
   "author": "",
   "license": "ISC",

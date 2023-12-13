@@ -36,6 +36,7 @@ function CustomSnackBar(props) {
       action={action}
     >
       <Alert
+        id={`alert_${props.message.text}`}
         onClose={handleClose}
         severity={props.message.type}
         sx={{ width: "100%" }}

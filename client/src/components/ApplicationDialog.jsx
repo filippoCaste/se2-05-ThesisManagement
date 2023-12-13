@@ -125,7 +125,7 @@ const {
             </Typography>
         </Button>
         : <></> }
-        <Button onClick={handleShowCV} variant="contained" disabled={!fileExists}>
+        <Button id="showCV" onClick={handleShowCV} variant="contained" disabled={!fileExists}>
           <Typography variant="button">
             Show Student CV
           </Typography>

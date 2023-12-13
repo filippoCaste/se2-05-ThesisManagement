@@ -36,8 +36,9 @@ export default function StickyHeadTable(props) {
       label: 'Apply',
       minWidth: 200,
       maxWidth: 200,
-      format: (value, row) => (
+      format: (value, row, index) => (
         <Button
+          id={`showButton${index}`}
           variant="outlined"
           startIcon={<DescriptionOutlinedIcon />}
           style={{
@@ -202,7 +203,7 @@ export default function StickyHeadTable(props) {
                           )?.surname
                         }`
                       : column.format
-                      ? column.format(row[column.id], row)
+                      ? column.format(row[column.id], row, index)
                       : row[column.id]}
                   </TableCell>
                 ))}

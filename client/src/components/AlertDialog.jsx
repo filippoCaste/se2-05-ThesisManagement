@@ -131,13 +131,13 @@ export default function AlertDialog({
         {renderField('Group', title_group)}
         {renderField('Required Knowledge', required_knowledge)}
         {handleApply && !isAppliedProposals && 
-          <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} disabled={isAppliedProposal}>
+          <Button id="uploadButton" component="label" variant="contained" startIcon={<CloudUploadIcon />} disabled={isAppliedProposal}>
             Upload file
             <VisuallyHiddenInput type="file" accept=".pdf" onChange={(e) => handleFileChange(e.target.files)}/>
           </Button>
         }
         {!isAppliedProposals && selectedFile && (
-          <Typography variant="body1" gutterBottom>
+          <Typography id="selectedFile" variant="body1" gutterBottom>
             <strong>Selected file:</strong> {selectedFile.name}
           </Typography>
         )}
@@ -163,7 +163,7 @@ export default function AlertDialog({
           handleApply &&
           !isAppliedProposals &&
            (
-            <Button onClick={() => handleApply(selectedFile)} color="primary" variant="contained" disabled={isAppliedProposal}>
+            <Button id="applyButton" onClick={() => handleApply(selectedFile)} color="primary" variant="contained" disabled={isAppliedProposal}>
               <Typography variant="button" sx={{ color: 'white' }}>
                 Apply
               </Typography>

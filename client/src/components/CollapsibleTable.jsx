@@ -62,6 +62,7 @@ function Row(props) {
       <TableRow sx={{ '& > *': { borderTop: "3px solid #ddd", backgroundColor: isEvenRow ? '#f5f5f5' : '#ffffff' } }}>
         <TableCell style={{ width: '5%' }}>
           <IconButton
+            id={`expand-row_${row.p.title}`}
             aria-label="expand row"
             size="small"
             onClick={() => setOpen(!open)}
@@ -174,7 +175,7 @@ function Row(props) {
                   </TableHead>
                   <TableBody>
                     {row.students.map((studentsRow) => (
-                      <TableRow key={studentsRow.student_id}>
+                      <TableRow id={studentsRow.application_id} key={studentsRow.student_id}>
                       {!isSM? 
                       <>   
                         <TableCell style={{ width: '5%' }} component="th" scope="row">{studentsRow.student_id}</TableCell>
@@ -185,7 +186,7 @@ function Row(props) {
                         <TableCell style={{ width: '7%' }}>{studentsRow.student_nationality}</TableCell>
                         <TableCell style={{ width: '12%' }}>{dayjs(studentsRow.submission_date).format("DD/MM/YYYY")}</TableCell>
                         <TableCell style={{ width: '10%' }}>
-                          <IconButton style={{ color: "#007FFF" }} aria-label="show details" onClick={() => onClickApplication(studentsRow)}>
+                          <IconButton id={`showMoreButton_${studentsRow.application_id}`}style={{ color: "#007FFF" }} aria-label="show details" onClick={() => onClickApplication(studentsRow)}>
                             <UnfoldMoreOutlinedIcon />
                           </IconButton>
                         </TableCell>

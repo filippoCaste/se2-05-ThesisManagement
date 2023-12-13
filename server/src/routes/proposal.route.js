@@ -18,7 +18,7 @@ router.post("/", isTeacher, postProposal);
 
 router.get('/teachers/:id', isLoggedIn, getProposalTeacherId)
 
-router.delete("/:id",isLoggedIn,isTeacher,deleteProposal);
+router.delete("/:id",isTeacher,deleteProposal);
 
 router.put("/:id/archived",isLoggedIn,isTeacher,archiveProposal);
 

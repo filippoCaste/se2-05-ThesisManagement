@@ -74,7 +74,7 @@ export default function PrimarySearchAppBar(props) {
         <Typography sx={{ color: theme.palette.main, fontFamily: 'cursive' }}>{user ? user.name : ""}</Typography>
       </Box>
       <MenuItem id="logout" sx={{ mt: "1vw" }}>
-        <IconButton href="http://localhost:3001/api/users/logout" >
+        <IconButton id="iconButtonLogout" href="http://localhost:3001/api/users/logout" >
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
@@ -141,6 +141,7 @@ export default function PrimarySearchAppBar(props) {
 
             
               {!user ? (<IconButton
+              id="iconButton"
               size="large"
               edge="end"
               aria-label="account of current user"
@@ -151,6 +152,7 @@ export default function PrimarySearchAppBar(props) {
             >
               <AccountCircle />
             </IconButton>): (<IconButton
+              id="iconButton"
               size="large"
               edge="end"
               aria-label="account of current user"

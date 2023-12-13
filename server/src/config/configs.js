@@ -6,14 +6,11 @@ const { Strategy: SamlStrategy } = passportSaml;
 import { getUserById } from '../services/user.services.js';
 import multer from 'multer';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 export const strategy = new SamlStrategy({
   entryPoint: 'https://thesis-management-05.eu.auth0.com/samlp/aLJmcMkDJkpc8Rql8EfxLVl4ND9aUyWp',
   issuer: 'urn:thesis-management-05.eu.auth0.com',
   callbackUrl: 'http://localhost:3001/api/users/login/callback',
-  cert: fs.readFileSync(path.join(__dirname, '../../cert.pem'), 'utf8'),
+  cert: fs.readFileSync(path.join(process.cwd(), 'cert.pem'), 'utf8'),
   acceptedClockSkewMs: 30000
 }, 
 function (profile, done) {
