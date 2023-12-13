@@ -101,7 +101,7 @@ export default function StickyHeadTable(props) {
             {renderNoProposalsMessage()}
             {sortedRows.map((row, index) => (
               <TableRow
-                key={index}
+                key={row.id}
                 hover
                 tabIndex={-1}
                 style={{backgroundColor: index % 2 === 0 ? '#f5f5f5' : ''}}

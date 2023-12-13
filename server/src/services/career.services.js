@@ -27,7 +27,7 @@ export const getStudentCV = (studentId, applicationId) => {
               if (fileUrl.length !== 0) {
                   resolve({ fileUrl: fileUrl[0] });
               } else {
-                  resolve(null);
+                  resolve({ fileUrl: null});
               }
           }
       });

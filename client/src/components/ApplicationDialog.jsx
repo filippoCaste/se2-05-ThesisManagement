@@ -73,6 +73,7 @@ const {
 
   useEffect(() => {
     careerAPI.downloadFile(item.application_id, student_id).then((res) => {
+      console.log(res);
       if(res.fileUrl) {
         setFileExists(true);
         setPdf(res.fileUrl);
