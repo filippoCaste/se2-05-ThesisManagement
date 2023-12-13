@@ -4,7 +4,15 @@ import { getCareerByStudentId, getFile, uploadFile } from '../controllers/career
 import multer from 'multer';
 import { isTeacher, storage, isStudent } from '../config/configs.js';
 
-const upload = multer({ storage: storage, limits: { fileSize: 1024 * 1024 * 5 } });
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype === 'application/pdf') {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type'), false);
+    }
+};
+
+const upload = multer({ storage: storage, limits: { fileSize: 1024 * 1024 * 5 }, fileFilter: fileFilter });
 
 const router = Router();
 

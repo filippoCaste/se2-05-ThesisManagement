@@ -5,6 +5,7 @@ import passportSaml from 'passport-saml';
 const { Strategy: SamlStrategy } = passportSaml;
 import { getUserById } from '../services/user.services.js';
 import multer from 'multer';
+import { LIMIT_ATTACHED } from 'sqlite3';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
