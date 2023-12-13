@@ -109,7 +109,7 @@ export default function StickyHeadTable(props) {
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'asc' : 'desc');
+    setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 

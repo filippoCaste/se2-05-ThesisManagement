@@ -30,6 +30,7 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.7",
     "npx": "^10.2.2",
     "passport": "^0.6.0",
     "passport-saml": "^3.2.4",
