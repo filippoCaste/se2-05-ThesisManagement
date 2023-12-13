@@ -13,10 +13,10 @@ export const getProposalsFromDB = (
 ) => {
   return new Promise((resolve, reject) => {
     const params = [];
-    var levels = "";
-    var keywords = "";
-    var supervisor = "";
-    var cod_degree_condition = "";
+    let levels = "";
+    let keywords = "";
+    let supervisor = "";
+    let cod_degree_condition = "";
     if (level_ids && level_ids.length > 0) {
       levels = ` AND level IN (${level_ids.map(() => "?").join(",")})`;
       params.push(...level_ids);
@@ -36,7 +36,7 @@ export const getProposalsFromDB = (
       params.push(cod_degree);
     }
     // consider cases where there is only start_date or end_date or both
-    var date = "";
+    let date = "";
     if (start_date && end_date) {
       date = ` AND (p.expiration_date BETWEEN ? AND ?)`;
       params.push(start_date, end_date);
@@ -634,3 +634,17 @@ export const getAllInfoByProposalId = (proposalId, userId) => {
   });
 }
 
+export const archiveExpiredProposals = () => {
+  return new Promise((resolve, reject) => {
+    const now = new Date().toISOString();
+    const sql = 'UPDATE Proposals SET status = "archived" WHERE expiration_date < ?';
+    db.run(sql, [now], (err) => {
+      if (err) {
+        return reject(err);
+      }
+      const msg = 'The status of expired proposals was changed to archived';
+      console.log(msg);
+      return resolve(msg);
+    });
+  });
+}

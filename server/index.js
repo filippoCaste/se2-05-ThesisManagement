@@ -18,6 +18,7 @@ import passport from "passport";
 import session from "express-session";
 import morgan from "morgan";
 import {strategy} from "./src/config/configs.js";
+import { initScheduledJobs } from "./src/cron-jobs.js"
 
 passport.use(strategy);
 
@@ -74,6 +75,9 @@ app.use("/api/keywords", keywordRoutes);
 app.use("/api/levels", levelRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/careers", careerRoutes);
+
+// initialize cron jobs
+initScheduledJobs();
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}!`);
