@@ -15,6 +15,7 @@ import InitialPage from './pages/InitialPage.jsx';
 import userAPI from './services/users.api.js';
 import { Student, Professor } from './models/User.js';
 import StudentApplications from './pages/StudentApplications';
+import ProposalStudent from './components/ProposalStudent.jsx';
 
 function App() {
   const [message, setMessage] = useState('');
@@ -61,6 +62,8 @@ function App() {
             <Routes>
               <Route index path="/" element={<InitialPage />} />
               <Route path="*" element={<NotFoundPage />} />
+              
+              {/********* STUDENT ROUTES **********/}
               <Route
                 path="/student"
                 element={
@@ -74,6 +77,13 @@ function App() {
                 path="/student/applications"
                 element={<StudentApplications />}
               />
+              <Route
+                path="/student/proposal"
+                element={<ProposalStudent />}
+              />
+
+
+              {/********** TEACHER ROUTES **********/}
               <Route path="/teacher" element={<TeacherPage  currentDataAndTime={currentDataAndTime} />} />
               <Route path="/teacher/addProposal" 
                element={<ProposalTeacher  typeOperation="add" />} />

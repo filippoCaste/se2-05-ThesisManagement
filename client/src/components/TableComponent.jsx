@@ -54,7 +54,7 @@ export default function StickyHeadTable(props) {
           }}
           onClick={() => props.onClick(row)}
         >
-          Show more details
+          Details
         </Button>
       ),
     },
