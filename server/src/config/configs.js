@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import passportSaml from 'passport-saml';
 const { Strategy: SamlStrategy } = passportSaml;
 import { getUserById } from '../services/user.services.js';

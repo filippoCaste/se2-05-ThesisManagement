@@ -382,7 +382,7 @@ function ProposalTeacher(props)
 
 
     {typeOperation === "add" ? (
-        <> <Typography variant="h4" align="center">  INSERT A NEW THESIS PROPOSAL <br /> </Typography> <br /> </> ) : (<></>)}
+        <> <Typography id="add" variant="h4" align="center">  INSERT A NEW THESIS PROPOSAL <br /> </Typography> <br /> </> ) : (<></>)}
 
     {typeOperation === "edit" ? (
     <>   <Typography variant="h4" align="center"> EDIT PROPOSAL OF THESIS: <br /> { title } </Typography> <br /> </> ) : (<></>)}
@@ -412,10 +412,10 @@ function ProposalTeacher(props)
     <form onSubmit={handleSubmit}>
              
         <Typography variant="subtitle1" fontWeight="bold">   TITLE </Typography>
-          <TextField  name="title" variant="filled" fullWidth
+          <TextField id="title" name="title" variant="filled" fullWidth
           value={title}  onChange={ev=>setTitle(ev.target.value)}/>  <br /> <br /> 
 
-        <Typography variant="subtitle1" fontWeight="bold"> DESCRIPTION </Typography>
+        <Typography id="description" variant="subtitle1" fontWeight="bold"> DESCRIPTION </Typography>
         <TextField  name="description" variant="outlined"  fullWidth  multiline
            rows={7} value={description}  onChange={ev=>setDescription(ev.target.value)}   />  <br />  <br /> 
 
@@ -429,7 +429,7 @@ function ProposalTeacher(props)
               </Grid>
 
               <Grid item xs={4}>
-                  <Typography variant="subtitle1" fontWeight="bold"> TYPE </Typography>     
+                  <Typography id="type" variant="subtitle1" fontWeight="bold"> TYPE </Typography>     
                   <TextField  name="type" variant="outlined"  fullWidth
                   value={type}  onChange={ev=>setType(ev.target.value)}/>  <br /> <br />
               </Grid>
@@ -464,7 +464,7 @@ function ProposalTeacher(props)
                     >
                        {
                         array_cod_degree.map((el, index) =>
-                        <MenuItem key={el.id} value={el.short}> {el.long}</MenuItem> ) 
+                        <MenuItem id={el.short} key={el.id} value={el.short}> {el.long}</MenuItem> ) 
                         
                       }                   
                     </Select>
@@ -473,7 +473,7 @@ function ProposalTeacher(props)
           </Grid>   <br/> <br/>
 
           {level!=='' && <><Grid item xs={4}>
-          <Paper elevation={3} style={{ padding: '1rem' }}>
+          <Paper id="select_degree" elevation={3} style={{ padding: '1rem' }}>
             <FormControl fullWidth>
               <Typography variant="subtitle1" gutterBottom fontWeight="bold">
                 ADD DEGREE  {level=='MSc'? "MASTER" : "BACHELOR" }
@@ -487,13 +487,14 @@ function ProposalTeacher(props)
                 input={<Input id="select-multiple" />}
               >
                 {Array.from(degreesList).filter(d=>d.level_degree == level).map((degree, index) => (
-                  <MenuItem key={degree.cod_degree} value={degree}>
+                  <MenuItem id={degree.title_degree} key={degree.cod_degree} value={degree}>
                     {degree.title_degree}
                   </MenuItem>
                 ))}
               </Select>
 
               <Button
+                id='addDegreeButton'
                 variant="contained"
                 color="primary"
                 onClick={handleAddClickDegree}
@@ -507,7 +508,7 @@ function ProposalTeacher(props)
                 Added degrees
               </Typography>}
               {selectedDegreeList.map((degree, index) => (
-                <Paper key={degree.cod_degree} elevation={1} style={{ padding: '0.5rem', marginTop: '0.5rem' }}>
+                <Paper id="prova" key={degree.cod_degree} elevation={1} style={{ padding: '0.5rem', marginTop: '0.5rem' }}>
                   <Grid container alignItems="center">
                     <Grid item xs={10}>
                       <Typography variant="body1">{degree.title_degree} </Typography>
@@ -530,7 +531,7 @@ function ProposalTeacher(props)
 
 
           <Typography variant="subtitle5" fontWeight="bold"> REQUIRED KNOWLEDGE </Typography>
-          <TextField  name="required_knowledge" variant="filled" fullWidth multiline  rows={7}
+          <TextField id="required_knowledge" name="required_knowledge" variant="filled" fullWidth multiline  rows={7}
           value={required_knowledge}  onChange={ev=>setRequired_knowledge(ev.target.value)}/>  <br /> <br />
        
       <br />  <br /> 
@@ -597,13 +598,13 @@ function ProposalTeacher(props)
           </Typography>
           <Select
             labelId="keyword-label"
-            id="cosup-select"
+            id="keywords-select"
             value={selectedKeyword}
             onChange={(event) => setSelectedKeyword(event.target.value)}
             input={<Input id="select-multiple" />}
           >
            {Array.from(keywordsList).map((k, index) => (
-            <MenuItem key={k.id} value={k.name}>
+            <MenuItem id={k.name} key={k.id} value={k.name}>
               {k.name}
             </MenuItem>
           ))}
@@ -621,6 +622,7 @@ function ProposalTeacher(props)
 
           {/* Button to add the new keyword */}
           <Button
+            id="addKeywordButton"
             variant="contained"
             color="primary"
             onClick={handleAddClickKeyword}
@@ -736,7 +738,7 @@ function ProposalTeacher(props)
     <br />
 
         { typeOperation=="add"?
-        <Button variant="contained" color="primary" type="submit" onClick={()=>{ 
+        <Button id="addProposalButton" variant="contained" color="primary" type="submit" onClick={()=>{ 
             handleMessage("Added Proposal","success")}}> ADD PROPOSAL </Button>  : <></> }
 
         { typeOperation=="edit"?    

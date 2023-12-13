@@ -19,6 +19,7 @@ describe('End to end test for AccessApplicantCV', () => {
     test('student can upload CV', async () => {
         await login(driver, 's318082@studenti.polito.it', '318082');
         await driver.get(`${clientUrl}/student`);
+        await driver.findElement(By.id('alert_Student successfully logged in'));
         await driver.sleep(1000);
 
         await driver.findElement(By.id('showButton0')).click();
@@ -40,6 +41,7 @@ describe('End to end test for AccessApplicantCV', () => {
         await driver.sleep(1000);
 
         await driver.findElement(By.id('alert_Successfully Applied')).click();
+        console.log("File uploads successfully");
 
         await driver.sleep(1000);
 
@@ -49,6 +51,7 @@ describe('End to end test for AccessApplicantCV', () => {
     test('professor can access student CV', async () => {
         await login(driver, 'mario.rossi@polito.it', '10000');
         await driver.get(`${clientUrl}/teacher`);
+        await driver.findElement(By.id('alert_Teacher successfully logged in'));
         await driver.sleep(1000);
 
         await driver.findElement(By.id('expandRow_Computer vision tecnique for mobile testing')).click();
@@ -62,6 +65,7 @@ describe('End to end test for AccessApplicantCV', () => {
 
         const button = await driver.findElement(By.id('showCV')).isEnabled();
         expect(button).toBe(true);
+        console.log("Professor can see student CV");
 
         await driver.sleep(1000);
         await logout(driver);
