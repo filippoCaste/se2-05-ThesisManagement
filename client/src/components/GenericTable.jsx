@@ -84,7 +84,7 @@ export default function StickyHeadTable(props) {
             <TableRow className="headerRow">
               {columns.map((column,index) => (
                 <TableCell
-                  key={index}
+                  key={column.id}
                   style={{ width: column.width }}
                   onClick={() => handleRequestSort(column.id)}
                 >
