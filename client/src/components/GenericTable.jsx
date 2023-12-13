@@ -7,6 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import PropTypes from 'prop-types';
 
 export default function StickyHeadTable(props) {
   const [page, setPage] = React.useState(0);
@@ -152,3 +153,10 @@ export default function StickyHeadTable(props) {
     </Paper>
   );
 }
+
+StickyHeadTable.propTypes = {
+  rows: PropTypes.array.isRequired,
+  columns: PropTypes.array.isRequired,
+  noDataMessage: PropTypes.string.isRequired,
+  pagination: PropTypes.bool
+};

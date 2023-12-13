@@ -140,7 +140,7 @@ function Row(props) {
       </>}
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: isEvenRow ? '#f5f5f5' : '#ffffff' }} colSpan={10}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: isEvenRow ? '#f5f5f5' : '#ffffff' }} colSpan={11}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1, height: 'auto' }}>
               <Typography variant="h6" gutterBottom component="div">

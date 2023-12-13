@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Button,
   Dialog,
@@ -14,6 +13,7 @@ import theme from '../theme';
 import StickyHeadTable from './GenericTable';
 import careerAPI from '../services/career.api';
 import { MessageContext } from '../Contexts';
+import PropTypes from 'prop-types';
 
 function renderField(label, value) {
   if (label === "Level") {
@@ -141,3 +141,9 @@ const {
 
 }
 
+ApplicationDialog.propTypes = {
+  open: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  item: PropTypes.object.isRequired,
+  studentExams: PropTypes.array.isRequired,
+};

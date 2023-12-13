@@ -1,4 +1,3 @@
-import request from "supertest";
 import * as controllers from "../../src/controllers/career.controller.js";
 import * as services from "../../src/services/career.services.js";
 
