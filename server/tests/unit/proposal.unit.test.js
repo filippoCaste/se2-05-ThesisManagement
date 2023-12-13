@@ -1,6 +1,6 @@
-import request from "supertest";
 import * as controllers from "../../src/controllers/proposal.controller.js";
 import * as services from "../../src/services/proposal.services.js";
+import * as proposalRequestServices from "../../src/services/proposalRequest.services.js";
 import * as teacherServices from "../../src/services/teacher.services.js";
 import * as keywords from "../../src/services/keyword.services.js";
 
@@ -23,6 +23,11 @@ jest.mock("../../src/services/keyword.services", () => ({
 
 jest.mock("../../src/services/teacher.services", () => ({
   getTeacherById: jest.fn(),
+  getTeacherByEmail: jest.fn(),
+}));
+
+jest.mock("../../src/services/proposalRequest.services", () => ({
+  createProposalRequest: jest.fn(),
 }));
 
 beforeEach(() => {
@@ -631,4 +636,188 @@ describe("deleteProposal", () => {
     expect(mockRes.json).toHaveBeenCalledWith({error: "Unexpected error"});
   });
 
+});
+
+describe("createStudentProposalRequest", () => {
+  test("should return 400 if teacher email is not valid", async () => {
+    const mockReq = {
+      body: {
+        teacherEmail: "not an email",
+        coSupervisorsEmails: ["example@email.com"],
+        title: "Test",
+        description: "Test",
+        notes: "Test"
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Teacher email is not correct"});
+  });
+
+  test("should return 400 if title or description are empty strings", async () => {
+    const mockReq = {
+      body: {
+        teacherEmail: "example@email.com",
+        coSupervisorsEmails: ["example@email.com"],
+        title: "",
+        description: "Test",
+        notes: "Test"
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Title and description should be not empty strings"});
+  });
+
+  test("should return 400 if teacher does not exist", async () => {
+    const mockReq = {
+      body: {
+        teacherEmail: "example@email.com",
+        coSupervisorsEmails: ["example@email.com"],
+        title: "Test",
+        description: "Test",
+        notes: "Test"
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    teacherServices.getTeacherByEmail.mockResolvedValue(null);
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Teacher not found"});
+  });
+
+  test("should return 400 if any of co-supervisors emails are not valid", async () => {
+    const mockReq = {
+      body: {
+        teacherEmail: "example@email.com",
+        coSupervisorsEmails: ["@email.com"],
+        title: "Test",
+        description: "Test",
+        notes: "Test"
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    teacherServices.getTeacherByEmail.mockResolvedValue({});
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Co-supervisors ids should be an array of emails"});
+  });
+
+  test("should return 400 if co-supervisor does not exist", async () => {
+    const mockReq = {
+      body: {
+        teacherEmail: "example@email.com",
+        coSupervisorsEmails: ["example@email.com"],
+        title: "Test",
+        description: "Test",
+        notes: "Test"
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    teacherServices.getTeacherByEmail.mockResolvedValueOnce({});
+    teacherServices.getTeacherByEmail.mockResolvedValueOnce(null);
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Co-supervisor with email example@email.com not found"});
+  });
+
+  test("should return 500 if createProposalRequest throws error", async () => {
+    const mockReq = {
+      user: { id: 1 },
+      body: {
+        teacherEmail: "example@email.com",
+        title: "Test",
+        description: "Test",
+        notes: "Test"
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    teacherServices.getTeacherByEmail.mockResolvedValue({});
+
+    proposalRequestServices.createProposalRequest.mockImplementation(() => {
+      throw new Error("Unexpected error");
+    });
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(500);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Unexpected error"});
+  });
+
+  test("should return 201 if proposal request is created successfully", async () => {
+    const mockReq = {
+      user: { id: 1 },
+      body: {
+        teacherEmail: "example@email.com",
+        title: "Test",
+        description: "Test",
+        notes: "Test"
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    teacherServices.getTeacherByEmail.mockResolvedValue({});
+
+    proposalRequestServices.createProposalRequest.mockResolvedValue({
+      id: 1,
+      student_id: 1,
+      teacher_id: 1,
+      co_supervisors_ids: undefined,
+      title: "Test",
+      description: "Test",
+      notes: "Test",
+      type: "submitted",
+    });
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(201);
+    expect(mockRes.json).toHaveBeenCalledWith({
+      id: 1,
+      student_id: 1,
+      teacher_id: 1,
+      co_supervisors_ids: undefined,
+      title: "Test",
+      description: "Test",
+      notes: "Test",
+      type: "submitted",
+    });
+  });
 });
