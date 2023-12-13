@@ -103,7 +103,6 @@ export default function StickyHeadTable(props) {
               <TableRow
                 key={index}
                 hover
-                role="checkbox"
                 tabIndex={-1}
                 style={{backgroundColor: index % 2 === 0 ? '#f5f5f5' : ''}}
               >

@@ -17,7 +17,6 @@ export const getStudentCareer = (studentId) => {
 export const getStudentCV = (studentId, applicationId) => {
   const fileName = `s${studentId}_${applicationId}_CV.pdf`;
   const filesFolder = path.join(process.cwd(), 'students_CV');
-  console.log(filesFolder);
 
   return new Promise((resolve, reject) => {
       fs.readdir(filesFolder, (err, files) => {
