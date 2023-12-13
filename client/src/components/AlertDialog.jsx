@@ -11,8 +11,23 @@ import {
 import dayjs from 'dayjs';
 import theme from '../theme';
 import {useState, useContext, useEffect } from 'react';
-import { UserContext } from '../Contexts';
+import { UserContext, MessageContext } from '../Contexts';
 import applicationsAPI from '../services/applications.api';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { styled } from '@mui/material/styles';
+
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
+
 
 export default function AlertDialog({
   open,
@@ -43,6 +58,8 @@ export default function AlertDialog({
   );
   const [isAppliedProposal, setIsAppliedProposal] = useState(false);
   const { user } = useContext(UserContext);
+  const handleMessage = useContext(MessageContext);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
         applicationsAPI.getStudentApplications().then((response) => {
@@ -52,6 +69,20 @@ export default function AlertDialog({
         (err) => {console.log(err);}
       )
   });
+
+  const handleFileChange = (files) => {
+    if (files.length > 0) {
+      const selectedFile = files[0];
+      const fileExtension = selectedFile.name.split('.').pop().toLowerCase();
+  
+      if (fileExtension === 'pdf') {
+        setSelectedFile(selectedFile);
+      } else {
+        handleMessage('Please insert a pdf file!', 'warning');
+        files = null;
+      }
+    }
+  };  
 
   return (
     <Dialog
@@ -99,6 +130,17 @@ export default function AlertDialog({
 
         {renderField('Group', title_group)}
         {renderField('Required Knowledge', required_knowledge)}
+        {handleApply && !isAppliedProposals && 
+          <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} disabled={isAppliedProposal}>
+            Upload file
+            <VisuallyHiddenInput type="file" accept=".pdf" onChange={(e) => handleFileChange(e.target.files)}/>
+          </Button>
+        }
+        {!isAppliedProposals && selectedFile && (
+          <Typography variant="body1" gutterBottom>
+            <strong>Selected file:</strong> {selectedFile.name}
+          </Typography>
+        )}
       </DialogContent>
       <DialogActions
         sx={{
@@ -121,7 +163,7 @@ export default function AlertDialog({
           handleApply &&
           !isAppliedProposals &&
            (
-            <Button onClick={handleApply} color="primary" variant="contained" disabled={isAppliedProposal}>
+            <Button onClick={() => handleApply(selectedFile)} color="primary" variant="contained" disabled={isAppliedProposal}>
               <Typography variant="button" sx={{ color: 'white' }}>
                 Apply
               </Typography>
