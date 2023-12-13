@@ -1,8 +1,5 @@
-const request = require('supertest');
-const app = require('../../index');
-
-const { login, logout } = require('./utils');
-const { Builder, By, until } = require('selenium-webdriver');
+import { login, logout } from './utils';
+import { Builder, By, until } from 'selenium-webdriver';
 
 describe('professor can insert a new thesis proposal', () => {
     let driver;

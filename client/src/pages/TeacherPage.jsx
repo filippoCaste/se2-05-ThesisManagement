@@ -235,7 +235,7 @@ function TeacherPage(props)
                   control={<Radio />} label="Posted" />
 
                   <FormControlLabel value="archived" onClick={() => handleRadioClickStatus("archived")}
-                  control={<Radio />} label="Archived" />
+                  control={<Radio id="archive-radio"/>} label="Archived" />
 
                   <FormControlLabel value="assigned" onClick={() => handleRadioClickStatus("assigned")}
                   control={<Radio />} label="Assigned" />

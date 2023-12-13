@@ -746,7 +746,7 @@ function ProposalTeacher(props)
             handleMessage("Update Proposal","success")}}> UPDATE PROPOSAL </Button> : <></> }
             
         { typeOperation=="copy"?    
-           <Button variant="contained" color="primary" type="submit" onClick={()=>{ 
+           <Button id="copyProposalButton" variant="contained" color="primary" type="submit" onClick={()=>{ 
             handleMessage("Copy Proposal","success")}}> ADD PROPOSAL </Button> : <></> }
 
         {' '} <Button variant="contained" color="error" onClick={()=>{navigate('/teacher');handleMessage("Undone insert proposal","success");} }> CANCEL </Button>
