@@ -100,6 +100,15 @@ function MainPage(props) {
         >
           Browse Applied Proposals
         </Button>
+        {' '}
+        <Button
+          variant='contained'
+          color='primary'
+          onClick={() => navigate('/student/proposal')}
+          sx={{ mb: '2vh' }}
+        >
+          Create a New Proposal
+        </Button>
         <br />
         <MainDashboard
           proposals={filteredProposals}

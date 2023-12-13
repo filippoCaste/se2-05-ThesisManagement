@@ -14,6 +14,7 @@ import ApplicationDialog from '../components/ApplicationDialog';
 import careerAPI from '../services/career.api';
 import API_Degrees from '../services/degrees.api';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import ConfirmationDialog from '../components/ConfirmationDialog';
 
 function TeacherPage(props)
 {  
@@ -31,6 +32,10 @@ function TeacherPage(props)
    const [loading, setLoading] = useState(false);
    const [selectedApplication, setSelectedApplication] = useState(null);
    const [studentExams, setStudentExams] = useState([]);
+   const [confirmation, setConfirmation] = useState(false);
+   const [index, setIndex] = useState(null); // used for the confirmation procedure
+   const [message, setMessage] = useState(null);
+   const [operation, setOperation] = useState(null);
    const [degreesList, setDegreesList]=useState('');
     
   //FILTRI
@@ -86,8 +91,6 @@ function TeacherPage(props)
 
     if (user) 
     {
-      
-      
        const updateExpiredStatus = (proposals) => {
          proposals?.forEach(item => {
            if (dayjs(item.expiration_date).isBefore(currentDataAndTime.subtract(1, 'day'))) {
@@ -114,7 +117,6 @@ function TeacherPage(props)
         const titoli= filteredProposal.map(p=> ({id: p.id, title: p.title}));
         setListTitles(titoli);  
 
-    
         const updateStudentStatus = (students) => {
           students.forEach(student => {
             if (student.status === 'pending') {
@@ -269,6 +271,7 @@ function TeacherPage(props)
           </FormControl>
         </Grid>   
         
+        {confirmation && customConfirmation(message, operation)}
         
         <CollapsibleTable
           listProposals={ listProposals }
