@@ -18,7 +18,7 @@ export default function StickyHeadTable(props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [orderBy, setOrderBy] = React.useState('');
   const [order, setOrder] = React.useState('asc');
-  const { proposals, isAppliedProposals } = props;
+  const { proposals, isAppliedProposals,drawerWidth } = props;
 
   const columns = [
     { id: 'title', label: 'Title', minWidth: 450, maxWidth: 450 },
@@ -79,6 +79,8 @@ export default function StickyHeadTable(props) {
         return 'secondary';
       case 'submitted':
         return 'primary';
+      case 'accepted':
+        return 'success';
       default:
         return 'action';
     }
@@ -148,14 +150,14 @@ export default function StickyHeadTable(props) {
   };
 
   return (
-    <Paper className="paperContainer">
+    <Paper className="paperContainer" >
       <TableContainer className="tableContainer">
-        <Table stickyHeader aria-label="sticky table" id={'table'}>
+        <Table stickyHeader aria-label="sticky table" >
           <TableHead>
             <TableRow className="headerRow">
-              {columns.map((column) => (
+              {columns.map((column,index) => (
                 <TableCell
-                  key={column.id}
+                  key={index}
                   align={column.align}
                   style={{ width: column.maxWidth }}
                   className="tableCell"
@@ -170,7 +172,7 @@ export default function StickyHeadTable(props) {
             {renderNoProposalsMessage()}
             {sortedProposals.map((row, index) => (
               <TableRow
-                key={row.code}
+                key={index}
                 hover
                 role="checkbox"
                 tabIndex={-1}

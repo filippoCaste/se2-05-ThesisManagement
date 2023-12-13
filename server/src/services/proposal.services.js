@@ -13,10 +13,10 @@ export const getProposalsFromDB = (
 ) => {
   return new Promise((resolve, reject) => {
     const params = [];
-    var levels = "";
-    var keywords = "";
-    var supervisor = "";
-    var cod_degree_condition = "";
+    let levels = "";
+    let keywords = "";
+    let supervisor = "";
+    let cod_degree_condition = "";
     if (level_ids && level_ids.length > 0) {
       levels = ` AND level IN (${level_ids.map(() => "?").join(",")})`;
       params.push(...level_ids);
@@ -36,7 +36,7 @@ export const getProposalsFromDB = (
       params.push(cod_degree);
     }
     // consider cases where there is only start_date or end_date or both
-    var date = "";
+    let date = "";
     if (start_date && end_date) {
       date = ` AND (p.expiration_date BETWEEN ? AND ?)`;
       params.push(start_date, end_date);
@@ -70,7 +70,7 @@ export const getProposalsFromDB = (
       LEFT JOIN Supervisors AS s ON s.proposal_id = p.id
       LEFT JOIN Degrees AS d ON p.cod_degree = d.cod_degree
       LEFT JOIN Groups AS g ON p.cod_group = g.cod_group
-      WHERE p.expiration_date >= date('now')
+      WHERE p.expiration_date >= date('now') AND p.status != 'accepted'
         ${levels}
         ${keywords}
         ${supervisor}
@@ -243,7 +243,16 @@ export const postNewProposal = (
                     });
                   }
                 }
-              }
+              } 
+              // if(supervisor_obj.co_supervisors.length == 0) {
+                db.run(sqlSuper, [propId, supervisor_obj.supervisor_id, null, null], (err) => {
+                  if(err) {
+                    reject(err);
+                  } else {
+                    console.log("added supervisor")
+                  }
+                });
+              // }
 
               if (supervisor_obj.external && supervisor_obj.external.length > 0) {
                 for (let ext of supervisor_obj.external) {
@@ -314,9 +323,9 @@ export const getProposalsByTeacherId = (teacherId) => {
   return new Promise((resolve, reject) => {
     const sql = "SELECT * " +
                 " FROM Proposals p, Groups g, Degrees d" +
-                " WHERE p.id IN(SELECT proposal_id FROM Supervisors WHERE supervisor_id = ? OR co_supervisor_id = ?) AND " +
+                " WHERE p.id IN(SELECT proposal_id FROM Supervisors WHERE supervisor_id = ?) AND " +
                 "g.cod_group = p.cod_group AND d.cod_degree = p.cod_degree ";
-    db.all(sql, [teacherId, teacherId], (err, rows) => {
+    db.all(sql, [teacherId], (err, rows) => {
       if (err) {
         return reject(err);
       }
@@ -469,6 +478,7 @@ export const updateProposalByProposalId = (proposalId, userId, proposal) => {
       else if (row.supervisor_id != userId) {
         reject(403);
       } else if(row.status === 'assigned') {
+        console.log("This proposal has been already assigned so it cannot be modified")
         reject(400);
       } else {
 
@@ -624,3 +634,17 @@ export const getAllInfoByProposalId = (proposalId, userId) => {
   });
 }
 
+export const archiveExpiredProposals = () => {
+  return new Promise((resolve, reject) => {
+    const now = new Date().toISOString();
+    const sql = 'UPDATE Proposals SET status = "archived" WHERE expiration_date < ?';
+    db.run(sql, [now], (err) => {
+      if (err) {
+        return reject(err);
+      }
+      const msg = 'The status of expired proposals was changed to archived';
+      console.log(msg);
+      return resolve(msg);
+    });
+  });
+}

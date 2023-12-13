@@ -10,6 +10,9 @@ import {
 } from '@mui/material';
 import dayjs from 'dayjs';
 import theme from '../theme';
+import {useState, useContext, useEffect } from 'react';
+import { UserContext } from '../Contexts';
+import applicationsAPI from '../services/applications.api';
 
 export default function AlertDialog({
   open,
@@ -24,6 +27,7 @@ export default function AlertDialog({
     supervisor_id,
     title,
     description,
+    keyword_names,
     notes,
     expiration_date,
     level,
@@ -37,6 +41,17 @@ export default function AlertDialog({
   const coSupervisors = supervisorsInfo?.filter(
     (supervisor) => supervisor.id !== supervisor_id
   );
+  const [isAppliedProposal, setIsAppliedProposal] = useState(false);
+  const { user } = useContext(UserContext);
+
+  useEffect(() => {
+        applicationsAPI.getStudentApplications().then((response) => {
+          setIsAppliedProposal(response.filter((o) => o.status !== 'rejected').length > 0);
+        })
+      .catch(
+        (err) => {console.log(err);}
+      )
+  });
 
   return (
     <Dialog
@@ -68,6 +83,7 @@ export default function AlertDialog({
         }}
       >
         {renderField('Description', description)}
+        {renderField("Keywords", keyword_names)}
         {renderField('Notes', notes)}
         {renderField(
           'Expiration Date',
@@ -103,8 +119,9 @@ export default function AlertDialog({
           <CircularProgress color="primary" size={24} />
         ) : (
           handleApply &&
-          !isAppliedProposals && (
-            <Button onClick={handleApply} color="primary" variant="contained">
+          !isAppliedProposals &&
+           (
+            <Button onClick={handleApply} color="primary" variant="contained" disabled={isAppliedProposal}>
               <Typography variant="button" sx={{ color: 'white' }}>
                 Apply
               </Typography>

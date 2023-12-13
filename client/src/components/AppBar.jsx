@@ -107,7 +107,7 @@ export default function PrimarySearchAppBar(props) {
 
 
   return (
-    <Box position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, overflow:"auto", top:0, left:0, height:"15vh"}}>
+    <Box position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, overflow:"none", top:0, left:0, height:"15vh"}}>
       <AppBar sx={{backgroundColor:"#003049"}}>
         <Toolbar  >
           <IconButton
@@ -115,12 +115,12 @@ export default function PrimarySearchAppBar(props) {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            sx={{ mr: 2, display:{xs:'inline',md: 'none'} }}
+            sx={{ mr: 2, display:{xs:(user?.email[0] === 'd') ? 'none' : 'inline',md: 'none'} }}
             onClick={()=>{setOpenSelectionsMobile(!openSelectionsMobile);}}
           >
             <MenuIcon />
           </IconButton>
-          <Box sx={{display:{xs:'none', md:'inline'}, width:{xs:"0vh",md:"auto"},mx:"1vh",my:"1vh", height:{xs:"0vh",md:"inherit"}, maxWidth:{xs:"0vh",md:"100px"},maxHeight:{xs:"0px",md:"inherit"} }}>
+          <Box sx={{display:{xs:(user?.email[0] === 'd') ? 'inline' : 'none', md:'inline'}, width:{xs:(user?.email[0] === 'd') ? 'auto' : '0vw',md:"auto"},mx:"1vw",my:"1vh", height:{xs:(user?.email[0] === 'd') ? 'inherit' : '0vh',md:"inherit"}, maxWidth:{xs:(user?.email[0] === 'd') ? '100px' : '0vw',md:"100px"},maxHeight:{xs:(user?.email[0] === 'd') ? 'inherit' : '0px',md:"inherit"} }}>
           <Image src={headerBackground} />
           </Box>
           <Typography
@@ -134,12 +134,11 @@ export default function PrimarySearchAppBar(props) {
 
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <IconButton
-              color="inherit">
+
                 <ClockCustomized currentDataAndTime={currentDataAndTime} setCurrentDataAndTime={setCurrentDataAndTime} open={openClock}
                 onOpen={handleClockOpen}
                 onClose={handleClockClose}/>
-            </IconButton>
+
             
               {!user ? (<IconButton
               size="large"

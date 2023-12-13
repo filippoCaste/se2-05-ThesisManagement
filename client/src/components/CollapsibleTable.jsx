@@ -1,31 +1,55 @@
 import React from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import dayjs from 'dayjs';
-import { Box, Collapse, Button, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Typography, Chip } from '@mui/material';
+import { Box, Collapse, Button, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Typography, Chip,useMediaQuery  } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import EditIcon from '@mui/icons-material/Edit';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import applicationsAPI from '../services/applications.api';
-import { Link } from "react-router-dom";
 import { MessageContext } from '../Contexts';
 import { useContext } from 'react';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
 
 function Row(props) {
-  const { row, isEvenRow, deleteProposal, index, onClick, archiveProposal } = props;
+  const navigate = useNavigate();
+  
+  const { row, isEvenRow, deleteProposal, index, onClick,onClickApplication, archiveProposal,isSM, fetchProposals } = props;
   const [open, setOpen] = React.useState(false);
-  const {handleMessage} = useContext(MessageContext);
+  const handleMessage = useContext(MessageContext);
   const [statusChangeLoading, setStatusChangeLoading] = React.useState(false);
-  console.log()
+  const [proposalAccepted, setProposalAccepted] = React.useState(false);
+  //more actions mobile version
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openActions = Boolean(anchorEl);
+  const handleClick = (event) => {
+    if (anchorEl === event.currentTarget) {
+      setAnchorEl(null);
+    } else {
+      setAnchorEl(event.currentTarget);
+    }
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  /////
   const changeStatusOfApplication = async (studentsRow, status) => {
     try {
       setStatusChangeLoading(true);
-
       const response = await applicationsAPI.changeStatusOfApplication(studentsRow.application_id, status);
-
       if (response) {
         studentsRow.status = status;
+        await fetchProposals();
+        handleMessage("Proposal "+ status+" successfully.", "success");
+        if(status=='accepted'){
+          setOpen(false);
+        }
       }
     } catch (error) {
       handleMessage("Error changing status:"+ error,"warning");
@@ -33,8 +57,6 @@ function Row(props) {
       setStatusChangeLoading(false);
     }
   };
-
-
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderTop: "3px solid #ddd", backgroundColor: isEvenRow ? '#f5f5f5' : '#ffffff' } }}>
@@ -47,37 +69,75 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell style={{ width: '27%' }} component="th" scope="row">{row.p.title}</TableCell>
-        <TableCell style={{ width: '10%' }}>{row.p.level === 'MSc' ? "Master of Science" :  "Bachelor of Science" }</TableCell>
+        <TableCell style={{ width: isSM ? '80%' : '25%' }} component="th" scope="row">{row.p.title}</TableCell>
+        {!isSM ? 
+        <>
+        <TableCell style={{ width: '10%' }}>{row.p.level === 'MSc' ? "Master of Science" : row.p.level === 'BSc' ? "Bachelor of Science" : ""}</TableCell>
         <TableCell style={{ width: '14%' }}>{row.p.title_degree}</TableCell>
         <TableCell style={{ width: '11%' }}>{dayjs(row.p.expiration_date).format("DD/MM/YYYY")}</TableCell>
         <TableCell style={{ width: '6%' }}>{row.p.status}</TableCell>
-        <TableCell style={{ width: '3%' }}>
-          <IconButton style={{ color: "#007FFF" }} aria-label="show detailss" onClick={() => onClick(row.p)}>
+        <TableCell style={{ width: '3.6%' }}>
+          <IconButton style={{ color: "#007FFF" }} aria-label="show details" onClick={() => onClick(row.p)}>
             <DescriptionOutlinedIcon />
           </IconButton>
         </TableCell>
-        <TableCell style={{ width: '3%' }}>
-          <IconButton color='success' aria-label="edit" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"}>
+        <TableCell style={{ width: '3.6%' }}>
+          <IconButton color='success' aria-label="edit" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"  || row.p.status === 'assigned' || proposalAccepted}>
             <ArchiveIcon />
           </IconButton>
         </TableCell>
         <TableCell style={{ width: '3%' }}> 
-        <Link to={`/teacher/updateProposal/${row.p.id}`}>
-          <IconButton color='info' aria-label="edit" onClick={() => { }}>
+          <IconButton color='info' aria-label="edit" 
+          onClick={() => navigate(`/teacher/updateProposal/${row.p.id}`)} disabled={proposalAccepted  || row.p.status === 'assigned'}>
             <EditIcon />
           </IconButton>
-          </Link>
+          
         </TableCell>
-        <TableCell style={{ width: '3%' }}>
+        <TableCell style={{ width: '3.6%' }}>
           <IconButton
             color="error"
             aria-label="delete"
             onClick={() => deleteProposal(index)}
-          >
+            disabled={proposalAccepted || row.p.status === 'assigned'}>
             <DeleteIcon />
           </IconButton>
         </TableCell>
+        <TableCell style={{ width: '3%' }}> 
+          <IconButton aria-label="copy" 
+          onClick={() => navigate(`/teacher/copyProposal/${row.p.id}`)}
+           disabled={proposalAccepted  || row.p.status === 'assigned'}>
+            <ContentCopyIcon />
+          </IconButton>
+        </TableCell>
+        </>
+        :
+        <>
+        <TableCell style={{ width: '15%' }}>
+        <IconButton style={{ color: "#007FFF" }} aria-label="show more"  
+                    aria-controls={openActions ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={openActions ? 'true' : undefined}
+                    onClick={handleClick}>
+                    <MoreHorizIcon />
+                    <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={openActions}
+                    onClose={handleClose}
+                    MenuListProps={{
+                      'aria-labelledby': 'basic-button',
+                    }}
+                  >
+        <MenuItem style={{ color: "#007FFF" }} aria-label="show details" onClick={() => {onClick(row.p);handleClose();}}><DescriptionOutlinedIcon /></MenuItem>
+        <MenuItem aria-label="archive" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"  || row.p.status === 'assigned' || proposalAccepted}><ArchiveIcon   color='success'/></MenuItem>
+        <MenuItem aria-label="edit" onClick={() => {handleClose();}} disabled={proposalAccepted  || row.p.status === 'assigned'}><Link to={`/teacher/updateProposal/${row.p.id}`}><EditIcon color='info' /></Link></MenuItem>
+        <MenuItem aria-label="delete" onClick={() => {deleteProposal(index);handleClose();}} disabled={proposalAccepted || row.p.status === 'assigned'}><DeleteIcon color="error" /></MenuItem>
+        <MenuItem aria-label="copy" onClick={() => {handleClose();}} disabled={proposalAccepted  || row.p.status === 'assigned'}><Link to={`/teacher/copyProposal/${row.p.id}`}><ContentCopyIcon  /></Link></MenuItem>
+      
+                  </Menu>
+        </IconButton>
+      </TableCell>
+      </>}
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: isEvenRow ? '#f5f5f5' : '#ffffff' }} colSpan={10}>
@@ -90,6 +150,8 @@ function Row(props) {
                 <Table size="small" aria-label="purchases">
                   <TableHead>
                     <TableRow>
+                      {!isSM? 
+                      <>                      
                       <TableCell style={{ width: '5%' }}><b>Id</b></TableCell>
                       <TableCell style={{ width: '20%' }}><b>Name</b></TableCell>
                       <TableCell style={{ width: '15%' }}><b>Email</b></TableCell>
@@ -99,11 +161,19 @@ function Row(props) {
                       <TableCell style={{ width: '15%' }}><b>Submission Date</b></TableCell>
                       <TableCell style={{ width: '5%' }} />
                       <TableCell style={{ width: '5%' }} />
+                      </>:
+                      <>
+                      <TableCell style={{ width: '90%' }}><b>Name</b></TableCell>
+                      <TableCell style={{ width: '10%' }}><b>Show more</b></TableCell>
+                      </>
+                      }
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {row.students.map((studentsRow) => (
                       <TableRow key={studentsRow.student_id}>
+                      {!isSM? 
+                      <>   
                         <TableCell style={{ width: '5%' }} component="th" scope="row">{studentsRow.student_id}</TableCell>
                         <TableCell style={{ width: '20%' }}>{studentsRow.student_name + " " + studentsRow.student_surname}</TableCell>
                         <TableCell style={{ width: '15%' }}>{studentsRow.student_email}</TableCell>
@@ -133,7 +203,7 @@ function Row(props) {
                             <TableCell style={{ width: '5%' }}>
                               <Button
                                 variant="outlined"
-                                onClick={() => changeStatusOfApplication(studentsRow, 'refused')}
+                                onClick={() => changeStatusOfApplication(studentsRow, 'rejected')}
                                 style={{
                                   fontSize: '12px',
                                   textTransform: 'none',
@@ -153,6 +223,17 @@ function Row(props) {
                             <Chip label={studentsRow.status} color={studentsRow.status === 'accepted' ? "success" : "error"} />
                           </TableCell>
                         )}
+                        </>:
+                        <>
+                      <TableCell style={{ width: '90%' }}>{studentsRow.student_name + " " + studentsRow.student_surname}</TableCell>
+                      <TableCell style={{ width: '10%' }}>
+                      <IconButton style={{ color: "#007FFF" }} aria-label="show details" onClick={() => onClickApplication(studentsRow)}>
+                        <DescriptionOutlinedIcon />
+                      </IconButton>
+                      </TableCell>
+                        
+                        </>
+                        }
                       </TableRow>
                     ))}
                   </TableBody>
@@ -167,29 +248,35 @@ function Row(props) {
     </React.Fragment>
   );
 }
-
 function CollapsibleTable(props) {
-  const {listProposals,onClick,deleteProposal, archiveProposal} = props;
+  const {listProposals,onClick,deleteProposal, archiveProposal,onClickApplication, fetchProposals} = props;
+  const theme = useTheme();
+  const isSM = useMediaQuery(theme.breakpoints.down('md'));
   return (
-    <Table aria-label="collapsible table">
+    <Table aria-label="collapsible table" >
       <TableHead>
         <TableRow>
           <TableCell style={{ width: '5%' }} />
-          <TableCell style={{ width: '27%' }}><b>Title</b></TableCell>
+          <TableCell style={{ width: isSM ? "80%": "25%"}}><b>Title</b></TableCell>
+          {!isSM? 
+          <>
           <TableCell style={{ width: '10%' }}><b>Level</b></TableCell>
           <TableCell style={{ width: '14%' }}><b>Title Degree</b></TableCell>
           <TableCell style={{ width: '11%' }}><b>Expiration Date</b></TableCell>
           <TableCell style={{ width: '6%' }}><b>Status</b></TableCell>
-          <TableCell style={{ width: '3%' }}><b>See details</b></TableCell>
-          <TableCell style={{ width: '3%' }}><b>Archive</b></TableCell>
-          <TableCell style={{ width: '3%' }}><b>Edit</b></TableCell>
-          <TableCell style={{ width: '3%' }}><b>Delete</b></TableCell>
+          <TableCell style={{ width: '3.6%' }}><b>See details</b></TableCell>
+          <TableCell style={{ width: '3.6%' }}><b>Archive</b></TableCell>
+          <TableCell style={{ width: '3.6%' }}><b>Edit</b></TableCell>
+          <TableCell style={{ width: '3.6%' }}><b>Delete</b></TableCell>
+          <TableCell style={{ width: '3.6%' }}><b>Copy</b></TableCell>
+          </>
+          :<><TableCell style={{ width: '15%' }}><b>Actions</b></TableCell></> }
         </TableRow>
       </TableHead>
       <TableBody>
         {listProposals.length > 0 ? (
           listProposals.map((row, index) => (
-            <Row key={row.id} row={row} isEvenRow={index % 2 === 0} onClick={onClick} index={index} deleteProposal={deleteProposal} archiveProposal={archiveProposal} />
+            <Row key={index} row={row} isEvenRow={index % 2 === 0} isSM={isSM} onClick={onClick} onClickApplication={onClickApplication} index={index} deleteProposal={deleteProposal} archiveProposal={archiveProposal} fetchProposals={fetchProposals} />
           ))
         ) : (
           <TableRow>
@@ -203,5 +290,4 @@ function CollapsibleTable(props) {
     </Table>
   );
 }
-
 export default CollapsibleTable;

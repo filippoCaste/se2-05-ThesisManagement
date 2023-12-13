@@ -1,23 +1,14 @@
 import * as React from 'react';
-import { useEffect } from 'react';
 import Drawer from '@mui/material/Drawer';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import Link from '@mui/material/Link';
 import FilterComponent from './FilterComponent.jsx';
-
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
+
 import Box from '@mui/material/Box';
 
 export default function ResponsiveDrawer(props) {
   const {
     openSelectionsMobile,
-    drawerWidth,
     setSelectedLevels,
     setSelectedExpirationDate,
     selectedKeywords,
@@ -31,12 +22,11 @@ export default function ResponsiveDrawer(props) {
     setSelectedStartExpirationDate,
     title,
     setTitle,
+    drawerWidth
   } = props;
-  const [openFilter, setOpenFilter] = React.useState(true);
 
-  /*const handleClickFilter = () => {
-    setOpenFilter(!openFilter);
-  };*/
+
+
 
   const handleResetFilters = () => {
     // Reset all filters here
@@ -52,29 +42,30 @@ export default function ResponsiveDrawer(props) {
     <Drawer
       variant="permanent"
       sx={{
-        width: drawerWidth,
         display: {
           sm: openSelectionsMobile ? 'block' : 'none',
-          md: 'block',
+          md: 'block'
         },
-        flexShrink: 0,
+         width: { xs:"100vw",sm: "100vw", md: `${drawerWidth}` },
         [`& .MuiDrawer-paper`]: {
-          width: { sm: '100vw', md: drawerWidth },
+          width: {xs:"100vw" ,sm: "100vw", md: `${drawerWidth}` },
           boxSizing: 'border-box',
         },
       }}
     >
-      <Box sx={{ overflow: 'auto', mt: '15vh', mx: '2vh' }}>
-        {/*<ListItemButton onClick={handleClickFilter}>
-          <Typography variant="h7" fontWeight={'bold'}>
-            Filter by:
-          </Typography>
-          <ListItemText />
-          {openFilter ? <ExpandLess /> : <ExpandMore />}
-    </ListItemButton>*/}
-        <Collapse in={openFilter} timeout="auto" unmountOnExit>
-          <Divider />
-          <List component="div" disablePadding>
+      <Collapse in={ openSelectionsMobile ? openSelectionsMobile : true } sx={{ mt: '15vh',mx:'3vh',}} timeout="auto" unmountOnExit>
+      <Box sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100%', 
+      overflow:"hidden",
+      position:"relative"
+      
+ }}>
+
+
             <FilterComponent
               setSelectedLevels={setSelectedLevels}
               selectedExpirationDate={selectedExpirationDate}
@@ -90,13 +81,13 @@ export default function ResponsiveDrawer(props) {
               title={title}
               setTitle={setTitle}
             />
-          </List>
-        </Collapse>
+
+
 
         <Link
           position="absolute"
-          bottom="5vh"
-          right="5vh"
+          bottom="2vh"
+          right="2vw"
           href="#"
           color="red"
           underline="none"
@@ -105,6 +96,7 @@ export default function ResponsiveDrawer(props) {
           Reset all
         </Link>
       </Box>
+      </Collapse>
     </Drawer>
   );
 }

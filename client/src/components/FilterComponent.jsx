@@ -5,12 +5,12 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import teachersAPI from '../services/teachers.api';
 import keywordsAPI from '../services/keywords.api';
 import theme from '../theme';
 import ChipsArray from './ChipsCustomized';
 import SupervisorMenu from './SupervisorMenu';
+import CheckboxesTags from './Autocomplete';
 
 export default function FilterComponent(props) {
   const {
@@ -30,7 +30,7 @@ export default function FilterComponent(props) {
   const [availableKeywords, setAvailableKeywords] = useState([]);
   const [availableSupervisors, setAvailableSupervisors] = useState([]);
 
-  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+
 
   useEffect(() => {
     const retrieveFilterOptions = async () => {
@@ -50,14 +50,14 @@ export default function FilterComponent(props) {
   return (
     <Box
       sx={{
-        padding: isSmallScreen ? '10px' : '20px',
         background: 'white',
         borderRadius: '8px',
         boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
         color: theme.palette.primary.main,
+        width:"100%"
       }}
     >
-      <Box sx={{ mb: isSmallScreen ? '10px' : '20px' }}>
+      <Box >
         <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'cursive' }}>
           Title:
         </Typography>
@@ -67,15 +67,14 @@ export default function FilterComponent(props) {
           variant="outlined"
           value={title}
           onChange={(ev) => setTitle(ev.target.value)}
-          sx={{ width: isSmallScreen ? '100%' : '240px', mt: '8px' }}
+          sx={{ width: '100%', mt: '5%' }}
         />
       </Box>
-
-      <Box sx={{ mb: isSmallScreen ? '10px' : '20px' }}>
+      <Box sx={{ mt: "5%" }}>
         <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'cursive' }}>
           Expiration Date:
         </Typography>
-        <Box display="flex" sx={{ mt: '8px', flexDirection: isSmallScreen ? 'column' : 'row' }}>
+        <Box display="flex" sx={{ mt: '5%', flexDirection:'column' }}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="From..."
@@ -86,7 +85,7 @@ export default function FilterComponent(props) {
               slotProps={{
                 textField: {
                   helperText: 'DD/MM/YYYY',
-                  width: isSmallScreen ? '100%' : 'auto',
+                  width: {sm: '100%', md: 'auto'},
                 },
               }}
             />
@@ -99,27 +98,22 @@ export default function FilterComponent(props) {
               slotProps={{
                 textField: {
                   helperText: 'DD/MM/YYYY',
-                  width: isSmallScreen ? '100%' : 'auto',
-                  ml: isSmallScreen ? 0 : '10px',
-                },
+                  width: {sm: '100%', md: 'auto'},
+                  },
               }}
             />
           </LocalizationProvider>
         </Box>
       </Box>
 
-      <Box sx={{ mb: isSmallScreen ? '10px' : '20px' }}>
+      <Box sx={{ mt: "5%" }} >
         <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'cursive' }}>
           Keywords:
         </Typography>
-        <ChipsArray
-          array={availableKeywords}
-          setSelectedArray={setSelectedKeywords}
-          selectedArray={selectedKeywords}
-        />
+        <CheckboxesTags array={availableKeywords} setSelectedArray={setSelectedKeywords} selectedArray={selectedKeywords}/>
       </Box>
 
-      <Box sx={{ mb: isSmallScreen ? '10px' : '20px' }}>
+      <Box sx={{ mt: "5%" }}>
         <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'cursive' }}>
           Supervisor:
         </Typography>

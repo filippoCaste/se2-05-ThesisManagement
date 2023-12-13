@@ -183,7 +183,10 @@ describe('changeStatus', () => {
     });
 
     test("should return 404 if proposal is not found", async () => {
-        const req = { body: { status: "accepted" }, params: { applicationId: 1 } };
+        const req = { 
+            body: { status: "accepted" }, params: { applicationId: 1 },
+            user: { id: 1 }
+        };
         const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
         services.changeStatus.mockImplementation(() => {throw 404});
 
@@ -194,7 +197,10 @@ describe('changeStatus', () => {
     });
 
     test("should return 403 if user is not the supervisor of the proposal", async () => {
-        const req = { body: { status: "accepted" }, params: { applicationId: 1 } };
+        const req = { 
+            body: { status: "accepted" }, params: { applicationId: 1 },
+            user: { id: 1 } 
+        };
         const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
         services.changeStatus.mockImplementation(() => {throw 403});
 
@@ -205,7 +211,10 @@ describe('changeStatus', () => {
     });
 
     test("should return 500 if an error occurs during database operation", async () => {
-        const req = { body: { status: "accepted" }, params: { applicationId: 1 } };
+        const req = { 
+            body: { status: "accepted" }, params: { applicationId: 1 },
+            user: { id: 1 }
+        };
         const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
         services.changeStatus.mockImplementation(() => {throw Error("Database error")});
 
@@ -216,7 +225,10 @@ describe('changeStatus', () => {
     });
 
     test("should return 204 if everything is OK", async () => {
-        const req = { body: { status: "accepted" }, params: { applicationId: 1 } };
+        const req = { 
+            body: { status: "accepted" }, params: { applicationId: 1 },
+            user: { id: 1 }
+        };
         const res = { status: jest.fn().mockReturnThis(), json: jest.fn(), send: jest.fn() };
         services.changeStatus.mockResolvedValue(true);
 
