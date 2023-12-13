@@ -110,13 +110,15 @@ const {
       </DialogTitle>
       <DialogContent sx={{ padding: '20px', backgroundColor: theme.palette.background.default }}>
       {
-        !isSM ? (
+        !isSM && (
           <StickyHeadTable columns={columns} rows={studentExams} noDataMessage={'No exams passed'} />
-        ) : isStudentInformation ? (
+        ) 
+      }
+      { isSM && (isStudentInformation ? (
           StudentInformation(student_id, student_email, student_title_degree, student_enrollment_year, student_nationality, submission_date, status)
         ) : (
           <StickyHeadTable columns={columns} rows={studentExams} noDataMessage={'No exams passed'} />
-        )
+        ))
       } 
       </DialogContent>
       <DialogActions sx={{ padding: '20px', borderTop: `1px solid ${theme.palette.secondary.main}`, justifyContent: 'space-between' }}>
