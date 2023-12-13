@@ -27,17 +27,6 @@ router.post('/login/callback', bodyParser.urlencoded({ extended: false }), (req,
     }else
         res.redirect('http://localhost:5173');
 });
-
-  
-  /*router.post('/login/callback', passport.authenticate('saml', {
-    failureRedirect: '/login', // Redirezione in caso di errore di autenticazione
-  }), async (req, res) => {
-    console.log(req.isAuthenticated());
-  
-    // Questo punto verrà raggiunto solo se l'autenticazione è avvenuta con successo
-    const userData = await getUserById(req.user.nickname.slice(1));
-    return res.redirect("http://localhost:5173/" + userData.role);
-  });*/
   
 router.get('/logout', (req, res) => {
     req.logOut(res, function (err) {
