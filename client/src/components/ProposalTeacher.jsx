@@ -56,7 +56,8 @@ function ProposalTeacher(props) {
   const [selectedDegreeList, setSelectedDegreeList] = useState([]);
 
   const handleAddClickDegree = () => {
-    if (selectedDegree != '') {
+    if (selectedDegree != '') 
+    {
       if (selectedDegree && !selectedDegreeList.includes(selectedDegree)) {
         setSelectedDegreeList([...selectedDegreeList, selectedDegree]);
         setSelectedDegree(''); // Clean the selection
@@ -480,6 +481,7 @@ function ProposalTeacher(props) {
                   variant="contained"
                   color="primary"
                   onClick={handleAddClickDegree}
+                  disabled={typeOperation == 'edit' && selectedDegreeList.length == 1}
                   style={{ marginTop: '1rem' }}
                 >
                   ADD
