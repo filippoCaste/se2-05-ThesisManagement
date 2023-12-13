@@ -19,6 +19,7 @@ import session from "express-session";
 import morgan from "morgan";
 import {strategy} from "./src/config/configs.js";
 import { initScheduledJobs } from "./src/cron-jobs.js";
+import { getProposalTitleByApplicationId } from "./src/services/proposal.services.js";
 
 passport.use(strategy);
 
@@ -78,7 +79,6 @@ app.use("/api/applications", applicationRoutes);
 
 // initialize cron jobs
 initScheduledJobs();
-
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}!`);

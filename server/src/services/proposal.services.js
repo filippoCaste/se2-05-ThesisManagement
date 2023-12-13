@@ -678,3 +678,23 @@ export const getEmailsSupervisorsOneWeekExpiration = () => {
     }
   });  
 })}
+
+
+export const getProposalTitleByApplicationId = (applicationid) => {
+  return new Promise((resolve, reject) => {
+      const sql = `
+          SELECT Proposals.title
+          FROM Proposals
+          INNER JOIN Applications ON Proposals.id = Applications.proposal_id
+          WHERE Applications.application_id = ?
+      `;
+    
+      db.get(sql, [applicationid], (err, row) => {
+          if (err) {
+              reject(err);
+          } else {
+              resolve(row.title);
+          }
+      });
+  });
+};

@@ -2,10 +2,12 @@
 
 import { sendEmail } from "../emailService/sendEmail.js";
 import { getStudentEmailByApplicationId } from "../services/application.services.js";
+import { getProposalTitleByApplicationId } from "./proposal.services.js"; 
 
 export const sendNotificationApplicationDecision = async (applicationId, status) => {
   try {
     const subject = "Thesis Management - Professor application decision";
+    const title = getProposalTitleByApplicationId(applicationId);
     const htmlMessage = `
     <html>
       <head>
@@ -31,9 +33,9 @@ export const sendNotificationApplicationDecision = async (applicationId, status)
       </head>
       <body>
         <div class="container">
-          <h1>Application ${applicationId} Status Update</h1>
+          <h1>Application of proposal ${title} Status Update</h1>
           <p>
-            Application ${applicationId} has been updated to "${status}".
+            Application of proposal ${title} has been updated to "${status}".
           </p>
         </div>
       </body>
