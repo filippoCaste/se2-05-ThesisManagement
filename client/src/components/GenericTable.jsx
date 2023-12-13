@@ -117,7 +117,7 @@ export default function StickyHeadTable(props) {
                     }}
                   >
                     {column.id === 'supervisor_id'
-                      ? `${
+                      && `${
                           row.supervisorsInfo.find(
                             (supervisor) => supervisor.id === row.supervisor_id
                           )?.name
@@ -126,9 +126,11 @@ export default function StickyHeadTable(props) {
                             (supervisor) => supervisor.id === row.supervisor_id
                           )?.surname
                         }`
-                      : column.format
-                      ? column.format(row[column.id], row)
-                      : row[column.id]}
+                    } 
+                    { column.id !== 'supervisor_id' && (column.format ? 
+                      column.format(row[column.id], row)
+                      : row[column.id])
+                    }
                   </TableCell>
                 ))}
               </TableRow>
