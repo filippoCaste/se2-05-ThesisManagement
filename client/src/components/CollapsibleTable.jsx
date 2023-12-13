@@ -174,21 +174,29 @@ function Row(props) {
                   </TableHead>
                   <TableBody>
                     {row.students.map((studentsRow) => (
-                      <TableRow key={studentsRow.student_id}>
-                      {!isSM? 
-                      <>   
-                        <TableCell style={{ width: '5%' }} component="th" scope="row">{studentsRow.student_id}</TableCell>
+                      <TableRow key={studentsRow.student_id}>   
+                        {!isSM ? (<TableCell style={{ width: '5%' }} component="th" scope="row">{studentsRow.student_id}</TableCell>) : null}
                         <TableCell style={{ width: '18%' }}>{studentsRow.student_name + " " + studentsRow.student_surname}</TableCell>
-                        <TableCell style={{ width: '15%' }}>{studentsRow.student_email}</TableCell>
-                        <TableCell style={{ width: '20%' }}>{studentsRow.student_title_degree}</TableCell>
-                        <TableCell style={{ width: '12%' }}>{studentsRow.student_enrollment_year}</TableCell>
-                        <TableCell style={{ width: '7%' }}>{studentsRow.student_nationality}</TableCell>
-                        <TableCell style={{ width: '12%' }}>{dayjs(studentsRow.submission_date).format("DD/MM/YYYY")}</TableCell>
-                        <TableCell style={{ width: '10%' }}>
-                          <IconButton style={{ color: "#007FFF" }} aria-label="show details" onClick={() => onClickApplication(studentsRow)}>
-                            <UnfoldMoreOutlinedIcon />
-                          </IconButton>
-                        </TableCell>
+                        {!isSM ? (<TableCell style={{ width: '15%' }}>{studentsRow.student_email}</TableCell>) : null}
+                        {!isSM ? (<TableCell style={{ width: '20%' }}>{studentsRow.student_title_degree}</TableCell>) : null}
+                        {!isSM ? (<TableCell style={{ width: '12%' }}>{studentsRow.student_enrollment_year}</TableCell>) : null}
+                        {!isSM ? (<TableCell style={{ width: '7%' }}>{studentsRow.student_nationality}</TableCell>) : null}
+                        {!isSM ? (<TableCell style={{ width: '12%' }}>{dayjs(studentsRow.submission_date).format("DD/MM/YYYY")}</TableCell>) : null}
+                        {!isSM ? 
+                          ( <TableCell style={{ width: '10%' }}>
+                              <IconButton style={{ color: "#007FFF" }} aria-label="show details" onClick={() => onClickApplication(studentsRow)}>
+                                <UnfoldMoreOutlinedIcon />
+                              </IconButton>
+                            </TableCell>
+                          ) 
+                          : 
+                          ( <TableCell style={{ width: '15%' }}>
+                              <IconButton style={{ color: "#007FFF" }} aria-label="show details" onClick={() => onClickApplication(studentsRow)}>
+                                <DescriptionOutlinedIcon />
+                              </IconButton>
+                            </TableCell>
+                          )
+                        }
                         {studentsRow.status === 'submitted' ? (
                           <>
                             <TableCell style={{ width: '5%' }}>
@@ -230,58 +238,7 @@ function Row(props) {
                           <TableCell colSpan={2} style={{ width: '10%' }}>
                             <Chip label={studentsRow.status} color={studentsRow.status === 'accepted' ? "success" : "error"} />
                           </TableCell>
-                        )}
-                        </>:
-                        <>
-                      <TableCell style={{ width: '75%' }}>{studentsRow.student_name + " " + studentsRow.student_surname}</TableCell>
-                      <TableCell style={{ width: '15%' }}>
-                        <IconButton style={{ color: "#007FFF" }} aria-label="show details" onClick={() => onClickApplication(studentsRow)}>
-                          <DescriptionOutlinedIcon />
-                        </IconButton>
-                      </TableCell>
-                      {studentsRow.status === 'submitted' ? (
-                          <>
-                            <TableCell style={{ width: '5%' }}>
-                              <Button
-                                variant="outlined"
-                                onClick={() => changeStatusOfApplication(studentsRow, 'accepted')}
-                                style={{
-                                  fontSize: '12px',
-                                  textTransform: 'none',
-                                  color: 'white',
-                                  borderRadius: '4px',
-                                  border: '1px solid #35682D',
-                                  backgroundColor: '#35682D',
-                                }}
-                                disabled={statusChangeLoading}
-                              >
-                                Accept
-                              </Button>
-                            </TableCell>
-                            <TableCell style={{ width: '5%' }}>
-                              <Button
-                                variant="outlined"
-                                onClick={() => changeStatusOfApplication(studentsRow, 'rejected')}
-                                style={{
-                                  fontSize: '12px',
-                                  textTransform: 'none',
-                                  color: 'white',
-                                  borderRadius: '4px',
-                                  border: '1px solid #FF0000',
-                                  backgroundColor: '#FF0000',
-                                }}
-                                disabled={statusChangeLoading}
-                              >
-                                Reject
-                              </Button>
-                            </TableCell>
-                          </>
-                        ) : (
-                          <TableCell colSpan={2} style={{ width: '10%' }}>
-                            <Chip label={studentsRow.status} color={studentsRow.status === 'accepted' ? "success" : "error"} />
-                          </TableCell>
-                        )}
-                        </>
+                        )
                         }
                       </TableRow>
                     ))}
