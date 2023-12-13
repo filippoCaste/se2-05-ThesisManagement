@@ -176,18 +176,20 @@ function Row(props) {
                     {row.students.map((studentsRow) => (
                       <TableRow key={studentsRow.student_id}>   
                         {!isSM ? (<TableCell style={{ width: '5%' }} component="th" scope="row">{studentsRow.student_id}</TableCell>) : null}
-                        <TableCell style={{ width: '18%' }}>{studentsRow.student_name + " " + studentsRow.student_surname}</TableCell>
-                        {!isSM ? (<TableCell style={{ width: '15%' }}>{studentsRow.student_email}</TableCell>) : null}
-                        {!isSM ? (<TableCell style={{ width: '20%' }}>{studentsRow.student_title_degree}</TableCell>) : null}
-                        {!isSM ? (<TableCell style={{ width: '12%' }}>{studentsRow.student_enrollment_year}</TableCell>) : null}
-                        {!isSM ? (<TableCell style={{ width: '7%' }}>{studentsRow.student_nationality}</TableCell>) : null}
-                        {!isSM ? (<TableCell style={{ width: '12%' }}>{dayjs(studentsRow.submission_date).format("DD/MM/YYYY")}</TableCell>) : null}
+                        <TableCell style={{ width: !isSM ? '18%' : '75%' }}>{studentsRow.student_name + " " + studentsRow.student_surname}</TableCell>
                         {!isSM ? 
-                          ( <TableCell style={{ width: '10%' }}>
-                              <IconButton style={{ color: "#007FFF" }} aria-label="show details" onClick={() => onClickApplication(studentsRow)}>
-                                <UnfoldMoreOutlinedIcon />
-                              </IconButton>
-                            </TableCell>
+                          ( <>
+                              <TableCell style={{ width: '15%' }}>{studentsRow.student_email}</TableCell>
+                              <TableCell style={{ width: '20%' }}>{studentsRow.student_title_degree}</TableCell>
+                              <TableCell style={{ width: '12%' }}>{studentsRow.student_enrollment_year}</TableCell>
+                              <TableCell style={{ width: '7%' }}>{studentsRow.student_nationality}</TableCell>
+                              <TableCell style={{ width: '12%' }}>{dayjs(studentsRow.submission_date).format("DD/MM/YYYY")}</TableCell>
+                              <TableCell style={{ width: '10%' }}>
+                                <IconButton style={{ color: "#007FFF" }} aria-label="show details" onClick={() => onClickApplication(studentsRow)}>
+                                  <UnfoldMoreOutlinedIcon />
+                                </IconButton>
+                              </TableCell>
+                            </>
                           ) 
                           : 
                           ( <TableCell style={{ width: '15%' }}>
