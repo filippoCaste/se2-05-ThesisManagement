@@ -18,6 +18,7 @@ import passport from "passport";
 import session from "express-session";
 import morgan from "morgan";
 import {strategy} from "./src/config/configs.js";
+import { initScheduledJobs } from "./src/cron-jobs.js";
 
 passport.use(strategy);
 
@@ -48,6 +49,8 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+
+
 app.use(
   session({
     secret: "session-secret",
@@ -72,6 +75,9 @@ app.use("/api/students", studentRoutes);
 app.use("/api/keywords", keywordRoutes);
 app.use("/api/levels", levelRoutes);
 app.use("/api/applications", applicationRoutes);
+
+// initialize cron jobs
+initScheduledJobs();
 
 
 app.listen(port, () => {

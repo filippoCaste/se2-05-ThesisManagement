@@ -9,8 +9,8 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: true,
   auth: {
-    user: process.env.USER,
-    pass: process.env.APP_PASSWORD,
+    user: "thesisadmmanagement@gmail.com",
+    pass: "nzcbfernygmhzklv",
     //clientId: process.env.OAUTH_CLIENT_ID,
     //clientSecret: process.env.OAUTH_CLIENT_SECRET,
     //refreshToken: process.env.OAUTH_REFRESH_TOKEN,
@@ -22,7 +22,7 @@ export const sendEmail = async (receiver, subject, htmlContent) => {
   const mailOptions = {
     from: {
       name: "Thesis Management",
-      address: process.env.USER
+      address: "thesisadmmanagement@gmail.com"
     },
     to: receiver,
     subject: subject,

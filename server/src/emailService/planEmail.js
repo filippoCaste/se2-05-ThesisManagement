@@ -1,7 +1,6 @@
 import { sendEmail } from './sendEmail.js';
-import cron from 'node-cron';
-
-
+import { getEmailsSupervisorsOneWeekExpiration } from '../services/proposal.services.js';
+import dayjs from 'dayjs';
 
 // Function to schedule email one week before expiration date
 export const scheduleEmailOneWeekBefore = (expirationDate,receiver,title) => {
@@ -21,19 +20,33 @@ export const scheduleEmailOneWeekBefore = (expirationDate,receiver,title) => {
                 <p>Thank you.</p>
             </body>
             </html>`;
-
-
-  // Calculate the date one week before expiration
-  const oneWeekBefore = new Date(expiration.getTime() - 7 * 24 * 60 * 60 * 1000);
-  /*
-  Minute (0-59)
-  Hour (0-23)
-  Day of the month (1-31)
-  Month (1-12 or names like JAN, FEB, etc.)
-  Day of the week (0-7 or names like SUN, MON, etc., where 0 and 7 both represent Sunday) */
-
-  // Schedule email using node-cron
-  cron.schedule(`43 15  ${oneWeekBefore.getDay()}`, () => {
     sendEmail(receiver, subject, htmlContent);
-  });
 }
+
+export const scheduleEmailsOneWeekBeforeExpiration = async (objcAlreadySent) => {
+  const objects = await getEmailsSupervisorsOneWeekExpiration();
+  const filteredObjects = Array.isArray(objcAlreadySent) && objcAlreadySent.length > 0 ?
+  objects.filter((obj) => {
+    return !objcAlreadySent.some((sentObj) =>
+      sentObj.email === obj.email &&
+      sentObj.title === obj.title &&
+      sentObj.expiration_date === obj.expiration_date
+    );
+    // Filter objects that do not have an identical email, title, and expiration_date present in objcAlreadySent
+  }) :
+  objects;
+  for (const tuple of filteredObjects) {
+    const { expiration_date, email, title } = tuple;
+    scheduleEmailOneWeekBefore(expiration_date, email, title);
+  }
+
+  // Remove objects that are expired
+  const notExpiredObjects = filteredObjects.filter((obj) => {
+    return dayjs(obj.expiration_date).isAfter(dayjs());
+  });
+
+  return notExpiredObjects;
+};
+
+
+
