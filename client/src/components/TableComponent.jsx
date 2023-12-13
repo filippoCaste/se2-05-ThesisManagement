@@ -12,13 +12,25 @@ import Button from '@mui/material/Button';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import '../App.css';
 import Badge from '@mui/material/Badge';
+import TableSortLabel  from '@mui/material/TableSortLabel';
+import { Box } from '@mui/material';
+import { visuallyHidden } from '@mui/utils';
+import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
+import PropTypes from 'prop-types';
+
 
 export default function StickyHeadTable(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [orderBy, setOrderBy] = React.useState('');
-  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('expiration_date');
+  const [order, setOrder] = React.useState('desc');
   const { proposals, isAppliedProposals,drawerWidth } = props;
+  const theme = useTheme();
+
+  //slice 
+  StickyHeadTable.propTypes = {
+    proposals: PropTypes.array.isRequired,
+  };
 
   const columns = [
     { id: 'title', label: 'Title', minWidth: 450, maxWidth: 450 },
@@ -97,41 +109,28 @@ export default function StickyHeadTable(props) {
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    setOrder(isAsc ? 'asc' : 'desc');
     setOrderBy(property);
   };
 
   const sortedProposals = React.useMemo(() => {
     if (orderBy && order) {
-      return proposals.slice().sort((a, b) => {
+      return proposals?.slice().sort((a, b) => {
         const aValue = a[orderBy];
         const bValue = b[orderBy];
         if (order === 'asc') {
-          return aValue < bValue ? -1 : 1;
-        } else {
-          return aValue > bValue ? -1 : 1;
-        }
+          if(orderBy === "expiration_date") return dayjs(aValue).isAfter(bValue) ? -1 : 1;
+           return aValue < bValue ? -1 : 1;
+         } else {
+           if(orderBy === "expiration_date") return dayjs(aValue).isBefore(bValue) ? -1 : 1;
+           return aValue > bValue ? -1 : 1;
+         }
       });
     }
     return proposals;
   }, [proposals, orderBy, order]);
 
-  const renderSortArrow = (columnId, columnName) => {
-    if (columnId === 'button') {
-      return null;
-    }
-    return (
-      <span>
-        {columnName}
-        {orderBy === columnId && (
-          <span style={{ marginLeft: '5px' }}>
-            {order === 'asc' ? '↑' : '↓'}
-          </span>
-        )}
-      </span>
-    );
-  };
-
+  
   const renderNoProposalsMessage = () => {
     if (sortedProposals.length === 0) {
       return (
@@ -149,78 +148,111 @@ export default function StickyHeadTable(props) {
     return null;
   };
 
+  const RenderTableHeader = () => (
+    <TableHead>
+      <TableRow className="headerRow">
+        {columns?.map((column, index) => (
+          <TableCell
+            key={index}
+            align={column.align}
+            style={{ width: column.maxWidth }}
+            sortDirection={orderBy === column.id ? order : false}
+          >
+            {column.label !== 'Apply' ? (
+              <TableSortLabel
+                active={true}
+                direction={orderBy === column.id ? order : 'desc'}
+                onClick={() => handleRequestSort(column.id)}
+                sx={{
+                  '&.Mui-active .MuiTableSortLabel-icon': {
+                    color: orderBy === column.id ? theme.palette.secondary.main : 'none',
+                  },
+                }}
+              >
+                {column.label}
+                {orderBy === column.id ? (
+                  <Box component="span" sx={visuallyHidden}>
+                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            ) : (
+              <>{column.label}</>
+            )}
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+  
+  const RenderTableBody = () => (
+    <>
+    {sortedProposals.map((row, index) => (
+      <TableRow
+        key={index}
+        hover
+        role="checkbox"
+        tabIndex={-1}
+        className={`proposalRow ${
+          index % 2 === 0 ? 'proposalRowOdd' : ''
+        }`}
+      >
+        {columns.map((column) => (
+          <TableCell
+            key={column.id}
+            align={column.align}
+            style={{
+              width: column.maxWidth,
+              whiteSpace: 'normal',
+              maxHeight: '100px',
+              padding: '8px',
+            }}
+          >
+            {column.id === 'supervisor_id'
+              ? `${
+                  row.supervisorsInfo.find(
+                    (supervisor) => supervisor.id === row.supervisor_id
+                  )?.name
+                } ${
+                  row.supervisorsInfo.find(
+                    (supervisor) => supervisor.id === row.supervisor_id
+                  )?.surname
+                }`
+              : column.format
+              ? column.format(row[column.id], row)
+              : row[column.id]}
+          </TableCell>
+        ))}
+      </TableRow>
+    ))}
+    </>
+  );
+
+  const RenderTablePagination = () => (
+    <TablePagination
+    rowsPerPageOptions={[10, 25, 100]}
+    component="div"
+    count={proposals.length}
+    rowsPerPage={rowsPerPage}
+    page={page}
+    onPageChange={handleChangePage}
+    onRowsPerPageChange={handleChangeRowsPerPage}
+    style={{ borderTop: '1px solid rgba(224, 224, 224, 1)' }}
+  />
+  );
+
   return (
     <Paper className="paperContainer" >
       <TableContainer className="tableContainer">
         <Table stickyHeader aria-label="sticky table" >
-          <TableHead>
-            <TableRow className="headerRow">
-              {columns.map((column,index) => (
-                <TableCell
-                  key={index}
-                  align={column.align}
-                  style={{ width: column.maxWidth }}
-                  className="tableCell"
-                  onClick={() => handleRequestSort(column.id)}
-                >
-                  <b>{renderSortArrow(column.id, column.label)}</b>
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
+          {RenderTableHeader()}
           <TableBody>
             {renderNoProposalsMessage()}
-            {sortedProposals.map((row, index) => (
-              <TableRow
-                key={index}
-                hover
-                role="checkbox"
-                tabIndex={-1}
-                className={`proposalRow ${
-                  index % 2 === 0 ? 'proposalRowOdd' : ''
-                }`}
-              >
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{
-                      width: column.maxWidth,
-                      whiteSpace: 'normal',
-                      maxHeight: '100px',
-                      padding: '8px',
-                    }}
-                  >
-                    {column.id === 'supervisor_id'
-                      ? `${
-                          row.supervisorsInfo.find(
-                            (supervisor) => supervisor.id === row.supervisor_id
-                          )?.name
-                        } ${
-                          row.supervisorsInfo.find(
-                            (supervisor) => supervisor.id === row.supervisor_id
-                          )?.surname
-                        }`
-                      : column.format
-                      ? column.format(row[column.id], row)
-                      : row[column.id]}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
+            {RenderTableBody()}
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={proposals.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        style={{ borderTop: '1px solid rgba(224, 224, 224, 1)' }}
-      />
+            {RenderTablePagination()}
     </Paper>
   );
 }

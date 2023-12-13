@@ -18,9 +18,11 @@ import passport from "passport";
 import session from "express-session";
 import morgan from "morgan";
 import {strategy} from "./src/config/configs.js";
+import { initScheduledJobs } from "./src/cron-jobs.js";
+import { getProposalTitleByApplicationId } from "./src/services/proposal.services.js";
 import { Student } from "./src/models/Student.js";
 import { Teacher } from "./src/models/Teacher.js";
-import { initScheduledJobs } from "./src/cron-jobs.js"
+
 
 passport.use(strategy);
 
