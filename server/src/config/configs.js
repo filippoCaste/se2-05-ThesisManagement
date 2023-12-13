@@ -5,7 +5,6 @@ import passportSaml from 'passport-saml';
 const { Strategy: SamlStrategy } = passportSaml;
 import { getUserById } from '../services/user.services.js';
 import multer from 'multer';
-import { LIMIT_ATTACHED } from 'sqlite3';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -51,7 +50,7 @@ export const isTeacher = async (req, res, next) => {
   return res.status(401).json({ error: "Not authorized" });
 };
 
-export const storage = multer.diskStorage({
+const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadPath = path.join(__dirname, '../../public/students_CV');
     cb(null, uploadPath);
@@ -62,3 +61,13 @@ export const storage = multer.diskStorage({
     cb(null, fileName);
   },
 });
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'application/pdf') {
+    cb(null, true);
+  } else {
+    cb(new Error('Invalid file type'), false);
+  }
+};
+
+export const upload = multer({ storage: storage, limits: { fileSize: 1024 * 1024 * 5 }, fileFilter: fileFilter });
