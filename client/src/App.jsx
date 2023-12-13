@@ -3,15 +3,14 @@ import theme from './theme.jsx';
 import dayjs from 'dayjs';
 import { ThemeProvider } from '@mui/material/styles';
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
 import AppNavBar from './components/AppBar.jsx';
 import CustomSnackBar from './components/CustomSnackbar.jsx';
 import { UserContext, MessageContext } from './Contexts';
 import TeacherPage from './pages/TeacherPage.jsx';
-import AddProposalTeacher from './components/AddProposalTeacher.jsx';
-import EditProposalTeacher from './components/EditProposalTeacher.jsx';
+import ProposalTeacher from './components/ProposalTeacher.jsx';
 import InitialPage from './pages/InitialPage.jsx';
 import userAPI from './services/users.api.js';
 import { Student, Professor } from './models/User.js';
@@ -31,10 +30,13 @@ function App() {
     userAPI
       .getUserInfo()
       .then((userInfo) => {
-        if (userInfo?.email[0] === 's') {
+        if (userInfo?.email[0] === 's') 
+        {
           setUser(new Student(userInfo));
           handleMessage('Student successfully logged in', 'success');
-        } else if (userInfo?.email[0] === 'd') {
+        } 
+        else 
+        {
           setUser(new Professor(userInfo));
           handleMessage('Teacher successfully logged in', 'success');
         }
@@ -73,11 +75,15 @@ function App() {
                 element={<StudentApplications />}
               />
               <Route path="/teacher" element={<TeacherPage  currentDataAndTime={currentDataAndTime} />} />
-              <Route
-                path="/teacher/addProposal"
-                element={<AddProposalTeacher />}
-              />
-              <Route path='/teacher/updateProposal/:proposalId'  element={<EditProposalTeacher/>} />
+              <Route path="/teacher/addProposal" 
+               element={<ProposalTeacher  typeOperation="add" />} />
+
+              <Route path='/teacher/updateProposal/:proposalId'  
+               element={<ProposalTeacher typeOperation="edit" />} />
+
+              <Route path='/teacher/copyProposal/:proposalId'  
+               element={<ProposalTeacher typeOperation="copy" />} />
+                
 
             </Routes>
           </MessageContext.Provider>
