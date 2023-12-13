@@ -253,7 +253,7 @@ describe('changeStatus', () => {
 
         expect(res.status).toHaveBeenCalledWith(204);
         expect(res.send).toHaveBeenCalled();
-        expect(sendNotificationApplicationDecision).not.toHaveBeenCalled();
+        expect(sendNotificationApplicationDecision).toHaveBeenCalled();
     });
 });
 
