@@ -111,14 +111,14 @@ describe('getFile', () => {
         expect(res.status).toHaveBeenCalledWith(200);
     });
 
-    test('should return 404 if studentId and applicationId are numbers but file is not found', async () => {
+    test('should return 200 with an empty fileUrl if studentId and applicationId are numbers but file is not found', async () => {
         const req = { params: { studentId: 318082, applicationId: 19 } };
         const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
         services.getStudentCV.mockImplementation(() => {
             return null;
         });
         await controllers.getFile(req, res);
-        expect(res.status).toHaveBeenCalledWith(404);
+        expect(res.status).toHaveBeenCalledWith(200);
     });
 
     test('should return 500 if getStudentCV throws an error', async () => {
