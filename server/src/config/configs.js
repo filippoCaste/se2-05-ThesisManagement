@@ -52,7 +52,7 @@ export const isTeacher = async (req, res, next) => {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, '../../public/students_CV');
+    const uploadPath = path.join(__dirname, '../../students_CV');
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {

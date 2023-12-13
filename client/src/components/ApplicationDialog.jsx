@@ -86,6 +86,7 @@ const {
   };
 
   const handleShowCV = () => {
+    console.log(pdf);
     window.open(pdf, '_blank');
   };
 
