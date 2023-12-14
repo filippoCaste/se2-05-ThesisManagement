@@ -31,6 +31,8 @@ export const sendEmail = async (receiver, subject, htmlContent) => {
   };
 
   try {
+    if(!receiver || !subject || !htmlContent || !isValidEmail(receiver)) throw new Error("invalid settins for email sending");
+    
     transporter.sendMail(mailOptions);
     console.log("Email sent");
   } catch (error) {
@@ -40,3 +42,8 @@ export const sendEmail = async (receiver, subject, htmlContent) => {
 
 // Example usage:
 // sendMail("bruno2001@hotmail.it", "Send test", "HELLO", "<b>Hello</b>");
+function isValidEmail(email) {
+  // Regular expression to check for a valid email pattern
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
