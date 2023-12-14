@@ -189,6 +189,7 @@ function ProposalTeacher(props) {
 
   useEffect(() => {
     if ((degreesList.length > 0) && ((typeOperation == "edit") || (typeOperation == "copy"))) {
+
       proposalAPI.getProposalByProposalId(proposalId)
         .then((p) => {
           setTitle(() => (p.title));
@@ -218,20 +219,21 @@ function ProposalTeacher(props) {
             })
 
           })
-          setSelectedDegreeList(()=>list);
-
-          // Field 'id' renamed to 'teacher_id' 
-          p.coSupervisors.forEach(obj => { obj.teacher_id = obj.id; delete obj.id; });
-          setSelectedCoSupList(() => (p.coSupervisors));
-
-          setSelectedKeywordList(() => (p.keywords));
-
-          if (p.externalSupervisors != undefined) {
-            setListExternals(() => (p.externalSupervisors));
-          }
-
+          // Using Promise.resolve to ensure setSelectedDegreeList finishes before continuing
+          Promise.resolve(setSelectedDegreeList(list))
+            .then(() => {
+              // Continue with the rest of your code here
+              p.coSupervisors.forEach(obj => { obj.teacher_id = obj.id; delete obj.id; });
+              setSelectedCoSupList(p.coSupervisors);
+              setSelectedKeywordList(p.keywords);
+  
+              if (p.externalSupervisors !== undefined) {
+                setListExternals(p.externalSupervisors);
+              }
+            })
+            .catch((err) => handleMessage(err, "warning"));
         })
-        .catch((err) => handleMessage(err, "warning"))
+        .catch((err) => handleMessage(err, "warning"));
     }
 
   }, [degreesList]);
@@ -495,7 +497,8 @@ function ProposalTeacher(props) {
                 {selectedDegreeList.length != 0 && <Typography variant="h6" style={{ marginTop: '1rem' }}>
                   Added degrees
                 </Typography>}
-                {selectedDegreeList.map((degree, index) => (
+                { 
+                  selectedDegreeList.map((degree, index) => (
                   <Paper key={degree.cod_degree} elevation={1} style={{ padding: '0.5rem', marginTop: '0.5rem' }}>
                     <Grid container alignItems="center">
                       <Grid item xs={10}>
