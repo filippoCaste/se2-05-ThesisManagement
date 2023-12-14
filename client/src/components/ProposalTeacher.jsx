@@ -218,7 +218,7 @@ function ProposalTeacher(props) {
             })
 
           })
-          setSelectedDegreeList(() => (list));
+          setSelectedDegreeList(()=>list);
 
           // Field 'id' renamed to 'teacher_id' 
           p.coSupervisors.forEach(obj => { obj.teacher_id = obj.id; delete obj.id; });
@@ -358,6 +358,8 @@ function ProposalTeacher(props) {
 
   //SEND FORM ///////////////////////////////////////////////////////////////////////////////////
 
+  console.log(selectedDegreeList);
+
   return (
     <Grid container mt="10%">
       <Grid item xs={12} sx={{ mt: '2vh', mx: '4vh' }}>
@@ -444,6 +446,7 @@ function ProposalTeacher(props) {
                   labelId="word-label"
                   id="level-select"
                   value={level}
+                  disabled={typeOperation == 'edit'}
                   onChange={(ev) => { setLevel(ev.target.value) }}
                 >
                   {
@@ -458,6 +461,8 @@ function ProposalTeacher(props) {
 
           {level !== '' && <><Grid item xs={4}>
             <Paper elevation={3} style={{ padding: '1rem' }}>
+
+            {typeOperation != "edit"?
               <FormControl fullWidth>
                 <Typography variant="subtitle1" gutterBottom fontWeight="bold">
                   ADD DEGREE  {level == 'MSc' ? "MASTER" : "BACHELOR"}
@@ -481,13 +486,12 @@ function ProposalTeacher(props) {
                   variant="contained"
                   color="primary"
                   onClick={handleAddClickDegree}
-                  disabled={typeOperation == 'edit' && selectedDegreeList.length == 1}
                   style={{ marginTop: '1rem' }}
                 >
                   ADD
                 </Button>
 
-                {/* Selected co-supervisors */}
+                {/* Selected degree -list */}
                 {selectedDegreeList.length != 0 && <Typography variant="h6" style={{ marginTop: '1rem' }}>
                   Added degrees
                 </Typography>}
@@ -510,6 +514,23 @@ function ProposalTeacher(props) {
                   </Paper>
                 ))}
               </FormControl>
+
+            : 
+            <>
+              {/* Selected degree -list */}
+              {selectedDegreeList.length > 0 && 
+                <Typography variant="subtitle1" gutterBottom fontWeight="bold">
+                  DEGREE 
+                </Typography>
+                }
+
+            {selectedDegreeList.length > 0 &&  selectedDegreeList.map((degree,index)=>(
+                <Grid key={degree.cod_degree} container alignItems="center" style={{ padding: '0.5rem', marginTop: '0.5rem' }}>
+                <Grid item xs={10}>
+                  <Typography variant="body1">{degree.title_degree}</Typography>
+                </Grid>
+              </Grid>
+              ))}</>}
             </Paper>
           </Grid> <br /> <br /> </>}
 
