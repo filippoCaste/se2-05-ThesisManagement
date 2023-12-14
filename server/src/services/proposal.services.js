@@ -633,7 +633,70 @@ export const getAllInfoByProposalId = (proposalId, userId) => {
   });
 }
 
-export const archiveExpiredProposals = () => {
+// Assuming you have access to the database and can execute SQL queries
+
+export const getEmailsSupervisorsOneWeekExpiration = () => {
+  return new Promise((resolve, reject) => {
+  // Get today's date
+  const today = new Date();
+  
+  // Calculate the date one week from today
+  const oneWeekFromToday = new Date(today);
+  oneWeekFromToday.setDate(oneWeekFromToday.getDate() + 7);
+
+  // Convert dates to SQLite date format (assuming your database uses SQLite)
+  const todayString = today.toISOString().split('T')[0];
+  const oneWeekFromTodayString = oneWeekFromToday.toISOString().split('T')[0];
+
+  // SQL query to retrieve emails of supervisors, co-supervisors, and external supervisors
+    const sql = `
+    SELECT DISTINCT T.email, P.title, P.expiration_date
+    FROM Teachers T
+    INNER JOIN Supervisors S ON (S.supervisor_id = T.id OR S.co_supervisor_id = T.id)
+    INNER JOIN Proposals P ON S.proposal_id = P.id
+    WHERE P.expiration_date BETWEEN '${todayString}' AND '${oneWeekFromTodayString}'
+    AND P.status = "posted"
+
+    UNION
+
+    SELECT DISTINCT E.email, P.title, P.expiration_date
+    FROM ExternalUsers E
+    INNER JOIN Supervisors S ON E.id = S.external_supervisor
+    INNER JOIN Proposals P ON S.proposal_id = P.id
+    WHERE P.expiration_date BETWEEN '${todayString}' AND '${oneWeekFromTodayString}'
+    AND P.status = "posted";
+  `;
+
+
+  db.all(sql, async (err, rows) => {
+    if (err) {
+      reject(err); // Reject the promise if there's an error
+    } else {
+      const objects = rows.map(row => ({ email: row.email, title: row.title, expiration_date: row.expiration_date }));
+      resolve(objects); // Resolve with the mapped objects
+    }
+  });  
+})}
+
+
+export const getProposalTitleByApplicationId = (applicationid) => {
+  return new Promise((resolve, reject) => {
+      const sql = `
+          SELECT Proposals.title
+          FROM Proposals
+          INNER JOIN Applications ON Proposals.id = Applications.proposal_id
+          WHERE Applications.application_id = ?
+      `;
+    
+      db.get(sql, [applicationid], (err, row) => {
+          if (err) {
+              reject(err);
+          } else {
+              resolve(row.title);
+          }
+      });
+  });
+};export const archiveExpiredProposals = () => {
   return new Promise((resolve, reject) => {
     const now = new Date().toISOString();
     const sql = 'UPDATE Proposals SET status = "archived" WHERE expiration_date < ?';

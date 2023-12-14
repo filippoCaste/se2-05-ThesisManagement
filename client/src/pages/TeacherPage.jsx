@@ -9,6 +9,9 @@ import API_Applications from '../services/applications.api';
 import { MessageContext, UserContext } from '../Contexts';
 import CollapsibleTable from '../components/CollapsibleTable';
 import AlertDialog from '../components/AlertDialog';
+import dayjs from 'dayjs';
+import ApplicationDialog from '../components/ApplicationDialog';
+import careerAPI from '../services/career.api';
 import API_Degrees from '../services/degrees.api';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -20,21 +23,21 @@ function TeacherPage(props) {
   dayjs.extend(customParseFormat);
 
 
-  const navigate = useNavigate();
-  const { user } = useContext(UserContext);
-  const [errorMsgAPI, setErrorMsgAPI] = useState('');
-  const [listProposals, setListProposals] = useState([]);
-  const [openDialog, setOpenDialog] = useState(false);
-  const [openDialogApplication, setOpenDialogApplication] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const [confirmation, setConfirmation] = useState(false);
-  const [index, setIndex] = useState(null); // used for the confirmation procedure
-  const [message, setMessage] = useState(null);
-  const [operation, setOperation] = useState(null);
-  const [degreesList, setDegreesList] = useState('');
-
+   const navigate = useNavigate();
+   const { user } = useContext(UserContext);
+   const [listProposals, setListProposals]=useState([]);
+   const [openDialog, setOpenDialog] = useState(false);
+   const [openDialogApplication, setOpenDialogApplication] = useState(false);
+   const [selectedItem, setSelectedItem] = useState(null);
+   const [loading, setLoading] = useState(false);
+   const [selectedApplication, setSelectedApplication] = useState(null);
+   const [studentExams, setStudentExams] = useState([]);
+   const [confirmation, setConfirmation] = useState(false);
+   const [index, setIndex] = useState(null); // used for the confirmation procedure
+   const [message, setMessage] = useState(null);
+   const [operation, setOperation] = useState(null);
+   const [degreesList, setDegreesList]=useState('');
+    
   //FILTRI
 
   const [filterTitle, setFilterTitle] = useState('');
@@ -74,6 +77,9 @@ function TeacherPage(props) {
   };
   const handleClickApplication = (datum) => {
     setSelectedApplication(datum);
+    careerAPI.getCareerByStudentId(datum.student_id).then((res) => {
+      setStudentExams(res);
+    });
     setOpenDialogApplication(true);
   };
 
@@ -125,10 +131,9 @@ function TeacherPage(props) {
       const data = await createData(filteredProposal);
       data?.forEach(item => { updateArchivedStatus(item); });
 
-      setListProposals(data);
-    }
-  }
-
+       setListProposals(data);
+       }
+    };
 
   useEffect(() => {
     API_Degrees.getAllDegrees()
@@ -315,3 +320,4 @@ function TeacherPage(props) {
 }
 
 export default TeacherPage;
+

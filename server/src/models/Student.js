@@ -17,6 +17,7 @@ export class Student {
     this.email = email;
     this.cod_degree = cod_degree;
     this.enrollment_year = enrollment_year;
+    this.role = "student";
   }
 
   // Used to send the Student object to the client
@@ -30,6 +31,7 @@ export class Student {
       email: this.email,
       cod_degree: this.cod_degree,
       enrollment_year: this.enrollment_year,
+      role: this.role,
     };
   };
 

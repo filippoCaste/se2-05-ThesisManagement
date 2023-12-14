@@ -10,6 +10,7 @@ import { router as studentRoutes } from "./src/routes/student.route.js";
 import { router as keywordRoutes } from "./src/routes/keyword.route.js";
 import { router as levelRoutes } from "./src/routes/level.route.js";
 import { router as applicationRoutes } from "./src/routes/application.route.js";
+import { router as careerRoutes } from "./src/routes/career.route.js";
 import { getUserById } from "./src/services/user.services.js";
 import { getStudentById } from "./src/services/student.services.js";
 import { getTeacherById } from "./src/services/teacher.services.js";
@@ -17,7 +18,11 @@ import passport from "passport";
 import session from "express-session";
 import morgan from "morgan";
 import {strategy} from "./src/config/configs.js";
-import { initScheduledJobs } from "./src/cron-jobs.js"
+import { initScheduledJobs } from "./src/cron-jobs.js";
+import { getProposalTitleByApplicationId } from "./src/services/proposal.services.js";
+import { Student } from "./src/models/Student.js";
+import { Teacher } from "./src/models/Teacher.js";
+
 
 passport.use(strategy);
 
@@ -28,9 +33,9 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(async function (id, done) {
   let user = await getUserById(id.slice(1));
   if(user.role == 'student')
-    user = await getStudentById(user.id);
+    user = Student.fromResult(await getStudentById(user.id));
   else if(user.role == 'teacher')
-    user = await getTeacherById(user.id);
+    user = Teacher.fromTeachersResult(await getTeacherById(user.id));
   else 
     done(err, null);
 
@@ -47,6 +52,7 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
+app.use(express.static("students_CV"));
 
 app.use(
   session({
@@ -72,6 +78,7 @@ app.use("/api/students", studentRoutes);
 app.use("/api/keywords", keywordRoutes);
 app.use("/api/levels", levelRoutes);
 app.use("/api/applications", applicationRoutes);
+app.use("/api/careers", careerRoutes);
 
 // initialize cron jobs
 initScheduledJobs();
