@@ -31,15 +31,13 @@ function App() {
     userAPI
       .getUserInfo()
       .then((userInfo) => {
-        if (userInfo?.email[0] === 's') 
-        {
+        if (userInfo?.role === 'student') {
           setUser(new Student(userInfo));
           handleMessage('Student successfully logged in', 'success');
-        } 
-        else 
-        {
+        } else if (userInfo?.role === 'teacher'){
           setUser(new Professor(userInfo));
           handleMessage('Teacher successfully logged in', 'success');
+          console.log(user);
         }
       })
       .catch((err) => {

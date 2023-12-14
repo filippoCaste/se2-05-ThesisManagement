@@ -9,7 +9,7 @@ router.post('/', isStudent, createApplication);
 
 router.get("/proposal/:id", isLoggedIn, getApplicationsProposalId);
 
-router.get("/",isLoggedIn, isStudent,getApplicationsStudentId);
+router.get("/",isLoggedIn, isStudent, getApplicationsStudentId);
 
 router.put("/:applicationId", isTeacher, changeStatusOfApplication);
 

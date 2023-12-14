@@ -8,6 +8,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import applicationsAPI from '../services/applications.api';
 import { MessageContext } from '../Contexts';
@@ -19,8 +20,7 @@ import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
 
 function Row(props) {
   const navigate = useNavigate();
-  
-  const { row, isEvenRow, deleteProposal, index, onClick,onClickApplication, archiveProposal,isSM, fetchProposals } = props;
+  const { row, isEvenRow, deleteProposal, index, onClick, onClickApplication, archiveProposal, isSM, fetchProposals } = props;
   const [open, setOpen] = React.useState(false);
   const handleMessage = useContext(MessageContext);
   const [statusChangeLoading, setStatusChangeLoading] = React.useState(false);
@@ -140,7 +140,7 @@ function Row(props) {
       </>}
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: isEvenRow ? '#f5f5f5' : '#ffffff' }} colSpan={10}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: isEvenRow ? '#f5f5f5' : '#ffffff' }} colSpan={11}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1, height: 'auto' }}>
               <Typography variant="h6" gutterBottom component="div">
@@ -153,34 +153,52 @@ function Row(props) {
                       {!isSM? 
                       <>                      
                       <TableCell style={{ width: '5%' }}><b>Id</b></TableCell>
-                      <TableCell style={{ width: '20%' }}><b>Name</b></TableCell>
+                      <TableCell style={{ width: '18%' }}><b>Name</b></TableCell>
                       <TableCell style={{ width: '15%' }}><b>Email</b></TableCell>
                       <TableCell style={{ width: '20%' }}><b>Title Degree</b></TableCell>
-                      <TableCell style={{ width: '15%' }}><b>Enrollment Year</b></TableCell>
-                      <TableCell style={{ width: '10%' }}><b>Nationality</b></TableCell>
-                      <TableCell style={{ width: '15%' }}><b>Submission Date</b></TableCell>
+                      <TableCell style={{ width: '12%' }}><b>Enrollment Year</b></TableCell>
+                      <TableCell style={{ width: '7%' }}><b>Nationality</b></TableCell>
+                      <TableCell style={{ width: '12%' }}><b>Submission Date</b></TableCell>
+                      <TableCell style={{ width: '10%' }} ><b>Show more</b></TableCell>
                       <TableCell style={{ width: '5%' }} />
                       <TableCell style={{ width: '5%' }} />
                       </>:
                       <>
-                      <TableCell style={{ width: '90%' }}><b>Name</b></TableCell>
-                      <TableCell style={{ width: '10%' }}><b>Show more</b></TableCell>
+                      <TableCell style={{ width: '75%' }}><b>Name</b></TableCell>
+                      <TableCell style={{ width: '15%' }}><b>Show more</b></TableCell>
+                      <TableCell style={{ width: '5%' }} />
+                      <TableCell style={{ width: '5%' }} />
                       </>
                       }
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {row.students.map((studentsRow) => (
-                      <TableRow key={studentsRow.student_id}>
-                      {!isSM? 
-                      <>   
-                        <TableCell style={{ width: '5%' }} component="th" scope="row">{studentsRow.student_id}</TableCell>
-                        <TableCell style={{ width: '20%' }}>{studentsRow.student_name + " " + studentsRow.student_surname}</TableCell>
-                        <TableCell style={{ width: '15%' }}>{studentsRow.student_email}</TableCell>
-                        <TableCell style={{ width: '20%' }}>{studentsRow.student_title_degree}</TableCell>
-                        <TableCell style={{ width: '15%' }}>{studentsRow.student_enrollment_year}</TableCell>
-                        <TableCell style={{ width: '10%' }}>{studentsRow.student_nationality}</TableCell>
-                        <TableCell style={{ width: '15%' }}>{dayjs(studentsRow.submission_date).format("DD/MM/YYYY")}</TableCell>
+                      <TableRow key={studentsRow.student_id}>   
+                        {!isSM ? (<TableCell style={{ width: '5%' }} component="th" scope="row">{studentsRow.student_id}</TableCell>) : null}
+                        <TableCell style={{ width: !isSM ? '18%' : '75%' }}>{studentsRow.student_name + " " + studentsRow.student_surname}</TableCell>
+                        {!isSM ? 
+                          ( <>
+                              <TableCell style={{ width: '15%' }}>{studentsRow.student_email}</TableCell>
+                              <TableCell style={{ width: '20%' }}>{studentsRow.student_title_degree}</TableCell>
+                              <TableCell style={{ width: '12%' }}>{studentsRow.student_enrollment_year}</TableCell>
+                              <TableCell style={{ width: '7%' }}>{studentsRow.student_nationality}</TableCell>
+                              <TableCell style={{ width: '12%' }}>{dayjs(studentsRow.submission_date).format("DD/MM/YYYY")}</TableCell>
+                              <TableCell style={{ width: '10%' }}>
+                                <IconButton style={{ color: "#007FFF" }} aria-label="show details" onClick={() => onClickApplication(studentsRow)}>
+                                  <UnfoldMoreOutlinedIcon />
+                                </IconButton>
+                              </TableCell>
+                            </>
+                          ) 
+                          : 
+                          ( <TableCell style={{ width: '15%' }}>
+                              <IconButton style={{ color: "#007FFF" }} aria-label="show details" onClick={() => onClickApplication(studentsRow)}>
+                                <DescriptionOutlinedIcon />
+                              </IconButton>
+                            </TableCell>
+                          )
+                        }
                         {studentsRow.status === 'submitted' ? (
                           <>
                             <TableCell style={{ width: '5%' }}>
@@ -222,17 +240,7 @@ function Row(props) {
                           <TableCell colSpan={2} style={{ width: '10%' }}>
                             <Chip label={studentsRow.status} color={studentsRow.status === 'accepted' ? "success" : "error"} />
                           </TableCell>
-                        )}
-                        </>:
-                        <>
-                      <TableCell style={{ width: '90%' }}>{studentsRow.student_name + " " + studentsRow.student_surname}</TableCell>
-                      <TableCell style={{ width: '10%' }}>
-                      <IconButton style={{ color: "#007FFF" }} aria-label="show details" onClick={() => onClickApplication(studentsRow)}>
-                        <DescriptionOutlinedIcon />
-                      </IconButton>
-                      </TableCell>
-                        
-                        </>
+                        )
                         }
                       </TableRow>
                     ))}
