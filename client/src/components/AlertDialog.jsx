@@ -46,10 +46,11 @@ export default function AlertDialog({
 
   useEffect(() => {
         applicationsAPI.getStudentApplications().then((response) => {
-          setIsAppliedProposal(response.filter((o) => o.status !== 'rejected').length > 0);
+          const hasPendingApply = response.filter((o) => o.status !== 'rejected').length > 0;
 
           // Disables the "Apply" button for proposals that have already been applied and rejected.
-          setIsAppliedProposal(response.filter((o) => o.title === item.title && o.status === 'rejected').length > 0);
+          const alreadyApplied = response.filter((o) => o.title === item.title && o.status === 'rejected').length > 0;
+          setIsAppliedProposal(hasPendingApply && alreadyApplied);
         })
       .catch(
         (err) => {console.log(err);}
