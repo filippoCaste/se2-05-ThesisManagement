@@ -39,7 +39,7 @@ function ProposalTeacher(props) {
   const [teachersList, setTeachersList] = useState('');
   const [degreesList, setDegreesList] = useState('');
   const selectedSupervisor = user?.id;
-  const [keywordsList, setKeywordsList] = useState(''); //prese dal DB
+  const [keywordsList, setKeywordsList] = useState(''); //from the DB
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');

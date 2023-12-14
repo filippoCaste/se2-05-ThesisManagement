@@ -228,7 +228,7 @@ function InsertNewProposalStudent(props) {
 							{coSupervisors.map((coSupEmail, index) => (
 								<>
 									<Grid item xs={10} md={5}>
-										<Typography variant="body1">{coSupEmail} </Typography>
+										<Typography key={index} variant="body1">{coSupEmail} </Typography>
 									</Grid>
 									<Grid item xs={2} md={1}>
 										<IconButton
