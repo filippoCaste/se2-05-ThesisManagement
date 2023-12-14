@@ -83,15 +83,22 @@ sections:
 ## ASSESSMENT
 
 - What caused your errors in estimation (if any)?
+> This time, errors in estimations arised because we couldn't find a day to do the SCRUM meeting all together, so we estimated excessively more than needed for a story even if it was mostly done in the previous sprint. But later, the estimation was corrected and we worked the expected amount of time.
 
 - What lessons did you learn (both positive and negative) in this sprint?
+> We organized a little bit better the repository on github.com in order to have at least 1 code review from another team member before merging into the main branch. We were surprised on the benefits since it is a good way to have more precise code reviews and quicker.  
+However, we were waiting too much before completing the merges in the main branch and this caused some stories to be not completed because the merge in the main created too many conflicts, even if they were correctly working in the branch in which they were developed.
 
 - Which improvement goals set in the previous retrospective were you able to achieve? 
+> In the last retrospective, we identified overestimation as a challenge. I'm proud to share that in the recent sprint, we successfully addressed this issue, ensuring more accurate estimations. Additionally, our team demonstrated improved efficiency, with all members completing their hours as planned. This signifies a positive shift in our approach
   
 - Which ones you were not able to achieve? Why?
+> We were not able to do the SCRUM planning all together because there was no possibility to do it during the course allocated hours, and so it was difficult to find a day in which all of us could be present. Also, some of us could not participate for last time inconvenients.
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
 
-> Propose one or two
+> - do not wait the last days to complete the merge
+> - merge together and code review more accurately
 
 - One thing you are proud of as a Team!!
+> We're proud that everyone on the team worked hard, showing strong commitment. This dedication is a key strength that helps us overcome challenges and succeed together.
