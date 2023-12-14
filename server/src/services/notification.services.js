@@ -3,7 +3,7 @@
 import { sendEmail } from "../emailService/sendEmail.js";
 import { getStudentEmailByApplicationId } from "../services/application.services.js";
 import { getProposalTitleByApplicationId } from "./proposal.services.js"; 
-
+import isEmailInputValid from "../utils/utils.js";
 
 
 export const sendNotificationApplicationDecision = async (applicationId, status) => {
@@ -51,7 +51,7 @@ export const sendNotificationApplicationDecision = async (applicationId, status)
     // Get the student email by application ID
     const receiverEmail = await getStudentEmailByApplicationId(applicationId);
 
-    if (!receiverEmail || !isValidEmail(receiverEmail)) {
+    if (!receiverEmail || !isEmailInputValid(receiverEmail)) {
       throw new Error("User email not available");
     }
     // Send email to the retrieved email address
@@ -65,13 +65,3 @@ export const sendNotificationApplicationDecision = async (applicationId, status)
     throw new Error(err.message);
   }
 };
-
-
-
-//utils
-
-function isValidEmail(email) {
-  // Regular expression to check for a valid email pattern
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-}
