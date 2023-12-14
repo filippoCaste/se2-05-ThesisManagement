@@ -50,7 +50,7 @@ export default function AlertDialog({
 
           // Disables the "Apply" button for proposals that have already been applied and rejected.
           const alreadyApplied = response.filter((o) => o.title === item.title && o.status === 'rejected').length > 0;
-          setIsAppliedProposal(hasPendingApply && alreadyApplied);
+          setIsAppliedProposal(hasPendingApply || alreadyApplied);
         })
       .catch(
         (err) => {console.log(err);}
