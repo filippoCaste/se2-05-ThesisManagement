@@ -1,3 +1,8 @@
+html {
+  /* Increases the font size of the entire site by 20% */
+  font-size: 120%;
+}
+
 /* StickyHeadTableStyles */
 
 .tableContainer {
