@@ -15,6 +15,7 @@ import InitialPage from './pages/InitialPage.jsx';
 import userAPI from './services/users.api.js';
 import { Student, Professor } from './models/User.js';
 import StudentApplications from './pages/StudentApplications';
+import ProposalStudent from './components/ProposalStudent.jsx';
 
 function App() {
   const [message, setMessage] = useState('');
@@ -30,15 +31,13 @@ function App() {
     userAPI
       .getUserInfo()
       .then((userInfo) => {
-        if (userInfo?.email[0] === 's') 
-        {
+        if (userInfo?.role === 'student') {
           setUser(new Student(userInfo));
           handleMessage('Student successfully logged in', 'success');
-        } 
-        else 
-        {
+        } else if (userInfo?.role === 'teacher'){
           setUser(new Professor(userInfo));
           handleMessage('Teacher successfully logged in', 'success');
+          console.log(user);
         }
       })
       .catch((err) => {
@@ -61,6 +60,8 @@ function App() {
             <Routes>
               <Route index path="/" element={<InitialPage />} />
               <Route path="*" element={<NotFoundPage />} />
+              
+              {/********* STUDENT ROUTES **********/}
               <Route
                 path="/student"
                 element={
@@ -74,6 +75,13 @@ function App() {
                 path="/student/applications"
                 element={<StudentApplications />}
               />
+              <Route
+                path="/student/proposal"
+                element={<ProposalStudent />}
+              />
+
+
+              {/********** TEACHER ROUTES **********/}
               <Route path="/teacher" element={<TeacherPage  currentDataAndTime={currentDataAndTime} />} />
               <Route path="/teacher/addProposal" 
                element={<ProposalTeacher  typeOperation="add" />} />

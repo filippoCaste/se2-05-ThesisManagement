@@ -52,3 +52,14 @@ export function isNumericInputValid(values) {
     return true;
   }
 }
+
+export function isEmailInputValid(values) {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  for(let email of values) {
+    console.log("email: " + email);
+    if(!regex.test(String(email).toLowerCase())) {
+      return false;
+    }
+  }
+  return true;
+}

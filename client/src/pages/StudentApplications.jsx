@@ -6,17 +6,17 @@ import { Button, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-function StudentApplications(props) {
+function StudentApplications() {
   const [appliedProposals, setAppliedProposals] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const retriveStudentApplications = async () => {
+    const retrieveStudentApplications = async () => {
       const applications = await applicationsAPI.getStudentApplications();
       setAppliedProposals(applications);
     };
 
-    retriveStudentApplications();
+    retrieveStudentApplications();
   }, []);
   return (
     <>

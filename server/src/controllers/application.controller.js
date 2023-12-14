@@ -2,9 +2,9 @@
 import { changeStatus, createApplicationInDb, getApplicationsByProposalId, getApplicationsByStudentId } from "../services/application.services.js";
 import { getProposalInfoByID } from "../services/proposal.services.js";
 import { getTeacherById } from "../services/teacher.services.js";
-import { sendMail } from "../utils/emailSender.js";
+import { sendEmail } from '../utils/sendEmail.js';
 import { isValidDateFormat } from "../utils/utils.js";
-
+import {sendNotificationApplicationDecision} from "../services/notification.services.js";
 export const createApplication = async (req, res) => {
   const { proposal_id, student_id, submission_date } = req.body;
   if (!proposal_id) {
@@ -69,6 +69,8 @@ export const changeStatusOfApplication = async (req, res) => {
 
     await changeStatus(applicationId, req.user.id, status);
 
+
+   await sendNotificationApplicationDecision(applicationId,status);
     res.status(204).send();
 
   } catch(err) {
@@ -88,12 +90,24 @@ export const sendEmailToTeacher = async (application) => {
     if (!proposal) return;
     const teacher = await getTeacherById(proposal.supervisor_id);
     if (!teacher) return;
-    await sendMail(
+    const htmlContent = `<!DOCTYPE html>
+        <html>
+        <head>
+            <title>New Application Notification</title>
+        </head>
+        <body>
+            <h1>Proposal Expiration Notification</h1>
+            <p>Dear ${teacher.name},</p>
+            <p>A new application has been submitted for your proposal with title:\n${proposal.title}. 
+              The proposal expires on ${proposal.expiration_date}</p>
+        </body>
+        </html>`;
+    await sendEmail(
       teacher.email,
       "New application for your proposal",
-      `A new application has been submitted for your proposal with title:\n${proposal.title}`
+      htmlContent
     );
   } catch (error) {
-    console.log(error); 
+    console.log(error);
   }
 };

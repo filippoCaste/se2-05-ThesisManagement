@@ -8,9 +8,13 @@ import {
   archiveProposalByProposalId,
   updateProposalByProposalId
 } from "../services/proposal.services.js";
-import { isNumericInputValid, isTextInputValid, isValidDateFormat } from "../utils/utils.js";
-import { getTeacherById } from "../services/teacher.services.js";
+import { isEmailInputValid, isNumericInputValid, isTextInputValid, isValidDateFormat } from "../utils/utils.js";
+import { getTeacherByEmail, getTeacherById } from "../services/teacher.services.js";
 import { getKeywordByName, postKeyword } from "../services/keyword.services.js";
+import { createProposalRequest } from "../services/proposalRequest.services.js";
+import { getEmailById } from "../services/user.services.js";
+import {scheduleEmailOneWeekBefore} from "../utils/planEmail.js";
+
 
 export const getProposals = async (req, res, next) => {
   try {
@@ -103,6 +107,19 @@ export const postProposal = async (req, res) => {
           keywords
         );
       }
+    
+      const supervisorEmail = getEmailById(supervisors_obj.supervisor_id);
+      const co_supervisors = supervisors_obj.co_supervisors.map((userId) => getEmailById(userId) || null);
+      
+      //send to the professor
+      scheduleEmailOneWeekBefore(expiration_date,supervisorEmail,title); //formatted yyyy-mm-dd
+
+      // Loop through co_supervisors and schedule emails
+     // for (const cosupervisorId of co_supervisors) {
+
+     //     scheduleEmailOneWeekBefore(expiration_date, cosupervisorId, title);
+     // }
+
       return res.status(201).send();
     }
   } catch (err) {
@@ -253,6 +270,66 @@ export const getProposalById = async (req, res) => {
 
 function isSupervisorsObjValid(supervisors_obj) {
   const array = supervisors_obj.co_supervisors;
+  console.log(supervisors_obj);
   array.push(supervisors_obj.supervisor_id)
   return isNumericInputValid(array);
 }
+
+export const createStudentProposalRequest = async (req, res) => {
+  try {
+    const {
+      teacherEmail,
+      title,
+      description,
+      notes,
+      coSupervisorsEmails,
+    } = req.body;
+
+    let co_supervisors_ids;
+
+    if(!isEmailInputValid([teacherEmail])) {
+      return res.status(400).json({
+        error: "Teacher email is not correct",
+      });
+    }
+    if (!isTextInputValid([title, description])) {
+      return res.status(400).json({
+        error: "Title and description should be not empty strings",
+      });
+    }
+    const teacher = await getTeacherByEmail(teacherEmail);
+    if (!teacher) {
+      return res.status(400).json({ error: "Teacher not found" });
+    }
+    if (coSupervisorsEmails && coSupervisorsEmails.length > 0) {
+      co_supervisors_ids = [];
+      if (!isEmailInputValid([...coSupervisorsEmails])) {
+        return res.status(400).json({
+          error: "Co-supervisors ids should be an array of emails",
+        });
+      }
+      for (let email of coSupervisorsEmails) {
+        const co_supervisor = await getTeacherByEmail(email);
+        if (!co_supervisor) {
+          return res.status(400).json({
+            error: `Co-supervisor with email ${email} not found`,
+          });
+        } else {
+          co_supervisors_ids.push(co_supervisor.id);
+        }
+      }
+    }
+    const result = await createProposalRequest(
+      req.user.id,
+      teacher.id,
+      co_supervisors_ids,
+      title,
+      description,
+      notes
+    );
+    return res.status(201).json(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+};
