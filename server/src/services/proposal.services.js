@@ -483,11 +483,10 @@ export const updateProposalByProposalId = (proposalId, userId, proposal) => {
       } else {
 
         // update the proposal data
-        const sql2 = "UPDATE Proposals SET title = ?, type=?, description=?, level=?, expiration_date=?, notes=?, cod_group=?, required_knowledge=? " +
-                      " WHERE id = ? AND cod_degree = ?";
-
+        const sql2 = "UPDATE Proposals SET title = ?, type=?, description=?, level=?, expiration_date=?, notes=?, cod_degree=?, cod_group=?, required_knowledge=? " +" WHERE id = ? ";
+                               
         for(let degree of proposal.cod_degree) {
-          db.run(sql2, [proposal.title, proposal.type, proposal.description, proposal.level, proposal.expiration_date, proposal.notes||'', proposal.cod_group, proposal.required_knowledge||'', proposalId, degree], (err) => {
+          db.run(sql2, [proposal.title, proposal.type, proposal.description, proposal.level, proposal.expiration_date, proposal.notes||'', degree, proposal.cod_group, proposal.required_knowledge||'', proposalId], (err) => {
             if(err) {
               reject(err)
             }
