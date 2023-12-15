@@ -63,7 +63,8 @@ export default function AlertDialog({
 
   useEffect(() => {
         applicationsAPI.getStudentApplications().then((response) => {
-          setIsAppliedProposal(response.filter((o) => o.status !== 'rejected').length > 0);
+          console.log(response);
+          setIsAppliedProposal(response?.filter((o) => o.status !== 'rejected').length > 0);
         })
       .catch(
         (err) => {console.log(err);}

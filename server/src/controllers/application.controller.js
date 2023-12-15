@@ -1,6 +1,7 @@
 "use strict";
 import { changeStatus, createApplicationInDb, getApplicationsByProposalId, getApplicationsByStudentId } from "../services/application.services.js";
 import { isValidDateFormat } from "../utils/utils.js";
+import {sendEmailToTeacher, sendNotificationApplicationDecision} from "../services/notification.services.js";
 
 export const createApplication = async (req, res) => {
   const { proposal_id, student_id, submission_date } = req.body;
@@ -26,6 +27,7 @@ export const createApplication = async (req, res) => {
       student_id,
       submission_date
     );
+    await sendEmailToTeacher(application);
     return res.status(200).json(application);
   } catch (error) {
     if (error.scheduledError != undefined)
@@ -33,6 +35,7 @@ export const createApplication = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
 
 export const getApplicationsProposalId = async (req, res) => {
     try {
@@ -66,7 +69,7 @@ export const changeStatusOfApplication = async (req, res) => {
     }
 
     await changeStatus(applicationId, req.user.id, status);
-
+    await sendNotificationApplicationDecision(applicationId,status);
     res.status(204).send();
 
   } catch(err) {

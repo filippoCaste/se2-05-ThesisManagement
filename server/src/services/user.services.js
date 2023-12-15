@@ -17,3 +17,19 @@ export const getUserById = (id) => {
     });
   });
 }
+export const getEmailById = (userId) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT email FROM Users WHERE id = ?';
+    db.get(sql, [userId], (err, row) => {
+      if (err) {
+        reject(err);
+      } else {
+        if (row && row.email) {
+          resolve(row.email);
+        } else {
+          resolve(null); // User not found or email is empty
+        }
+      }
+    });
+  });
+};

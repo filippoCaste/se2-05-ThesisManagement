@@ -138,17 +138,28 @@ export const getKeyWordsFromDB = () => {
 
 export const getProposalInfoByID = (proposal_id) => {
   return new Promise((resolve, reject) => {
-    const proposalSearchSQL = `SELECT id,
-          title, 
-          description, 
-          expiration_date, 
-          cod_degree, 
-          level, 
-          notes, 
-          cod_group, 
-          required_knowledge 
-      FROM Proposals 
-      WHERE id = ?;`;
+    const proposalSearchSQL = `SELECT p.id,
+      p.title,
+      p.description,
+      p.expiration_date,
+      p.cod_degree,
+      d.title_degree,
+      p.level,
+      p.notes,
+      p.cod_group,
+      g.title_group,
+      p.required_knowledge,
+      s.supervisor_id,
+      s.co_supervisor_id,
+      s.external_supervisor,
+      group_concat(DISTINCT k.name) as keyword_names
+    FROM Proposals as p
+    LEFT JOIN ProposalKeywords AS pk ON p.id = pk.proposal_id
+    LEFT JOIN Keywords AS k ON k.id = pk.keyword_id
+    LEFT JOIN Supervisors AS s ON s.proposal_id = p.id
+    LEFT JOIN Degrees AS d ON p.cod_degree = d.cod_degree
+    LEFT JOIN Groups AS g ON p.cod_group = g.cod_group
+    WHERE p.id = ?;`;
     db.all(proposalSearchSQL, [proposal_id], (err, rows) => {
       if (err) {
         return reject(err);
@@ -634,6 +645,69 @@ export const getAllInfoByProposalId = (proposalId, userId) => {
   });
 }
 
+// Assuming you have access to the database and can execute SQL queries
+
+export const getEmailsSupervisorsOneWeekExpiration = () => {
+  return new Promise((resolve, reject) => {
+  // Get today's date
+  const today = new Date();
+  
+  // Calculate the date one week from today
+  const oneWeekFromToday = new Date(today);
+  oneWeekFromToday.setDate(oneWeekFromToday.getDate() + 7);
+
+  // Convert dates to SQLite date format (assuming your database uses SQLite)
+  const todayString = today.toISOString().split('T')[0];
+  const oneWeekFromTodayString = oneWeekFromToday.toISOString().split('T')[0];
+
+  // SQL query to retrieve emails of supervisors, co-supervisors, and external supervisors
+    const sql = `
+    SELECT DISTINCT T.email, P.title, P.expiration_date
+    FROM Teachers T
+    INNER JOIN Supervisors S ON (S.supervisor_id = T.id OR S.co_supervisor_id = T.id)
+    INNER JOIN Proposals P ON S.proposal_id = P.id
+    WHERE P.expiration_date BETWEEN '${todayString}' AND '${oneWeekFromTodayString}'
+    AND P.status = "posted"
+
+    UNION
+
+    SELECT DISTINCT E.email, P.title, P.expiration_date
+    FROM ExternalUsers E
+    INNER JOIN Supervisors S ON E.id = S.external_supervisor
+    INNER JOIN Proposals P ON S.proposal_id = P.id
+    WHERE P.expiration_date BETWEEN '${todayString}' AND '${oneWeekFromTodayString}'
+    AND P.status = "posted";
+  `;
+
+
+  db.all(sql, async (err, rows) => {
+    if (err) {
+      reject(err); // Reject the promise if there's an error
+    } else {
+      const objects = rows.map(row => ({ email: row.email, title: row.title, expiration_date: row.expiration_date }));
+      resolve(objects); // Resolve with the mapped objects
+    }
+  });  
+})}
+
+
+export const getProposalTitleByApplicationId = (applicationid) => {
+  return new Promise((resolve, reject) => {
+      const sql = `
+          SELECT Proposals.title
+          FROM Proposals
+          INNER JOIN Applications ON Proposals.id = Applications.proposal_id
+          WHERE Applications.application_id = ?
+      `;
+    
+      db.get(sql, [applicationid], (err, row) => {
+          if (err) {
+              reject(err);
+          } else {
+              resolve(row.title);
+          }
+      });
+  });}
 export const archiveExpiredProposals = () => {
   return new Promise((resolve, reject) => {
     const now = new Date().toISOString();

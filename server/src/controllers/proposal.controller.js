@@ -12,6 +12,9 @@ import { isEmailInputValid, isNumericInputValid, isTextInputValid, isValidDateFo
 import { getTeacherByEmail, getTeacherById } from "../services/teacher.services.js";
 import { getKeywordByName, postKeyword } from "../services/keyword.services.js";
 import { createProposalRequest } from "../services/proposalRequest.services.js";
+import { getEmailById } from "../services/user.services.js";
+import {scheduleEmailOneWeekBefore} from "../emailService/planEmail.js";
+
 
 export const getProposals = async (req, res, next) => {
   try {
@@ -104,6 +107,19 @@ export const postProposal = async (req, res) => {
           keywords
         );
       }
+    
+      const supervisorEmail = getEmailById(supervisors_obj.supervisor_id);
+      const co_supervisors = supervisors_obj.co_supervisors.map((userId) => getEmailById(userId) || null);
+      
+      //send to the professor
+      scheduleEmailOneWeekBefore(expiration_date,supervisorEmail,title); //formatted yyyy-mm-dd
+
+      // Loop through co_supervisors and schedule emails
+     // for (const cosupervisorId of co_supervisors) {
+
+     //     scheduleEmailOneWeekBefore(expiration_date, cosupervisorId, title);
+     // }
+
       return res.status(201).send();
     }
   } catch (err) {
@@ -128,7 +144,7 @@ export const getProposalTeacherId = async (req, res) => {
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
-}
+};
 
 export const deleteProposal = async (req, res) => {
   try {
@@ -254,6 +270,7 @@ export const getProposalById = async (req, res) => {
 
 function isSupervisorsObjValid(supervisors_obj) {
   const array = supervisors_obj.co_supervisors;
+  console.log(supervisors_obj);
   array.push(supervisors_obj.supervisor_id)
   return isNumericInputValid(array);
 }
