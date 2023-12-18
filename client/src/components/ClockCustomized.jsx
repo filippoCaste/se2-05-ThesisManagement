@@ -28,8 +28,7 @@ function ButtonField(props) {
     id: PropTypes.string.isRequired,
     disabled: PropTypes.bool.isRequired,
     InputProps: PropTypes.object.isRequired,
-    inputProps: PropTypes.object.isRequired,
-    slots: PropTypes.object.isRequired,
+    inputProps: PropTypes.object.isRequired
   };
 
   return (
