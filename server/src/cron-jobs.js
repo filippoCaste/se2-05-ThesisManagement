@@ -1,5 +1,4 @@
 import { schedule } from "node-cron";
-//import { archiveExpiredProposals } from "./services/proposal.services.js";
 import { scheduleEmailsOneWeekBeforeExpiration } from "./emailService/planEmail.js";
 import { archiveExpiredProposals } from "./services/proposal.services.js";
 

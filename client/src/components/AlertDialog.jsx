@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useContext, useEffect } from 'react';
 import {
   Button,
   Dialog,
@@ -10,11 +10,11 @@ import {
 } from '@mui/material';
 import dayjs from 'dayjs';
 import theme from '../theme';
-import {useState, useContext, useEffect } from 'react';
-import { UserContext, MessageContext } from '../Contexts';
+import { MessageContext } from '../Contexts';
 import applicationsAPI from '../services/applications.api';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
+import PropTypes from 'prop-types';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -57,7 +57,6 @@ export default function AlertDialog({
     (supervisor) => supervisor.id !== supervisor_id
   );
   const [isAppliedProposal, setIsAppliedProposal] = useState(false);
-  const { user } = useContext(UserContext);
   const handleMessage = useContext(MessageContext);
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -183,11 +182,15 @@ export default function AlertDialog({
           sx={{ color: theme.palette.text.primary }}
         >
           <strong>{label}:</strong>{' '}
-          {value === 'MSc'
-            ? 'Master of Science'
-            : value === 'BSc'
-            ? 'Bachelor of Science'
-            : ''}
+          {value === 'MSc' &&
+             'Master of Science'
+          }
+          {value === 'BSc' &&
+             'Bachelor of Science'
+          }
+          {value !== 'MSc' && value !== 'BSc' &&
+             ''
+          }
         </Typography>
       );
     }
@@ -217,3 +220,12 @@ export default function AlertDialog({
     );
   }
 }
+
+AlertDialog.propTypes = {
+  open: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  item: PropTypes.object.isRequired,
+  handleApply: PropTypes.func,
+  loading: PropTypes.bool,
+  isAppliedProposals: PropTypes.bool,
+};

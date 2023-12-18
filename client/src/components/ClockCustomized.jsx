@@ -6,6 +6,7 @@ import QueryBuilderOutlinedIcon from '@mui/icons-material/QueryBuilderOutlined';
 import { MobileDatePicker } from '@mui/x-date-pickers';
 import {MessageContext} from "../Contexts";
 import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 
 
 export default function ClockCustomized(props) {
@@ -16,12 +17,19 @@ export default function ClockCustomized(props) {
 function ButtonField(props) {
   const {
     setOpen,
-    label,
     id,
     disabled,
     InputProps: { ref } = {},
     inputProps: { 'aria-label': ariaLabel } = {},
   } = props;
+
+  ButtonField.propTypes = {
+    setOpen: PropTypes.func.isRequired,
+    id: PropTypes.string.isRequired,
+    disabled: PropTypes.bool.isRequired,
+    InputProps: PropTypes.object.isRequired,
+    inputProps: PropTypes.object.isRequired
+  };
 
   return (
     <IconButton
@@ -50,3 +58,8 @@ function ButtonField(props) {
       onChange={(newDateAndTime) => setCurrentDataAndTime(newDateAndTime)} />
     </LocalizationProvider>
     )};
+
+ClockCustomized.propTypes = {
+  currentDataAndTime: PropTypes.object.isRequired,
+  setCurrentDataAndTime: PropTypes.func.isRequired
+};

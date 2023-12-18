@@ -99,7 +99,7 @@ export const postProposal = async (req, res) => {
           description.trim(),
           level.trim(),
           expiration_date.trim(),
-          req.body.notes || '',
+          notes || '',
           cod,
           cod_group,
           req.body.required_knowledge,
@@ -109,16 +109,9 @@ export const postProposal = async (req, res) => {
       }
     
       const supervisorEmail = getEmailById(supervisors_obj.supervisor_id);
-      const co_supervisors = supervisors_obj.co_supervisors.map((userId) => getEmailById(userId) || null);
       
       //send to the professor
       scheduleEmailOneWeekBefore(expiration_date,supervisorEmail,title); //formatted yyyy-mm-dd
-
-      // Loop through co_supervisors and schedule emails
-     // for (const cosupervisorId of co_supervisors) {
-
-     //     scheduleEmailOneWeekBefore(expiration_date, cosupervisorId, title);
-     // }
 
       return res.status(201).send();
     }

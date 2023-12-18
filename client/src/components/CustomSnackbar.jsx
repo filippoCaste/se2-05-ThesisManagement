@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { Snackbar, IconButton, Alert } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import PropTypes from "prop-types";
 
 function CustomSnackBar(props) {
   const [open, setOpen] = useState(false);
@@ -45,5 +46,9 @@ function CustomSnackBar(props) {
     </Snackbar>
   );
 }
+
+CustomSnackBar.propTypes = {
+  message: PropTypes.object.isRequired,
+};
 
 export default CustomSnackBar;

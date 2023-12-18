@@ -4,6 +4,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import PropTypes from 'prop-types';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -43,3 +44,9 @@ export default function CheckboxesTags(props) {
     />
   );
 }
+
+CheckboxesTags.propTypes = {
+  array: PropTypes.array.isRequired,
+  selectedArray: PropTypes.array.isRequired,
+  setSelectedArray: PropTypes.func.isRequired,
+};

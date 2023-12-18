@@ -165,9 +165,7 @@ export const getProposalInfoByID = (proposal_id) => {
         return reject(err);
       }
       if (rows.length === 0) {
-        return reject({
-          scheduledError: new Error(`Proposal with id ${proposal_id} not found`),
-        });
+        return reject(new Error(`Proposal with id ${proposal_id} not found`));
       }
       resolve(Proposal.fromProposalsResult(rows[0]));
     });
@@ -255,15 +253,13 @@ export const postNewProposal = (
                   }
                 }
               } 
-              // if(supervisor_obj.co_supervisors.length == 0) {
-                db.run(sqlSuper, [propId, supervisor_obj.supervisor_id, null, null], (err) => {
-                  if(err) {
-                    reject(err);
-                  } else {
-                    console.log("added supervisor")
-                  }
-                });
-              // }
+              db.run(sqlSuper, [propId, supervisor_obj.supervisor_id, null, null], (err) => {
+                if(err) {
+                  reject(err);
+                } else {
+                  console.log("added supervisor")
+                }
+              });
 
               if (supervisor_obj.external && supervisor_obj.external.length > 0) {
                 for (let ext of supervisor_obj.external) {
@@ -485,12 +481,11 @@ export const updateProposalByProposalId = (proposalId, userId, proposal) => {
       if (err)
         reject(err);
       else if (!row)
-        reject(404);
+        reject(new Error("Proposal not found"));
       else if (row.supervisor_id != userId) {
-        reject(403);
+        reject(new Error("You are not the supervisor of this proposal"));
       } else if(row.status === 'assigned') {
-        console.log("This proposal has been already assigned so it cannot be modified")
-        reject(400);
+        reject(new Error("You cannot modify an assigned proposal"));
       } else {
 
         // update the proposal data
@@ -565,9 +560,9 @@ export const getAllInfoByProposalId = (proposalId, userId) => {
         reject(err)
       } else {
         if(!row) {
-          reject(404);
+          reject(new Error("Proposal not found"));
         } else if(row.supervisor_id !== userId) {
-          reject(403);
+          reject(new Error("You are not the supervisor of this proposal"));
         } else {
           let proposalInfo = {
             id: row.id,
