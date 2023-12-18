@@ -5,9 +5,7 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { MessageContext, UserContext } from '../Contexts';
-import { FormControl, Select, MenuItem, Input, Container, IconButton, Paper, Avatar } from '@mui/material';
-import Autocomplete from '@mui/material/Autocomplete';
-
+import { FormControl, Select, MenuItem, Input, IconButton, Paper, Avatar } from '@mui/material';
 
 import proposalAPI from '../services/proposals.api';
 import API_Degrees from '../services/degrees.api';
@@ -764,10 +762,9 @@ function ProposalTeacher(props) {
 
 }
 
-
 ProposalTeacher.propTypes = {
+  currentDataAndTime: PropTypes.string,
   typeOperation: PropTypes.string.isRequired,
-
 };
 
 

@@ -24,7 +24,7 @@ export const getEmailById = (userId) => {
       if (err) {
         reject(err);
       } else {
-        if (row && row.email) {
+        if (row?.email) {
           resolve(row.email);
         } else {
           resolve(null); // User not found or email is empty

@@ -1,6 +1,5 @@
 "use strict";
-import { getTeacherById } from '../services/teacher.services.js';
-import { getAllTeachers } from '../services/teacher.services.js';
+import { getTeacherById, getAllTeachers } from '../services/teacher.services.js';
 
 export const getTeachers = async (req, res) => {
     try {

@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 // Function to schedule email one week before expiration date
 export const scheduleEmailOneWeekBefore = (expirationDate,receiver,title) => {
   // Convert expiration date string to a JavaScript Date object
-    const expiration = new Date(expirationDate);
+    //const expiration = new Date(expirationDate);
     const subject = `TM - Proposal ${title} will expires ${expirationDate}`;
     const htmlContent = `
             <!DOCTYPE html>

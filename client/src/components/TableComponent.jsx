@@ -16,13 +16,14 @@ import { Box } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
 import Badge from '@mui/material/Badge';
+import PropTypes from 'prop-types';
 
 export default function StickyHeadTable(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [orderBy, setOrderBy] = React.useState('expiration_date');
   const [order, setOrder] = React.useState('asc');
-  const { proposals, isAppliedProposals,drawerWidth } = props;
+  const { proposals, isAppliedProposals } = props;
   const theme = useTheme();
   
   const columns = [
@@ -200,7 +201,7 @@ export default function StickyHeadTable(props) {
                 }}
               >
                 {column.id === 'supervisor_id'
-                  ? `${
+                  && `${
                       row.supervisorsInfo.find(
                         (supervisor) => supervisor.id === row.supervisor_id
                       )?.name
@@ -209,7 +210,8 @@ export default function StickyHeadTable(props) {
                         (supervisor) => supervisor.id === row.supervisor_id
                       )?.surname
                     }`
-                  : column.format
+                  }
+                  {column.format
                   ? column.format(row[column.id], row)
                   : row[column.id]}
               </TableCell>
@@ -232,3 +234,9 @@ export default function StickyHeadTable(props) {
     </Paper>
   );
 }
+
+StickyHeadTable.propTypes = {
+  proposals: PropTypes.array,
+  isAppliedProposals: PropTypes.bool,
+  onClick: PropTypes.func,
+};

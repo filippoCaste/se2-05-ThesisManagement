@@ -6,9 +6,10 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import headerBackground from "../../public/img/imageedit_3_5228036516.jpg";
 import Logout from '@mui/icons-material/Logout';
 import Image from "mui-image";
-import { AppBar, Toolbar, IconButton, Typography, Badge, MenuItem, Menu , TextField, ListItemIcon, Box} from '@mui/material';
+import { AppBar, Toolbar, IconButton, Typography, MenuItem, Menu, ListItemIcon, Box} from '@mui/material';
 import { MessageContext, UserContext } from '../Contexts';
 import theme from '../theme';
+import { PropTypes } from 'prop-types';
 
 
 export default function PrimarySearchAppBar(props) {
@@ -16,7 +17,6 @@ export default function PrimarySearchAppBar(props) {
   const [openClock, setOpenClock] = React.useState(false);
   const [anchorElA, setAnchorElA] = React.useState(null);
   const [mobileMoreAnchorElA, setMobileMoreanchorElA] = React.useState(null);
-  const {handleMessage} = React.useContext(MessageContext);
   const { user } = React.useContext(UserContext);
   
   const handleClockOpen = () => {
@@ -182,3 +182,10 @@ export default function PrimarySearchAppBar(props) {
     </Box>
   );
 }
+
+PrimarySearchAppBar.propTypes = {
+  openSelectionsMobile: PropTypes.bool,
+  setOpenSelectionsMobile: PropTypes.func,
+  currentDataAndTime: PropTypes.object,
+  setCurrentDataAndTime: PropTypes.func
+};

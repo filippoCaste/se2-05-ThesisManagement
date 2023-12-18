@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { Box, Collapse, Button, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Typography, Chip,useMediaQuery  } from '@mui/material';
@@ -12,12 +12,12 @@ import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import applicationsAPI from '../services/applications.api';
 import { MessageContext } from '../Contexts';
-import { useContext } from 'react';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
 import TableSortLabel  from '@mui/material/TableSortLabel';
+import PropTypes from 'prop-types';
 
 function Row(props) {
   const navigate = useNavigate();
@@ -73,7 +73,11 @@ function Row(props) {
         <TableCell style={{ width: isSM ? '80%' : '25%' }} component="th" scope="row">{row.p.title}</TableCell>
         {!isSM ? 
         <>
-        <TableCell style={{ width: '10%' }}>{row.p.level === 'MSc' ? "Master of Science" : row.p.level === 'BSc' ? "Bachelor of Science" : ""}</TableCell>
+        <TableCell style={{ width: '10%' }}>
+          {row.p.level === 'MSc' && "Master of Science" }
+          {row.p.level === 'BSc' && "Bachelor of Science"}
+          {row.p.level !== 'MSc' && row.p.level !== 'BSc' && ""}
+        </TableCell>
         <TableCell style={{ width: '14%' }}>{row.p.title_degree}</TableCell>
         <TableCell style={{ width: '11%' }}>{dayjs(row.p.expiration_date).format("DD/MM/YYYY")}</TableCell>
         <TableCell style={{ width: '6%' }}>{row.p.status}</TableCell>
@@ -112,7 +116,6 @@ function Row(props) {
         </TableCell>
         </>
         :
-        <>
         <TableCell style={{ width: '15%' }}>
         <IconButton style={{ color: "#007FFF" }} aria-label="show more"  
                     aria-controls={openActions ? 'basic-menu' : undefined}
@@ -138,7 +141,7 @@ function Row(props) {
                   </Menu>
         </IconButton>
       </TableCell>
-      </>}
+      }
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: isEvenRow ? '#f5f5f5' : '#ffffff' }} colSpan={11}>
@@ -390,4 +393,26 @@ function CollapsibleTable(props) {
     </Table>
   );
 }
+
+CollapsibleTable.propTypes = {
+  listProposals: PropTypes.array.isRequired,
+  onClick: PropTypes.func.isRequired,
+  deleteProposal: PropTypes.func.isRequired,
+  archiveProposal: PropTypes.func.isRequired,
+  onClickApplication: PropTypes.func.isRequired,
+  fetchProposals: PropTypes.func.isRequired,
+};
+
+Row.propTypes = {
+  row: PropTypes.object.isRequired,
+  isEvenRow: PropTypes.bool.isRequired,
+  deleteProposal: PropTypes.func.isRequired,
+  archiveProposal: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
+  onClickApplication: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
+  isSM: PropTypes.bool.isRequired,
+  fetchProposals: PropTypes.func.isRequired,
+};
+
 export default CollapsibleTable;
