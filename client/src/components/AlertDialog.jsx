@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import dayjs from 'dayjs';
 import theme from '../theme';
-import { UserContext, MessageContext } from '../Contexts';
+import { MessageContext } from '../Contexts';
 import applicationsAPI from '../services/applications.api';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
@@ -72,6 +72,7 @@ export default function AlertDialog({
   const coSupervisors = supervisorsInfo?.filter(
     (supervisor) => supervisor.id !== supervisor_id
   );
+  console.log(coSupervisors);
   const [isAppliedProposal, setIsAppliedProposal] = useState(false);
   const handleMessage = useContext(MessageContext);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -149,8 +150,9 @@ export default function AlertDialog({
                   value={`${mainSupervisor.name} ${mainSupervisor.surname} (${mainSupervisor.email})`}
                 />
               )}
-              {coSupervisors?.map((supervisor, index) => (
+              {coSupervisors?.map((supervisor) => (
                 <RenderFieldTable
+                  key={supervisor.id}
                   label="Co-Supervisor"
                   value={`${supervisor.name} ${supervisor.surname} (${supervisor.email})`}
                 />
@@ -164,7 +166,7 @@ export default function AlertDialog({
           </Table>
         </TableContainer>
 
-        {!isAppliedProposals && (
+        {handleApply && !isAppliedProposals && (
           <Button
             component="label"
             variant="contained"
@@ -179,7 +181,7 @@ export default function AlertDialog({
             />
           </Button>
         )}
-        {!isAppliedProposals && selectedFile && (
+        {handleApply && !isAppliedProposals && selectedFile && (
           <Typography variant="body1" gutterBottom>
             <strong>Selected file:</strong> {selectedFile.name}
           </Typography>
@@ -220,54 +222,12 @@ export default function AlertDialog({
       </DialogActions>
     </Dialog>
   );
+};
 
-  function renderField(label, value) {
-    if (label === 'Level') {
-      return (
-        <Typography
-          variant="body1"
-          gutterBottom
-          sx={{ color: theme.palette.text.primary }}
-        >
-          <strong>{label}:</strong>{' '}
-          {value === 'MSc' &&
-             'Master of Science'
-          }
-          {value === 'BSc' &&
-             'Bachelor of Science'
-          }
-          {value !== 'MSc' && value !== 'BSc' &&
-             ''
-          }
-        </Typography>
-      );
-    }
-
-    return (
-      <Typography
-        variant="body1"
-        gutterBottom
-        sx={{ color: theme.palette.text.primary }}
-      >
-        <strong>{label}:</strong> {value}
-      </Typography>
-    );
-  }
-
-  function renderSupervisor(label, supervisor, index) {
-    const { name, surname, email } = supervisor;
-    return (
-      <Typography
-        key={index}
-        variant="body1"
-        gutterBottom
-        sx={{ color: theme.palette.text.primary }}
-      >
-        <strong>{label}:</strong> {`${name} ${surname} (${email})`}
-      </Typography>
-    );
-  }
-}
+RenderFieldTable.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+};
 
 AlertDialog.propTypes = {
   open: PropTypes.bool.isRequired,

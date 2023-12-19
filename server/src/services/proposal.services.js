@@ -303,14 +303,12 @@ export const postNewProposal = (
                 db.get(sqlGetKeyw, kw, (err, row4) => {
                   if (err) {
                     reject(err);
-                  } else {
-                    if (row4.id) {
+                  } else if (row4.id) {
                       db.run(sqlKeyw, [propId, row4.id], (err) => {
                         if (err) {
                           reject(err);
                         }
                       });
-                    }
                   }
                 });
               }
@@ -508,14 +506,12 @@ export const updateProposalByProposalId = (proposalId, userId, proposal) => {
           db.get(sql4a, [proposalId, coSup], (err, row) => {
             if (err) {
               reject(err)
-            } else {
-              if (!row) {
+            } else if (!row) {
                 db.run(sql4b, [proposalId, userId, coSup], (err) => {
                   if (err) {
                     reject(err);
                   }
                 })
-              }
             }
           })
         }

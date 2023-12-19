@@ -87,8 +87,7 @@ export const postProposal = async (req, res) => {
       return res.status(400).json({ error: "Uncorrect fields" });
     } else {
       for(let kw of keywords) {
-        kw = kw.trim();
-        const k = await getKeywordByName(kw);
+        const k = await getKeywordByName(kw.trim());
         if (!k) {
           await postKeyword(kw);
         }
@@ -219,8 +218,7 @@ export const updateProposal = async (req, res) => {
     } else {
       // add new keyword if not already in the database
       for (let kw of keywords) {
-        kw = kw.trim();
-        const k = await getKeywordByName(kw);
+        const k = await getKeywordByName(kw.trim());
         if (!k) {
           await postKeyword(kw);
         }
