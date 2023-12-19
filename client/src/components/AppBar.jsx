@@ -16,7 +16,7 @@ export default function PrimarySearchAppBar(props) {
   const {openSelectionsMobile, setOpenSelectionsMobile,currentDataAndTime, setCurrentDataAndTime} = props;
   const [openClock, setOpenClock] = React.useState(false);
   const [anchorElA, setAnchorElA] = React.useState(null);
-  const [mobileMoreAnchorElA, setMobileMoreanchorElA] = React.useState(null);
+  const mobileMoreAnchorElA = null;
   const { user } = React.useContext(UserContext);
   
   const handleClockOpen = () => {

@@ -23,12 +23,10 @@ export const getEmailById = (userId) => {
     db.get(sql, [userId], (err, row) => {
       if (err) {
         reject(err);
-      } else {
-        if (row?.email) {
+      } else if (row?.email) {
           resolve(row.email);
-        } else {
+      } else {
           resolve(null); // User not found or email is empty
-        }
       }
     });
   });

@@ -91,7 +91,7 @@ export default function FilterComponent(props) {
             />
             <DatePicker
               label="To..."
-              minDate={selectedStartExpirationDate ? selectedStartExpirationDate : currentDataAndTime}
+              minDate={selectedStartExpirationDate || currentDataAndTime}
               format="DD/MM/YYYY"
               value={selectedExpirationDate}
               onChange={(date) => setSelectedExpirationDate(date)}
