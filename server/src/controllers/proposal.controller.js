@@ -230,12 +230,12 @@ export const updateProposal = async (req, res) => {
     }
 
   } catch(err) {
-    if(err == 404) {
-      res.status(404).json({error: "Proposal not found"})
-    } else if(err == 403) {
-      res.status(403).json({error: "You cannot access this resource"})
-    } else if(err === 400) {
-      res.status(400).json({error: "This proposal cannot be modified"})
+    if(err.message == "Proposal not found") {
+      res.status(404).json({error: err.message})
+    } else if(err.message == "You cannot access this resource") {
+      res.status(403).json({error: err.message})
+    } else if(err.message === "This proposal cannot be modified") {
+      res.status(400).json({error: err.message})
     } else {
       res.status(500).json({ error: err.message });
       }
