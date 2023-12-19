@@ -481,11 +481,12 @@ export const updateProposalByProposalId = (proposalId, userId, proposal) => {
       if (err)
         reject(err);
       else if (!row)
-        reject(new Error("Proposal not found"));
+        reject(404);
       else if (row.supervisor_id != userId) {
-        reject(new Error("You are not the supervisor of this proposal"));
+        reject(403);
       } else if(row.status === 'assigned') {
-        reject(new Error("You cannot modify an assigned proposal"));
+        console.log("This proposal has been already assigned so it cannot be modified")
+        reject(400);
       } else {
 
         // update the proposal data
@@ -560,9 +561,9 @@ export const getAllInfoByProposalId = (proposalId, userId) => {
         reject(err)
       } else {
         if(!row) {
-          reject(new Error("Proposal not found"));
+          reject(404);
         } else if(row.supervisor_id !== userId) {
-          reject(new Error("You are not the supervisor of this proposal"));
+          reject(403);
         } else {
           let proposalInfo = {
             id: row.id,

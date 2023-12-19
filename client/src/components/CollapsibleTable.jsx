@@ -275,15 +275,16 @@ function CollapsibleTable(props) {
        if (orderBy && order) {
   
          return listProposals.slice().sort((a, b) => {
-           const aValue = a.p[orderBy];
-           const bValue = b.p[orderBy];
-           if (order === 'asc') {
-            if(orderBy === "expiration_date") return dayjs(aValue).isAfter(bValue) ? -1 : 1;
-             return aValue < bValue ? -1 : 1;
-           } else {
-             if(orderBy === "expiration_date") return dayjs(aValue).isBefore(bValue) ? -1 : 1;
-             return aValue > bValue ? -1 : 1;
-           }
+          const aValue = a.p[orderBy];
+          const bValue = b.p[orderBy];
+          if(order === 'asc' && orderBy === "expiration_date")
+            return dayjs(aValue).isAfter(bValue) ? 1 : -1;
+          else if(order === 'desc' && orderBy === "expiration_date")
+            return dayjs(aValue).isBefore(bValue) ? -1 : 1;
+          else if(order === 'asc' && orderBy !== "expiration_date")
+            return aValue < bValue ? 1 : -1;
+          else if(order === 'desc' && orderBy !== "expiration_date")
+            return aValue > bValue ? 1 : -1;
          });
        }
        return listProposals;
@@ -373,13 +374,13 @@ function CollapsibleTable(props) {
             <TableCell style={{ width: '3.6%' }}><b>Delete</b></TableCell>
             <TableCell style={{ width: '3.6%' }}><b>Copy</b></TableCell>
             </>
-            :<><TableCell style={{ width: '15%' }}><b>Actions</b></TableCell></> }
+            : <TableCell style={{ width: '15%' }}><b>Actions</b></TableCell> }
           </TableRow>
       </TableHead>
       <TableBody>
         {sortedProposals.length > 0 ? (
           sortedProposals.map((row, index) => (
-            <Row key={index} row={row} isEvenRow={index % 2 === 0} isSM={isSM} onClick={onClick} onClickApplication={onClickApplication} index={index} deleteProposal={deleteProposal} archiveProposal={archiveProposal} fetchProposals={fetchProposals} />
+            <Row key={row.p.id} row={row} isEvenRow={index % 2 === 0} isSM={isSM} onClick={onClick} onClickApplication={onClickApplication} index={index} deleteProposal={deleteProposal} archiveProposal={archiveProposal} fetchProposals={fetchProposals} />
           ))
         ) : (
           <TableRow>

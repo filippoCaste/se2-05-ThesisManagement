@@ -1,7 +1,7 @@
 "use strict";
 import { changeStatus, createApplicationInDb, getApplicationsByProposalId, getApplicationsByStudentId } from "../services/application.services.js";
-import { isValidDateFormat } from "../utils/utils.js";
 import {sendEmailToTeacher, sendNotificationApplicationDecision} from "../services/notification.services.js";
+import validator from "validator";
 
 export const createApplication = async (req, res) => {
   const { proposal_id, student_id, submission_date } = req.body;
@@ -15,7 +15,7 @@ export const createApplication = async (req, res) => {
       .status(400)
       .json({ error: "Request should contain a student_id" });
   }
-  if (!submission_date || isValidDateFormat(submission_date) === false) {
+  if (!submission_date || validator.isDate(submission_date) === false) {
     return res.status(400).json({
       error:
         "Request should contain a submission_date and be in the format YYYY-MM-dd",

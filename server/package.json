@@ -38,7 +38,8 @@
     "path": "^0.12.7",
     "selenium-webdriver": "^4.15.0",
     "sqlite3": "^5.1.6",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "validator": "^13.11.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.22.5",

@@ -50,7 +50,7 @@ export default function ResponsiveDrawer(props) {
         },
       }}
     >
-      <Collapse in={ openSelectionsMobile ? openSelectionsMobile : true } sx={{ mt: '15vh',mx:'3vh',}} timeout="auto" unmountOnExit>
+      <Collapse in={ openSelectionsMobile || true } sx={{ mt: '15vh',mx:'3vh',}} timeout="auto" unmountOnExit>
       <Box sx={{
       display: 'flex',
       flexDirection: 'column',
