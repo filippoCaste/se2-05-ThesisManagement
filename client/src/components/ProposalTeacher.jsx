@@ -179,9 +179,14 @@ function ProposalTeacher(props) {
 
   // USE EFFECT /////////////////////////////////////////////
 
+  const [changeLevel,setChangeLevel]= useState(0);
+  
   useEffect(() => {
-    setSelectedDegreeList([]);
-
+    if(changeLevel >= 3 )
+    {
+      setSelectedDegreeList([]);
+    }
+    setChangeLevel((old)=>old+1);
   }, [level])
 
 
