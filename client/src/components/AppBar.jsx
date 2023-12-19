@@ -7,7 +7,7 @@ import headerBackground from "../../public/img/imageedit_3_5228036516.jpg";
 import Logout from '@mui/icons-material/Logout';
 import Image from "mui-image";
 import { AppBar, Toolbar, IconButton, Typography, MenuItem, Menu, ListItemIcon, Box} from '@mui/material';
-import { MessageContext, UserContext } from '../Contexts';
+import { UserContext } from '../Contexts';
 import theme from '../theme';
 import { PropTypes } from 'prop-types';
 

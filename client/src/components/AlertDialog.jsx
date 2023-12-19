@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import dayjs from 'dayjs';
 import theme from '../theme';
-import { UserContext, MessageContext } from '../Contexts';
+import { MessageContext } from '../Contexts';
 import applicationsAPI from '../services/applications.api';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';

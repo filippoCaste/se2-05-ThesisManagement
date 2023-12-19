@@ -461,7 +461,7 @@ describe("updateProposal", () => {
     };
   
       keywords.getKeywordByName.mockResolvedValue("Test");
-      services.updateProposalByProposalId.mockImplementation(() => {throw 403});
+      services.updateProposalByProposalId.mockImplementation(() => {throw 403;});
   
       await controllers.updateProposal(mockReq, mockRes);
   
