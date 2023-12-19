@@ -36,7 +36,7 @@ function TeacherPage(props) {
    const [operation, setOperation] = useState(null);
    const [degreesList, setDegreesList]=useState('');
     
-  //FILTRI
+  //FILTRES
 
   const [filterTitle, setFilterTitle] = useState('');
   const [filterLevel, setFilterLevel] = useState('');
@@ -55,7 +55,7 @@ function TeacherPage(props) {
     setFilterDegree('');
     setFilterStatus('');
   };
-  // FINE FILTRI
+  // END FILTRES
 
   async function createRow(p) {
     const students = await API_Applications.getApplicationStudentsByProposalId(
@@ -207,17 +207,7 @@ function TeacherPage(props) {
         />}
 
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={2}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => navigate('/teacher/addProposal')}
-            >
-              {' '}
-              INSERT NEW THESIS PROPOSAL{' '}
-            </Button>{' '}
-            <br /> <br />
-          </Grid>
+          <Grid item xs={12} sm={6} md={2} />
           <Grid item xs={12} sm={6} md={8}>
             <input
               type="text" list="titleSuggestions" placeholder="Search by Title"
@@ -288,6 +278,45 @@ function TeacherPage(props) {
             deleteProposal={deleteProposal}
             archiveProposal={archiveProposal}
           />
+
+          <br /> <br />
+            
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6} md={2}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => navigate('/teacher/addProposal')}
+                style={{
+                  position: 'fixed',
+                  bottom: '20px', 
+                  right: '40px', 
+                  zIndex: 1000, 
+                }}
+              >
+                INSERT NEW THESIS PROPOSAL
+              </Button>
+              <br /> <br />
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={2}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => navigate('/teacher/browseCoSupervisor')}
+                style={{
+                  position: 'fixed',
+                  bottom: '20px', 
+                  left: '20px', 
+                  zIndex: 1000, 
+                }}
+              >
+                 BROWSE CO-SUPERVISORS
+              </Button>{' '}
+              <br /> <br />
+            </Grid>
+          </Grid>
+          
           {openDialog && (
             <AlertDialog
               open={openDialog}

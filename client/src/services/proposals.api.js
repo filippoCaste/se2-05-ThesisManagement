@@ -155,6 +155,25 @@ const getProposalsByTeacherId = async (teacherId) => {
 
 };
 
+const getProposalsByCoSupervisorId = async (teacherId) => {
+  try {
+    const response = await fetch(SERVER_URL + `/api/proposals/cosupervisors/${teacherId}`, {
+      method: "GET",
+      credentials: 'include',
+    });
+    if (response.ok) {
+      const proposals = await response.json();
+      return proposals;
+    } else {
+      const message = await response.text();
+      throw new Error("Application error: " + message);
+    }
+  } catch (error) {
+    throw new Error("Network Error: " + error.message);
+  }
+
+};
+
 //  fetch(  SERVER_URL + `/api/proposals/${id}`, {
   
 const updateProposal = async (
@@ -268,6 +287,7 @@ const proposalAPI = {
   postProposalKeywords,
   getProposalsByTeacherId,
   getProposalByProposalId,
+  getProposalsByCoSupervisorId,
   updateProposal,
   deleteProposal,
   archivedProposal

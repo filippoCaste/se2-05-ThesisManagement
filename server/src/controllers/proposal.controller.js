@@ -2,6 +2,7 @@ import {
   getAllInfoByProposalId,
   getProposalsByTeacherId,
   getProposalsFromDB,
+  getProposalsByCoSupervisorId,
   postNewProposal,
   deleteProposalById,
   getSupervisorByProposalId,
@@ -133,6 +134,26 @@ export const getProposalTeacherId = async (req, res) => {
       throw new Error("Problems with integer conversion")
     }
     const proposals = await getProposalsByTeacherId(teacher_id);
+    return res.json(proposals);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
+export const getProposalCoSupervisorId = async (req, res) => {
+  try {
+    let teacher_id = req.params.id;
+    try {
+      teacher_id = parseInt(teacher_id);
+      const teacher = await getTeacherById(teacher_id);
+      if(!teacher) {
+        return res.status(400).send({error: "Uncorrect filter parameter"})
+      }
+    } catch(err) {
+      throw new Error("Problems with integer conversion")
+    }
+
+    const proposals = await getProposalsByCoSupervisorId(teacher_id);
     return res.json(proposals);
   } catch (err) {
     return res.status(500).json({ error: err.message });

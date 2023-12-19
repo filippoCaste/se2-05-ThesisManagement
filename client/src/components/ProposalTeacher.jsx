@@ -536,7 +536,7 @@ function ProposalTeacher(props) {
           </Grid> <br /> <br /> </>}
 
 
-          <Typography variant="subtitle5" fontWeight="bold"> REQUIRED KNOWLEDGE </Typography>
+          <Typography variant="subtitle5" fontWeight="bold"> REQUIRED KNOWLEDGE (optional) </Typography>
           <TextField name="required_knowledge" variant="filled" fullWidth multiline rows={7}
             value={required_knowledge} onChange={ev => setRequired_knowledge(ev.target.value)} />  <br /> <br />
 
@@ -546,7 +546,7 @@ function ProposalTeacher(props) {
             <Paper elevation={3} style={{ padding: '1rem' }}>
               <FormControl fullWidth>
                 <Typography variant="subtitle1" gutterBottom fontWeight="bold">
-                  ADD CO-SUPERVISORS
+                  ADD CO-SUPERVISORS (optional)
                 </Typography>
 
                 <input
@@ -666,7 +666,7 @@ function ProposalTeacher(props) {
           <Grid item xs={4}>
             <Paper elevation={3} style={{ padding: '1rem' }}>
               <Typography variant="subtitle1" gutterBottom fontWeight="bold">
-                ADD EXTERNAL CO-SUPERVISORS
+                ADD EXTERNAL CO-SUPERVISORS (optional)
               </Typography>
 
               {/* Input for external co-supervisors contacts */}
@@ -735,7 +735,7 @@ function ProposalTeacher(props) {
 
           {/* NOTES */}
 
-          <Typography variant="subtitle5" fontWeight="bold"> NOTES </Typography>
+          <Typography variant="subtitle5" fontWeight="bold"> NOTES (optional)  </Typography>
           <TextField name="notes" variant="filled" fullWidth multiline rows={5}
             value={notes} onChange={ev => setNotes(ev.target.value)} />  <br /> <br />
 

@@ -16,6 +16,7 @@ import userAPI from './services/users.api.js';
 import { Student, Professor } from './models/User.js';
 import StudentApplications from './pages/StudentApplications';
 import ProposalStudent from './components/ProposalStudent.jsx';
+import ProposalTeacherCoSupervisor from './components/ProposalTeacherCoSupervisor.jsx';
 
 function App() {
   const [message, setMessage] = useState('');
@@ -91,6 +92,9 @@ function App() {
 
               <Route path='/teacher/copyProposal/:proposalId'  
                element={<ProposalTeacher typeOperation="copy" />} />
+
+              <Route path='/teacher/browseCoSupervisor'
+               element={<ProposalTeacherCoSupervisor currentDataAndTime={currentDataAndTime}/>} />
                 
 
             </Routes>
