@@ -24,7 +24,6 @@ export default function StickyHeadTable(props) {
   const [orderBy, setOrderBy] = React.useState('expiration_date');
   const [order, setOrder] = React.useState('asc');
   const { proposals, isAppliedProposals } = props;
-  console.log(proposals);
   const theme = useTheme();
   
   const columns = [
@@ -185,7 +184,6 @@ export default function StickyHeadTable(props) {
               <TableRow
                 key={row.id}
                 hover
-                role="checkbox"
                 tabIndex={-1}
                 className={`proposalRow ${
                   index % 2 === 0 ? 'proposalRowOdd' : ''

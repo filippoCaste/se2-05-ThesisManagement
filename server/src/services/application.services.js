@@ -118,7 +118,7 @@ export const changeStatus = (applicationId, userId, status) => {
       if (err) {
         reject(err);
       } else if (!row) {
-        reject(new Error("Application not found"));
+        reject(new Error("Proposal not found"));
       } else if(userId != row.supervisor_id) {
         reject(new Error("You are not the supervisor of this proposal"));
       }
