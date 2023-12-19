@@ -10,7 +10,8 @@ import CollapsibleTable from '../components/CollapsibleTable';
 import AlertDialog from '../components/AlertDialog';
 import dayjs from 'dayjs';
 import ApplicationDialog from '../components/ApplicationDialog';
-import careerAPI from '../services/career.api';
+import careerAPI from '../services/careers.api';
+
 import API_Degrees from '../services/degrees.api';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import ConfirmationDialog from '../components/ConfirmationDialog';
@@ -20,7 +21,6 @@ function TeacherPage(props) {
   const { currentDataAndTime } = props;
   const handleMessage = useContext(MessageContext);
   dayjs.extend(customParseFormat);
-
 
    const navigate = useNavigate();
    const { user } = useContext(UserContext);
