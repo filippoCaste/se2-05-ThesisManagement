@@ -426,7 +426,7 @@ describe("updateProposal", () => {
 
     keywords.getKeywordByName.mockResolvedValue("Test");
     services.updateProposalByProposalId.mockImplementation(() => {
-      throw new Error("Proposal not found");
+      throw 404;
     });
 
     await controllers.updateProposal(mockReq, mockRes);
@@ -461,7 +461,7 @@ describe("updateProposal", () => {
     };
   
       keywords.getKeywordByName.mockResolvedValue("Test");
-      services.updateProposalByProposalId.mockImplementation(() => {throw new Error("You cannot access this resource")});
+      services.updateProposalByProposalId.mockImplementation(() => {throw 403});
   
       await controllers.updateProposal(mockReq, mockRes);
   

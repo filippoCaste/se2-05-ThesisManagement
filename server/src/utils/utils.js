@@ -1,4 +1,5 @@
 import validator from "validator";
+
 /**
  * Check whether the input values are text or contains undefined values
  * @param {Array} values : array of input values to be checked
@@ -9,7 +10,7 @@ export function isTextInputValid(values) {
     return false;
   }
   for (let text of values) {
-    if (!text || !validator.isAlphanumeric(text)) {
+    if (!text || typeof text !== "string" || text.trim() === "") {
       console.log("The error is in value: " + text);
       return false;
     }
@@ -24,7 +25,8 @@ export function isTextInputValid(values) {
  */
 export function isNumericInputValid(values) {
   for (let number of values) {
-    if (!number || !validator.isNumeric(number)) {
+    const value = number && parseInt(number);
+    if (!value || isNaN(value) || number != value.toString()) {
       console.log("The error is in value: " + number);
       return false;
     }
