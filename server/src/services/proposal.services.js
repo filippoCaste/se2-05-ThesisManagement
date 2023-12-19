@@ -555,82 +555,79 @@ export const getAllInfoByProposalId = (proposalId, userId) => {
     db.get(sql, [proposalId], (err,row) => {
       if(err){
         reject(err)
-      } else {
-        if(!row) {
+      } else if(!row) {
           reject(404);
-        } else if(row.supervisor_id !== userId) {
+      } else if(row.supervisor_id !== userId) {
           reject(403);
-        } else {
-          let proposalInfo = {
-            id: row.id,
-            title: row.title,
-            description: row.description,
-            type: row.type,
-            level: row.level,
-            expiration_date: row.expiration_date,
-            notes: row.notes,
-            cod_degree: row.cod_degree,
-            required_knowledge: row.required_knowledge,
-            status: row.status,
-            title_degree: row.title_degree,
-          };
+      } else {
+        let proposalInfo = {
+          id: row.id,
+          title: row.title,
+          description: row.description,
+          type: row.type,
+          level: row.level,
+          expiration_date: row.expiration_date,
+          notes: row.notes,
+          cod_degree: row.cod_degree,
+          required_knowledge: row.required_knowledge,
+          status: row.status,
+          title_degree: row.title_degree,
+        };
 
-          const sqlGroup = "SELECT * FROM Teachers t, Supervisors s, Groups g WHERE g.cod_group=t.cod_group AND s.co_supervisor_id=t.id AND s.proposal_id=?; "
-          db.all(sqlGroup, [proposalId], (err, rows) => {
-            if(err) {
-              reject(err);
-            } else {
-              let groups = rows.map((g) => {
-                return {cod_group: g.cod_group, title_group: g.title_group};
-              })
-              groups.push({cod_group: row.cod_group, title_group: row.title_group});
-              proposalInfo = {...proposalInfo, groups}
-            }
-          });
+        const sqlGroup = "SELECT * FROM Teachers t, Supervisors s, Groups g WHERE g.cod_group=t.cod_group AND s.co_supervisor_id=t.id AND s.proposal_id=?; "
+        db.all(sqlGroup, [proposalId], (err, rows) => {
+          if(err) {
+            reject(err);
+          } else {
+            let groups = rows.map((g) => {
+              return {cod_group: g.cod_group, title_group: g.title_group};
+            })
+            groups.push({cod_group: row.cod_group, title_group: row.title_group});
+            proposalInfo = {...proposalInfo, groups}
+          }
+        });
 
-          const sqlKw = "SELECT * FROM Keywords k, ProposalKeywords pk WHERE pk.proposal_id=? AND pk.keyword_id=k.id";
-          db.all(sqlKw, proposalId, (err, rows) => {
-            if(err) {
-              reject(err)
-            } else {
-              let keywords = rows.map(k => {
-                return k.name
-              });
-              proposalInfo = {...proposalInfo, keywords};
+        const sqlKw = "SELECT * FROM Keywords k, ProposalKeywords pk WHERE pk.proposal_id=? AND pk.keyword_id=k.id";
+        db.all(sqlKw, proposalId, (err, rows) => {
+          if(err) {
+            reject(err)
+          } else {
+            let keywords = rows.map(k => {
+              return k.name
+            });
+            proposalInfo = {...proposalInfo, keywords};
 
-              // add cosupervisors
-              const sqlSuper = "SELECT id, name, surname, email FROM Supervisors s, Teachers t WHERE s.proposal_id=? AND s.co_supervisor_id=t.id";
-              db.all(sqlSuper, proposalId, (err, rows) => {
-                if (err) {
-                  reject(err);
-                } else {
-                  let coSupervisors = rows.map(s => {
-                    return { id: s.id, name: s.name, surname: s.surname, email: s.email }
-                  });
-                  proposalInfo = { ...proposalInfo, coSupervisors};
+            // add cosupervisors
+            const sqlSuper = "SELECT id, name, surname, email FROM Supervisors s, Teachers t WHERE s.proposal_id=? AND s.co_supervisor_id=t.id";
+            db.all(sqlSuper, proposalId, (err, rows) => {
+              if (err) {
+                reject(err);
+              } else {
+                let coSupervisors = rows.map(s => {
+                  return { id: s.id, name: s.name, surname: s.surname, email: s.email }
+                });
+                proposalInfo = { ...proposalInfo, coSupervisors};
 
-                  // add external-co_supervisors
-                  const sqlExtSup = "SELECT * FROM ExternalUsers eu, Supervisors s WHERE s.proposal_id=? AND s.external_supervisor=eu.id";
-                  db.all(sqlExtSup, proposalId, (err, rows) => {
-                    if(err) {
-                      reject(err);
-                    } else {
-                      if(rows.length !== 0) {
-                        let externalSupervisors = rows.map(e => {
-                          return { name: e.name, surname: e.surname, email: e.email }
-                        });
-                        proposalInfo = {...proposalInfo, externalSupervisors};
-                      }
-                      resolve(proposalInfo);
+                // add external-co_supervisors
+                const sqlExtSup = "SELECT * FROM ExternalUsers eu, Supervisors s WHERE s.proposal_id=? AND s.external_supervisor=eu.id";
+                db.all(sqlExtSup, proposalId, (err, rows) => {
+                  if(err) {
+                    reject(err);
+                  } else {
+                    if(rows.length !== 0) {
+                      let externalSupervisors = rows.map(e => {
+                        return { name: e.name, surname: e.surname, email: e.email }
+                      });
+                      proposalInfo = {...proposalInfo, externalSupervisors};
                     }
-                  });
-                }
-              });
+                    resolve(proposalInfo);
+                  }
+                });
+              }
+            });
 
-            } 
-          });
-
-        }
+          } 
+        });
       }
     })
   });
