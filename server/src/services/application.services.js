@@ -1,8 +1,7 @@
 import { db } from "../config/db.js";
 import { Student } from "../models/Student.js";
-import { getProposalInfoByID } from "./proposal.services.js";
+import { getProposalInfoByID, getExtraInfoFromProposal } from "./proposal.services.js";
 import { Application } from "../models/Application.js";
-import { getExtraInfoFromProposal } from "./proposal.services.js";
 
 export const createApplicationInDb = async (
   proposal_id,
@@ -69,9 +68,7 @@ const getStudentInfoByID = (student_id) => {
         return reject(err);
       }
       if (rows.length === 0) {
-        return reject({
-          scheduledError: new Error(`Student with id ${student_id} not found`),
-        });
+        return reject(new Error(`Student with id ${student_id} not found`));
       }
       resolve(Student.fromResult(rows[0]));
     });
@@ -121,9 +118,9 @@ export const changeStatus = (applicationId, userId, status) => {
       if (err) {
         reject(err);
       } else if (!row) {
-        reject(404);
+        reject(new Error("Application not found"));
       } else if(userId != row.supervisor_id) {
-        reject(403);
+        reject(new Error("You are not the supervisor of this proposal"));
       }
 
       const proposalId = row.proposal_id;
@@ -235,3 +232,25 @@ export const getApplicationsByStudentId = (studentId) => {
 };
 
 
+export const getStudentEmailByApplicationId = (applicationId) => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      SELECT Students.email
+      FROM Applications
+      JOIN Students ON Applications.student_id = Students.id
+      WHERE Applications.application_id = ?;
+    `;
+
+    db.get(sql, [applicationId], (err, row) => {
+      if (err) {
+        return reject(err);
+      }
+
+      if (row?.email) {
+        resolve(row.email);
+      } else {
+        reject(new Error("No email were found")); // Return null if email not found for the applicationId
+      }
+    });
+  });
+};

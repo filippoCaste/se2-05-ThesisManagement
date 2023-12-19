@@ -22,6 +22,7 @@ import { Student } from "./src/models/Student.js";
 import { Teacher } from "./src/models/Teacher.js";
 import { initScheduledJobs } from "./src/cron-jobs.js"
 
+
 passport.use(strategy);
 
 passport.serializeUser(function (user, done) {

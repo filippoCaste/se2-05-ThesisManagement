@@ -7,6 +7,7 @@ import proposalAPI from '../services/proposals.api.js';
 import dayjs from 'dayjs';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 function MainPage(props) {
   const navigate = useNavigate();
@@ -119,5 +120,10 @@ function MainPage(props) {
     </Box>
   );
 }
+
+MainPage.propTypes = {
+  openSelectionsMobile: PropTypes.bool,
+  currentDataAndTime: PropTypes.string,
+};
 
 export default MainPage;

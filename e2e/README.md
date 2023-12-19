@@ -51,3 +51,30 @@ Students can search for their desired proposal by title, expiration date, superv
 
 ![search proposals](./search_proposals.png)
 
+### Access Applicant CV
+
+#### Student can upload a file when he/she applies for a proposal
+
+![student_AccessApplicantCV](./student_AccessApplicantCV.jpg)
+
+#### Professor can see the career of the student and his cv file
+
+![professor_AccessApplicantCV](./professor_AccessApplicantCV.jpg)
+
+### Insert Student Request
+
+#### A student can create a new thesis proposal
+
+![insertStudentRequest](./insertStudentRequest.jpg)
+
+### Search Archive
+
+#### A professor can see the archived thesis proposal
+
+![searchArchive](./searchArchive.jpg)
+
+### Copy Proposal
+
+#### A professor can create a new proposal starting from an existing proposal
+
+![copyPorposal](./copyProposal.jpg)

@@ -3,8 +3,8 @@ import Drawer from '@mui/material/Drawer';
 import Link from '@mui/material/Link';
 import FilterComponent from './FilterComponent.jsx';
 import Collapse from '@mui/material/Collapse';
-
 import Box from '@mui/material/Box';
+import PropTypes from 'prop-types';
 
 export default function ResponsiveDrawer(props) {
   const {
@@ -24,9 +24,6 @@ export default function ResponsiveDrawer(props) {
     setTitle,
     drawerWidth
   } = props;
-
-
-
 
   const handleResetFilters = () => {
     // Reset all filters here
@@ -53,7 +50,7 @@ export default function ResponsiveDrawer(props) {
         },
       }}
     >
-      <Collapse in={ openSelectionsMobile ? openSelectionsMobile : true } sx={{ mt: '15vh',mx:'3vh',}} timeout="auto" unmountOnExit>
+      <Collapse in={ openSelectionsMobile || true } sx={{ mt: '15vh',mx:'3vh',}} timeout="auto" unmountOnExit>
       <Box sx={{
       display: 'flex',
       flexDirection: 'column',
@@ -100,3 +97,21 @@ export default function ResponsiveDrawer(props) {
     </Drawer>
   );
 }
+
+ResponsiveDrawer.propTypes = {
+  openSelectionsMobile: PropTypes.bool.isRequired,
+  setSelectedLevels: PropTypes.func.isRequired,
+  setSelectedExpirationDate: PropTypes.func.isRequired,
+  selectedKeywords: PropTypes.array.isRequired,
+  setSelectedKeywords: PropTypes.func.isRequired,
+  setSelectedSupervisorId: PropTypes.func.isRequired,
+  selectedExpirationDate: PropTypes.object,
+  selectedLevels: PropTypes.array.isRequired,
+  selectedSupervisorId: PropTypes.number,
+  currentDataAndTime: PropTypes.object.isRequired,
+  selectedStartExpirationDate: PropTypes.object.isRequired,
+  setSelectedStartExpirationDate: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  setTitle: PropTypes.func.isRequired,
+  drawerWidth: PropTypes.string.isRequired
+};

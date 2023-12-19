@@ -1,4 +1,3 @@
-import request from "supertest";
 import * as controllers from "../../src/controllers/level.controller.js";
 import * as services from "../../src/services/level.services.js";
 

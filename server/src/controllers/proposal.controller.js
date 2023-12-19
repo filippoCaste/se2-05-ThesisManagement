@@ -8,10 +8,14 @@ import {
   archiveProposalByProposalId,
   updateProposalByProposalId
 } from "../services/proposal.services.js";
-import { isEmailInputValid, isNumericInputValid, isTextInputValid, isValidDateFormat } from "../utils/utils.js";
+import { isEmailInputValid, isNumericInputValid, isTextInputValid } from "../utils/utils.js";
 import { getTeacherByEmail, getTeacherById } from "../services/teacher.services.js";
 import { getKeywordByName, postKeyword } from "../services/keyword.services.js";
 import { createProposalRequest } from "../services/proposalRequest.services.js";
+import { getEmailById } from "../services/user.services.js";
+import {scheduleEmailOneWeekBefore} from "../emailService/planEmail.js";
+import validator from "validator";
+
 
 export const getProposals = async (req, res, next) => {
   try {
@@ -24,7 +28,7 @@ export const getProposals = async (req, res, next) => {
     }
     if (
       start_expiration_date &&
-      isValidDateFormat(start_expiration_date) === false
+      validator.isDate(start_expiration_date) === false
     ) {
       return res.status(400).json({
         message: "Invalid start_expiration_date, format should be YYYY-MM-dd",
@@ -32,7 +36,7 @@ export const getProposals = async (req, res, next) => {
     }
     if (
       end_expiration_date &&
-      isValidDateFormat(end_expiration_date) === false
+      validator.isDate(end_expiration_date) === false
     ) {
       return res.status(400).json({
         message: "Invalid end_expiration_date, format should be YYYY-MM-dd",
@@ -70,14 +74,14 @@ export const getProposals = async (req, res, next) => {
  */
 export const postProposal = async (req, res) => {
   try {
-    const { title, type, description, level, cod_group, cod_degree, expiration_date, notes, supervisors_obj, keywords } = req.body;
+    const { title, type, description, level, cod_group, cod_degree, expiration_date, supervisors_obj, keywords } = req.body;
 
 
     if (!isNumericInputValid([cod_group])
       || !isNumericInputValid(cod_degree)
       || !isTextInputValid(keywords)
       || !isTextInputValid([title, type, description, level])
-      || !isValidDateFormat(expiration_date)
+      || !validator.isDate(expiration_date)
       || !isSupervisorsObjValid(supervisors_obj)
     ) {
       return res.status(400).json({ error: "Uncorrect fields" });
@@ -104,6 +108,12 @@ export const postProposal = async (req, res) => {
           keywords
         );
       }
+    
+      const supervisorEmail = getEmailById(supervisors_obj.supervisor_id);
+      
+      //send to the professor
+      scheduleEmailOneWeekBefore(expiration_date,supervisorEmail,title); //formatted yyyy-mm-dd
+
       return res.status(201).send();
     }
   } catch (err) {
@@ -128,7 +138,7 @@ export const getProposalTeacherId = async (req, res) => {
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
-}
+};
 
 export const deleteProposal = async (req, res) => {
   try {
@@ -202,7 +212,7 @@ export const updateProposal = async (req, res) => {
     if(!isNumericInputValid([cod_group, proposalId]) 
           || !isTextInputValid(keywords)
           || !isTextInputValid([title, type, description, level])
-          || !isValidDateFormat(expiration_date)
+          || !validator.isDate(expiration_date)
           || !isSupervisorsObjValid(supervisors_obj)
       ) {
       return res.status(400).json({error: "Uncorrect fields"});
@@ -254,6 +264,7 @@ export const getProposalById = async (req, res) => {
 
 function isSupervisorsObjValid(supervisors_obj) {
   const array = supervisors_obj.co_supervisors;
+  console.log(supervisors_obj);
   array.push(supervisors_obj.supervisor_id)
   return isNumericInputValid(array);
 }

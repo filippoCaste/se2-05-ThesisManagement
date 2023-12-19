@@ -1,4 +1,3 @@
-import request from "supertest";
 import * as controllers from "../../src/controllers/degree.controller.js";
 import * as services from "../../src/services/degree.services.js";
 
