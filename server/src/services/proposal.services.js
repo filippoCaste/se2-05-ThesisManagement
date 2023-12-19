@@ -165,9 +165,7 @@ export const getProposalInfoByID = (proposal_id) => {
         return reject(err);
       }
       if (rows.length === 0) {
-        return reject({
-          scheduledError: new Error(`Proposal with id ${proposal_id} not found`),
-        });
+        return reject(new Error(`Proposal with id ${proposal_id} not found`));
       }
       resolve(Proposal.fromProposalsResult(rows[0]));
     });
@@ -255,15 +253,13 @@ export const postNewProposal = (
                   }
                 }
               } 
-              // if(supervisor_obj.co_supervisors.length == 0) {
-                db.run(sqlSuper, [propId, supervisor_obj.supervisor_id, null, null], (err) => {
-                  if(err) {
-                    reject(err);
-                  } else {
-                    console.log("added supervisor")
-                  }
-                });
-              // }
+              db.run(sqlSuper, [propId, supervisor_obj.supervisor_id, null, null], (err) => {
+                if(err) {
+                  reject(err);
+                } else {
+                  console.log("added supervisor")
+                }
+              });
 
               if (supervisor_obj.external && supervisor_obj.external.length > 0) {
                 for (let ext of supervisor_obj.external) {

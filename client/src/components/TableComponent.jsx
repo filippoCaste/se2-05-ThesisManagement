@@ -113,17 +113,14 @@ export default function StickyHeadTable(props) {
       return proposals?.slice().sort((a, b) => {
         const aValue = a[orderBy];
         const bValue = b[orderBy];
-        if (order === 'asc') {
-          if(orderBy === "expiration_date") 
-            return dayjs(aValue).isAfter(bValue) ? -1 : 1;
-          else
-            return aValue < bValue ? -1 : 1;
-        } else {
-          if(orderBy === "expiration_date") 
+        if(order === 'asc' && orderBy === "expiration_date")
+            return dayjs(aValue).isAfter(bValue) ? 1 : -1;
+          else if(order === 'desc' && orderBy === "expiration_date")
             return dayjs(aValue).isBefore(bValue) ? -1 : 1;
-          else
-            return aValue > bValue ? -1 : 1;
-        }
+          else if(order === 'asc' && orderBy !== "expiration_date")
+            return aValue < bValue ? 1 : -1;
+          else if(order === 'desc' && orderBy !== "expiration_date")
+            return aValue > bValue ? 1 : -1;
       });
     }
     return proposals;

@@ -277,17 +277,14 @@ function CollapsibleTable(props) {
          return listProposals.slice().sort((a, b) => {
           const aValue = a.p[orderBy];
           const bValue = b.p[orderBy];
-          if (order === 'asc') {
-            if(orderBy === "expiration_date") 
-              return dayjs(aValue).isAfter(bValue) ? -1 : 1;
-            else
-              return aValue < bValue ? -1 : 1;
-          } else {
-            if(orderBy === "expiration_date") 
-              return dayjs(aValue).isBefore(bValue) ? -1 : 1;
-            else
-              return aValue > bValue ? -1 : 1;
-          }
+          if(order === 'asc' && orderBy === "expiration_date")
+            return dayjs(aValue).isAfter(bValue) ? 1 : -1;
+          else if(order === 'desc' && orderBy === "expiration_date")
+            return dayjs(aValue).isBefore(bValue) ? -1 : 1;
+          else if(order === 'asc' && orderBy !== "expiration_date")
+            return aValue < bValue ? 1 : -1;
+          else if(order === 'desc' && orderBy !== "expiration_date")
+            return aValue > bValue ? 1 : -1;
          });
        }
        return listProposals;
