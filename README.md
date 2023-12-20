@@ -32,6 +32,7 @@
       - [`ProposalRequests`](#proposalrequests)
       - [`ProposalRequestCoSupervisors`](#proposalrequestcosupervisors)
       - [`Applications`](#applications)
+      - [`Secretaries`](#secretaries)
   - [Client main pages](#client-main-pages)
     - [General](#general)
       - [Components](#components)
@@ -672,6 +673,12 @@ The database can be found in: `./server/database.db`.
 - student_id: INTEGER (NOT NULL)
 - status: TEXT (DEFAULT 'submitted', OTHERS 'accepted', 'refused')
 - submission_date: TEXT
+
+#### `Secretaries`
+- id: INTEGER (AI)
+- name: TEXT (NOT NULL)
+- surname: TEXT (NOT NULL)
+- email: TEXT (NOT NULL)
 
 ## Client main pages
 Official palette:
