@@ -37,7 +37,7 @@ export default function MenuButton(props) {
             if(index === 0) {
                 path = '/teacher/addProposal';
             } else if(index === 1) {
-                // path = '/teacher/co-supervisors';
+                path = '/teacher/browseCoSupervisor'
             }
             navigate(path);
         }
