@@ -2,8 +2,17 @@ import { Box, Button, Menu, MenuItem } from "@mui/material";
 import React from "react";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import ListIcon from '@mui/icons-material/List';
+import { useNavigate } from "react-router-dom";
 
+/**
+ * Generates a menu button component based on the user's role.
+ *
+ * @param {Object} props - The props object containing the user's role.
+ * @param {string} props.userRole - The role of the user.
+ * @return {JSX.Element} The generated menu button component.
+ */
 export default function MenuButton(props) {
+    const navigate = useNavigate();
     const { userRole } = props;
     let menuList = [];
     if (userRole === 'student') {
@@ -12,6 +21,26 @@ export default function MenuButton(props) {
     } else if(userRole === 'teacher') {
         menuList.push("Insert new proposal")
         menuList.push("Browse co-supervised proposals")
+    }
+
+    const handleClick = (index) => {
+        if(userRole === 'student') {
+            let path = '/student';
+            if(index === 0) {
+                path = '/student/applications';
+            } else if(index === 1) {
+                path = '/student/proposal';
+            }
+            navigate(path);
+        } else if(userRole === 'teacher') {
+            let path = '/teacher';
+            if(index === 0) {
+                path = '/teacher/addProposal';
+            } else if(index === 1) {
+                // path = '/teacher/co-supervisors';
+            }
+            navigate(path);
+        }
     }
 
     return (
@@ -30,8 +59,8 @@ export default function MenuButton(props) {
                         </Button>
                     </Box>
                     <Menu {...bindMenu(popupState)}>
-                        {menuList.map(item => { 
-                                return <MenuItem onClick={popupState.close}>{item}</MenuItem>;
+                        {menuList.map((item, index) => { 
+                                return <MenuItem key={index} onClick={() => handleClick(index)}>{item}</MenuItem>;
                             })}
                     </Menu>
                 </React.Fragment>

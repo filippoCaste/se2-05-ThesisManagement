@@ -16,6 +16,7 @@ import API_Degrees from '../services/degrees.api';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import ConfirmationDialog from '../components/ConfirmationDialog';
 import PropTypes from 'prop-types';
+import MenuButton from '../components/MenuButton';
 
 function TeacherPage(props) {
   const { currentDataAndTime } = props;
@@ -207,17 +208,6 @@ function TeacherPage(props) {
         />}
 
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={2}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => navigate('/teacher/addProposal')}
-            >
-              {' '}
-              INSERT NEW THESIS PROPOSAL{' '}
-            </Button>{' '}
-            <br /> <br />
-          </Grid>
           <Grid item xs={12} sm={6} md={8}>
             <input
               type="text" list="titleSuggestions" placeholder="Search by Title"
@@ -313,6 +303,7 @@ function TeacherPage(props) {
           )}
         </Grid>
       </Grid >
+      <MenuButton userRole='teacher' />
     </Grid >
   );
 }

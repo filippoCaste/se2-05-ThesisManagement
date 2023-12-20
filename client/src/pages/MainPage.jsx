@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import MenuButton from '../components/MenuButton.jsx';
 
 function MainPage(props) {
   const navigate = useNavigate();
@@ -93,23 +94,6 @@ function MainPage(props) {
         drawerWidth={drawerWidth}
       />
       <Box>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate('/student/applications')}
-          sx={{mb: '2vh'}}
-        >
-          Browse Applied Proposals
-        </Button>
-        {' '}
-        <Button
-          variant='contained'
-          color='primary'
-          onClick={() => navigate('/student/proposal')}
-          sx={{ mb: '2vh' }}
-        >
-          Create a New Proposal
-        </Button>
         <br />
         <MainDashboard
           proposals={filteredProposals}
@@ -117,6 +101,7 @@ function MainPage(props) {
           drawerWidth={drawerWidth}
         />
       </Box>
+      <MenuButton userRole='student'/>
     </Box>
   );
 }
