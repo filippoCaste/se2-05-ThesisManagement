@@ -143,14 +143,15 @@ export const getProposalTeacherId = async (req, res) => {
 export const getProposalCoSupervisorId = async (req, res) => {
   try {
     let teacher_id = req.params.id;
-    try {
-      teacher_id = parseInt(teacher_id);
-      const teacher = await getTeacherById(teacher_id);
-      if(!teacher) {
-        return res.status(400).send({error: "Uncorrect filter parameter"})
-      }
-    } catch(err) {
-      throw new Error("Problems with integer conversion")
+    if(!isNumericInputValid([teacher_id])) {
+      console.log("uncorrect teacher id")
+      return res.status(400).send({error: "Uncorrect teacher id"})
+    }
+    teacher_id = parseInt(teacher_id);
+    const teacher = await getTeacherById(teacher_id);
+    if(!teacher) {
+      console.log("uncorrect filter parameters")
+      return res.status(400).send({error: "Uncorrect filter parameter"})
     }
 
     const proposals = await getProposalsByCoSupervisorId(teacher_id);

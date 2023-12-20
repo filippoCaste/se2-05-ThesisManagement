@@ -14,6 +14,7 @@ jest.mock("../../src/services/proposal.services", () => ({
   getProposalsByTeacherId: jest.fn(),
   deleteProposalById: jest.fn(),
   getSupervisorByProposalId: jest.fn(),
+  getProposalsByCoSupervisorId: jest.fn(),
 }));
 
 jest.mock("../../src/services/keyword.services", () => ({
@@ -819,5 +820,69 @@ describe("createStudentProposalRequest", () => {
       notes: "Test",
       type: "submitted",
     });
+  });
+});
+
+describe('getProposalCoSupervisorId', () => {
+  let mockReq, mockRes;
+
+  beforeEach(() => {
+    mockReq = { params: {} };
+    mockRes = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
+      json: jest.fn()
+    };
+  });
+
+  it('should return an error with status 400 if the teacher_id is not a number', async () => {
+    mockReq.params.id = 'invalid-id';
+    await controllers.getProposalCoSupervisorId(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.send).toHaveBeenCalledWith({ error: 'Uncorrect teacher id' });
+  });
+
+  it('should return an error with status 400 if the teacher does not exist', async () => {
+    mockReq.params.id = '123';
+    await controllers.getProposalCoSupervisorId(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.send).toHaveBeenCalledWith({ error: 'Uncorrect filter parameter' });
+  });
+
+  it('should return an error with status 500 if an error occurs', async () => {
+    const mockTeacherData = {
+      id: 1,
+      surname: "Rossi",
+      name: "Mario",
+      email: "",
+      cod_group: 1,
+      cod_department: "ICM",
+      title_group: "Elite"
+    };
+    mockReq.params.id = '1';
+
+    teacherServices.getTeacherById.mockResolvedValue(mockTeacherData);
+    services.getProposalsByCoSupervisorId.mockRejectedValue(new Error("this should fail"));
+    await controllers.getProposalCoSupervisorId(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(500);
+  });
+
+  it('should return the proposals with status 200 if the teacher exists', async () => {
+    const mockTeacherData = {
+      id: 1,
+      surname: "Rossi",
+      name: "Mario",
+      email: "",
+      cod_group: 1,
+      cod_department: "ICM",
+      title_group: "Elite"
+    };
+
+    mockReq.params.id = '1';
+    const proposals = [{ id: 1, title: 'Proposal 1' }, { id: 2, title: 'Proposal 2' }];
+    teacherServices.getTeacherById.mockResolvedValue(mockTeacherData);
+    services.getProposalsByCoSupervisorId.mockResolvedValueOnce(proposals);
+    await controllers.getProposalCoSupervisorId(mockReq, mockRes);
+    expect(mockRes.json).toHaveBeenCalledWith(proposals);
   });
 });

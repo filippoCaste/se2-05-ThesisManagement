@@ -729,8 +729,8 @@ export const getProposalsByCoSupervisorId = (teacherId) => {
                 
     db.all(sql, [teacherId], (err, rows) => {
       if (err) {
-        return reject(err);
-      }
+        reject(err);
+      } else {
       const proposals = rows.map((e) => {
         const obj = {
           id: e.id,
@@ -754,6 +754,7 @@ export const getProposalsByCoSupervisorId = (teacherId) => {
         return obj;
       });
       resolve(proposals);
+    }
     });
   });
 }
