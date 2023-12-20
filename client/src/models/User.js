@@ -87,3 +87,21 @@ export class Professor extends User {
   };
 }
 
+
+export class Secretary extends User {
+  constructor(data) {
+    super(data);
+    this.role = "secretary";
+  }
+
+  serialize = () => {
+    return {
+      ...super.serialize(),
+      role: this.role,
+    };
+  };
+
+  static fromJson = (json) => {
+    return new Secretary(json.id, json.surname, json.name, json.email);
+  };
+}
