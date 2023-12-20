@@ -865,7 +865,7 @@ export const getExtraInfoFromProposalRequest = (proposal) => {
         student_enrollment_year: row.enrollment_year,
         student_id: row.id,
         student_nationality: row.nationality,
-        student_title_degree: row.title_degree,
+        student_title_degree: row.student_title_degree,
       };
       console.log(studentInfo)
         resolve(studentInfo);
@@ -900,3 +900,20 @@ export const changeStatusProRequest = (requestid, type) => {
   });
 };
 
+export const getProposalRequestInfoByID = (requestid) => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+    SELECT pr.id AS request_id, pr.title,s.name AS student_name, s.surname AS student_surname,pr.teacher_id AS teacherid
+    FROM ProposalRequests pr
+    INNER JOIN Students s ON pr.student_id = s.id
+    WHERE pr.id = ?;`
+    
+    db.get(sql, [requestid], (err, rows) => {
+      if (err) {
+        return reject(err);
+      }
+
+      resolve(rows);
+    });
+  });
+};

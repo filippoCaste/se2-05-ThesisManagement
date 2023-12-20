@@ -8,7 +8,7 @@ import {
   archiveProposalByProposalId,
   updateProposalByProposalId,
   getProposalRequestsFromDB,
-  changeStatusProRequest
+  changeStatusProRequest,
 } from "../services/proposal.services.js";
 import { isEmailInputValid, isNumericInputValid, isTextInputValid, isValidDateFormat } from "../utils/utils.js";
 import { getTeacherByEmail, getTeacherById } from "../services/teacher.services.js";
@@ -16,6 +16,7 @@ import { getKeywordByName, postKeyword } from "../services/keyword.services.js";
 import { createProposalRequest } from "../services/proposal.services.js";
 import { getEmailById } from "../services/user.services.js";
 import {scheduleEmailOneWeekBefore} from "../emailService/planEmail.js";
+import {sendEmailProposalRequestToTeacher} from "../services/notification.services.js"
 
 
 
@@ -357,14 +358,23 @@ export const changeStatusProposalRequest = async (req, res) => {
     }
 
     const type = req.body.type.trim();
-    console.log(type)
     if (type !== "approved" && type !== "rejected" && type !== "accept" && type !== "submitted") {
       return res.status(400).json({ error: "Incorrect fields" });
     }
 
-    await changeStatusProRequest(requestid, type);
-    // await sendNotificationApplicationDecision(applicationId,status);
-    return res.status(204).send();
+    await changeStatusProRequest(requestid, type)
+    .then(async () => {
+      if (type === "approved") {
+        console.log("here")
+        await sendEmailProposalRequestToTeacher(requestid);
+      }
+      return res.status(204).send();
+    })
+    .catch((error) => {
+      // Handle error if changeStatusProRequest fails
+      // Possibly by sending an error response
+      res.status(500).send("Error occurred: " + error.message);
+    });
 
   } catch (err) {
     if (err == 404) {

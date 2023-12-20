@@ -2,7 +2,7 @@
 
 import { sendEmail } from "../emailService/sendEmail.js";
 import { getStudentEmailByApplicationId } from "../services/application.services.js";
-import { getProposalTitleByApplicationId } from "./proposal.services.js"; 
+import { getProposalTitleByApplicationId, getProposalRequestInfoByID } from "./proposal.services.js"; 
 import {isEmailInputValid} from "../utils/utils.js";
 import { getProposalInfoByID } from "./proposal.services.js";
 import {getTeacherById} from "./teacher.services.js";
@@ -91,6 +91,39 @@ export const sendEmailToTeacher = async (application) => {
     await sendEmail(
       teacher.email,
       "New application for your proposal",
+      htmlContent
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const sendEmailProposalRequestToTeacher = async (requestid) => {
+  try {
+    const proposalRequest = await getProposalRequestInfoByID(requestid);
+
+    if (!proposalRequest) return;
+    console.log(proposalRequest)
+    const supervisor = await getTeacherById(proposalRequest.teacherid);
+
+    if (!supervisor) return;
+    const htmlContent = `<!DOCTYPE html>
+        <html>
+        <head>
+            <title>New Student Proposal Request Notification</title>
+        </head>
+        <body>
+            <h1>Student Proposal Request Notification</h1>
+            <p>Dear ${supervisor.name},</p>
+            <p>A new student proposal request has been approved with title:\n${proposalRequest.title}. 
+              The student who made the request is ${proposalRequest.student_name}  ${proposalRequest.student_surname}
+              The proposal requires you to be accepted or rejected</p>
+        </body>
+        </html>`;
+
+  await sendEmail(
+    supervisor.email,
+      "New proposal request",
       htmlContent
     );
   } catch (error) {
