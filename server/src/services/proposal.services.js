@@ -774,7 +774,7 @@ export const createProposalRequest = async (
 
 export const getProposalRequestsFromDB = async () => {
   return new Promise((resolve, reject) => {
-    const sql = `SELECT * FROM ProposalRequests AS PR`;
+    const sql = `SELECT * FROM ProposalRequests AS PR WHERE type="submitted"`;
     db.all(
       sql, [],
       async function (err, rows) {
@@ -874,4 +874,29 @@ export const getExtraInfoFromProposalRequest = (proposal) => {
   });
 };
 
+export const changeStatusProRequest = (requestid, type) => {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT COUNT(*) AS count FROM ProposalRequests WHERE id = ?";
+    db.get(sql, [requestid], (err, row) => {
+      if (err) {
+        reject(err);
+      } else {
+        const count = row ? row.count : 0;
+        if (count > 0) {
+
+          const updateSql = "UPDATE ProposalRequests SET type = ? WHERE id = ?";
+          db.run(updateSql, [type, requestid], (updateErr) => {
+            if (updateErr) {
+              reject(updateErr);
+            } else {
+              resolve('Status updated successfully');
+            }
+          });
+        } else {
+          reject('Request id does not exist');
+        }
+      }
+    });
+  });
+};
 

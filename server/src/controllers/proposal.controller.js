@@ -7,7 +7,8 @@ import {
   getSupervisorByProposalId,
   archiveProposalByProposalId,
   updateProposalByProposalId,
-  getProposalRequestsFromDB
+  getProposalRequestsFromDB,
+  changeStatusProRequest
 } from "../services/proposal.services.js";
 import { isEmailInputValid, isNumericInputValid, isTextInputValid, isValidDateFormat } from "../utils/utils.js";
 import { getTeacherByEmail, getTeacherById } from "../services/teacher.services.js";
@@ -344,5 +345,34 @@ export const getProposalRequests = async (req, res, next) => {
     return res.status(200).json(proposalRequests);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+
+export const changeStatusProposalRequest = async (req, res) => {
+  try {
+    const requestid = req.params.requestid;
+    if (!req.body.type) {
+      return res.status(400).json({ error: "Incorrect fields" });
+    }
+
+    const type = req.body.type.trim();
+    console.log(type)
+    if (type !== "approved" && type !== "rejected" && type !== "accept" && type !== "submitted") {
+      return res.status(400).json({ error: "Incorrect fields" });
+    }
+
+    await changeStatusProRequest(requestid, type);
+    // await sendNotificationApplicationDecision(applicationId,status);
+    return res.status(204).send();
+
+  } catch (err) {
+    if (err == 404) {
+      return res.status(404).json({ error: "Proposal Request not found" });
+    } else if (err == 403) {
+      return res.status(403).json({ error: "You cannot access this resource" });
+    } else {
+      return res.status(500).json({ error: err.message });
+    }
   }
 };

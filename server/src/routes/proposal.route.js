@@ -8,9 +8,10 @@ import {
   updateProposal,
   getProposalById,
   createStudentProposalRequest,
-  getProposalRequests
+  getProposalRequests,
+  changeStatusProposalRequest
 } from "../controllers/proposal.controller.js";
-import { isLoggedIn, isStudent, isTeacher } from "../config/configs.js";
+import { isLoggedIn, isSecretary, isStudent, isTeacher } from "../config/configs.js";
 
 const router = Router();
 
@@ -20,7 +21,10 @@ router.post("/", isTeacher, postProposal);
 
 router.post('/request', isStudent, createStudentProposalRequest);
 
-router.get("/request", getProposalRequests); // TODO: ADD isSecretary,isLoggedIn
+router.get("/request", isSecretary, getProposalRequests); 
+
+router.put("/request/:requestid", isSecretary, changeStatusProposalRequest);
+
 
 router.get('/teachers/:id', isLoggedIn, getProposalTeacherId)
 

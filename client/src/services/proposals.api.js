@@ -323,6 +323,29 @@ const postStudentRequest = async (studentRequest) => {
       throw new Error("Network Error: " + error.message);
   }
 };
+const changeStatusProposalRequest = async (proposalRequestId, type) => {
+  try {
+
+    const response = await fetch(`${SERVER_URL}/api/proposals/request/${proposalRequestId}`, {
+      method: "PUT",
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ type }), // Sending type as an object
+    });
+
+    if (response.ok) {
+      return true;
+    } else {
+      const message = await response.text();
+      throw new Error("Request error: " + message);
+    }
+  } catch (error) {
+    throw new Error("Network Error: " + error.message);
+  }
+};
+
 
 
 const proposalAPI = {
@@ -335,7 +358,8 @@ const proposalAPI = {
   deleteProposal,
   archivedProposal,
   getProposalRequests,
-  postStudentRequest
+  postStudentRequest,
+  changeStatusProposalRequest
 };
 
 export default proposalAPI;
