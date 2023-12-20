@@ -358,8 +358,6 @@ function ProposalTeacher(props) {
 
   //SEND FORM ///////////////////////////////////////////////////////////////////////////////////
 
-  console.log(selectedDegreeList);
-
   return (
     <Grid container mt="10%">
       <Grid item xs={12} sx={{ mt: '2vh', mx: '4vh' }}>

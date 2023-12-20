@@ -72,7 +72,6 @@ export default function AlertDialog({
   const coSupervisors = supervisorsInfo?.filter(
     (supervisor) => supervisor.id !== supervisor_id
   );
-  console.log(coSupervisors);
   const [isAppliedProposal, setIsAppliedProposal] = useState(false);
   const handleMessage = useContext(MessageContext);
   const [selectedFile, setSelectedFile] = useState(null);
