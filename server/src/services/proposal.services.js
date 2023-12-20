@@ -824,7 +824,7 @@ export const getSupervisorInfosByProposalRequestId = (proposalRequestId) => {
 };
 
 
-export const getCoSupervisorInfosByProposalRequestId = (proposalRequestId) => {
+const getCoSupervisorInfosByProposalRequestId = (proposalRequestId) => {
   return new Promise((resolve, reject) => {
     const sql = `
       SELECT CS.co_supervisor_id, T.name, T.surname, T.email, T.cod_department, T.cod_group
@@ -843,7 +843,7 @@ export const getCoSupervisorInfosByProposalRequestId = (proposalRequestId) => {
 };
 
 
-export const getExtraInfoFromProposalRequest = (proposal) => {
+const getExtraInfoFromProposalRequest = (proposal) => {
   return new Promise((resolve, reject) => {
     const sql = `
     SELECT Students.*,
