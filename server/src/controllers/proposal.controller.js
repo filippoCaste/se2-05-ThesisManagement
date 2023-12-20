@@ -6,14 +6,16 @@ import {
   deleteProposalById,
   getSupervisorByProposalId,
   archiveProposalByProposalId,
-  updateProposalByProposalId
+  updateProposalByProposalId,
+  getProposalRequestsFromDB
 } from "../services/proposal.services.js";
 import { isEmailInputValid, isNumericInputValid, isTextInputValid, isValidDateFormat } from "../utils/utils.js";
 import { getTeacherByEmail, getTeacherById } from "../services/teacher.services.js";
 import { getKeywordByName, postKeyword } from "../services/keyword.services.js";
-import { createProposalRequest } from "../services/proposalRequest.services.js";
+import { createProposalRequest } from "../services/proposal.services.js";
 import { getEmailById } from "../services/user.services.js";
 import {scheduleEmailOneWeekBefore} from "../emailService/planEmail.js";
+
 
 
 export const getProposals = async (req, res, next) => {
@@ -331,5 +333,16 @@ export const createStudentProposalRequest = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });
+  }
+};
+
+export const getProposalRequests = async (req, res, next) => {
+  try {
+
+    const proposalRequests = await getProposalRequestsFromDB();
+    
+    return res.status(200).json(proposalRequests);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };

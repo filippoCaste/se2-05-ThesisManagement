@@ -36,6 +36,7 @@ export default function AlertDialog({
   handleApply,
   loading,
   isAppliedProposals,
+  isSecretary
 }) {
   const {
     supervisorsInfo,
@@ -49,19 +50,22 @@ export default function AlertDialog({
     title_degree,
     title_group,
     required_knowledge,
+    type
   } = item || {};
   const mainSupervisor = supervisorsInfo?.find(
-    (supervisor) => supervisor.id === supervisor_id
+    (supervisor) => (supervisor.id === supervisor_id || supervisor.id === teacher_id)
   );
   const coSupervisors = supervisorsInfo?.filter(
-    (supervisor) => supervisor.id !== supervisor_id
+    (supervisor) => (supervisor.id !== supervisor_id || supervisor.co_supervisor_id )
   );
+  console.log(supervisorsInfo)
   const [isAppliedProposal, setIsAppliedProposal] = useState(false);
   const { user } = useContext(UserContext);
   const handleMessage = useContext(MessageContext);
   const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
+      if(!isSecretary){
         applicationsAPI.getStudentApplications().then((response) => {
           console.log(response);
           setIsAppliedProposal(response?.filter((o) => o.status !== 'rejected').length > 0);
@@ -69,6 +73,7 @@ export default function AlertDialog({
       .catch(
         (err) => {console.log(err);}
       )
+      }
   });
 
   const handleFileChange = (files) => {
@@ -114,20 +119,22 @@ export default function AlertDialog({
         }}
       >
         {renderField('Description', description)}
-        {renderField("Keywords", keyword_names)}
         {renderField('Notes', notes)}
         {renderField(
           'Expiration Date',
           dayjs(expiration_date).format('DD/MM/YYYY')
         )}
-        {renderField('Level', level)}
-        {renderField('Degree', title_degree)}
 
+        {isSecretary && (<>{renderField('Type',type)}</>)}
         {mainSupervisor && renderSupervisor('Supervisor', mainSupervisor)}
         {coSupervisors?.map((supervisor, index) =>
           renderSupervisor('Co-Supervisor', supervisor, index)
         )}
-
+        {!isSecretary && (
+          <>
+        {renderField("Keywords", keyword_names)}
+        {renderField('Level', level)}
+        {renderField('Degree', title_degree)}
         {renderField('Group', title_group)}
         {renderField('Required Knowledge', required_knowledge)}
         {handleApply && !isAppliedProposals && 
@@ -141,6 +148,7 @@ export default function AlertDialog({
             <strong>Selected file:</strong> {selectedFile.name}
           </Typography>
         )}
+        </>)}
       </DialogContent>
       <DialogActions
         sx={{

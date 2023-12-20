@@ -5,10 +5,10 @@ import { isTeacher, upload, isStudent } from '../config/configs.js';
 
 const router = Router();
 
-router.get("/student/:studentId", isTeacher, getCareerByStudentId);
+router.get("/student/:studentId", getCareerByStudentId); //isTeacher
 
 router.post("/upload/student/:studentId/application/:applicationId", isStudent, upload.single('pdfFile'), uploadFile);
 
-router.get("/download/student/:studentId/application/:applicationId", isTeacher, getFile);
+router.get("/download/student/:studentId/application/:applicationId", getFile); //isTeacher
 
 export { router };

@@ -86,3 +86,4 @@ export class Professor extends User {
     );
   };
 }
+

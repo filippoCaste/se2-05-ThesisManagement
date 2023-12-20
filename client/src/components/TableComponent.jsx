@@ -22,7 +22,7 @@ export default function StickyHeadTable(props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [orderBy, setOrderBy] = React.useState('expiration_date');
   const [order, setOrder] = React.useState('asc');
-  const { proposals, isAppliedProposals,drawerWidth } = props;
+  const { proposals, isAppliedProposals } = props;
   const theme = useTheme();
   
   const columns = [
