@@ -50,7 +50,8 @@ export default function AlertDialog({
     title_degree,
     title_group,
     required_knowledge,
-    type
+    type,
+    teacher_id
   } = item || {};
   const mainSupervisor = supervisorsInfo?.find(
     (supervisor) => (supervisor.id === supervisor_id || supervisor.id === teacher_id)
@@ -67,7 +68,6 @@ export default function AlertDialog({
   useEffect(() => {
       if(!isSecretary){
         applicationsAPI.getStudentApplications().then((response) => {
-          console.log(response);
           setIsAppliedProposal(response?.filter((o) => o.status !== 'rejected').length > 0);
         })
       .catch(
