@@ -1,6 +1,5 @@
 import * as controllers from "../../src/controllers/proposal.controller.js";
 import * as services from "../../src/services/proposal.services.js";
-import * as proposalRequestServices from "../../src/services/proposalRequest.services.js";
 import * as teacherServices from "../../src/services/teacher.services.js";
 import * as keywords from "../../src/services/keyword.services.js";
 
@@ -14,6 +13,7 @@ jest.mock("../../src/services/proposal.services", () => ({
   getProposalsByTeacherId: jest.fn(),
   deleteProposalById: jest.fn(),
   getSupervisorByProposalId: jest.fn(),
+  createProposalRequest: jest.fn(),
 }));
 
 jest.mock("../../src/services/keyword.services", () => ({
@@ -26,9 +26,7 @@ jest.mock("../../src/services/teacher.services", () => ({
   getTeacherByEmail: jest.fn(),
 }));
 
-jest.mock("../../src/services/proposalRequest.services", () => ({
-  createProposalRequest: jest.fn(),
-}));
+
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -768,7 +766,7 @@ describe("createStudentProposalRequest", () => {
 
     teacherServices.getTeacherByEmail.mockResolvedValue({});
 
-    proposalRequestServices.createProposalRequest.mockImplementation(() => {
+    services.createProposalRequest.mockImplementation(() => {
       throw new Error("Unexpected error");
     });
 
@@ -795,7 +793,7 @@ describe("createStudentProposalRequest", () => {
 
     teacherServices.getTeacherByEmail.mockResolvedValue({});
 
-    proposalRequestServices.createProposalRequest.mockResolvedValue({
+    services.createProposalRequest.mockResolvedValue({
       id: 1,
       student_id: 1,
       teacher_id: 1,
