@@ -2,6 +2,12 @@ import * as controllers from "../../src/controllers/proposal.controller.js";
 import * as services from "../../src/services/proposal.services.js";
 import * as teacherServices from "../../src/services/teacher.services.js";
 import * as keywords from "../../src/services/keyword.services.js";
+import * as notifications from "../../src/services/notification.services.js";
+
+ 
+jest.mock("../../src/services/notification.services", () => ({
+  sendEmailProposalRequestToTeacher: jest.fn(),
+}));
 
 jest.mock("../../src/services/proposal.services", () => ({
   getProposalsFromDB: jest.fn(),
@@ -14,6 +20,7 @@ jest.mock("../../src/services/proposal.services", () => ({
   deleteProposalById: jest.fn(),
   getSupervisorByProposalId: jest.fn(),
   createProposalRequest: jest.fn(),
+  changeStatusProRequest: jest.fn(),
 }));
 
 jest.mock("../../src/services/keyword.services", () => ({
@@ -820,3 +827,46 @@ describe("createStudentProposalRequest", () => {
   });
 });
 
+
+describe('changeStatusProposalRequest', () => {
+  let req, res;
+
+  beforeEach(() => {
+    req = { params: {}, body: {} };
+    res = {
+      status: jest.fn(() => res),
+      json: jest.fn(),
+      send: jest.fn(),
+    };
+  });
+
+  test('should return 400 if type is missing or incorrect', async () => {
+    await controllers.changeStatusProposalRequest(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ error: 'Incorrect fields' });
+
+    req.body.type = 'invalid_type';
+    await controllers.changeStatusProposalRequest(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ error: 'Incorrect fields' });
+  });
+
+  // Test valid requests...
+
+  test('should call sendEmailProposalRequestToTeacher if type is "approved"', async () => {
+    req.params.requestid = 'valid_id';
+    req.body.type = 'approved';
+
+    services.changeStatusProRequest.mockResolvedValue(); // Mock the changeStatusProRequest function
+    notifications.sendEmailProposalRequestToTeacher.mockResolvedValue(); // Mock the email sending function
+
+    await controllers.changeStatusProposalRequest(req, res);
+
+    expect(services.changeStatusProRequest).toHaveBeenCalledWith('valid_id', 'approved');
+    expect(notifications.sendEmailProposalRequestToTeacher).toHaveBeenCalledWith('valid_id');
+    expect(res.status).toHaveBeenCalledWith(204);
+    expect(res.send).toHaveBeenCalled();
+  });
+
+  // Test error scenarios...
+});
