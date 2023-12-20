@@ -115,12 +115,12 @@ export default function PrimarySearchAppBar(props) {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            sx={{ mr: 2, display:{xs:(user?.email[0] === 'd') ? 'none' : 'inline',md: 'none'} }}
+            sx={{ mr: 2, display:{xs:(user?.role !== 'student') ? 'none' : 'inline',md: 'none'} }}
             onClick={()=>{setOpenSelectionsMobile(!openSelectionsMobile);}}
           >
             <MenuIcon />
           </IconButton>
-          <Box sx={{display:{xs:(user?.email[0] === 'd') ? 'inline' : 'none', md:'inline'}, width:{xs:(user?.email[0] === 'd') ? 'auto' : '0vw',md:"auto"},mx:"1vw",my:"1vh", height:{xs:(user?.email[0] === 'd') ? 'inherit' : '0vh',md:"inherit"}, maxWidth:{xs:(user?.email[0] === 'd') ? '100px' : '0vw',md:"100px"},maxHeight:{xs:(user?.email[0] === 'd') ? 'inherit' : '0px',md:"inherit"} }}>
+          <Box sx={{display:{xs:(user?.role !== 'student') ? 'inline' : 'none', md:'inline'}, width:{xs:(user?.email[0] === 'd') ? 'auto' : '0vw',md:"auto"},mx:"1vw",my:"1vh", height:{xs:(user?.email[0] === 'd') ? 'inherit' : '0vh',md:"inherit"}, maxWidth:{xs:(user?.email[0] === 'd') ? '100px' : '0vw',md:"100px"},maxHeight:{xs:(user?.email[0] === 'd') ? 'inherit' : '0px',md:"inherit"} }}>
           <Image src={headerBackground} />
           </Box>
           <Typography
