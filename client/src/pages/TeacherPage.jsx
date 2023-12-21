@@ -2,7 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
-import { Grid, FormControl, RadioGroup, FormControlLabel, Radio, Select, MenuItem } from '@mui/material';
+import { Grid, FormControl, RadioGroup, FormControlLabel, Radio, Select, MenuItem, Drawer } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';  
+import IconButton from '@mui/material/IconButton';
 import API_Proposal from '../services/proposals.api';
 import API_Applications from '../services/applications.api';
 import { MessageContext, UserContext } from '../Contexts';
@@ -16,11 +18,18 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import ConfirmationDialog from '../components/ConfirmationDialog';
 import PropTypes from 'prop-types';
 
-function TeacherPage(props) {
-  const { currentDataAndTime } = props;
-  const handleMessage = useContext(MessageContext);
-  dayjs.extend(customParseFormat);
 
+function TeacherPage(props) {
+
+   const { currentDataAndTime } = props;
+   const handleMessage = useContext(MessageContext);
+   dayjs.extend(customParseFormat);
+
+   const [drawerOpen, setDrawerOpen] = useState(false);
+
+   const handleDrawerToggle = () => {
+     setDrawerOpen(!drawerOpen);
+   }
 
    const navigate = useNavigate();
    const { user } = useContext(UserContext);
@@ -279,44 +288,55 @@ function TeacherPage(props) {
             archiveProposal={archiveProposal}
           />
 
-          <br /> <br />
-            
+          <br /> <br /> 
+
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={2}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => navigate('/teacher/addProposal')}
-                style={{
-                  position: 'fixed',
-                  bottom: '20px', 
-                  right: '40px', 
-                  zIndex: 1000, 
-                }}
-              >
-                INSERT NEW THESIS PROPOSAL
-              </Button>
-              <br /> <br />
-            </Grid>
 
-            <Grid item xs={12} sm={6} md={2}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => navigate('/teacher/browseCoSupervisor')}
+              <IconButton  aria-label="open drawer" 
+                onClick={handleDrawerToggle} edge="end"
                 style={{
                   position: 'fixed',
-                  bottom: '20px', 
-                  left: '20px', 
-                  zIndex: 1000, 
+                  bottom: '20px',
+                  right: '40px',
+                  zIndex: 1000,
+                  borderRadius: '50%',  
+                  color: '#FFFFFF',
+                  backgroundColor: '#001F3F',
+                  padding: '30px',  
                 }}
               >
-                 BROWSE CO-SUPERVISORS
-              </Button>{' '}
-              <br /> <br />
+                  <MenuIcon /> 
+              </IconButton>    
+
+              <Drawer anchor="right" open={drawerOpen} 
+                onClose={handleDrawerToggle} style={{ width: '250px' }}>
+                  
+                  <div style={{ height: '150px' }}> </div>
+
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate('/teacher/addProposal')}
+                    style={{ marginBottom: '20px' }}
+                  >
+                    INSERT NEW THESIS PROPOSAL
+                  </Button>
+
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate('/teacher/browseCoSupervisor')}
+                    style={{ marginBottom: '10px' }}
+                  >
+                    BROWSE CO-SUPERVISORS
+                  </Button>
+
+              </Drawer>
+
             </Grid>
           </Grid>
-          
+                
           {openDialog && (
             <AlertDialog
               open={openDialog}
