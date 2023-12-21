@@ -166,7 +166,7 @@ function Row(props) {
                 {listProposals.length > 0 ? (
                   listProposals.map((proposal, index) => (
                     <Row
-                      key={proposal.id}
+                      key={index}
                       proposal={proposal}
                       isEvenRow={index % 2 === 0}
                       isSM={isSM}
