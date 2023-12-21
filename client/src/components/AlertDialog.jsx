@@ -66,7 +66,6 @@ export default function AlertDialog({
     title_degree,
     title_group,
     required_knowledge,
-    type,
     teacher_id
   } = item || {};
   const mainSupervisor = supervisorsInfo?.find(
