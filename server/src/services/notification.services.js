@@ -102,10 +102,11 @@ export const sendEmailProposalRequestToTeacher = async (requestid) => {
     const proposalRequest = await getProposalRequestInfoByID(requestid);
 
     if (!proposalRequest) return;
-    console.log(proposalRequest)
+
     const supervisor = await getTeacherById(proposalRequest.teacherid);
 
     if (!supervisor) return;
+
     const htmlContent = `<!DOCTYPE html>
         <html>
         <head>
@@ -115,13 +116,13 @@ export const sendEmailProposalRequestToTeacher = async (requestid) => {
             <h1>Student Proposal Request Notification</h1>
             <p>Dear ${supervisor.name},</p>
             <p>A new student proposal request has been approved with title:\n${proposalRequest.title}. 
-              The student who made the request is ${proposalRequest.student_name}  ${proposalRequest.student_surname}
+              The student who made the request is ${proposalRequest.student_name} ${proposalRequest.student_surname}
               The proposal requires you to be accepted or rejected</p>
         </body>
         </html>`;
 
-  await sendEmail(
-    supervisor.email,
+    await sendEmail(
+      supervisor.email,
       "New proposal request",
       htmlContent
     );

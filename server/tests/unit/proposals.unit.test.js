@@ -139,48 +139,46 @@ describe("getProposals", () => {
 
 
 describe('getProposalRequests', () => {
-  it('should return proposal requests from the database', async () => {
-    // mock the getProposalRequestsFromDB function
-    const mockProposalRequests = ['request1', 'request2'];
+  it('should return proposal requests when fetched successfully', async () => {
+    const mockProposalRequests = [
+      { id: 1, title: 'Proposal 1' },
+      { id: 2, title: 'Proposal 2' },
+    ];
+
     jest.spyOn(proposalServices, 'getProposalRequestsFromDB').mockResolvedValue(mockProposalRequests);
 
-
-    // mock the response and next functions
     const mockResponse = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
     };
     const mockNext = jest.fn();
 
-    // call the function
     await getProposalRequests({}, mockResponse, mockNext);
 
-    // assert the expected behavior
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith(mockProposalRequests);
     expect(mockNext).not.toHaveBeenCalled();
   });
 
   it('should handle errors and return a 500 status code', async () => {
-    // mock the getProposalRequestsFromDB function to throw an error
-    jest.spyOn(proposalServices, 'getProposalRequestsFromDB').mockRejectedValue(new Error('Database error'));
+    const errorMessage = 'Failed to fetch proposal requests';
+    jest.spyOn(proposalServices, 'getProposalRequestsFromDB').mockRejectedValue(new Error(errorMessage));
 
-    // mock the response and next functions
     const mockResponse = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
     };
     const mockNext = jest.fn();
 
-    // call the function
     await getProposalRequests({}, mockResponse, mockNext);
 
-    // assert the expected behavior
     expect(mockResponse.status).toHaveBeenCalledWith(500);
-    expect(mockResponse.json).toHaveBeenCalledWith({ error: 'Database error' });
+    expect(mockResponse.json).toHaveBeenCalledWith({ error: errorMessage });
     expect(mockNext).not.toHaveBeenCalled();
   });
+
 });
+
 
 
 

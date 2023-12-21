@@ -872,7 +872,6 @@ export const changeStatusProRequest = (requestid, type) => {
       } else {
         const count = row ? row.count : 0;
         if (count > 0) {
-
           const updateSql = "UPDATE ProposalRequests SET type = ? WHERE id = ?";
           db.run(updateSql, [type, requestid], (updateErr) => {
             if (updateErr) {
@@ -882,7 +881,7 @@ export const changeStatusProRequest = (requestid, type) => {
             }
           });
         } else {
-          reject('Request id does not exist');
+          reject(new Error('RequestNotFound'));
         }
       }
     });

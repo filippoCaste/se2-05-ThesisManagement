@@ -355,23 +355,16 @@ export const changeStatusProposalRequest = async (req, res) => {
     }
 
     await changeStatusProRequest(requestid, type)
-    .then(async () => {
-      if (type === "approved") {
-        console.log("here")
-        await sendEmailProposalRequestToTeacher(requestid);
-      }
-      return res.status(204).send();
-    })
-    .catch((error) => {
-      // Handle error if changeStatusProRequest fails
-      // Possibly by sending an error response
-      res.status(500).send("Error occurred: " + error.message);
-    });
-
+      .then(async () => {
+        if (type === "approved") {
+          await sendEmailProposalRequestToTeacher(requestid);
+        }
+        return res.status(204).send();
+      });
   } catch (err) {
-    if (err == 404) {
+    if (err.message === "RequestNotFound") {
       return res.status(404).json({ error: "Proposal Request not found" });
-    } else if (err == 403) {
+    } else if (err.message === "ForbiddenAccess") {
       return res.status(403).json({ error: "You cannot access this resource" });
     } else {
       return res.status(500).json({ error: err.message });

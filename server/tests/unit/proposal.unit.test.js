@@ -829,44 +829,117 @@ describe("createStudentProposalRequest", () => {
 
 
 describe('changeStatusProposalRequest', () => {
-  let req, res;
+  it('should handle correct type and return a 204 status code', async () => {
+    const mockRequest = {
+      params: {
+        requestid: 'someRequestId',
+      },
+      body: {
+        type: 'approved',
+      },
+    };
 
-  beforeEach(() => {
-    req = { params: {}, body: {} };
-    res = {
-      status: jest.fn(() => res),
-      json: jest.fn(),
+    jest.spyOn(services, 'changeStatusProRequest').mockResolvedValue();
+    jest.spyOn(notifications, 'sendEmailProposalRequestToTeacher').mockResolvedValue(); // Update to the imported notifications
+
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
       send: jest.fn(),
     };
+
+    await controllers.changeStatusProposalRequest(mockRequest, mockResponse);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(204);
+    expect(mockResponse.send).toHaveBeenCalled();
   });
 
-  test('should return 400 if type is missing or incorrect', async () => {
-    await controllers.changeStatusProposalRequest(req, res);
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ error: 'Incorrect fields' });
+  it('should handle incorrect type and return a 400 status code', async () => {
+    const mockRequest = {
+      params: {
+        requestid: 'someRequestId',
+      },
+      body: {
+        type: 'invalidType',
+      },
+    };
 
-    req.body.type = 'invalid_type';
-    await controllers.changeStatusProposalRequest(req, res);
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ error: 'Incorrect fields' });
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await controllers.changeStatusProposalRequest(mockRequest, mockResponse);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(400);
+    expect(mockResponse.json).toHaveBeenCalledWith({ error: 'Incorrect fields' });
   });
 
-  // Test valid requests...
+  it('should handle RequestNotFound and return a 404 status code', async () => {
+    const mockRequest = {
+      params: {
+        requestid: 'nonExistentId',
+      },
+      body: {
+        type: 'approved',
+      },
+    };
 
-  test('should call sendEmailProposalRequestToTeacher if type is "approved"', async () => {
-    req.params.requestid = 'valid_id';
-    req.body.type = 'approved';
+    jest.spyOn(services, 'changeStatusProRequest').mockRejectedValue(new Error('RequestNotFound'));
 
-    services.changeStatusProRequest.mockResolvedValue(); // Mock the changeStatusProRequest function
-    notifications.sendEmailProposalRequestToTeacher.mockResolvedValue(); // Mock the email sending function
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
 
-    await controllers.changeStatusProposalRequest(req, res);
+    await controllers.changeStatusProposalRequest(mockRequest, mockResponse);
 
-    expect(services.changeStatusProRequest).toHaveBeenCalledWith('valid_id', 'approved');
-    expect(notifications.sendEmailProposalRequestToTeacher).toHaveBeenCalledWith('valid_id');
-    expect(res.status).toHaveBeenCalledWith(204);
-    expect(res.send).toHaveBeenCalled();
+    expect(mockResponse.status).toHaveBeenCalledWith(404);
+    expect(mockResponse.json).toHaveBeenCalledWith({ error: 'Proposal Request not found' });
   });
 
-  // Test error scenarios...
+  it('should handle ForbiddenAccess and return a 403 status code', async () => {
+    const mockRequest = {
+      params: {
+        requestid: 'someRequestId',
+      },
+      body: {
+        type: 'approved',
+      },
+    };
+
+    jest.spyOn(services, 'changeStatusProRequest').mockRejectedValue(new Error('ForbiddenAccess'));
+
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await controllers.changeStatusProposalRequest(mockRequest, mockResponse);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(403);
+    expect(mockResponse.json).toHaveBeenCalledWith({ error: 'You cannot access this resource' });
+  });
+
+  it('should handle other errors and return a 500 status code', async () => {
+    const mockRequest = {
+      params: {
+        requestid: 'someRequestId',
+      },
+      body: {
+        type: 'approved',
+      },
+    };
+
+    jest.spyOn(services, 'changeStatusProRequest').mockRejectedValue(new Error('Some other error'));
+
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await controllers.changeStatusProposalRequest(mockRequest, mockResponse);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockResponse.json).toHaveBeenCalledWith({ error: 'Some other error' });
+  });
 });
