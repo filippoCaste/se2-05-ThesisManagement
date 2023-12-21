@@ -1,4 +1,3 @@
-import request from "supertest";
 import * as controllers from "../../src/controllers/keyword.controller.js";
 import * as services from "../../src/services/keyword.services.js";
 

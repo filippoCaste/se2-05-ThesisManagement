@@ -393,8 +393,8 @@ describe("updateProposal", () => {
       json: jest.fn(),
     };
 
-    for (let i = 0; i < wrongFields.length; i++) {
-      mockReq.body[wrongFields[i].field] = wrongFields[i].value;
+    for (let wrongField of wrongFields) {
+      mockReq.body[wrongField.field] = wrongField.value;
       await controllers.updateProposal(mockReq, mockRes);
 
       expect(mockRes.status).toHaveBeenCalledWith(400);
@@ -431,7 +431,7 @@ describe("updateProposal", () => {
 
     keywords.getKeywordByName.mockResolvedValue("Test");
     services.updateProposalByProposalId.mockImplementation(() => {
-      throw 404;
+      throw new Error("Proposal not found");
     });
 
     await controllers.updateProposal(mockReq, mockRes);
@@ -466,7 +466,7 @@ describe("updateProposal", () => {
     };
   
       keywords.getKeywordByName.mockResolvedValue("Test");
-      services.updateProposalByProposalId.mockImplementation(() => {throw 403});
+      services.updateProposalByProposalId.mockImplementation(() => {throw new Error("You cannot access this resource");});
   
       await controllers.updateProposal(mockReq, mockRes);
   
@@ -633,7 +633,7 @@ describe("deleteProposal", () => {
     };
 
     services.getSupervisorByProposalId.mockResolvedValue(1);
-    services.deleteProposalById.mockImplementation(() => {throw {message: "Unexpected error"}});
+    services.deleteProposalById.mockImplementation(() => {throw new Error("Unexpected error")});
 
     await controllers.deleteProposal(mockReq, mockRes);
 

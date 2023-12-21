@@ -2,9 +2,8 @@
 
 import { sendEmail } from "../emailService/sendEmail.js";
 import { getStudentEmailByApplicationId } from "../services/application.services.js";
-import { getProposalTitleByApplicationId, getProposalRequestInfoByID } from "./proposal.services.js"; 
+import { getProposalTitleByApplicationId, getProposalRequestInfoByID, getProposalInfoByID } from "./proposal.services.js"; 
 import {isEmailInputValid} from "../utils/utils.js";
-import { getProposalInfoByID } from "./proposal.services.js";
 import {getTeacherById} from "./teacher.services.js";
 
 export const sendNotificationApplicationDecision = async (applicationId, status) => {

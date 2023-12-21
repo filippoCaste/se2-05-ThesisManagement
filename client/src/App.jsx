@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import theme from './theme.jsx';
 import dayjs from 'dayjs';
 import { ThemeProvider } from '@mui/material/styles';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
@@ -23,10 +23,11 @@ function App() {
   const [user, setUser] = useState(null);
   const [openSelectionsMobile, setOpenSelectionsMobile] = useState(true);
   const [currentDataAndTime, setCurrentDataAndTime] = useState(dayjs());
+  const userObject = useMemo(() => ({ user, setUser }), [user, setUser]);
 
-  const handleMessage = (messageContent, severity) => {
+  const handleMessage = useMemo(() => (messageContent, severity) => {
     setMessage({ text: messageContent, type: severity });
-  };
+  }, [setMessage]);
 
   useEffect(() => {
     userAPI
@@ -52,7 +53,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <UserContext.Provider value={{ user, setUser }}>
+        <UserContext.Provider value={userObject}>
           <MessageContext.Provider value={handleMessage}>
             <CustomSnackBar message={message}></CustomSnackBar>
             <AppNavBar

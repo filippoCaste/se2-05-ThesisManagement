@@ -19,7 +19,10 @@ function renderField(label, value) {
   if (label === "Level") {
     return (
       <Typography variant="body1" gutterBottom sx={{ color: theme.palette.text.primary }}>
-        <strong>{label}:</strong> {value === "MSc" ? "Master of Science" : value === "BSc" ? "Bachelor of Science" : ""}
+        <strong>{label}:</strong> 
+        {value === "MSc" && "Master of Science" }
+        {value === "BSc" && "Bachelor of Science" }
+        {value !== "MSc" && value !== "BSc" && ""}
       </Typography>
     );
   }

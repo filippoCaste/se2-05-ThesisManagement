@@ -5,9 +5,10 @@ import { MessageContext, UserContext } from '../Contexts';
 import dayjs from 'dayjs';
 import StickyHeadTable from './TableComponent';
 import careerAPI from '../services/career.api';
+import PropTypes from 'prop-types';
 
 function MainDashboard(props) {
-  const { proposals, openSelectionMobile, drawerWidth, isAppliedProposals } =
+  const { proposals, drawerWidth, isAppliedProposals } =
     props;
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -63,5 +64,11 @@ function MainDashboard(props) {
     </>
   );
 }
+
+MainDashboard.propTypes = {
+  proposals: PropTypes.array.isRequired,
+  drawerWidth: PropTypes.number.isRequired,
+  isAppliedProposals: PropTypes.bool.isRequired,
+};
 
 export default MainDashboard;

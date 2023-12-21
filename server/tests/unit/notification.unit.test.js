@@ -1,5 +1,3 @@
-import request from "supertest";
-
 import * as applications from "../../src/services/application.services.js";
 import * as proposals from "../../src/services/proposal.services.js";
 import * as emails from "../../src/emailService/sendEmail.js";

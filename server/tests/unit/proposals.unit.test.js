@@ -1,10 +1,5 @@
 import { getProposals } from "../../src/controllers/proposal.controller";
-//import { getKeywords } from "../../src/controllers/keyword.controller";
-import { getLevels } from "../../src/controllers/level.controller";
-import {
-  getKeyWordsFromDB,
-  getProposalsFromDB,
-} from "../../src/services/proposal.services";
+import { getProposalsFromDB } from "../../src/services/proposal.services";
 
 jest.mock("../../src/services/proposal.services", () => ({
   getProposalsFromDB: jest.fn(),
