@@ -865,14 +865,15 @@ const getExtraInfoFromProposalRequest = (proposal) => {
 
 export const changeStatusProRequest = (requestid, type) => {
   return new Promise((resolve, reject) => {
-    const sql = "SELECT COUNT(*) AS count FROM ProposalRequests WHERE id = ?";
-    db.get(sql, [requestid], (err, row) => {
+    const countQuery = "SELECT COUNT(*) AS count FROM ProposalRequests WHERE id = ?";
+    db.get(countQuery, [requestid], (err, row) => {
       if (err) {
         reject(err);
       } else {
         const count = row ? row.count : 0;
+        const updateSql = "UPDATE ProposalRequests SET type = ? WHERE id = ?";
+        
         if (count > 0) {
-          const updateSql = "UPDATE ProposalRequests SET type = ? WHERE id = ?";
           db.run(updateSql, [type, requestid], (updateErr) => {
             if (updateErr) {
               reject(updateErr);
@@ -887,6 +888,7 @@ export const changeStatusProRequest = (requestid, type) => {
     });
   });
 };
+
 
 export const getProposalRequestInfoByID = (requestid) => {
   return new Promise((resolve, reject) => {
