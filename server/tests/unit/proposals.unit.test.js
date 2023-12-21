@@ -1,7 +1,4 @@
-import { getProposals } from "../../src/controllers/proposal.controller";
-import { getProposalsFromDB } from "../../src/services/proposal.services";
-import { getProposalRequests } from '../../src/controllers/proposal.controller';
-import { getProposalById } from '../../src/controllers/proposal.controller';
+import { getProposalRequests, getProposalById, getProposals} from '../../src/controllers/proposal.controller';
 import proposalServices from '../../src/services/proposal.services';
 
 
