@@ -868,11 +868,9 @@ export const changeStatusProRequest = (requestid, type) => {
     db.get(countQuery, [requestid], (err, row) => {
       if (err) {
         reject(err);
-      } else {
-        const count = row ? row.count : 0;
+      } else if (row && row.count> 0) {
+        const count = row.count; 
         const updateSql = "UPDATE ProposalRequests SET type = ? WHERE id = ?";
-        
-        if (count > 0) {
           db.run(updateSql, [type, requestid], (updateErr) => {
             if (updateErr) {
               reject(updateErr);
@@ -883,7 +881,6 @@ export const changeStatusProRequest = (requestid, type) => {
         } else {
           reject(new Error('RequestNotFound'));
         }
-      }
     });
   });
 };
