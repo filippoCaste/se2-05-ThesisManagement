@@ -1,7 +1,7 @@
 "use strict";
 import { Router } from 'express';
 import { getCareerByStudentId, getFile, uploadFile } from '../controllers/career.controller.js';
-import { isTeacher, upload, isStudent } from '../config/configs.js';
+import { upload, isStudent } from '../config/configs.js';
 
 const router = Router();
 

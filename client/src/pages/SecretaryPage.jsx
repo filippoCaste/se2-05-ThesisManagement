@@ -1,11 +1,10 @@
 
-import { Grid } from '@mui/material';
+import { Grid, Button } from '@mui/material';
 import { useEffect, useState, useContext } from 'react';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import StickyHeadTable from '../components/GenericTable';
 import dayjs from 'dayjs';
-import {Button} from '@mui/material';
 import ApplicationDialog from '../components/ApplicationDialog';
 import careerAPI from '../services/career.api';
 import proposalAPI from '../services/proposals.api';
@@ -13,7 +12,7 @@ import AlertDialog from '../components/AlertDialog';
 import { MessageContext } from '../Contexts';
 
 function SecretaryPage(props) {
-    const {currentDataAndTime, onClick, onClickStudent} = props;
+
     const [proposalRequests,setProposalRequests] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState();
     const [selectedProposalRequest, setSelectedProposalRequest] = useState();

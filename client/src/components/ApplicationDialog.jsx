@@ -158,4 +158,5 @@ ApplicationDialog.propTypes = {
   handleClose: PropTypes.func.isRequired,
   item: PropTypes.object.isRequired,
   studentExams: PropTypes.array.isRequired,
+  isSecretary: PropTypes.bool //optional
 };

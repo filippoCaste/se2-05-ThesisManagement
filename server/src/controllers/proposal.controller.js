@@ -9,11 +9,12 @@ import {
   updateProposalByProposalId,
   getProposalRequestsFromDB,
   changeStatusProRequest,
+  createProposalRequest
 } from "../services/proposal.services.js";
 import { isEmailInputValid, isNumericInputValid, isTextInputValid } from "../utils/utils.js";
 import { getTeacherByEmail, getTeacherById } from "../services/teacher.services.js";
 import { getKeywordByName, postKeyword } from "../services/keyword.services.js";
-import { createProposalRequest } from "../services/proposal.services.js";
+
 import { getEmailById } from "../services/user.services.js";
 import {scheduleEmailOneWeekBefore} from "../emailService/planEmail.js";
 import {sendEmailProposalRequestToTeacher} from "../services/notification.services.js"

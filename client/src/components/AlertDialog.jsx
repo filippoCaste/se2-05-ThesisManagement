@@ -232,4 +232,5 @@ AlertDialog.propTypes = {
   handleApply: PropTypes.func,
   loading: PropTypes.bool,
   isAppliedProposals: PropTypes.bool,
+  isSecretary: PropTypes.bool //optional
 };

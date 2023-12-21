@@ -3,8 +3,7 @@ import { db } from "../config/db.js";
 import { Proposal } from "../models/Proposal.js";
 import { Teacher } from "../models/Teacher.js";
 import { ProposalRequest} from "../models/ProposalRequest.js"
-import {Student} from "../models/Student.js";
-import { getTeacherById } from "./teacher.services.js";
+
 export const getProposalsFromDB = (
   cod_degree,
   level_ids,
