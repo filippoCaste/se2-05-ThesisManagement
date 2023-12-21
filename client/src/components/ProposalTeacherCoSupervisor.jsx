@@ -13,12 +13,9 @@ from '@mui/material';
 import { UserContext } from '../Contexts';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
+import { useTheme } from '@mui/material/styles'; 
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
-import Modal from '@mui/material/Modal';
-import Paper from '@mui/material/Paper';
-
 import API_Proposal from '../services/proposals.api';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -42,7 +39,6 @@ function Row(props) {
     };
   
     return (
-      <React.Fragment>
         <TableRow sx={{ '& > *': { borderTop: "3px solid #ddd", backgroundColor: isEvenRow ? '#f5f5f5' : '#ffffff' } }}>
           <TableCell style={{ width: isSM ? '80%' : '25%' }} component="th" scope="row">{proposal.title}</TableCell>
           {!isSM ?
@@ -84,13 +80,12 @@ function Row(props) {
             </TableCell>
           }
         </TableRow>
-      </React.Fragment>
     );
   }
   
   function ProposalTeacherCoSupervisor(props) {
     const navigate = useNavigate();
-    const { currentDataAndTime, typeOperation } = props;
+    const { currentDataAndTime } = props;
     const theme = useTheme();
     const isSM = useMediaQuery(theme.breakpoints.down('md'));
     dayjs.extend(customParseFormat);
@@ -122,7 +117,6 @@ function Row(props) {
     }, [user, currentDataAndTime]);
   
     const openModal = (proposal) => {
-      console.log("QUII: ",proposal)
       setSelectedProposal(proposal);
       setModalOpen(true);
     };
@@ -131,6 +125,7 @@ function Row(props) {
       setSelectedProposal(null);
       setModalOpen(false);
     };
+
   
     return (
       <Grid container mt="10%">
@@ -164,14 +159,14 @@ function Row(props) {
                       </TableCell>
                       <TableCell style={{ width: '3.6%' }}><b>See details</b></TableCell>
                     </>
-                    : <><TableCell style={{ width: '15%' }}><b>Actions</b></TableCell></>}
+                    : <TableCell style={{ width: '15%' }}><b>Actions</b></TableCell> }
                 </TableRow>
               </TableHead>
               <TableBody>
                 {listProposals.length > 0 ? (
                   listProposals.map((proposal, index) => (
                     <Row
-                      key={index}
+                      key={proposal.id}
                       proposal={proposal}
                       isEvenRow={index % 2 === 0}
                       isSM={isSM}
@@ -249,7 +244,22 @@ function Row(props) {
 }
 
 ProposalTeacherCoSupervisor.propTypes = {
-  currentDataAndTime: PropTypes.string,
+  currentDataAndTime: PropTypes.string.isRequired
 };
+
+Row.propTypes = {
+  proposal: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    level: PropTypes.string.isRequired,
+    title_degree: PropTypes.string.isRequired,
+    expiration_date: PropTypes.string.isRequired,
+    status: PropTypes.string.isRequired,
+    // Add other props as needed
+  }).isRequired,
+  isEvenRow: PropTypes.bool.isRequired,
+  isSM: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
+
 
 export default ProposalTeacherCoSupervisor;

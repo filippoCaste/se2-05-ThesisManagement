@@ -228,7 +228,40 @@ function TeacherPage(props) {
               ))}
             </datalist>
           </Grid>
-          <Grid item xs={12} sm={6} md={2}>
+
+          <Grid item xs={12} sm={6} md={2} style={{ textAlign: 'right' }}>
+            <IconButton  aria-label="open drawer" 
+                  onClick={handleDrawerToggle} edge="end"
+                  style={{
+                    zIndex: 1001,
+                    borderRadius: '50%',  
+                    color: '#FFFFFF',
+                    backgroundColor: '#001F3F',
+                    padding: '30px',  
+                  }}
+                >
+                <MenuIcon />
+            </IconButton>    
+            <Drawer anchor="right" open={drawerOpen} 
+              onClose={handleDrawerToggle} style={{ width: '250px' }}>      
+                <div style={{ height: '150px' }}> </div>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => navigate('/teacher/addProposal')}
+                  style={{ marginBottom: '20px' }}
+                >
+                  INSERT NEW THESIS PROPOSAL
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => navigate('/teacher/browseCoSupervisor')}
+                  style={{ marginBottom: '10px' }}
+                >
+                  BROWSE CO-SUPERVISORS
+                </Button>
+            </Drawer>
           </Grid>
 
           <br /><br />
@@ -287,56 +320,7 @@ function TeacherPage(props) {
             deleteProposal={deleteProposal}
             archiveProposal={archiveProposal}
           />
-
-          <br /> <br /> 
-
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={2}>
-
-              <IconButton  aria-label="open drawer" 
-                onClick={handleDrawerToggle} edge="end"
-                style={{
-                  position: 'fixed',
-                  bottom: '20px',
-                  right: '40px',
-                  zIndex: 1000,
-                  borderRadius: '50%',  
-                  color: '#FFFFFF',
-                  backgroundColor: '#001F3F',
-                  padding: '30px',  
-                }}
-              >
-                  <MenuIcon /> 
-              </IconButton>    
-
-              <Drawer anchor="right" open={drawerOpen} 
-                onClose={handleDrawerToggle} style={{ width: '250px' }}>
-                  
-                  <div style={{ height: '150px' }}> </div>
-
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => navigate('/teacher/addProposal')}
-                    style={{ marginBottom: '20px' }}
-                  >
-                    INSERT NEW THESIS PROPOSAL
-                  </Button>
-
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => navigate('/teacher/browseCoSupervisor')}
-                    style={{ marginBottom: '10px' }}
-                  >
-                    BROWSE CO-SUPERVISORS
-                  </Button>
-
-              </Drawer>
-
-            </Grid>
-          </Grid>
-                
+       
           {openDialog && (
             <AlertDialog
               open={openDialog}
