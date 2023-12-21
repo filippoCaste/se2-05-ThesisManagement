@@ -68,11 +68,11 @@ function SecretaryPage(props) {
         {
           id: 'expiration_date',
           label: 'Expiration Date',
-          minWidth: 150,
-          maxWidth: 150,
+          minWidth: 200,
+          maxWidth: 200,
           format: (value) => dayjs(value).format('DD/MM/YYYY'),
         },
-        { id: 'type', label: 'Type', minWidth: 150, maxWidth: 150 },
+        { id: 'type', label: 'Type', minWidth: 200, maxWidth: 200 },
         {
           id: 'buttonProposalDetails',
           label: 'Proposal Request details',
