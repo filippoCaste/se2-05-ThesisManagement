@@ -1,10 +1,16 @@
 import { getProposals } from "../../src/controllers/proposal.controller";
 import { getProposalsFromDB } from "../../src/services/proposal.services";
+import { getProposalRequests } from '../../src/controllers/proposal.controller';
+import { getProposalRequestsFromDB } from "../../src/services/proposal.services";
+import proposalServices from '../../src/services/proposal.services';
+
+
 
 jest.mock("../../src/services/proposal.services", () => ({
   getProposalsFromDB: jest.fn(),
   getKeyWordsFromDB: jest.fn(),
   getExtraInfoFromProposal: jest.fn(),
+  getProposalRequestsFromDB: jest.fn()
 }));
 
 beforeEach(() => {
@@ -126,5 +132,50 @@ describe("getProposals", () => {
       undefined
     );
     expect(res.json).toHaveBeenCalledWith({ proposals: [] });
+  });
+});
+
+
+describe('getProposalRequests', () => {
+  it('should return proposal requests from the database', async () => {
+    // mock the getProposalRequestsFromDB function
+    const mockProposalRequests = ['request1', 'request2'];
+    jest.spyOn(proposalServices, 'getProposalRequestsFromDB').mockResolvedValue(mockProposalRequests);
+
+
+    // mock the response and next functions
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    const mockNext = jest.fn();
+
+    // call the function
+    await getProposalRequests({}, mockResponse, mockNext);
+
+    // assert the expected behavior
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.json).toHaveBeenCalledWith(mockProposalRequests);
+    expect(mockNext).not.toHaveBeenCalled();
+  });
+
+  it('should handle errors and return a 500 status code', async () => {
+    // mock the getProposalRequestsFromDB function to throw an error
+    jest.spyOn(proposalServices, 'getProposalRequestsFromDB').mockRejectedValue(new Error('Database error'));
+
+    // mock the response and next functions
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    const mockNext = jest.fn();
+
+    // call the function
+    await getProposalRequests({}, mockResponse, mockNext);
+
+    // assert the expected behavior
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockResponse.json).toHaveBeenCalledWith({ error: 'Database error' });
+    expect(mockNext).not.toHaveBeenCalled();
   });
 });
