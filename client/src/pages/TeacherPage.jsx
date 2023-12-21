@@ -3,8 +3,6 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import { Grid, FormControl, RadioGroup, FormControlLabel, Radio, Select, MenuItem, Drawer } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';  
-import IconButton from '@mui/material/IconButton';
 import API_Proposal from '../services/proposals.api';
 import API_Applications from '../services/applications.api';
 import { MessageContext, UserContext } from '../Contexts';
