@@ -1,17 +1,19 @@
 import { getProposals } from "../../src/controllers/proposal.controller";
 import { getProposalsFromDB } from "../../src/services/proposal.services";
 import { getProposalRequests } from '../../src/controllers/proposal.controller';
-import { getProposalRequestsFromDB } from "../../src/services/proposal.services";
+import { getAllInfoByProposalId } from "../../src/services/proposal.services";
+import { getProposalById } from '../../src/controllers/proposal.controller';
 import proposalServices from '../../src/services/proposal.services';
-
 
 
 jest.mock("../../src/services/proposal.services", () => ({
   getProposalsFromDB: jest.fn(),
   getKeyWordsFromDB: jest.fn(),
   getExtraInfoFromProposal: jest.fn(),
-  getProposalRequestsFromDB: jest.fn()
+  getProposalRequestsFromDB: jest.fn(),
+  getAllInfoByProposalId: jest.fn(),
 }));
+
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -177,5 +179,80 @@ describe('getProposalRequests', () => {
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockResponse.json).toHaveBeenCalledWith({ error: 'Database error' });
     expect(mockNext).not.toHaveBeenCalled();
+  });
+});
+
+
+
+
+
+
+describe('getProposalById', () => {
+  let req, res, next;
+
+  beforeEach(() => {
+    req = {
+      params: {
+        proposalId: 'testProposalId',
+      },
+      user: {
+        id: 'testUserId',
+      },
+    };
+    res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    next = jest.fn();
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('should return the proposal when found', async () => {
+    const mockProposal = { /* Your mock proposal data */ };
+    getAllInfoByProposalId.mockResolvedValue(mockProposal);
+
+    await getProposalById(req, res, next);
+
+    expect(getAllInfoByProposalId).toHaveBeenCalledWith('testProposalId', 'testUserId');
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(mockProposal);
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  test('should return 404 when proposal is not found', async () => {
+    getAllInfoByProposalId.mockRejectedValue(404);
+
+    await getProposalById(req, res, next);
+
+    expect(getAllInfoByProposalId).toHaveBeenCalledWith('testProposalId', 'testUserId');
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ error: 'Proposal not found' });
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  test('should return 403 when access is forbidden', async () => {
+    getAllInfoByProposalId.mockRejectedValue(403);
+
+    await getProposalById(req, res, next);
+
+    expect(getAllInfoByProposalId).toHaveBeenCalledWith('testProposalId', 'testUserId');
+    expect(res.status).toHaveBeenCalledWith(403);
+    expect(res.json).toHaveBeenCalledWith({ error: 'You cannot access this resource' });
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  test('should return 500 for other errors', async () => {
+    const errorMessage = 'Some internal error';
+    getAllInfoByProposalId.mockRejectedValue(new Error(errorMessage));
+
+    await getProposalById(req, res, next);
+
+    expect(getAllInfoByProposalId).toHaveBeenCalledWith('testProposalId', 'testUserId');
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ error: errorMessage });
+    expect(next).not.toHaveBeenCalled();
   });
 });
