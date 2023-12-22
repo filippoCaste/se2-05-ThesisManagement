@@ -179,10 +179,16 @@ function ProposalTeacher(props) {
 
   // USE EFFECT /////////////////////////////////////////////
 
+  const [changeLevel,setChangeLevel]= useState(0);
+  
   useEffect(() => {
-    setSelectedDegreeList([]);
-
+    if(changeLevel >= 3 )
+    {
+      setSelectedDegreeList([]);
+    }
+    setChangeLevel((old)=>old+1);
   }, [level])
+
 
 
   useEffect(() => {
@@ -237,7 +243,6 @@ function ProposalTeacher(props) {
   }, [degreesList]);
 
 
-
   useEffect(() => {
     API_Degrees.getAllDegrees()
       .then((d) => { setDegreesList(d); })
@@ -252,6 +257,7 @@ function ProposalTeacher(props) {
       .catch((err) => handleMessage(err, "warning"))
 
   }, [])
+  
 
 
   //VALIDATE INPUT FORM
@@ -358,7 +364,6 @@ function ProposalTeacher(props) {
 
   //SEND FORM ///////////////////////////////////////////////////////////////////////////////////
 
-  console.log(selectedDegreeList);
 
   return (
     <Grid container mt="10%">
