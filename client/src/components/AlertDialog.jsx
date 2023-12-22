@@ -52,6 +52,7 @@ export default function AlertDialog({
   handleApply,
   loading,
   isAppliedProposals,
+  isSecretary
 }) {
   const {
     supervisorsInfo,
@@ -65,29 +66,28 @@ export default function AlertDialog({
     title_degree,
     title_group,
     required_knowledge,
+    teacher_id
   } = item || {};
   const mainSupervisor = supervisorsInfo?.find(
-    (supervisor) => supervisor.id === supervisor_id
+    (supervisor) => (supervisor.id === supervisor_id || supervisor.id === teacher_id)
   );
   const coSupervisors = supervisorsInfo?.filter(
-    (supervisor) => supervisor.id !== supervisor_id
+    (supervisor) => (supervisor.id !== supervisor_id || supervisor.co_supervisor_id )
   );
-  console.log(coSupervisors);
+ 
   const [isAppliedProposal, setIsAppliedProposal] = useState(false);
   const handleMessage = useContext(MessageContext);
   const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
-    applicationsAPI
-      .getStudentApplications()
-      .then((response) => {
-        setIsAppliedProposal(
-          response.filter((o) => o.status !== 'rejected').length > 0
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      if(!isSecretary){
+        applicationsAPI.getStudentApplications().then((response) => {
+          setIsAppliedProposal(response?.filter((o) => o.status !== 'rejected').length > 0);
+        })
+      .catch(
+        (err) => {console.log(err);}
+      )
+      }
   });
 
   const handleFileChange = (files) => {
@@ -140,28 +140,24 @@ export default function AlertDialog({
               <RenderFieldTable label="Notes" value={notes} />
               <RenderFieldTable
                 label="Expiration Date"
-                value={dayjs(expiration_date).format('DD/MM/YYYY')}
-              />
+                value={dayjs(expiration_date).format('DD/MM/YYYY')} />
               <RenderFieldTable label="Level" value={level} />
               <RenderFieldTable label="Degree" value={title_degree} />
               {mainSupervisor && (
                 <RenderFieldTable
                   label="Supervisor"
-                  value={`${mainSupervisor.name} ${mainSupervisor.surname} (${mainSupervisor.email})`}
-                />
+                  value={`${mainSupervisor.name} ${mainSupervisor.surname} (${mainSupervisor.email})`} />
               )}
               {coSupervisors?.map((supervisor) => (
                 <RenderFieldTable
                   key={supervisor.id}
                   label="Co-Supervisor"
-                  value={`${supervisor.name} ${supervisor.surname} (${supervisor.email})`}
-                />
+                  value={`${supervisor.name} ${supervisor.surname} (${supervisor.email})`} />
               ))}
               <RenderFieldTable label="Group" value={title_group} />
               <RenderFieldTable
                 label="Required Knowledge"
-                value={required_knowledge}
-              />
+                value={required_knowledge} />
             </TableBody>
           </Table>
         </TableContainer>
@@ -177,8 +173,7 @@ export default function AlertDialog({
             <VisuallyHiddenInput
               type="file"
               accept=".pdf"
-              onChange={(e) => handleFileChange(e.target.files)}
-            />
+              onChange={(e) => handleFileChange(e.target.files)} />
           </Button>
         )}
         {handleApply && !isAppliedProposals && selectedFile && (
@@ -186,14 +181,14 @@ export default function AlertDialog({
             <strong>Selected file:</strong> {selectedFile.name}
           </Typography>
         )}
-      </DialogContent>
-      <DialogActions
-        sx={{
-          padding: '20px',
-          borderTop: `1px solid ${theme.palette.secondary.main}`,
-          justifyContent: 'space-between',
-        }}
-      >
+      
+    </DialogContent><DialogActions
+      sx={{
+        padding: '20px',
+        borderTop: `1px solid ${theme.palette.secondary.main}`,
+        justifyContent: 'space-between',
+      }}
+    >
         <Button onClick={handleClose} color="secondary">
           <Typography
             variant="button"
@@ -236,4 +231,5 @@ AlertDialog.propTypes = {
   handleApply: PropTypes.func,
   loading: PropTypes.bool,
   isAppliedProposals: PropTypes.bool,
+  isSecretary: PropTypes.bool //optional
 };

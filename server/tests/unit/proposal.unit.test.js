@@ -1,8 +1,13 @@
 import * as controllers from "../../src/controllers/proposal.controller.js";
 import * as services from "../../src/services/proposal.services.js";
-import * as proposalRequestServices from "../../src/services/proposalRequest.services.js";
 import * as teacherServices from "../../src/services/teacher.services.js";
 import * as keywords from "../../src/services/keyword.services.js";
+import * as notifications from "../../src/services/notification.services.js";
+
+ 
+jest.mock("../../src/services/notification.services", () => ({
+  sendEmailProposalRequestToTeacher: jest.fn(),
+}));
 
 jest.mock("../../src/services/proposal.services", () => ({
   getProposalsFromDB: jest.fn(),
@@ -14,6 +19,8 @@ jest.mock("../../src/services/proposal.services", () => ({
   getProposalsByTeacherId: jest.fn(),
   deleteProposalById: jest.fn(),
   getSupervisorByProposalId: jest.fn(),
+  createProposalRequest: jest.fn(),
+  changeStatusProRequest: jest.fn(),
 }));
 
 jest.mock("../../src/services/keyword.services", () => ({
@@ -26,9 +33,7 @@ jest.mock("../../src/services/teacher.services", () => ({
   getTeacherByEmail: jest.fn(),
 }));
 
-jest.mock("../../src/services/proposalRequest.services", () => ({
-  createProposalRequest: jest.fn(),
-}));
+
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -768,7 +773,7 @@ describe("createStudentProposalRequest", () => {
 
     teacherServices.getTeacherByEmail.mockResolvedValue({});
 
-    proposalRequestServices.createProposalRequest.mockImplementation(() => {
+    services.createProposalRequest.mockImplementation(() => {
       throw new Error("Unexpected error");
     });
 
@@ -795,7 +800,7 @@ describe("createStudentProposalRequest", () => {
 
     teacherServices.getTeacherByEmail.mockResolvedValue({});
 
-    proposalRequestServices.createProposalRequest.mockResolvedValue({
+    services.createProposalRequest.mockResolvedValue({
       id: 1,
       student_id: 1,
       teacher_id: 1,
@@ -819,5 +824,122 @@ describe("createStudentProposalRequest", () => {
       notes: "Test",
       type: "submitted",
     });
+  });
+});
+
+
+describe('changeStatusProposalRequest', () => {
+  it('should handle correct type and return a 204 status code', async () => {
+    const mockRequest = {
+      params: {
+        requestid: 'someRequestId',
+      },
+      body: {
+        type: 'approved',
+      },
+    };
+
+    jest.spyOn(services, 'changeStatusProRequest').mockResolvedValue();
+    jest.spyOn(notifications, 'sendEmailProposalRequestToTeacher').mockResolvedValue(); // Update to the imported notifications
+
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
+    };
+
+    await controllers.changeStatusProposalRequest(mockRequest, mockResponse);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(204);
+    expect(mockResponse.send).toHaveBeenCalled();
+  });
+
+  it('should handle incorrect type and return a 400 status code', async () => {
+    const mockRequest = {
+      params: {
+        requestid: 'someRequestId',
+      },
+      body: {
+        type: 'invalidType',
+      },
+    };
+
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await controllers.changeStatusProposalRequest(mockRequest, mockResponse);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(400);
+    expect(mockResponse.json).toHaveBeenCalledWith({ error: 'Incorrect fields' });
+  });
+
+  it('should handle RequestNotFound and return a 404 status code', async () => {
+    const mockRequest = {
+      params: {
+        requestid: 'nonExistentId',
+      },
+      body: {
+        type: 'approved',
+      },
+    };
+
+    jest.spyOn(services, 'changeStatusProRequest').mockRejectedValue(new Error('RequestNotFound'));
+
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await controllers.changeStatusProposalRequest(mockRequest, mockResponse);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(404);
+    expect(mockResponse.json).toHaveBeenCalledWith({ error: 'Proposal Request not found' });
+  });
+
+  it('should handle ForbiddenAccess and return a 403 status code', async () => {
+    const mockRequest = {
+      params: {
+        requestid: 'someRequestId',
+      },
+      body: {
+        type: 'approved',
+      },
+    };
+
+    jest.spyOn(services, 'changeStatusProRequest').mockRejectedValue(new Error('ForbiddenAccess'));
+
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await controllers.changeStatusProposalRequest(mockRequest, mockResponse);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(403);
+    expect(mockResponse.json).toHaveBeenCalledWith({ error: 'You cannot access this resource' });
+  });
+
+  it('should handle other errors and return a 500 status code', async () => {
+    const mockRequest = {
+      params: {
+        requestid: 'someRequestId',
+      },
+      body: {
+        type: 'approved',
+      },
+    };
+
+    jest.spyOn(services, 'changeStatusProRequest').mockRejectedValue(new Error('Some other error'));
+
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await controllers.changeStatusProposalRequest(mockRequest, mockResponse);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockResponse.json).toHaveBeenCalledWith({ error: 'Some other error' });
   });
 });

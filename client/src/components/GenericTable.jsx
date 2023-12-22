@@ -43,6 +43,7 @@ export default function StickyHeadTable(props) {
         }
       });
     }
+
     return rows;
   }, [rows, orderBy, order]);
 
@@ -126,7 +127,8 @@ export default function StickyHeadTable(props) {
                             (supervisor) => supervisor.id === row.supervisor_id
                           )?.surname
                         }`
-                    } 
+                    }
+                    {column.id === 'student_id' &&  `${row.student_name}` && `${row.student_surname}`}
                     { column.id !== 'supervisor_id' && (column.format ? 
                       column.format(row[column.id], row)
                       : row[column.id])
