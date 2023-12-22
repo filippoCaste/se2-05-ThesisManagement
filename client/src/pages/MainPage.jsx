@@ -5,13 +5,10 @@ import MainDashboard from '../components/MainDashboard.jsx';
 import { UserContext } from '../Contexts';
 import proposalAPI from '../services/proposals.api.js';
 import dayjs from 'dayjs';
-import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import MenuButton from '../components/MenuButton.jsx';
 
 function MainPage(props) {
-  const navigate = useNavigate();
   const { openSelectionsMobile, currentDataAndTime } = props;
   const { user } = useContext(UserContext);
   const drawerWidth = "30vw";

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import { Grid, FormControl, RadioGroup, FormControlLabel, Radio, Select, MenuItem } from '@mui/material';
 import API_Proposal from '../services/proposals.api';
@@ -23,8 +22,7 @@ function TeacherPage(props) {
   const handleMessage = useContext(MessageContext);
   dayjs.extend(customParseFormat);
 
-   const navigate = useNavigate();
-   const { user } = useContext(UserContext);
+  const { user } = useContext(UserContext);
    const [listProposals, setListProposals]=useState([]);
    const [openDialog, setOpenDialog] = useState(false);
    const [openDialogApplication, setOpenDialogApplication] = useState(false);

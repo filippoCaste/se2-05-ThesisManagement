@@ -59,8 +59,8 @@ export default function MenuButton(props) {
                         </Button>
                     </Box>
                     <Menu {...bindMenu(popupState)}>
-                        {menuList.map((item, index) => { 
-                                return <MenuItem key={index} onClick={() => handleClick(index)}>{item}</MenuItem>;
+                        {menuList.map((item) => { 
+                                return <MenuItem key={item} onClick={() => handleClick(index)}>{item}</MenuItem>;
                             })}
                     </Menu>
                 </React.Fragment>
