@@ -43,6 +43,7 @@ export default function StickyHeadTable(props) {
         }
       });
     }
+
     return rows;
   }, [rows, orderBy, order]);
 
@@ -84,7 +85,7 @@ export default function StickyHeadTable(props) {
             <TableRow className="headerRow">
               {columns.map((column,index) => (
                 <TableCell
-                  key={index}
+                  key={column.id}
                   style={{ width: column.width }}
                   onClick={() => handleRequestSort(column.id)}
                 >
@@ -101,9 +102,8 @@ export default function StickyHeadTable(props) {
             {renderNoProposalsMessage()}
             {sortedRows.map((row, index) => (
               <TableRow
-                key={index}
+                key={row.id}
                 hover
-                role="checkbox"
                 tabIndex={-1}
                 style={{backgroundColor: index % 2 === 0 ? '#f5f5f5' : ''}}
               >
@@ -118,7 +118,7 @@ export default function StickyHeadTable(props) {
                     }}
                   >
                     {column.id === 'supervisor_id'
-                      ? `${
+                      && `${
                           row.supervisorsInfo.find(
                             (supervisor) => supervisor.id === row.supervisor_id
                           )?.name
@@ -127,9 +127,12 @@ export default function StickyHeadTable(props) {
                             (supervisor) => supervisor.id === row.supervisor_id
                           )?.surname
                         }`
-                      : column.format
-                      ? column.format(row[column.id], row)
-                      : row[column.id]}
+                    }
+                    {column.id === 'student_id' &&  `${row.student_name}` && `${row.student_surname}`}
+                    { column.id !== 'supervisor_id' && (column.format ? 
+                      column.format(row[column.id], row)
+                      : row[column.id])
+                    }
                   </TableCell>
                 ))}
               </TableRow>

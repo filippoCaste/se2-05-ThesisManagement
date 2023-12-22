@@ -9,6 +9,7 @@ export const getCareerByStudentId = async (req, res) => {
         if(isNaN(studentId))
             return res.status(400).json({ error: 'Student id must be a number.' });
         const result = await getStudentCareer(studentId);
+        console.log(result)
         return res.status(200).json(result);
     } catch (err) {
         return res.status(500).json({ error: err.message });
@@ -44,8 +45,6 @@ export const getFile = async (req, res) => {
         const result = await getStudentCV(studentId, applicationId);
         if(result)
             return res.status(200).json(result);
-        console.log(result);
-        return res.status(404).json({ error: 'File not found.' });
     } catch (err) {
         return res.status(500).json({ error: err.message });
     }

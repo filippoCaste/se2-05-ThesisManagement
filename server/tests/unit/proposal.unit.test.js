@@ -1,8 +1,13 @@
-import request from "supertest";
 import * as controllers from "../../src/controllers/proposal.controller.js";
 import * as services from "../../src/services/proposal.services.js";
 import * as teacherServices from "../../src/services/teacher.services.js";
 import * as keywords from "../../src/services/keyword.services.js";
+import * as notifications from "../../src/services/notification.services.js";
+
+ 
+jest.mock("../../src/services/notification.services", () => ({
+  sendEmailProposalRequestToTeacher: jest.fn(),
+}));
 
 jest.mock("../../src/services/proposal.services", () => ({
   getProposalsFromDB: jest.fn(),
@@ -14,6 +19,8 @@ jest.mock("../../src/services/proposal.services", () => ({
   getProposalsByTeacherId: jest.fn(),
   deleteProposalById: jest.fn(),
   getSupervisorByProposalId: jest.fn(),
+  createProposalRequest: jest.fn(),
+  changeStatusProRequest: jest.fn(),
 }));
 
 jest.mock("../../src/services/keyword.services", () => ({
@@ -23,7 +30,10 @@ jest.mock("../../src/services/keyword.services", () => ({
 
 jest.mock("../../src/services/teacher.services", () => ({
   getTeacherById: jest.fn(),
+  getTeacherByEmail: jest.fn(),
 }));
+
+
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -383,8 +393,8 @@ describe("updateProposal", () => {
       json: jest.fn(),
     };
 
-    for (let i = 0; i < wrongFields.length; i++) {
-      mockReq.body[wrongFields[i].field] = wrongFields[i].value;
+    for (let wrongField of wrongFields) {
+      mockReq.body[wrongField.field] = wrongField.value;
       await controllers.updateProposal(mockReq, mockRes);
 
       expect(mockRes.status).toHaveBeenCalledWith(400);
@@ -421,7 +431,7 @@ describe("updateProposal", () => {
 
     keywords.getKeywordByName.mockResolvedValue("Test");
     services.updateProposalByProposalId.mockImplementation(() => {
-      throw 404;
+      throw new Error("Proposal not found");
     });
 
     await controllers.updateProposal(mockReq, mockRes);
@@ -456,7 +466,7 @@ describe("updateProposal", () => {
     };
   
       keywords.getKeywordByName.mockResolvedValue("Test");
-      services.updateProposalByProposalId.mockImplementation(() => {throw 403});
+      services.updateProposalByProposalId.mockImplementation(() => {throw new Error("You cannot access this resource");});
   
       await controllers.updateProposal(mockReq, mockRes);
   
@@ -623,7 +633,7 @@ describe("deleteProposal", () => {
     };
 
     services.getSupervisorByProposalId.mockResolvedValue(1);
-    services.deleteProposalById.mockImplementation(() => {throw {message: "Unexpected error"}});
+    services.deleteProposalById.mockImplementation(() => {throw new Error("Unexpected error")});
 
     await controllers.deleteProposal(mockReq, mockRes);
 
@@ -631,4 +641,305 @@ describe("deleteProposal", () => {
     expect(mockRes.json).toHaveBeenCalledWith({error: "Unexpected error"});
   });
 
+});
+
+describe("createStudentProposalRequest", () => {
+  test("should return 400 if teacher email is not valid", async () => {
+    const mockReq = {
+      body: {
+        teacherEmail: "not an email",
+        coSupervisorsEmails: ["example@email.com"],
+        title: "Test",
+        description: "Test",
+        notes: "Test"
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Teacher email is not correct"});
+  });
+
+  test("should return 400 if title or description are empty strings", async () => {
+    const mockReq = {
+      body: {
+        teacherEmail: "example@email.com",
+        coSupervisorsEmails: ["example@email.com"],
+        title: "",
+        description: "Test",
+        notes: "Test"
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Title and description should be not empty strings"});
+  });
+
+  test("should return 400 if teacher does not exist", async () => {
+    const mockReq = {
+      body: {
+        teacherEmail: "example@email.com",
+        coSupervisorsEmails: ["example@email.com"],
+        title: "Test",
+        description: "Test",
+        notes: "Test"
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    teacherServices.getTeacherByEmail.mockResolvedValue(null);
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Teacher not found"});
+  });
+
+  test("should return 400 if any of co-supervisors emails are not valid", async () => {
+    const mockReq = {
+      body: {
+        teacherEmail: "example@email.com",
+        coSupervisorsEmails: ["@email.com"],
+        title: "Test",
+        description: "Test",
+        notes: "Test"
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    teacherServices.getTeacherByEmail.mockResolvedValue({});
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Co-supervisors ids should be an array of emails"});
+  });
+
+  test("should return 400 if co-supervisor does not exist", async () => {
+    const mockReq = {
+      body: {
+        teacherEmail: "example@email.com",
+        coSupervisorsEmails: ["example@email.com"],
+        title: "Test",
+        description: "Test",
+        notes: "Test"
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    teacherServices.getTeacherByEmail.mockResolvedValueOnce({});
+    teacherServices.getTeacherByEmail.mockResolvedValueOnce(null);
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Co-supervisor with email example@email.com not found"});
+  });
+
+  test("should return 500 if createProposalRequest throws error", async () => {
+    const mockReq = {
+      user: { id: 1 },
+      body: {
+        teacherEmail: "example@email.com",
+        title: "Test",
+        description: "Test",
+        notes: "Test"
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    teacherServices.getTeacherByEmail.mockResolvedValue({});
+
+    services.createProposalRequest.mockImplementation(() => {
+      throw new Error("Unexpected error");
+    });
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(500);
+    expect(mockRes.json).toHaveBeenCalledWith({error: "Unexpected error"});
+  });
+
+  test("should return 201 if proposal request is created successfully", async () => {
+    const mockReq = {
+      user: { id: 1 },
+      body: {
+        teacherEmail: "example@email.com",
+        title: "Test",
+        description: "Test",
+        notes: "Test"
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    teacherServices.getTeacherByEmail.mockResolvedValue({});
+
+    services.createProposalRequest.mockResolvedValue({
+      id: 1,
+      student_id: 1,
+      teacher_id: 1,
+      co_supervisors_ids: undefined,
+      title: "Test",
+      description: "Test",
+      notes: "Test",
+      type: "submitted",
+    });
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(201);
+    expect(mockRes.json).toHaveBeenCalledWith({
+      id: 1,
+      student_id: 1,
+      teacher_id: 1,
+      co_supervisors_ids: undefined,
+      title: "Test",
+      description: "Test",
+      notes: "Test",
+      type: "submitted",
+    });
+  });
+});
+
+
+describe('changeStatusProposalRequest', () => {
+  it('should handle correct type and return a 204 status code', async () => {
+    const mockRequest = {
+      params: {
+        requestid: 'someRequestId',
+      },
+      body: {
+        type: 'approved',
+      },
+    };
+
+    jest.spyOn(services, 'changeStatusProRequest').mockResolvedValue();
+    jest.spyOn(notifications, 'sendEmailProposalRequestToTeacher').mockResolvedValue(); // Update to the imported notifications
+
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
+    };
+
+    await controllers.changeStatusProposalRequest(mockRequest, mockResponse);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(204);
+    expect(mockResponse.send).toHaveBeenCalled();
+  });
+
+  it('should handle incorrect type and return a 400 status code', async () => {
+    const mockRequest = {
+      params: {
+        requestid: 'someRequestId',
+      },
+      body: {
+        type: 'invalidType',
+      },
+    };
+
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await controllers.changeStatusProposalRequest(mockRequest, mockResponse);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(400);
+    expect(mockResponse.json).toHaveBeenCalledWith({ error: 'Incorrect fields' });
+  });
+
+  it('should handle RequestNotFound and return a 404 status code', async () => {
+    const mockRequest = {
+      params: {
+        requestid: 'nonExistentId',
+      },
+      body: {
+        type: 'approved',
+      },
+    };
+
+    jest.spyOn(services, 'changeStatusProRequest').mockRejectedValue(new Error('RequestNotFound'));
+
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await controllers.changeStatusProposalRequest(mockRequest, mockResponse);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(404);
+    expect(mockResponse.json).toHaveBeenCalledWith({ error: 'Proposal Request not found' });
+  });
+
+  it('should handle ForbiddenAccess and return a 403 status code', async () => {
+    const mockRequest = {
+      params: {
+        requestid: 'someRequestId',
+      },
+      body: {
+        type: 'approved',
+      },
+    };
+
+    jest.spyOn(services, 'changeStatusProRequest').mockRejectedValue(new Error('ForbiddenAccess'));
+
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await controllers.changeStatusProposalRequest(mockRequest, mockResponse);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(403);
+    expect(mockResponse.json).toHaveBeenCalledWith({ error: 'You cannot access this resource' });
+  });
+
+  it('should handle other errors and return a 500 status code', async () => {
+    const mockRequest = {
+      params: {
+        requestid: 'someRequestId',
+      },
+      body: {
+        type: 'approved',
+      },
+    };
+
+    jest.spyOn(services, 'changeStatusProRequest').mockRejectedValue(new Error('Some other error'));
+
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await controllers.changeStatusProposalRequest(mockRequest, mockResponse);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockResponse.json).toHaveBeenCalledWith({ error: 'Some other error' });
+  });
 });

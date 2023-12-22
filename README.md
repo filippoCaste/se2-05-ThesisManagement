@@ -1,7 +1,8 @@
 # Thesis Management 
 
 - [Thesis Management](#thesis-management)
-  - [Login credentials](#login-credentials)
+  - [Run instructions](#run-instructions)
+  - [Login credentials (main users)](#login-credentials-main-users)
   - [API Server](#api-server)
     - [`/api/proposals`:](#apiproposals)
     - [`/api/degrees`:](#apidegrees)
@@ -28,16 +29,36 @@
       - [`Students`](#students)
       - [`Supervisors`](#supervisors)
       - [`Proposals`](#proposals)
+      - [`ProposalRequests`](#proposalrequests)
+      - [`ProposalRequestCoSupervisors`](#proposalrequestcosupervisors)
       - [`Applications`](#applications)
-  - [Main React Components](#main-react-components)
+  - [Client main pages](#client-main-pages)
+    - [General](#general)
+      - [Components](#components)
+    - [Student](#student)
+      - [Components](#components-1)
+    - [Teacher](#teacher)
+      - [Components](#components-2)
 
-## Login credentials
+## Run instructions
+In order to run the application you need to open two terminals and run:
+- `cd client; npm install; npm run dev` in the first one;
+- `cd server; npm install; node index.js` in the other one.
+
+## Login credentials (main users)
 |username|password|
 |---|---|
 |d10000@polito.it | 10000 |
 |d10001@polito.it | 10001 |
+|d10002@polito.it | 10002 |
 |s308692@studenti.polito.it | 308692 |
 |s318082@studenti.polito.it | 318082 |
+|s312121@studenti.polito.it | 312121 |
+|s314948@studenti.polito.it | 314948 |
+|s309164@studenti.polito.it | 309164 |
+|secretaryfrompolito@hotmail.com | secFromPolito.. |
+|teacherfrompolito@gmail.com | teacherFromPolito.. |
+|studentfrompolito@gmail.com | studentFromPolito.. |
 
 ## API Server
 
@@ -248,6 +269,26 @@
     }
   ]
 }
+```
+- POST `/request`
+  - request body content: 
+    - see below
+  - response: 
+    - 201 Created
+    - 400 Errors in the body object
+    - 500 Internal Server Error: Indicates an error during processing.
+```json
+{
+  "title": "A title",
+  "type": "Research",
+  "description": "A description related to the activity",
+  "notes": "Some additional notes about the thesis work",
+  "teacherEmail": "john.doe@polito.it",
+  "coSupervisorEmails": [
+    "mario.rossi@polito.it",
+    "giuseppe.verdi@polito.it"
+  ]
+} 
 ```
 
 ### `/api/degrees`:
@@ -531,7 +572,7 @@
 - `getKeywordByName(keywordName)`: if exists, it returns a keyword with the specified name (path: `services/keyword.services.js`)
 
 ## Database Tables
-
+The database can be found in: `./server/database.db`.
 ### Tables
 #### `ProposalKeywords`
 - proposal_id: INTEGER (NOT NULL)
@@ -614,6 +655,19 @@
     - `assigned`: if a student application has been accepted
     - `archived`: if the proposal has been archived or has expired
 
+#### `ProposalRequests`
+- id: INTEGER
+- student_id: INTEGER
+- teacher_id: INTEGER
+- title: TEXT
+- description: TEXT
+- notes: TEXT
+- type: TEXT
+
+#### `ProposalRequestCoSupervisors`
+- proposal_request_id: INTEGER
+- co_supervisor_id: INTEGER
+
 #### `Applications`
 - application_id: INTEGER (AI)
 - proposal_id: INTEGER (NOT NULL)
@@ -621,17 +675,39 @@
 - status: TEXT (DEFAULT 'submitted', OTHERS 'accepted', 'refused')
 - submission_date: TEXT
 
-## Main React Components
+## Client main pages
+Official palette:
+![Palette for the Thesis management application](client/public/img/Palette.png)
+### General
+- `InitialPage.jsx`: Contains the redirect mechanisms to the login page to be performed with SAML2.0 technologies.
+- `NotFoundPage.jsx`: Landing page in case the url is incorrect.
 
-`Pages`:
-<!-- 
-- `MainPage` (in `MainPage.jsx`): It is the main page and index of the application.
-- `LoginPage` (in `LoginPage.jsx`): shows the Login page where user can perform authentication. Can be reached by clicking the Login button in the AppBar.
-- `SignUpPage` (in `SignupPage.jsx`): shows the Signup page where user can create a new account. Can be reached by clicking the Signup button in the LoginPage.
+#### Components
+- `AlertDialog.jsx`: Is a popup window that displays the information about a thesis or a student.
+- `ConfirmationDialog.jsx`: Is a popup window that asks for confirmation. To correctly work, it is necessary to pass ALL the following properties:
+  - `open`: boolean;
+  - `onClose`: what to do when the popup is closed;
+  - `onConfirm`: returns `true` if the operation is *completed*, `false` otherwise;
+  - `message`: the message to display ("Are you sure you want to...");
+  - `operation`: the operation to be performed ("send", "apply", ...) [this text is displayed in the button label];
+- `ClockCustomized.jsx`: implements the logic of the virtual clock which allows move forward in the time to see the status of the system in a future day (with the current data).
+- `CustomSnackbar.jsx`
+- `ChipsCustomized.jsx`
+- `Autocomplete.jsx`
 
-- `NotFoundPage` (in `NotFoundPage.jsx`): shows the 404 page not found page. Can be reached by typing any other route in the browser.
+### Student
+- `MainPage.jsx`: Is the main page of the student. It is the one displayed right after logging in.
+- `StudentApplications.jsx`: It is the page from which the user can navigate through the list of his applications to the theses proposals.
 
-`Components`:
+#### Components
+- `ProposalStudent.jsx`: It is the component through which the student can propose a thesis work to the secretary and to a professor.
+- `FilterComponent.jsx`: It is the component through which the student can filter the theses in the page in which they are displayed.
+- `MainDashboard.jsx`: render the `TableComponent.jsx`.
+- `TableComponent.jsx`: It is the component used both for showing the proposals available on the website and for showing the application status made by students.
 
-- `AppBar` (in `AppBar.jsx`): shows the AppBar with the application name (with link to "/" by clicking on it), the name of user logged in, the login/logout button. Params passed: app title, user object, handleLogout, function for the admin to change the app title.
-- `CustomSnackbar` (in `CustomSnackbar.jsx`): shows the snackbar with a message on the bottom left corner. Present in all pages. Passed param: message. -->
+### Teacher
+- `TeacherPage.jsx`: Is the main page of the teacher. It is displayed right after the login, and within the page the teacher can check the status of her proposals (archived, applications received) and inserting a new one by clicking on the button.
+
+#### Components
+- `ProposalTeacher.jsx`: It is the component through which the teacher can add a new thesis proposal from scratch or starting by an existing one, and it also handles the editing/updating part of an existing proposal (if it has not been assigned to any student).
+- `CollapsibleTable.jsx`: It is the component in which the proposals of the teacher (logged in) are shown. From that list it is possible to access the informations related to that proposal, executing some actions (archive, edit, delete) and see the list of applications made by students to that proposal.

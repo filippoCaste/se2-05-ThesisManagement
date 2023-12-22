@@ -19,7 +19,10 @@ function renderField(label, value) {
   if (label === "Level") {
     return (
       <Typography variant="body1" gutterBottom sx={{ color: theme.palette.text.primary }}>
-        <strong>{label}:</strong> {value === "MSc" ? "Master of Science" : value === "BSc" ? "Bachelor of Science" : ""}
+        <strong>{label}:</strong> 
+        {value === "MSc" && "Master of Science" }
+        {value === "BSc" && "Bachelor of Science" }
+        {value !== "MSc" && value !== "BSc" && ""}
       </Typography>
     );
   }
@@ -31,7 +34,7 @@ function renderField(label, value) {
   );
 }
 
-function StudentInformation(student_id, student_email, student_title_degree, student_enrollment_year, student_nationality, submission_date, status) {
+function StudentInformation(student_id, student_email, student_title_degree, student_enrollment_year, student_nationality, submission_date, status,isSecretary) {
   return (
     <>
       {renderField("Id", student_id)}
@@ -40,13 +43,13 @@ function StudentInformation(student_id, student_email, student_title_degree, stu
       {renderField("Enrollment Year", student_enrollment_year)}
       {renderField("Nationality", student_nationality)}
       {renderField("Submission Date", dayjs(submission_date).format("DD/MM/YYYY"))}
-      {renderField("Status", status)}
+      {!isSecretary && renderField("Status", status)}
     </>
   );
 };
 
 export default function ApplicationDialog(props) {
-const {open, handleClose, item, studentExams} = props;
+const {open, handleClose, item, studentExams,isSecretary} = props;
 const isSM = useMediaQuery(theme.breakpoints.down('md'));
 const columns = [
   { id: 'cod_course', label: 'Course Code', width: '25%' },
@@ -66,19 +69,23 @@ const {
     submission_date,
     status,
   } = item || {}; 
+  console.log(studentExams)
   const [isStudentInformation, setIsStudentInformation] = useState(true);
   const [pdf, setPdf] = useState(null);
   const [fileExists, setFileExists] = useState(false);
   const handleMessage = useContext(MessageContext);
 
   useEffect(() => {
+    if(!isSecretary){
     careerAPI.downloadFile(item.application_id, student_id).then((res) => {
+      console.log(res);
       if(res.fileUrl) {
         setFileExists(true);
         setPdf(res.fileUrl);
       }
     })
     .catch((err) => handleMessage(err,"warning"));
+  }
     }, [item.application_id, student_id]);
 
   const handleClick = () => {
@@ -86,6 +93,7 @@ const {
   };
 
   const handleShowCV = () => {
+    console.log(pdf);
     window.open(pdf, '_blank');
   };
 
@@ -108,13 +116,15 @@ const {
       </DialogTitle>
       <DialogContent sx={{ padding: '20px', backgroundColor: theme.palette.background.default }}>
       {
-        !isSM ? (
+        !isSM && (
           <StickyHeadTable columns={columns} rows={studentExams} noDataMessage={'No exams passed'} />
-        ) : isStudentInformation ? (
-          StudentInformation(student_id, student_email, student_title_degree, student_enrollment_year, student_nationality, submission_date, status)
+        ) 
+      }
+      { isSM && (isStudentInformation ? (
+          StudentInformation(student_id, student_email, student_title_degree, student_enrollment_year, student_nationality, submission_date, status,isSecretary)
         ) : (
           <StickyHeadTable columns={columns} rows={studentExams} noDataMessage={'No exams passed'} />
-        )
+        ))
       } 
       </DialogContent>
       <DialogActions sx={{ padding: '20px', borderTop: `1px solid ${theme.palette.secondary.main}`, justifyContent: 'space-between' }}>
@@ -125,11 +135,13 @@ const {
             </Typography>
         </Button>
         : <></> }
-        <Button id="showCV" onClick={handleShowCV} variant="contained" disabled={!fileExists}>
+        {!isSecretary &&
+        <Button onClick={handleShowCV} variant="contained" disabled={!fileExists}>
           <Typography variant="button">
             Show Student CV
           </Typography>
         </Button>
+        }
         <Button onClick={handleClose} color="secondary">
           <Typography variant="button" sx={{ color: theme.palette.secondary.main }}>
             Close
@@ -146,4 +158,5 @@ ApplicationDialog.propTypes = {
   handleClose: PropTypes.func.isRequired,
   item: PropTypes.object.isRequired,
   studentExams: PropTypes.array.isRequired,
+  isSecretary: PropTypes.bool //optional
 };

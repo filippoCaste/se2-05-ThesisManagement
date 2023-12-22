@@ -16,18 +16,18 @@ export const getStudentCareer = (studentId) => {
 
 export const getStudentCV = (studentId, applicationId) => {
   const fileName = `s${studentId}_${applicationId}_CV.pdf`;
-  const filesFolder = path.join(process.cwd(), 'public', 'students_CV');
+  const filesFolder = path.join(process.cwd(), 'students_CV');
 
   return new Promise((resolve, reject) => {
       fs.readdir(filesFolder, (err, files) => {
           if (err) {
               reject(err);
           } else {
-              const fileUrl = files.filter(file => file.includes(fileName)).map(file => `http://localhost:3001/students_CV/${file}`);
+              const fileUrl = files.filter(file => file.includes(fileName)).map(file => `http://localhost:3001/${file}`);
               if (fileUrl.length !== 0) {
                   resolve({ fileUrl: fileUrl[0] });
               } else {
-                  resolve(null);
+                  resolve({ fileUrl: null});
               }
           }
       });

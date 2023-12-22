@@ -1,5 +1,7 @@
 "use strict";
 import Proposal from "../models/Proposal";
+import  ProposalRequest from "../models/ProposalRequest";
+
 const SERVER_URL = "http://localhost:3001";
 
 const postProposal = async (
@@ -261,6 +263,90 @@ const archivedProposal = async (proposalId) => {
   }
 };
 
+const getProposalRequests = async () => {
+  try {
+
+    let url = `${SERVER_URL}/api/proposals/request`;
+    const response = await fetch(url, {
+      credentials: 'include',
+    });
+
+    if (response.ok) {
+      const proposalRequests = await response.json();
+      const proposalRequestsList = [];
+
+      for (const proposalRequest of proposalRequests) {
+          proposalRequestsList.push(ProposalRequest.fromProposalRequestsResult(proposalRequest));
+      }
+
+      return proposalRequestsList;
+    } else {
+      return [];
+    }
+
+  } catch (error) {
+    console.error("An error occurred:", error);
+    return [];
+  }
+};
+
+
+/**
+ * 
+ * @param {Object} studentRequest 
+ * - `title`
+ * - `type`
+ * - `description`
+ * - `notes`
+ * - `teacherEmail`
+ * - `coSupervisorEmails[]`
+ * @returns 
+ */
+const postStudentRequest = async (studentRequest) => {
+  try {
+      const response = await fetch(SERVER_URL + "/api/proposals/request", {
+          method: "POST",
+          credentials: 'include',
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify(studentRequest),
+      });
+
+      if (response.ok) {
+          return true;
+      } else {
+          const message = await response.text();
+          throw new Error("Application error: " + message);
+      }
+  } catch (error) {
+      throw new Error("Network Error: " + error.message);
+  }
+};
+const changeStatusProposalRequest = async (proposalRequestId, type) => {
+  try {
+
+    const response = await fetch(`${SERVER_URL}/api/proposals/request/${proposalRequestId}`, {
+      method: "PUT",
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ type }), // Sending type as an object
+    });
+
+    if (response.ok) {
+      return true;
+    } else {
+      const message = await response.text();
+      throw new Error("Request error: " + message);
+    }
+  } catch (error) {
+    throw new Error("Network Error: " + error.message);
+  }
+};
+
+
 
 const proposalAPI = {
   getProposals,
@@ -270,7 +356,10 @@ const proposalAPI = {
   getProposalByProposalId,
   updateProposal,
   deleteProposal,
-  archivedProposal
+  archivedProposal,
+  getProposalRequests,
+  postStudentRequest,
+  changeStatusProposalRequest
 };
 
 export default proposalAPI;

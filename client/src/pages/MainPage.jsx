@@ -7,6 +7,7 @@ import proposalAPI from '../services/proposals.api.js';
 import dayjs from 'dayjs';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 function MainPage(props) {
   const navigate = useNavigate();
@@ -100,6 +101,15 @@ function MainPage(props) {
         >
           Browse Applied Proposals
         </Button>
+        {' '}
+        <Button
+          variant='contained'
+          color='primary'
+          onClick={() => navigate('/student/proposal')}
+          sx={{ mb: '2vh' }}
+        >
+          Create a New Proposal
+        </Button>
         <br />
         <MainDashboard
           proposals={filteredProposals}
@@ -110,5 +120,10 @@ function MainPage(props) {
     </Box>
   );
 }
+
+MainPage.propTypes = {
+  openSelectionsMobile: PropTypes.bool,
+  currentDataAndTime: PropTypes.string,
+};
 
 export default MainPage;

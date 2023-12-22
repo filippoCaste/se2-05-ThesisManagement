@@ -7,6 +7,7 @@ const getCareerByStudentId = async (studentId) => {
         method: "GET",
         credentials: 'include',
         });
+
         if (response.ok) {
             const careers = await response.json();
             return careers;
@@ -48,10 +49,14 @@ const downloadFile = async (applicationId, studentId) => {
         method: "GET",
         credentials: 'include',
         });
-        if (response.ok) {
+        if (response.status === 200) {
             const file = await response.json();
             return file;
-        } else {
+        } 
+        else if(response.status === 404) {
+            return null;
+        }
+        else {
             const message = await response.text();
             throw new Error("Career error: " + message);
         }

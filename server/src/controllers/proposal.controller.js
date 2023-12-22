@@ -6,11 +6,21 @@ import {
   deleteProposalById,
   getSupervisorByProposalId,
   archiveProposalByProposalId,
-  updateProposalByProposalId
+  updateProposalByProposalId,
+  getProposalRequestsFromDB,
+  changeStatusProRequest,
+  createProposalRequest
 } from "../services/proposal.services.js";
-import { isNumericInputValid, isTextInputValid, isValidDateFormat } from "../utils/utils.js";
-import { getTeacherById } from "../services/teacher.services.js";
+import { isEmailInputValid, isNumericInputValid, isTextInputValid } from "../utils/utils.js";
+import { getTeacherByEmail, getTeacherById } from "../services/teacher.services.js";
 import { getKeywordByName, postKeyword } from "../services/keyword.services.js";
+
+import { getEmailById } from "../services/user.services.js";
+import {scheduleEmailOneWeekBefore} from "../emailService/planEmail.js";
+import {sendEmailProposalRequestToTeacher} from "../services/notification.services.js"
+
+import validator from "validator";
+
 
 export const getProposals = async (req, res, next) => {
   try {
@@ -23,7 +33,7 @@ export const getProposals = async (req, res, next) => {
     }
     if (
       start_expiration_date &&
-      isValidDateFormat(start_expiration_date) === false
+      validator.isDate(start_expiration_date) === false
     ) {
       return res.status(400).json({
         message: "Invalid start_expiration_date, format should be YYYY-MM-dd",
@@ -31,7 +41,7 @@ export const getProposals = async (req, res, next) => {
     }
     if (
       end_expiration_date &&
-      isValidDateFormat(end_expiration_date) === false
+      validator.isDate(end_expiration_date) === false
     ) {
       return res.status(400).json({
         message: "Invalid end_expiration_date, format should be YYYY-MM-dd",
@@ -69,21 +79,20 @@ export const getProposals = async (req, res, next) => {
  */
 export const postProposal = async (req, res) => {
   try {
-    const { title, type, description, level, cod_group, cod_degree, expiration_date, notes, supervisors_obj, keywords } = req.body;
+    const { title, type, description, level, cod_group, cod_degree, expiration_date, supervisors_obj, keywords } = req.body;
 
 
     if (!isNumericInputValid([cod_group])
       || !isNumericInputValid(cod_degree)
       || !isTextInputValid(keywords)
       || !isTextInputValid([title, type, description, level])
-      || !isValidDateFormat(expiration_date)
+      || !validator.isDate(expiration_date)
       || !isSupervisorsObjValid(supervisors_obj)
     ) {
       return res.status(400).json({ error: "Uncorrect fields" });
     } else {
       for(let kw of keywords) {
-        kw = kw.trim();
-        const k = await getKeywordByName(kw);
+        const k = await getKeywordByName(kw.trim());
         if (!k) {
           await postKeyword(kw);
         }
@@ -103,6 +112,12 @@ export const postProposal = async (req, res) => {
           keywords
         );
       }
+    
+      const supervisorEmail = getEmailById(supervisors_obj.supervisor_id);
+      
+      //send to the professor
+      scheduleEmailOneWeekBefore(expiration_date,supervisorEmail,title); //formatted yyyy-mm-dd
+
       return res.status(201).send();
     }
   } catch (err) {
@@ -127,7 +142,7 @@ export const getProposalTeacherId = async (req, res) => {
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
-}
+};
 
 export const deleteProposal = async (req, res) => {
   try {
@@ -201,15 +216,14 @@ export const updateProposal = async (req, res) => {
     if(!isNumericInputValid([cod_group, proposalId]) 
           || !isTextInputValid(keywords)
           || !isTextInputValid([title, type, description, level])
-          || !isValidDateFormat(expiration_date)
+          || !validator.isDate(expiration_date)
           || !isSupervisorsObjValid(supervisors_obj)
       ) {
       return res.status(400).json({error: "Uncorrect fields"});
     } else {
       // add new keyword if not already in the database
       for (let kw of keywords) {
-        kw = kw.trim();
-        const k = await getKeywordByName(kw);
+        const k = await getKeywordByName(kw.trim());
         if (!k) {
           await postKeyword(kw);
         }
@@ -221,12 +235,12 @@ export const updateProposal = async (req, res) => {
     }
 
   } catch(err) {
-    if(err == 404) {
-      res.status(404).json({error: "Proposal not found"})
-    } else if(err == 403) {
-      res.status(403).json({error: "You cannot access this resource"})
-    } else if(err === 400) {
-      res.status(400).json({error: "This proposal cannot be modified"})
+    if(err.message == "Proposal not found") {
+      res.status(404).json({error: err.message})
+    } else if(err.message == "You cannot access this resource") {
+      res.status(403).json({error: err.message})
+    } else if(err.message === "This proposal cannot be modified") {
+      res.status(400).json({error: err.message})
     } else {
       res.status(500).json({ error: err.message });
       }
@@ -253,6 +267,108 @@ export const getProposalById = async (req, res) => {
 
 function isSupervisorsObjValid(supervisors_obj) {
   const array = supervisors_obj.co_supervisors;
+  console.log(supervisors_obj);
   array.push(supervisors_obj.supervisor_id)
   return isNumericInputValid(array);
 }
+
+export const createStudentProposalRequest = async (req, res) => {
+  try {
+    const {
+      teacherEmail,
+      title,
+      description,
+      notes,
+      coSupervisorsEmails,
+    } = req.body;
+
+    let co_supervisors_ids;
+
+    if(!isEmailInputValid([teacherEmail])) {
+      return res.status(400).json({
+        error: "Teacher email is not correct",
+      });
+    }
+    if (!isTextInputValid([title, description])) {
+      return res.status(400).json({
+        error: "Title and description should be not empty strings",
+      });
+    }
+    const teacher = await getTeacherByEmail(teacherEmail);
+    if (!teacher) {
+      return res.status(400).json({ error: "Teacher not found" });
+    }
+    if (coSupervisorsEmails && coSupervisorsEmails.length > 0) {
+      co_supervisors_ids = [];
+      if (!isEmailInputValid([...coSupervisorsEmails])) {
+        return res.status(400).json({
+          error: "Co-supervisors ids should be an array of emails",
+        });
+      }
+      for (let email of coSupervisorsEmails) {
+        const co_supervisor = await getTeacherByEmail(email);
+        if (!co_supervisor) {
+          return res.status(400).json({
+            error: `Co-supervisor with email ${email} not found`,
+          });
+        } else {
+          co_supervisors_ids.push(co_supervisor.id);
+        }
+      }
+    }
+    const result = await createProposalRequest(
+      req.user.id,
+      teacher.id,
+      co_supervisors_ids,
+      title,
+      description,
+      notes
+    );
+    return res.status(201).json(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getProposalRequests = async (req, res, next) => {
+  try {
+
+    const proposalRequests = await getProposalRequestsFromDB();
+    
+    return res.status(200).json(proposalRequests);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+export const changeStatusProposalRequest = async (req, res) => {
+  try {
+    const requestid = req.params.requestid;
+    if (!req.body.type) {
+      return res.status(400).json({ error: "Incorrect fields" });
+    }
+
+    const type = req.body.type.trim();
+    if (type !== "approved" && type !== "rejected" && type !== "accept" && type !== "submitted") {
+      return res.status(400).json({ error: "Incorrect fields" });
+    }
+
+    await changeStatusProRequest(requestid, type)
+      .then(async () => {
+        if (type === "approved") {
+          await sendEmailProposalRequestToTeacher(requestid);
+        }
+        return res.status(204).send();
+      });
+  } catch (err) {
+    if (err.message === "RequestNotFound") {
+      return res.status(404).json({ error: "Proposal Request not found" });
+    } else if (err.message === "ForbiddenAccess") {
+      return res.status(403).json({ error: "You cannot access this resource" });
+    } else {
+      return res.status(500).json({ error: err.message });
+    }
+  }
+};

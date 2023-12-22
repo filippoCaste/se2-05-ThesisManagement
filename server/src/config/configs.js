@@ -36,6 +36,17 @@ export const isStudent = async (req, res, next) => {
   return res.status(401).json({ error: "Not authorized" });
 };
 
+export const isSecretary = async (req, res, next) => {
+  if (req.isAuthenticated()) {
+    const user = await getUserById(req.user.id);
+    if (user.role === "secretary") {
+      return next();
+    }
+  }
+  return res.status(401).json({ error: "Not authorized" });
+};
+
+
 export const isTeacher = async (req, res, next) => {
   if (req.isAuthenticated()) {
     const user = await getUserById(req.user.id);
@@ -48,7 +59,7 @@ export const isTeacher = async (req, res, next) => {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, '../../public/students_CV');
+    const uploadPath = path.join(__dirname, '../../students_CV');
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {

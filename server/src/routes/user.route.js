@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
-import { getUserById } from "../services/user.services.js";
+import { getUserByEmail } from "../services/user.services.js";
 import bodyParser from "body-parser";
 
 const router = Router();
@@ -14,15 +14,15 @@ router.post('/login/callback', bodyParser.urlencoded({ extended: false }), (req,
         passport.authenticate('saml', { failureRedirect: '/login', failureFlash: true }, async function (err, user, info) {
             if (err)
                 return next(err);
-
-            if (!user)
+            else if (!user)
                 return res.redirect('/login');
-
+            else {
                 req.logIn(user, async function (err) {
                     if (err) { return next(err); }
-                    const userData = await getUserById(user.nickname.slice(1));
+                    const userData = await getUserByEmail(user.email);
                     return res.redirect("http://localhost:5173/" + userData.role);
                 });
+            }
         })(req, res, next);
     }else
         res.redirect('http://localhost:5173');
