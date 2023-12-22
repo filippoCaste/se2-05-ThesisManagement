@@ -868,8 +868,7 @@ export const changeStatusProRequest = (requestid, type) => {
     db.get(countQuery, [requestid], (err, row) => {
       if (err) {
         reject(err);
-      } else if (row && row.count> 0) {
-        const count = row.count; 
+      } else if (row && row.count> 0) { 
         const updateSql = "UPDATE ProposalRequests SET type = ? WHERE id = ?";
           db.run(updateSql, [type, requestid], (updateErr) => {
             if (updateErr) {

@@ -56,9 +56,9 @@ In order to run the application you need to open two terminals and run:
 |s312121@studenti.polito.it | 312121 |
 |s314948@studenti.polito.it | 314948 |
 |s309164@studenti.polito.it | 309164 |
-|secretaryFromPolito@hotmail.com | secFromPolito.. |
-|teacherFromPolito@gmail.com | teacherFromPolito.. |
-|studentFromPolito@gmail.com | studentFromPolito.. |
+|secretaryfrompolito@hotmail.com | secFromPolito.. |
+|teacherfrompolito@gmail.com | teacherFromPolito.. |
+|studentfrompolito@gmail.com | studentFromPolito.. |
 
 ## API Server
 
