@@ -385,9 +385,9 @@ function ProposalTeacher(props) {
             </Avatar>
           </Grid>
           <Grid item md={4}>
-            <Typography>{user?.name}  {user?.surname}  ({user?.id})</Typography>
-            <Typography>Deparment: {user?.cod_department}</Typography>
-            <Typography>Group: {user?.group_name}</Typography>
+            <Typography><em>Name:</em> {user?.name}  {user?.surname} ({user?.id})</Typography>
+            <Typography><em>Deparment:</em> {user?.cod_department}</Typography>
+            <Typography><em>Group:</em> {user?.group_name} </Typography>
           </Grid>
         </Grid>
 
