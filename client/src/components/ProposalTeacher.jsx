@@ -398,7 +398,7 @@ function ProposalTeacher(props) {
         <form onSubmit={handleSubmit}>
 
           <Typography variant="subtitle1" fontWeight="bold">   TITLE </Typography>
-          <TextFieldid="title" name="title" variant="filled" fullWidth
+          <TextField id="title" name="title" variant="filled" fullWidth
             value={title} onChange={ev => setTitle(ev.target.value)} />  <br /> <br />
 
           <Typography id="description" variant="subtitle1" fontWeight="bold"> DESCRIPTION </Typography>
@@ -538,7 +538,7 @@ function ProposalTeacher(props) {
 
 
           <Typography variant="subtitle5" fontWeight="bold"> REQUIRED KNOWLEDGE </Typography>
-          <TextFieldid="required_knowledge" name="required_knowledge" variant="filled" fullWidth multiline rows={7}
+          <TextField id="required_knowledge" name="required_knowledge" variant="filled" fullWidth multiline rows={7}
             value={required_knowledge} onChange={ev => setRequired_knowledge(ev.target.value)} />  <br /> <br />
 
           <br />  <br />
