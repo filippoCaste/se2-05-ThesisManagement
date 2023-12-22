@@ -13,9 +13,10 @@ import TeacherPage from './pages/TeacherPage.jsx';
 import ProposalTeacher from './components/ProposalTeacher.jsx';
 import InitialPage from './pages/InitialPage.jsx';
 import userAPI from './services/users.api.js';
-import { Student, Professor } from './models/User.js';
+import { Student, Professor, Secretary } from './models/User.js';
 import StudentApplications from './pages/StudentApplications';
 import ProposalStudent from './components/ProposalStudent.jsx';
+import SecretaryPage from './pages/SecretaryPage.jsx';
 
 function App() {
   const [message, setMessage] = useState('');
@@ -38,6 +39,10 @@ function App() {
         } else if (userInfo?.role === 'teacher'){
           setUser(new Professor(userInfo));
           handleMessage('Teacher successfully logged in', 'success');
+        }
+        else if(userInfo?.role === 'secretary'){
+          setUser(new Secretary(userInfo));
+          handleMessage('Secretary successfully logged in', 'success');
         }
       })
       .catch((err) => {
@@ -92,6 +97,8 @@ function App() {
               <Route path='/teacher/copyProposal/:proposalId'  
                element={<ProposalTeacher typeOperation="copy" />} />
                 
+              {/******** SECRETARY ROUTES *******/}
+              <Route path="/secretary" element={<SecretaryPage currentDataAndTime={currentDataAndTime}/>}></Route>
 
             </Routes>
           </MessageContext.Provider>
