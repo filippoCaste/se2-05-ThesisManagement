@@ -82,7 +82,6 @@ app.use("/api/careers", careerRoutes);
 
 // initialize cron jobs
 initScheduledJobs();
-
 app.listen(port, () => {
   console.log(`app listening on port ${port}!`);
 });

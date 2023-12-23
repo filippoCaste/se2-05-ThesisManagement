@@ -254,3 +254,48 @@ export const getStudentEmailByApplicationId = (applicationId) => {
     });
   });
 };
+
+
+export const getCosupervisorsEmail = (applicationid) => {
+  return new Promise((resolve, reject) => {
+    const proposalIdQuery = `
+      SELECT proposal_id FROM Applications WHERE application_id = ?;
+    `;
+  
+    db.get(proposalIdQuery, [applicationid], (err, row) => {
+      if (err) {
+        return reject(err);
+      }
+  
+      if (!row || !row.proposal_id) {
+        return reject(new Error("No proposal found for the given application ID"));
+      }
+  
+      const { proposal_id } = row;
+  
+      const emailQuery = `
+        SELECT email FROM ExternalUsers WHERE id IN (
+          SELECT co_supervisor_id FROM Supervisors WHERE proposal_id = ?
+        )
+        UNION
+        SELECT email FROM Teachers WHERE id IN (
+          SELECT co_supervisor_id FROM Supervisors WHERE proposal_id = ?
+        );
+      `;
+  
+      db.all(emailQuery, [proposal_id, proposal_id], (error, rows) => {
+        if (error) {
+          return reject(error);
+        }
+        if (rows.length > 0) {
+          const emails = rows.map(row => row.email);
+          resolve(emails);
+        } else {
+          resolve([]);
+        }
+      });
+    });
+  });
+  
+
+};
