@@ -175,12 +175,6 @@ describe('getProposalRequests', () => {
 
 });
 
-
-
-
-
-
-
 describe('getProposalById', () => {
   let req, res, next;
 
