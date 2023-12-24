@@ -16,7 +16,6 @@ function ButtonField(props) {
     InputProps: { ref } = {},
     inputProps: { 'aria-label': ariaLabel } = {},
   } = props;
-
   return (
     <IconButton
       variant="outlined"
@@ -25,8 +24,9 @@ function ButtonField(props) {
       ref={ref}
       aria-label={ariaLabel}
       onClick={() => setOpen?.((prev) => !prev)}
+      sx={{color:{sm: 'black',md: 'white'}}}
     >
-     <QueryBuilderOutlinedIcon fontSize='medium' sx={{fill:"white"}}/>
+     <QueryBuilderOutlinedIcon fontSize='medium'/>
     </IconButton>
   );
 }

@@ -21,7 +21,7 @@ import SecretaryPage from './pages/SecretaryPage.jsx';
 function App() {
   const [message, setMessage] = useState('');
   const [user, setUser] = useState(null);
-  const [openSelectionsMobile, setOpenSelectionsMobile] = useState(true);
+  const [openSelectionsMobile, setOpenSelectionsMobile] = useState(false);
   const [currentDataAndTime, setCurrentDataAndTime] = useState(dayjs());
   const userObject = useMemo(() => ({ user, setUser }), [user, setUser]);
 
