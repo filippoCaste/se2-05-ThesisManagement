@@ -16,6 +16,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import ConfirmationDialog from '../components/ConfirmationDialog';
 import PropTypes from 'prop-types';
 import MenuButton from '../components/MenuButton';
+import { useNavigate } from 'react-router-dom';
 
 
 function TeacherPage(props) {
@@ -287,44 +288,7 @@ function TeacherPage(props) {
             archiveProposal={archiveProposal}
           />
 
-<br /> <br />
-
-<Grid container spacing={2}>
-  <Grid item xs={12} sm={6} md={2}>
-    <Button
-      variant="contained"
-      color="primary"
-      onClick={() => navigate('/teacher/addProposal')}
-      style={{
-        position: 'fixed',
-        bottom: '20px', 
-        right: '40px', 
-        zIndex: 1000, 
-      }}
-    >
-      INSERT NEW THESIS PROPOSAL
-    </Button>
-    <br /> <br />
-  </Grid>
-
-  <Grid item xs={12} sm={6} md={2}>
-    <Button
-      variant="contained"
-      color="primary"
-      onClick={() => navigate('/teacher/browseCoSupervisor')}
-      style={{
-        position: 'fixed',
-        bottom: '20px', 
-        left: '20px', 
-        zIndex: 1000, 
-      }}
-    >
-       BROWSE CO-SUPERVISORS
-    </Button>{' '}
-    <br /> <br />
-  </Grid>
-</Grid>
-       
+<br /> <br />       
           {openDialog && (
             <AlertDialog
               open={openDialog}
