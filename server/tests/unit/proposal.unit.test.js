@@ -889,6 +889,8 @@ describe('getProposalCoSupervisorId', () => {
     services.getProposalsByCoSupervisorId.mockResolvedValueOnce(proposals);
     await controllers.getProposalCoSupervisorId(mockReq, mockRes);
     expect(mockRes.json).toHaveBeenCalledWith(proposals);
+  })
+});
 
 describe('changeStatusProposalRequest', () => {
   it('should handle correct type and return a 204 status code', async () => {
@@ -1004,4 +1006,4 @@ describe('changeStatusProposalRequest', () => {
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockResponse.json).toHaveBeenCalledWith({ error: 'Some other error' });
   });
-});
+})
