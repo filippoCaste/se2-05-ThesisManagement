@@ -20,12 +20,12 @@ import TableSortLabel  from '@mui/material/TableSortLabel';
 import PropTypes from 'prop-types';
 
 function Row(props) {
-  const navigate = useNavigate();
   const { row, isEvenRow, deleteProposal, index, onClick, onClickApplication, archiveProposal, isSM, fetchProposals } = props;
+  const navigate = useNavigate();
+  
   const [open, setOpen] = React.useState(false);
   const handleMessage = useContext(MessageContext);
   const [statusChangeLoading, setStatusChangeLoading] = React.useState(false);
-  const [proposalAccepted, setProposalAccepted] = React.useState(false);
   //more actions mobile version
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openActions = Boolean(anchorEl);
@@ -47,7 +47,7 @@ function Row(props) {
       if (response) {
         studentsRow.status = status;
         await fetchProposals();
-        handleMessage("Proposal "+ status+" successfully.", "success");
+        handleMessage("Proposal " + status +" successfully.", "success");
         if(status=='accepted'){
           setOpen(false);
         }
@@ -58,6 +58,7 @@ function Row(props) {
       setStatusChangeLoading(false);
     }
   };
+
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderTop: "3px solid #ddd", backgroundColor: isEvenRow ? '#f5f5f5' : '#ffffff' } }}>
@@ -87,13 +88,13 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell style={{ width: '3.6%' }}>
-          <IconButton color='success' aria-label="edit" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"  || row.p.status === 'assigned' || proposalAccepted}>
+          <IconButton color='success' aria-label="edit" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"  || row.p.status === 'assigned'}>
             <ArchiveIcon />
           </IconButton>
         </TableCell>
         <TableCell style={{ width: '3%' }}> 
           <IconButton color='info' aria-label="edit" 
-          onClick={() => navigate(`/teacher/updateProposal/${row.p.id}`)} disabled={proposalAccepted  || row.p.status === 'assigned'}>
+          onClick={() => navigate(`/teacher/updateProposal/${row.p.id}`)} disabled={row.p.status === 'assigned'}>
             <EditIcon />
           </IconButton>
           
@@ -103,14 +104,14 @@ function Row(props) {
             color="error"
             aria-label="delete"
             onClick={() => deleteProposal(index)}
-            disabled={proposalAccepted || row.p.status === 'assigned'}>
+            disabled={row.p.status === 'assigned'}>
             <DeleteIcon />
           </IconButton>
         </TableCell>
         <TableCell style={{ width: '3%' }}> 
           <IconButton aria-label="copy" 
           onClick={() => navigate(`/teacher/copyProposal/${row.p.id}`)}
-           disabled={proposalAccepted  || row.p.status === 'assigned'}>
+           disabled={row.p.status === 'assigned'}>
             <ContentCopyIcon />
           </IconButton>
         </TableCell>
@@ -133,10 +134,10 @@ function Row(props) {
                     }}
                   >
         <MenuItem style={{ color: "#007FFF" }} aria-label="show details" onClick={() => {onClick(row.p);handleClose();}}><DescriptionOutlinedIcon /></MenuItem>
-        <MenuItem aria-label="archive" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"  || row.p.status === 'assigned' || proposalAccepted}><ArchiveIcon   color='success'/></MenuItem>
-        <MenuItem aria-label="edit" onClick={() => {handleClose();}} disabled={proposalAccepted  || row.p.status === 'assigned'}><Link to={`/teacher/updateProposal/${row.p.id}`}><EditIcon color='info' /></Link></MenuItem>
-        <MenuItem aria-label="delete" onClick={() => {deleteProposal(index);handleClose();}} disabled={proposalAccepted || row.p.status === 'assigned'}><DeleteIcon color="error" /></MenuItem>
-        <MenuItem aria-label="copy" onClick={() => {handleClose();}} disabled={proposalAccepted  || row.p.status === 'assigned'}><Link to={`/teacher/copyProposal/${row.p.id}`}><ContentCopyIcon  /></Link></MenuItem>
+        <MenuItem aria-label="archive" onClick={() => archiveProposal(index)} disabled={row.p.status === "archived"  || row.p.status === 'assigned'}><ArchiveIcon   color='success'/></MenuItem>
+        <MenuItem aria-label="edit" onClick={() => {handleClose();}} disabled={row.p.status === 'assigned'}><Link to={`/teacher/updateProposal/${row.p.id}`}><EditIcon color='info' /></Link></MenuItem>
+        <MenuItem aria-label="delete" onClick={() => {deleteProposal(index);handleClose();}} disabled={row.p.status === 'assigned'}><DeleteIcon color="error" /></MenuItem>
+        <MenuItem aria-label="copy" onClick={() => {handleClose();}} disabled={row.p.status === 'assigned'}><Link to={`/teacher/copyProposal/${row.p.id}`}><ContentCopyIcon  /></Link></MenuItem>
       
                   </Menu>
         </IconButton>
@@ -275,15 +276,16 @@ function CollapsibleTable(props) {
        if (orderBy && order) {
   
          return listProposals.slice().sort((a, b) => {
-           const aValue = a.p[orderBy];
-           const bValue = b.p[orderBy];
-           if (order === 'asc') {
-            if(orderBy === "expiration_date") return dayjs(aValue).isAfter(bValue) ? -1 : 1;
-             return aValue < bValue ? -1 : 1;
-           } else {
-             if(orderBy === "expiration_date") return dayjs(aValue).isBefore(bValue) ? -1 : 1;
-             return aValue > bValue ? -1 : 1;
-           }
+          const aValue = a.p[orderBy];
+          const bValue = b.p[orderBy];
+          if(order === 'asc' && orderBy === "expiration_date")
+            return dayjs(aValue).isAfter(bValue) ? 1 : -1;
+          else if(order === 'desc' && orderBy === "expiration_date")
+            return dayjs(aValue).isBefore(bValue) ? -1 : 1;
+          else if(order === 'asc' && orderBy !== "expiration_date")
+            return aValue < bValue ? 1 : -1;
+          else if(order === 'desc' && orderBy !== "expiration_date")
+            return aValue > bValue ? 1 : -1;
          });
        }
        return listProposals;
@@ -373,13 +375,13 @@ function CollapsibleTable(props) {
             <TableCell style={{ width: '3.6%' }}><b>Delete</b></TableCell>
             <TableCell style={{ width: '3.6%' }}><b>Copy</b></TableCell>
             </>
-            :<><TableCell style={{ width: '15%' }}><b>Actions</b></TableCell></> }
+            : <TableCell style={{ width: '15%' }}><b>Actions</b></TableCell> }
           </TableRow>
       </TableHead>
       <TableBody>
         {sortedProposals.length > 0 ? (
           sortedProposals.map((row, index) => (
-            <Row key={index} row={row} isEvenRow={index % 2 === 0} isSM={isSM} onClick={onClick} onClickApplication={onClickApplication} index={index} deleteProposal={deleteProposal} archiveProposal={archiveProposal} fetchProposals={fetchProposals} />
+            <Row key={row.p.id} row={row} isEvenRow={index % 2 === 0} isSM={isSM} onClick={onClick} onClickApplication={onClickApplication} index={index} deleteProposal={deleteProposal} archiveProposal={archiveProposal} fetchProposals={fetchProposals} />
           ))
         ) : (
           <TableRow>

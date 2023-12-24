@@ -7,6 +7,7 @@ const getCareerByStudentId = async (studentId) => {
         method: "GET",
         credentials: 'include',
         });
+
         if (response.ok) {
             const careers = await response.json();
             return careers;

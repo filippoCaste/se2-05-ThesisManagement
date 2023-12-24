@@ -12,7 +12,7 @@
     - [`/api/keywords`:](#apikeywords)
     - [`/api/applications`:](#apiapplications)
     - [`/api/levels`:](#apilevels)
-     - [`/api/career`:](#apicareer)
+    - [`/api/career`:](#apicareer)
     - [Others](#others)
       - [Keywords](#keywords)
   - [Database Tables](#database-tables)
@@ -32,6 +32,7 @@
       - [`ProposalRequests`](#proposalrequests)
       - [`ProposalRequestCoSupervisors`](#proposalrequestcosupervisors)
       - [`Applications`](#applications)
+      - [`Secretaries`](#secretaries)
   - [Client main pages](#client-main-pages)
     - [General](#general)
       - [Components](#components)
@@ -56,7 +57,9 @@ In order to run the application you need to open two terminals and run:
 |s312121@studenti.polito.it | 312121 |
 |s314948@studenti.polito.it | 314948 |
 |s309164@studenti.polito.it | 309164 |
-|s312401@studenti.polito.it | 312401 |
+|secretaryfrompolito@hotmail.com | secFromPolito.. |
+|teacherfrompolito@gmail.com | teacherFromPolito.. |
+|studentfrompolito@gmail.com | studentFromPolito.. |
 
 ## API Server
 
@@ -704,6 +707,12 @@ The database can be found in: `./server/database.db`.
 - status: TEXT (DEFAULT 'submitted', OTHERS 'accepted', 'refused')
 - submission_date: TEXT
 
+#### `Secretaries`
+- id: INTEGER (AI)
+- name: TEXT (NOT NULL)
+- surname: TEXT (NOT NULL)
+- email: TEXT (NOT NULL)
+
 ## Client main pages
 Official palette:
 ![Palette for the Thesis management application](client/public/img/Palette.png)
@@ -720,10 +729,12 @@ Official palette:
   - `message`: the message to display ("Are you sure you want to...");
   - `operation`: the operation to be performed ("send", "apply", ...) [this text is displayed in the button label];
 - `ClockCustomized.jsx`: implements the logic of the virtual clock which allows move forward in the time to see the status of the system in a future day (with the current data).
-- `CustomSnackbar.jsx`
-- `ChipsCustomized.jsx`
-- `Autocomplete.jsx`
+- `CustomSnackbar.jsx`: it returns a Snackbar component with the `open` state, auto hide duration, `handleClose` function, and `action` as its props. Inside the `Snackbar`, there is an `Alert` component that displays the `props.message.text` and has a severity based on the `props.message.type`.
+- `ChipsCustomized.jsx`: it receives props including an `array`, a `selectedArray`, and a `setSelectedArray` function. Inside the component, there is a `handleClick` function that takes a `chipToSelect` parameter. If the `chipToSelect` is already in the `selectedArray`, it is removed from the `selectedArray`, otherwise, it is added to the `selectedArray`.  
+The component returns a JSX structure that renders a list of chips based on the input array. Each chip has a `label`, an `onClick` event that calls the `handleClick` function with the chip's data, and a `color` that depends on whether the chip is selected or not.
 
+- `Autocomplete.jsx`: it allows users to select multiple options from a list. It is customized with various props such as `options` (the available options), `limitTags` (the maximum number of selected tags to display), `getOptionLabel` (a function to determine the label for each option), and more. It also specifies a `value` prop to set the selected value and an `onChange` prop to handle changes to the selected value.
+- `MenuButton.jsx`: it generates a menu button component based on the user's role. The component takes in a props object with a `userRole` property, which represents the role of the user. Depending on the user's role, different menu items are added to the `menuList` array. When a menu item is clicked, the `handleClick` function is called, which uses the `userRole` and the clicked index to determine the appropriate path to navigate to.
 ### Student
 - `MainPage.jsx`: Is the main page of the student. It is the one displayed right after logging in.
 - `StudentApplications.jsx`: It is the page from which the user can navigate through the list of his applications to the theses proposals.

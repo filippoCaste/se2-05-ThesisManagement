@@ -58,7 +58,7 @@ describe('createApplication', () => {
     });
 
     it('should return 400 if submission_date is not in YYYY-MM-dd format', async () => {
-        const req = { body: { student_id: '123', proposal_id: '123', submission_date: '2023/05/15' } };
+        const req = { body: { student_id: '123', proposal_id: '123', submission_date: '15/05/2023' } };
         const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
         sendEmail.mockImplementation(() => {});
 
@@ -70,7 +70,7 @@ describe('createApplication', () => {
     });
 
     it('should return 400 if submission_date is missing', async () => {
-        const req = { body: { student_id: '123', proposal_id: '123', submission_date: '2023/05/15' } };
+        const req = { body: { student_id: '123', proposal_id: '123' } };
         const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
         sendEmail.mockImplementation(() => {});
 
@@ -255,7 +255,7 @@ test("should return 404 if proposal is not found", async () => {
         user: { id: 1 }
     };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
-    services.changeStatus.mockImplementation(() => {throw 404});
+    services.changeStatus.mockImplementation(() => {throw new Error("Proposal not found")});
     sendNotificationApplicationDecision.mockImplementation(() => {});
 
     await controllers.changeStatusOfApplication(req, res);
@@ -271,7 +271,7 @@ test("should return 403 if user is not the supervisor of the proposal", async ()
         user: { id: 1 } 
     };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
-    services.changeStatus.mockImplementation(() => {throw 403});
+    services.changeStatus.mockImplementation(() => {throw new Error("You cannot access this resource")});
     sendNotificationApplicationDecision.mockImplementation(() => {});
     
     await controllers.changeStatusOfApplication(req, res);

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import { Grid, FormControl, RadioGroup, FormControlLabel, Radio, Select, MenuItem, Drawer } from '@mui/material';
 import API_Proposal from '../services/proposals.api';
@@ -11,10 +10,12 @@ import AlertDialog from '../components/AlertDialog';
 import dayjs from 'dayjs';
 import ApplicationDialog from '../components/ApplicationDialog';
 import careerAPI from '../services/career.api';
+
 import API_Degrees from '../services/degrees.api';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import ConfirmationDialog from '../components/ConfirmationDialog';
 import PropTypes from 'prop-types';
+import MenuButton from '../components/MenuButton';
 
 
 function TeacherPage(props) {
@@ -31,6 +32,7 @@ function TeacherPage(props) {
 
    const navigate = useNavigate();
    const { user } = useContext(UserContext);
+
    const [listProposals, setListProposals]=useState([]);
    const [openDialog, setOpenDialog] = useState(false);
    const [openDialogApplication, setOpenDialogApplication] = useState(false);
@@ -348,6 +350,7 @@ function TeacherPage(props) {
           )}
         </Grid>
       </Grid >
+      <MenuButton userRole='teacher' />
     </Grid >
   );
 }

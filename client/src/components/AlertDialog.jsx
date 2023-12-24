@@ -14,6 +14,12 @@ import { MessageContext } from '../Contexts';
 import applicationsAPI from '../services/applications.api';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 import PropTypes from 'prop-types';
 
 const VisuallyHiddenInput = styled('input')({
@@ -28,6 +34,16 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
+export function RenderFieldTable({ label, value }) {
+  return (
+    <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+      <TableCell align="center" component="th" scope="row">
+        {label}
+      </TableCell>
+      <TableCell align="center">{value}</TableCell>
+    </TableRow>
+  );
+}
 
 export default function AlertDialog({
   open,
@@ -36,6 +52,7 @@ export default function AlertDialog({
   handleApply,
   loading,
   isAppliedProposals,
+  isSecretary
 }) {
   const {
     supervisorsInfo,
@@ -49,32 +66,34 @@ export default function AlertDialog({
     title_degree,
     title_group,
     required_knowledge,
+    teacher_id
   } = item || {};
   const mainSupervisor = supervisorsInfo?.find(
-    (supervisor) => supervisor.id === supervisor_id
+    (supervisor) => (supervisor.id === supervisor_id || supervisor.id === teacher_id)
   );
   const coSupervisors = supervisorsInfo?.filter(
-    (supervisor) => supervisor.id !== supervisor_id
+    (supervisor) => (supervisor.id !== supervisor_id || supervisor.co_supervisor_id )
   );
   const [isAppliedProposal, setIsAppliedProposal] = useState(false);
   const handleMessage = useContext(MessageContext);
   const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
+      if(!isSecretary){
         applicationsAPI.getStudentApplications().then((response) => {
-          console.log(response);
           setIsAppliedProposal(response?.filter((o) => o.status !== 'rejected').length > 0);
         })
       .catch(
         (err) => {console.log(err);}
       )
+      }
   });
 
   const handleFileChange = (files) => {
     if (files.length > 0) {
       const selectedFile = files[0];
       const fileExtension = selectedFile.name.split('.').pop().toLowerCase();
-  
+
       if (fileExtension === 'pdf') {
         setSelectedFile(selectedFile);
       } else {
@@ -82,7 +101,7 @@ export default function AlertDialog({
         files = null;
       }
     }
-  };  
+  };
 
   return (
     <Dialog
@@ -112,42 +131,63 @@ export default function AlertDialog({
           backgroundColor: theme.palette.background.default,
         }}
       >
-        {renderField('Description', description)}
-        {renderField("Keywords", keyword_names)}
-        {renderField('Notes', notes)}
-        {renderField(
-          'Expiration Date',
-          dayjs(expiration_date).format('DD/MM/YYYY')
-        )}
-        {renderField('Level', level)}
-        {renderField('Degree', title_degree)}
+        <TableContainer component={Paper} sx={{ mt: '1.5rem', mb: '1rem' }}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableBody>
+              <RenderFieldTable label="Description" value={description} />
+              <RenderFieldTable label="Keywords" value={keyword_names} />
+              <RenderFieldTable label="Notes" value={notes} />
+              <RenderFieldTable
+                label="Expiration Date"
+                value={dayjs(expiration_date).format('DD/MM/YYYY')} />
+              <RenderFieldTable label="Level" value={level} />
+              <RenderFieldTable label="Degree" value={title_degree} />
+              {mainSupervisor && (
+                <RenderFieldTable
+                  label="Supervisor"
+                  value={`${mainSupervisor.name} ${mainSupervisor.surname} (${mainSupervisor.email})`} />
+              )}
+              {coSupervisors?.map((supervisor) => (
+                <RenderFieldTable
+                  key={supervisor.id}
+                  label="Co-Supervisor"
+                  value={`${supervisor.name} ${supervisor.surname} (${supervisor.email})`} />
+              ))}
+              <RenderFieldTable label="Group" value={title_group} />
+              <RenderFieldTable
+                label="Required Knowledge"
+                value={required_knowledge} />
+            </TableBody>
+          </Table>
+        </TableContainer>
 
-        {mainSupervisor && renderSupervisor('Supervisor', mainSupervisor)}
-        {coSupervisors?.map((supervisor, index) =>
-          renderSupervisor('Co-Supervisor', supervisor, index)
-        )}
-
-        {renderField('Group', title_group)}
-        {renderField('Required Knowledge', required_knowledge)}
-        {handleApply && !isAppliedProposals && 
-          <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} disabled={isAppliedProposal}>
+        {handleApply && !isAppliedProposals && (
+          <Button
+            component="label"
+            variant="contained"
+            startIcon={<CloudUploadIcon />}
+            disabled={isAppliedProposal}
+          >
             Upload file
-            <VisuallyHiddenInput type="file" accept=".pdf" onChange={(e) => handleFileChange(e.target.files)}/>
+            <VisuallyHiddenInput
+              type="file"
+              accept=".pdf"
+              onChange={(e) => handleFileChange(e.target.files)} />
           </Button>
-        }
-        {!isAppliedProposals && selectedFile && (
+        )}
+        {handleApply && !isAppliedProposals && selectedFile && (
           <Typography variant="body1" gutterBottom>
             <strong>Selected file:</strong> {selectedFile.name}
           </Typography>
         )}
-      </DialogContent>
-      <DialogActions
-        sx={{
-          padding: '20px',
-          borderTop: `1px solid ${theme.palette.secondary.main}`,
-          justifyContent: 'space-between',
-        }}
-      >
+      
+    </DialogContent><DialogActions
+      sx={{
+        padding: '20px',
+        borderTop: `1px solid ${theme.palette.secondary.main}`,
+        justifyContent: 'space-between',
+      }}
+    >
         <Button onClick={handleClose} color="secondary">
           <Typography
             variant="button"
@@ -160,9 +200,13 @@ export default function AlertDialog({
           <CircularProgress color="primary" size={24} />
         ) : (
           handleApply &&
-          !isAppliedProposals &&
-           (
-            <Button onClick={() => handleApply(selectedFile)} color="primary" variant="contained" disabled={isAppliedProposal}>
+          !isAppliedProposals && (
+            <Button
+              onClick={() => handleApply(selectedFile)}
+              color="primary"
+              variant="contained"
+              disabled={isAppliedProposal}
+            >
               <Typography variant="button" sx={{ color: 'white' }}>
                 Apply
               </Typography>
@@ -172,54 +216,12 @@ export default function AlertDialog({
       </DialogActions>
     </Dialog>
   );
+};
 
-  function renderField(label, value) {
-    if (label === 'Level') {
-      return (
-        <Typography
-          variant="body1"
-          gutterBottom
-          sx={{ color: theme.palette.text.primary }}
-        >
-          <strong>{label}:</strong>{' '}
-          {value === 'MSc' &&
-             'Master of Science'
-          }
-          {value === 'BSc' &&
-             'Bachelor of Science'
-          }
-          {value !== 'MSc' && value !== 'BSc' &&
-             ''
-          }
-        </Typography>
-      );
-    }
-
-    return (
-      <Typography
-        variant="body1"
-        gutterBottom
-        sx={{ color: theme.palette.text.primary }}
-      >
-        <strong>{label}:</strong> {value}
-      </Typography>
-    );
-  }
-
-  function renderSupervisor(label, supervisor, index) {
-    const { name, surname, email } = supervisor;
-    return (
-      <Typography
-        key={index}
-        variant="body1"
-        gutterBottom
-        sx={{ color: theme.palette.text.primary }}
-      >
-        <strong>{label}:</strong> {`${name} ${surname} (${email})`}
-      </Typography>
-    );
-  }
-}
+RenderFieldTable.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+};
 
 AlertDialog.propTypes = {
   open: PropTypes.bool.isRequired,
@@ -228,4 +230,5 @@ AlertDialog.propTypes = {
   handleApply: PropTypes.func,
   loading: PropTypes.bool,
   isAppliedProposals: PropTypes.bool,
+  isSecretary: PropTypes.bool //optional
 };

@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import { db } from "../config/db.js";
 import { Proposal } from "../models/Proposal.js";
 import { Teacher } from "../models/Teacher.js";
+import { ProposalRequest} from "../models/ProposalRequest.js"
 
 export const getProposalsFromDB = (
   cod_degree,
@@ -303,14 +304,12 @@ export const postNewProposal = (
                 db.get(sqlGetKeyw, kw, (err, row4) => {
                   if (err) {
                     reject(err);
-                  } else {
-                    if (row4.id) {
+                  } else if (row4.id) {
                       db.run(sqlKeyw, [propId, row4.id], (err) => {
                         if (err) {
                           reject(err);
                         }
                       });
-                    }
                   }
                 });
               }
@@ -483,9 +482,10 @@ export const updateProposalByProposalId = (proposalId, userId, proposal) => {
       else if (!row)
         reject(new Error("Proposal not found"));
       else if (row.supervisor_id != userId) {
-        reject(new Error("You are not the supervisor of this proposal"));
+        reject(new Error("You cannot access this resource"));
       } else if(row.status === 'assigned') {
-        reject(new Error("You cannot modify an assigned proposal"));
+        console.log("This proposal has been already assigned so it cannot be modified")
+        reject(new Error("This proposal cannot be modified"));
       } else {
 
         // update the proposal data
@@ -507,14 +507,12 @@ export const updateProposalByProposalId = (proposalId, userId, proposal) => {
           db.get(sql4a, [proposalId, coSup], (err, row) => {
             if (err) {
               reject(err)
-            } else {
-              if (!row) {
+            } else if (!row) {
                 db.run(sql4b, [proposalId, userId, coSup], (err) => {
                   if (err) {
                     reject(err);
                   }
                 })
-              }
             }
           })
         }
@@ -558,82 +556,79 @@ export const getAllInfoByProposalId = (proposalId, userId) => {
     db.get(sql, [proposalId], (err,row) => {
       if(err){
         reject(err)
+      } else if(!row) {
+          reject(404);
+      } else if(row.supervisor_id !== userId) {
+          reject(403);
       } else {
-        if(!row) {
-          reject(new Error("Proposal not found"));
-        } else if(row.supervisor_id !== userId) {
-          reject(new Error("You are not the supervisor of this proposal"));
-        } else {
-          let proposalInfo = {
-            id: row.id,
-            title: row.title,
-            description: row.description,
-            type: row.type,
-            level: row.level,
-            expiration_date: row.expiration_date,
-            notes: row.notes,
-            cod_degree: row.cod_degree,
-            required_knowledge: row.required_knowledge,
-            status: row.status,
-            title_degree: row.title_degree,
-          };
+        let proposalInfo = {
+          id: row.id,
+          title: row.title,
+          description: row.description,
+          type: row.type,
+          level: row.level,
+          expiration_date: row.expiration_date,
+          notes: row.notes,
+          cod_degree: row.cod_degree,
+          required_knowledge: row.required_knowledge,
+          status: row.status,
+          title_degree: row.title_degree,
+        };
 
-          const sqlGroup = "SELECT * FROM Teachers t, Supervisors s, Groups g WHERE g.cod_group=t.cod_group AND s.co_supervisor_id=t.id AND s.proposal_id=?; "
-          db.all(sqlGroup, [proposalId], (err, rows) => {
-            if(err) {
-              reject(err);
-            } else {
-              let groups = rows.map((g) => {
-                return {cod_group: g.cod_group, title_group: g.title_group};
-              })
-              groups.push({cod_group: row.cod_group, title_group: row.title_group});
-              proposalInfo = {...proposalInfo, groups}
-            }
-          });
+        const sqlGroup = "SELECT * FROM Teachers t, Supervisors s, Groups g WHERE g.cod_group=t.cod_group AND s.co_supervisor_id=t.id AND s.proposal_id=?; "
+        db.all(sqlGroup, [proposalId], (err, rows) => {
+          if(err) {
+            reject(err);
+          } else {
+            let groups = rows.map((g) => {
+              return {cod_group: g.cod_group, title_group: g.title_group};
+            })
+            groups.push({cod_group: row.cod_group, title_group: row.title_group});
+            proposalInfo = {...proposalInfo, groups}
+          }
+        });
 
-          const sqlKw = "SELECT * FROM Keywords k, ProposalKeywords pk WHERE pk.proposal_id=? AND pk.keyword_id=k.id";
-          db.all(sqlKw, proposalId, (err, rows) => {
-            if(err) {
-              reject(err)
-            } else {
-              let keywords = rows.map(k => {
-                return k.name
-              });
-              proposalInfo = {...proposalInfo, keywords};
+        const sqlKw = "SELECT * FROM Keywords k, ProposalKeywords pk WHERE pk.proposal_id=? AND pk.keyword_id=k.id";
+        db.all(sqlKw, proposalId, (err, rows) => {
+          if(err) {
+            reject(err)
+          } else {
+            let keywords = rows.map(k => {
+              return k.name
+            });
+            proposalInfo = {...proposalInfo, keywords};
 
-              // add cosupervisors
-              const sqlSuper = "SELECT id, name, surname, email FROM Supervisors s, Teachers t WHERE s.proposal_id=? AND s.co_supervisor_id=t.id";
-              db.all(sqlSuper, proposalId, (err, rows) => {
-                if (err) {
-                  reject(err);
-                } else {
-                  let coSupervisors = rows.map(s => {
-                    return { id: s.id, name: s.name, surname: s.surname, email: s.email }
-                  });
-                  proposalInfo = { ...proposalInfo, coSupervisors};
+            // add cosupervisors
+            const sqlSuper = "SELECT id, name, surname, email FROM Supervisors s, Teachers t WHERE s.proposal_id=? AND s.co_supervisor_id=t.id";
+            db.all(sqlSuper, proposalId, (err, rows) => {
+              if (err) {
+                reject(err);
+              } else {
+                let coSupervisors = rows.map(s => {
+                  return { id: s.id, name: s.name, surname: s.surname, email: s.email }
+                });
+                proposalInfo = { ...proposalInfo, coSupervisors};
 
-                  // add external-co_supervisors
-                  const sqlExtSup = "SELECT * FROM ExternalUsers eu, Supervisors s WHERE s.proposal_id=? AND s.external_supervisor=eu.id";
-                  db.all(sqlExtSup, proposalId, (err, rows) => {
-                    if(err) {
-                      reject(err);
-                    } else {
-                      if(rows.length !== 0) {
-                        let externalSupervisors = rows.map(e => {
-                          return { name: e.name, surname: e.surname, email: e.email }
-                        });
-                        proposalInfo = {...proposalInfo, externalSupervisors};
-                      }
-                      resolve(proposalInfo);
+                // add external-co_supervisors
+                const sqlExtSup = "SELECT * FROM ExternalUsers eu, Supervisors s WHERE s.proposal_id=? AND s.external_supervisor=eu.id";
+                db.all(sqlExtSup, proposalId, (err, rows) => {
+                  if(err) {
+                    reject(err);
+                  } else {
+                    if(rows.length !== 0) {
+                      let externalSupervisors = rows.map(e => {
+                        return { name: e.name, surname: e.surname, email: e.email }
+                      });
+                      proposalInfo = {...proposalInfo, externalSupervisors};
                     }
-                  });
-                }
-              });
+                    resolve(proposalInfo);
+                  }
+                });
+              }
+            });
 
-            } 
-          });
-
-        }
+          } 
+        });
       }
     })
   });
@@ -758,3 +753,193 @@ export const getProposalsByCoSupervisorId = (teacherId) => {
     });
   });
 }
+
+export const createProposalRequest = async (
+  student_id,
+  teacher_id,
+  co_supervisors_ids,
+  title,
+  description,
+  notes
+) => {
+  return new Promise((resolve, reject) => {
+    const sql = `INSERT INTO ProposalRequests 
+        (student_id, teacher_id, title, description, notes, type) 
+        VALUES (?, ?, ?, ?, ?, 'submitted')`;
+    db.run(
+      sql,
+      [student_id, teacher_id, title, description, notes],
+      function (err) {
+        if (err) {
+          reject(err);
+        }
+
+        if (co_supervisors_ids && co_supervisors_ids.length > 0) {
+          const sql2 = `INSERT INTO ProposalRequestCoSupervisors 
+                        (proposal_request_id, co_supervisor_id) 
+                        VALUES (?, ?)`;
+          for (let id of co_supervisors_ids) {
+            db.run(sql2, [this.lastID, id], (err) => {
+              if (err) {
+                reject(err);
+              }
+            });
+          }
+        }
+        resolve({
+            id: this.lastID,
+            student_id: student_id,
+            teacher_id: teacher_id,
+            co_supervisors_ids: co_supervisors_ids,
+            title: title,
+            description: description,
+            notes: notes,
+            type: "submitted",
+        });
+      }
+    );
+  });
+};
+
+export const getProposalRequestsFromDB = async () => {
+  return new Promise((resolve, reject) => {
+    const sql = `SELECT * FROM ProposalRequests AS PR WHERE type="submitted"`;
+    db.all(
+      sql, [],
+      async function (err, rows) {
+        if (err) {
+          reject(err);
+        }
+        const returnObj = [];
+        for (const row of rows) {
+          const proposalRequest = ProposalRequest.fromProposalRequestsResult(row);
+          const studentInfo = await getExtraInfoFromProposalRequest(row);
+          proposalRequest.setStudentInfo(studentInfo);
+
+          const supervisorInfos = await getSupervisorInfosByProposalRequestId(row.id);
+          proposalRequest.addSupervisorInfo(supervisorInfos);
+
+          const cosupervisorsInfos = await getCoSupervisorInfosByProposalRequestId(row.id);
+          cosupervisorsInfos.forEach((cosupervisorInfo) => proposalRequest.addSupervisorInfo(cosupervisorInfo));
+
+          returnObj.push(proposalRequest.serialize());
+        }
+        resolve(returnObj);
+      }
+    );
+  });
+};
+
+export const getSupervisorInfosByProposalRequestId = (proposalRequestId) => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      SELECT PR.teacher_id AS supervisor_id, T.name, T.surname, T.email, T.cod_department, T.cod_group
+      FROM ProposalRequests AS PR
+      INNER JOIN Teachers AS T ON PR.teacher_id = T.id
+      WHERE PR.id = ?`;
+      
+    db.get(sql, [proposalRequestId], (err, row) => {
+      if (err) {
+        return reject(err);
+      }
+      
+      if (!row) {
+        return reject(new Error("No supervisor found for the given proposal request ID"));
+      }
+
+      resolve(row);
+    });
+  });
+};
+
+
+const getCoSupervisorInfosByProposalRequestId = (proposalRequestId) => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      SELECT CS.co_supervisor_id, T.name, T.surname, T.email, T.cod_department, T.cod_group
+      FROM ProposalRequestCoSupervisors AS CS
+      INNER JOIN Teachers AS T ON CS.co_supervisor_id = T.id
+      WHERE CS.proposal_request_id = ?`;
+      
+    db.all(sql, [proposalRequestId], (err, rows) => {
+      if (err) {
+        return reject(err);
+      }
+
+      resolve(rows);
+    });
+  });
+};
+
+
+const getExtraInfoFromProposalRequest = (proposal) => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+    SELECT Students.*,
+    Degrees.title_degree AS student_title_degree
+    FROM Students
+    LEFT JOIN Degrees ON Students.cod_degree = Degrees.cod_degree
+    WHERE Students.id = ?;`
+    db.get(
+      sql,
+      [proposal.student_id],
+      (err, row) => {
+        if (err) {
+          return reject(err);
+        }
+      const studentInfo = {
+        student_name: row.name,
+        student_surname: row.surname,
+        student_email: row.email,
+        student_enrollment_year: row.enrollment_year,
+        student_id: row.id,
+        student_nationality: row.nationality,
+        student_title_degree: row.student_title_degree,
+      };
+      console.log(studentInfo)
+        resolve(studentInfo);
+      }
+    );
+  });
+};
+
+export const changeStatusProRequest = (requestid, type) => {
+  return new Promise((resolve, reject) => {
+    const countQuery = "SELECT COUNT(*) AS count FROM ProposalRequests WHERE id = ?";
+    db.get(countQuery, [requestid], (err, row) => {
+      if (err) {
+        reject(err);
+      } else if (row && row.count> 0) { 
+        const updateSql = "UPDATE ProposalRequests SET type = ? WHERE id = ?";
+          db.run(updateSql, [type, requestid], (updateErr) => {
+            if (updateErr) {
+              reject(updateErr);
+            } else {
+              resolve('Status updated successfully');
+            }
+          });
+        } else {
+          reject(new Error('RequestNotFound'));
+        }
+    });
+  });
+};
+
+
+export const getProposalRequestInfoByID = (requestid) => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+    SELECT pr.id AS request_id, pr.title,s.name AS student_name, s.surname AS student_surname,pr.teacher_id AS teacherid
+    FROM ProposalRequests pr
+    INNER JOIN Students s ON pr.student_id = s.id
+    WHERE pr.id = ?;`
+    
+    db.get(sql, [requestid], (err, rows) => {
+      if (err) {
+        return reject(err);
+      }
+
+      resolve(rows);
+    });
+  });
+};

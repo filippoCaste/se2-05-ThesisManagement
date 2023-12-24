@@ -18,7 +18,7 @@ export const getTeacherId = async(req, res) => {
         }
         const teacher = await getTeacherById(id);
         if (teacher) {
-            return res.json(teacher);
+            return res.status(200).json(teacher);
         } else {
             res.status(404).json({ error: "User not found" })
         }
