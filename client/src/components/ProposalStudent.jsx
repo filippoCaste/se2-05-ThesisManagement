@@ -15,7 +15,6 @@ function ProposalStudent() {
 	const [errorMsg, setErrorMsg] = useState(null);
 	const [infoMsg, setInfoMsg] = useState(null);
 	const [confirmation, setConfirmation] = useState(false);
-// why is it a problem if location.state is null?
 	const [title, setTitle] = useState(location.state ? location.state.title : '');
 	const [description, setDescription] = useState(location.state ? location.state.description : '');
 	const [notes, setNotes] = useState(location.state ? location.state.notes : '');
@@ -33,7 +32,7 @@ function ProposalStudent() {
 
 	const handleOpenDialog = () => {
 		if (title == '' || type == '' || description == '' || teacherEmail == '') {
-			// the form is not completely filled
+			// if the form is not completely filled
 			setErrorMsg(<><p>Please fill all mandatory fields:</p> <ul>
 							{title === '' ? <li>Title</li> : null}
 							{type === '' ? <li>Type</li>: null}
@@ -52,15 +51,28 @@ function ProposalStudent() {
 		if (result) {
 			// User clicked "Confirm"
 			// call the api
-			const requestProposal = {
-				title, type, description, notes, teacherEmail, coSupervisorEmails: coSupervisors
-			}
-			try {
-				await studentRequestAPI.postStudentRequest(requestProposal);
-			} catch(err) {
-				console.log(err)
-				setErrorMsg("Emails are not correct.");
-				return;
+			if (!isFilled) {
+				const requestProposal = {
+					title, type, description, notes, teacherEmail, coSupervisorEmails: coSupervisors
+				}
+				try {
+					await studentRequestAPI.postStudentRequest(requestProposal);
+				} catch(err) {
+					console.log(err)
+					setErrorMsg("Emails are not correct.");
+					return;
+				}
+			} else {
+				const requestProposal = {
+					title, type, description, notes, teacherEmail
+				}
+				try {
+					await studentRequestAPI.postStudentRequestFromApplication(requestProposal);
+				} catch(err) {
+					console.log(err)
+					setErrorMsg("Wrong data.");
+					return;
+				}
 			}
 			// display info
 			handleMessage("Thesis request sent successfully", "success");
