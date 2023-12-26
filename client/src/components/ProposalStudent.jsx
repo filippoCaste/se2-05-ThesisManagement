@@ -6,7 +6,8 @@ import InfoIcon from '@mui/icons-material/Info';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ConfirmationDialog from './ConfirmationDialog';
-import studentRequestAPI from '../services/studentRequest.api';
+import proposalAPI from '../services/proposals.api';
+
 
 function ProposalStudent() {
 	const navigate = useNavigate();

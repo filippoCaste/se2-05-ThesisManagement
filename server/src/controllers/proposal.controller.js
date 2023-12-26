@@ -6,14 +6,19 @@ import {
   deleteProposalById,
   getSupervisorByProposalId,
   archiveProposalByProposalId,
-  updateProposalByProposalId
+  updateProposalByProposalId,
+  getProposalRequestsFromDB,
+  changeStatusProRequest,
+  createProposalRequest
 } from "../services/proposal.services.js";
 import { isEmailInputValid, isNumericInputValid, isTextInputValid } from "../utils/utils.js";
 import { getTeacherByEmail, getTeacherById } from "../services/teacher.services.js";
 import { getKeywordByName, postKeyword } from "../services/keyword.services.js";
-import { createProposalRequest } from "../services/proposalRequest.services.js";
+
 import { getEmailById } from "../services/user.services.js";
 import {scheduleEmailOneWeekBefore} from "../emailService/planEmail.js";
+import {sendEmailProposalRequestToTeacher} from "../services/notification.services.js"
+
 import validator from "validator";
 
 
@@ -323,5 +328,47 @@ export const createStudentProposalRequest = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });
+  }
+};
+
+export const getProposalRequests = async (req, res, next) => {
+  try {
+
+    const proposalRequests = await getProposalRequestsFromDB();
+    
+    return res.status(200).json(proposalRequests);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+export const changeStatusProposalRequest = async (req, res) => {
+  try {
+    const requestid = req.params.requestid;
+    if (!req.body.type) {
+      return res.status(400).json({ error: "Incorrect fields" });
+    }
+
+    const type = req.body.type.trim();
+    if (type !== "approved" && type !== "rejected" && type !== "accept" && type !== "submitted") {
+      return res.status(400).json({ error: "Incorrect fields" });
+    }
+
+    await changeStatusProRequest(requestid, type)
+      .then(async () => {
+        if (type === "approved") {
+          await sendEmailProposalRequestToTeacher(requestid);
+        }
+        return res.status(204).send();
+      });
+  } catch (err) {
+    if (err.message === "RequestNotFound") {
+      return res.status(404).json({ error: "Proposal Request not found" });
+    } else if (err.message === "ForbiddenAccess") {
+      return res.status(403).json({ error: "You cannot access this resource" });
+    } else {
+      return res.status(500).json({ error: err.message });
+    }
   }
 };

@@ -25,15 +25,21 @@ export function isTextInputValid(values) {
  */
 export function isNumericInputValid(values) {
   for (let number of values) {
-    const value = number && parseInt(number);
-    if (!value || isNaN(value) || number != value.toString()) {
-      console.log("The error is in value: " + number);
+    const value = parseInt(number);
+    if (isNaN(value) || number != value.toString()) {
+      console.log(`The error is in value: ${number}`);
       return false;
     }
-    return true;
   }
+  return true;
 }
 
+/**
+ * Checks if the input values are valid email addresses.
+ *
+ * @param {Array} values - An array of email addresses to be validated.
+ * @return {boolean} Returns true if all email addresses are valid, false otherwise.
+ */
 export function isEmailInputValid(values) {
   for(let email of values) {
     if(!validator.isEmail(email)) {
