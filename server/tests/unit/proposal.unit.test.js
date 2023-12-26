@@ -835,7 +835,7 @@ describe('changeStatusProposalRequest', () => {
         requestid: 'someRequestId',
       },
       body: {
-        type: 'approved',
+        status: 'approved',
       },
     };
 
@@ -880,7 +880,7 @@ describe('changeStatusProposalRequest', () => {
         requestid: 'nonExistentId',
       },
       body: {
-        type: 'approved',
+        status: 'approved',
       },
     };
 
@@ -903,7 +903,7 @@ describe('changeStatusProposalRequest', () => {
         requestid: 'someRequestId',
       },
       body: {
-        type: 'approved',
+        status: 'approved',
       },
     };
 
@@ -926,7 +926,7 @@ describe('changeStatusProposalRequest', () => {
         requestid: 'someRequestId',
       },
       body: {
-        type: 'approved',
+        status: 'approved',
       },
     };
 
