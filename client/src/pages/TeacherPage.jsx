@@ -17,12 +17,16 @@ import ConfirmationDialog from '../components/ConfirmationDialog';
 import PropTypes from 'prop-types';
 import MenuButton from '../components/MenuButton';
 
-function TeacherPage(props) {
-  const { currentDataAndTime } = props;
-  const handleMessage = useContext(MessageContext);
-  dayjs.extend(customParseFormat);
 
-  const { user } = useContext(UserContext);
+function TeacherPage(props) {
+
+   const { currentDataAndTime } = props;
+   const handleMessage = useContext(MessageContext);
+   dayjs.extend(customParseFormat);
+
+  
+   const { user } = useContext(UserContext);
+
    const [listProposals, setListProposals]=useState([]);
    const [openDialog, setOpenDialog] = useState(false);
    const [openDialogApplication, setOpenDialogApplication] = useState(false);
@@ -35,7 +39,7 @@ function TeacherPage(props) {
    const [operation, setOperation] = useState(null);
    const [degreesList, setDegreesList]=useState('');
     
-  //FILTRI
+  //FILTRES
 
   const [filterTitle, setFilterTitle] = useState('');
   const [filterLevel, setFilterLevel] = useState('');
@@ -54,7 +58,7 @@ function TeacherPage(props) {
     setFilterDegree('');
     setFilterStatus('');
   };
-  // FINE FILTRI
+  // END FILTRES
 
   async function createRow(p) {
     const students = await API_Applications.getApplicationStudentsByProposalId(
@@ -206,6 +210,7 @@ function TeacherPage(props) {
         />}
 
         <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} md={2} />
           <Grid item xs={12} sm={6} md={8}>
             <input
               type="text" list="titleSuggestions" placeholder="Search by Title"
@@ -217,8 +222,7 @@ function TeacherPage(props) {
               ))}
             </datalist>
           </Grid>
-          <Grid item xs={12} sm={6} md={2}>
-          </Grid>
+          <Grid item xs={12} sm={6} md={2} />
 
           <br /><br />
           {/* Second Row */}
@@ -276,6 +280,8 @@ function TeacherPage(props) {
             deleteProposal={deleteProposal}
             archiveProposal={archiveProposal}
           />
+
+<br /> <br />       
           {openDialog && (
             <AlertDialog
               open={openDialog}

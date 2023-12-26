@@ -3,6 +3,7 @@ import {
   getProposals,
   postProposal,
   getProposalTeacherId,
+  getProposalCoSupervisorId,
   deleteProposal,
   archiveProposal,
   updateProposal,
@@ -25,8 +26,9 @@ router.get("/request", isSecretary, getProposalRequests);
 
 router.put("/request/:requestid", isSecretary, changeStatusProposalRequest);
 
-
 router.get('/teachers/:id', isLoggedIn, getProposalTeacherId)
+
+router.get('/cosupervisors/:id', isLoggedIn, getProposalCoSupervisorId);
 
 router.delete("/:id",isLoggedIn,isTeacher,deleteProposal);
 
