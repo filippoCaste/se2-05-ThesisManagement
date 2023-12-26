@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Grid, FormControl, RadioGroup, FormControlLabel, Radio, Select, MenuItem, Drawer } from '@mui/material';
+import { Grid, FormControl, RadioGroup, FormControlLabel, Radio, Select, MenuItem } from '@mui/material';
 import API_Proposal from '../services/proposals.api';
 import API_Applications from '../services/applications.api';
 import { MessageContext, UserContext } from '../Contexts';
@@ -16,7 +16,6 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import ConfirmationDialog from '../components/ConfirmationDialog';
 import PropTypes from 'prop-types';
 import MenuButton from '../components/MenuButton';
-import { useNavigate } from 'react-router-dom';
 
 
 function TeacherPage(props) {
@@ -25,13 +24,7 @@ function TeacherPage(props) {
    const handleMessage = useContext(MessageContext);
    dayjs.extend(customParseFormat);
 
-   const [drawerOpen, setDrawerOpen] = useState(false);
-
-   const handleDrawerToggle = () => {
-     setDrawerOpen(!drawerOpen);
-   }
-
-   const navigate = useNavigate();
+  
    const { user } = useContext(UserContext);
 
    const [listProposals, setListProposals]=useState([]);

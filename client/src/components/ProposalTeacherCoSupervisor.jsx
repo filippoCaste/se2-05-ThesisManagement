@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
-import { Button, Typography, useMediaQuery, Dialog, DialogActions, DialogContent, DialogTitle}  from '@mui/material';
+import { Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle}  from '@mui/material';
 import { UserContext } from '../Contexts';
 import { useTheme } from '@mui/material/styles'; 
 import API_Proposal from '../services/proposals.api';

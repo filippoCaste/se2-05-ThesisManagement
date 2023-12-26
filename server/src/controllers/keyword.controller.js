@@ -1,7 +1,6 @@
 "use strict";
 
-import { getAllKeywords } from '../../src/services/keyword.services.js';
-import { getAllKeywordsWithProposalId }  from '../../src/services/keyword.services.js';
+import { getAllKeywords, getAllKeywordsWithProposalId } from '../../src/services/keyword.services.js';
 
 export const getKeywords = async (req, res) => {
   try {
