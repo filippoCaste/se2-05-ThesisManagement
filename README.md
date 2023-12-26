@@ -1,3 +1,7 @@
+
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=filippoCaste_se2-05-ThesisManagement&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=filippoCaste_se2-05-ThesisManagement)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=filippoCaste_se2-05-ThesisManagement&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=filippoCaste_se2-05-ThesisManagement)
+
 # Thesis Management 
 
 - [Thesis Management](#thesis-management)
@@ -12,7 +16,7 @@
     - [`/api/keywords`:](#apikeywords)
     - [`/api/applications`:](#apiapplications)
     - [`/api/levels`:](#apilevels)
-     - [`/api/career`:](#apicareer)
+    - [`/api/career`:](#apicareer)
     - [Others](#others)
       - [Keywords](#keywords)
   - [Database Tables](#database-tables)
