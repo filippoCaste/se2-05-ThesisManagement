@@ -16,8 +16,8 @@ export default function PrimarySearchAppBar(props) {
   const {openSelectionsMobile, setOpenSelectionsMobile,currentDataAndTime, setCurrentDataAndTime} = props;
   const [openClock, setOpenClock] = React.useState(false);
   const [anchorElA, setAnchorElA] = React.useState(null);
-  const mobileMoreAnchorElA = null;
   const { user } = React.useContext(UserContext);
+
   
   const handleClockOpen = () => {
     setOpenClock(true);
@@ -28,7 +28,9 @@ export default function PrimarySearchAppBar(props) {
   };
 
   const handleProfileMenuOpen = (event) => {
-    setAnchorElA(event.currentTarget);
+    if(user)
+     setAnchorElA(event.currentTarget);
+    else window.location.href = "http://localhost:3001/api/users/login";
   };
 
 
@@ -55,6 +57,11 @@ export default function PrimarySearchAppBar(props) {
       onClose={handleMenuClose}
       sx={{ elevation: 3, color: theme.palette.primary.main }}
     >
+      <Box sx={{ display:{sm:"flex", md:"none"}, justifyContent: 'center' }}>
+                <ClockCustomized currentDataAndTime={currentDataAndTime} setCurrentDataAndTime={setCurrentDataAndTime} open={openClock}
+                onOpen={handleClockOpen}
+                onClose={handleClockClose}/>
+      </Box>
       <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography mr={"0.5vw"} fontWeight="bold" sx={{ color: theme.palette.main, fontFamily: 'cursive' }}>
           User ID:
@@ -85,26 +92,6 @@ export default function PrimarySearchAppBar(props) {
   );
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorElA}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={Boolean(mobileMoreAnchorElA)}
-      onClose={handleMenuClose}
-    >
-     
-    </Menu>
-  );
-
 
   return (
     <Box position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, overflow:"none", top:0, left:0, height:"15vh"}}>
@@ -177,7 +164,7 @@ export default function PrimarySearchAppBar(props) {
           </Box>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
+
       {renderMenu}
     </Box>
   );

@@ -1,7 +1,7 @@
 "use strict";
 
 import { sendEmail } from "../emailService/sendEmail.js";
-import { getStudentEmailByApplicationId } from "../services/application.services.js";
+import { getStudentEmailByApplicationId,getCosupervisorsEmail } from "../services/application.services.js";
 import { getProposalTitleByApplicationId, getProposalRequestInfoByID, getProposalInfoByID } from "./proposal.services.js"; 
 import {isEmailInputValid} from "../utils/utils.js";
 import {getTeacherById} from "./teacher.services.js";
@@ -60,6 +60,71 @@ export const sendNotificationApplicationDecision = async (applicationId, status)
 
     await sendEmail(receiverEmail, subject, htmlMessage);
 
+    // Return success message
+    return { message: "Notification sending completed" };
+  } catch (err) {
+    // Handle errors
+    throw new Error(err.message);
+  }
+};
+
+export const sendNotificationApplicationDecisionSupervisor = async (applicationId, status) => {
+  try {
+    const subject = "Thesis Management - Supervisor application decision";
+    const title = await getProposalTitleByApplicationId(applicationId);
+    const htmlMessage = `
+    <html>
+      <head>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+          }
+          .container {
+            width: 80%;
+            heigth: 100vh;
+            margin: auto;
+            padding: 2%;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+          }
+          h1 {
+            color: #007bff;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>Application of proposal ${title} Status Update</h1>
+          <p>
+            Application of proposal ${title} has been updated to "${status}". As a Co-supervisor you can now manage it.
+          </p>
+        </div>
+      </body>
+    </html>
+  `;
+    
+    if (!applicationId || !status) {
+      throw new Error("Missing required fields");
+    }
+
+    // Get the student email by application ID
+    const receiverEmailArray = await getCosupervisorsEmail(applicationId);
+ 
+    if(!Array.isArray(receiverEmailArray)) throw new Error("Error retriving data");
+    if (receiverEmailArray.length == 0) return {message: "Noitification sending complete"};
+
+    for ( const email of receiverEmailArray){
+    if (!email || !isEmailInputValid([email])) {
+      console.log(email)
+      throw new Error("Cosupervisor email not available");
+    }
+    // Send email to the retrieved email address
+    await sendEmail(email, subject, htmlMessage);
+
+  }
     // Return success message
     return { message: "Notification sending completed" };
   } catch (err) {

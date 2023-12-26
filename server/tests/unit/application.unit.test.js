@@ -2,7 +2,7 @@ import * as controllers from "../../src/controllers/application.controller.js";
 import * as services from "../../src/services/application.services.js";
 import * as proposals from "../../src/services/proposal.services.js";
 import * as teacher from "../../src/services/teacher.services.js";
-import { sendNotificationApplicationDecision, sendEmailToTeacher } from "../../src/services/notification.services.js";
+import { sendNotificationApplicationDecision, sendNotificationApplicationDecisionSupervisor } from "../../src/services/notification.services.js";
 import { sendEmail } from "../../src/emailService/sendEmail.js";
 
 beforeEach(() => {
@@ -29,6 +29,7 @@ jest.mock('../../src/emailService/sendEmail.js', () => ({
 
 jest.mock('../../src/services/notification.services.js', () => ({
     sendNotificationApplicationDecision: jest.fn(),
+    sendNotificationApplicationDecisionSupervisor: jest.fn(),
     sendEmailToTeacher: jest.fn()
 }));
 
@@ -227,6 +228,7 @@ describe('createApplication', () => {
     const req = { body: { status: undefined }, params: { applicationId: 1 } };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
     sendNotificationApplicationDecision.mockImplementation(() => {});
+    sendNotificationApplicationDecisionSupervisor.mockImplementation(() => {});
 
     await controllers.changeStatusOfApplication(req, res);
 
@@ -240,6 +242,7 @@ test("should return 400 if status is not valid", async () => {
     const req = { body: { status: "other" }, params: { applicationId: 1 } };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
     sendNotificationApplicationDecision.mockImplementation(() => {});
+    sendNotificationApplicationDecisionSupervisor.mockImplementation(() => {});
 
     await controllers.changeStatusOfApplication(req, res);
 
@@ -257,6 +260,7 @@ test("should return 404 if proposal is not found", async () => {
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
     services.changeStatus.mockImplementation(() => {throw new Error("Proposal not found")});
     sendNotificationApplicationDecision.mockImplementation(() => {});
+    sendNotificationApplicationDecisionSupervisor.mockImplementation(() => {});
 
     await controllers.changeStatusOfApplication(req, res);
 
@@ -273,7 +277,8 @@ test("should return 403 if user is not the supervisor of the proposal", async ()
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
     services.changeStatus.mockImplementation(() => {throw new Error("You cannot access this resource")});
     sendNotificationApplicationDecision.mockImplementation(() => {});
-    
+    sendNotificationApplicationDecisionSupervisor.mockImplementation(() => {});
+
     await controllers.changeStatusOfApplication(req, res);
 
     expect(res.status).toHaveBeenCalledWith(403);
@@ -289,6 +294,7 @@ test("should return 500 if an error occurs during database operation", async () 
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
     services.changeStatus.mockImplementation(() => {throw Error("Database error")});
     sendNotificationApplicationDecision.mockImplementation(() => {});
+    sendNotificationApplicationDecisionSupervisor.mockImplementation(() => {});
 
     await controllers.changeStatusOfApplication(req, res);
 
@@ -305,7 +311,8 @@ test("should return 204 if everything is OK", async () => {
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn(), send: jest.fn() };
     services.changeStatus.mockResolvedValue(true);
     sendNotificationApplicationDecision.mockImplementation(() => {});
-    
+    sendNotificationApplicationDecisionSupervisor.mockImplementation(() => {});
+
     await controllers.changeStatusOfApplication(req, res);
 
     expect(res.status).toHaveBeenCalledWith(204);

@@ -1,6 +1,6 @@
 "use strict";
 import { changeStatus, createApplicationInDb, getApplicationsByProposalId, getApplicationsByStudentId } from "../services/application.services.js";
-import {sendEmailToTeacher, sendNotificationApplicationDecision} from "../services/notification.services.js";
+import {sendEmailToTeacher, sendNotificationApplicationDecision, sendNotificationApplicationDecisionSupervisor} from "../services/notification.services.js";
 import validator from "validator";
 
 export const createApplication = async (req, res) => {
@@ -69,7 +69,8 @@ export const changeStatusOfApplication = async (req, res) => {
     }
 
     await changeStatus(applicationId, req.user.id, status);
-    await sendNotificationApplicationDecision(applicationId,status);
+    await sendNotificationApplicationDecision(applicationId,status); //to student
+    await sendNotificationApplicationDecisionSupervisor(applicationId,status);
     res.status(204).send();
 
   } catch(err) {
