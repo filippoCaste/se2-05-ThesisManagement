@@ -7,6 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ConfirmationDialog from './ConfirmationDialog';
 import proposalAPI from '../services/proposals.api';
+import studentRequestAPI from '../services/studentRequest.api';
 
 
 function ProposalStudent() {
@@ -28,7 +29,7 @@ function ProposalStudent() {
 	const handleMessage = useContext(MessageContext);
 
 	const handleCancel = () => {
-		navigate('/student');
+		isFilled ? navigate('/student/applications') : navigate('/student');
 	}
 
 	const handleOpenDialog = () => {
@@ -65,10 +66,10 @@ function ProposalStudent() {
 				}
 			} else {
 				const requestProposal = {
-					title, type, description, notes, teacherEmail
+					title, type, description, notes, teacherEmail, status: 'accepted'
 				}
 				try {
-					await studentRequestAPI.postStudentRequestFromApplication(requestProposal);
+					await studentRequestAPI.postStudentRequest(requestProposal);
 				} catch(err) {
 					console.log(err)
 					setErrorMsg("Wrong data.");

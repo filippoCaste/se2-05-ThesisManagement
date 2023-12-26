@@ -59,7 +59,7 @@ export default function MenuButton(props) {
                         </Button>
                     </Box>
                     <Menu {...bindMenu(popupState)}>
-                        {menuList.map((item) => { 
+                        {menuList.map((item, index) => { 
                                 return <MenuItem key={item} onClick={() => handleClick(index)}>{item}</MenuItem>;
                             })}
                     </Menu>

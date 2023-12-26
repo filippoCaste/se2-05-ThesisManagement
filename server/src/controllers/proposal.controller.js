@@ -264,25 +264,34 @@ export const getProposalById = async (req, res) => {
   } 
 }
 
-
-function isSupervisorsObjValid(supervisors_obj) {
-  const array = supervisors_obj.co_supervisors;
-  console.log(supervisors_obj);
-  array.push(supervisors_obj.supervisor_id)
-  return isNumericInputValid(array);
-}
-
+/**
+ * Create a student proposal request.
+ *
+ * @param {Object} req - the request object.
+ * @param {Object} res - the response object.
+ * @return {Promise} - a promise that resolves to the result of the operation.
+ */
 export const createStudentProposalRequest = async (req, res) => {
   try {
     const {
       teacherEmail,
       title,
+      type,
       description,
       notes,
       coSupervisorsEmails,
+      status
     } = req.body;
 
     let co_supervisors_ids;
+
+    // this is for the students who create a proposal request starting from the 
+    // already existing one --> it doesn't pass through the secretary validation
+    if(status != undefined && status!="accepted") {
+      return res.status(400).json({
+        error: "Status should be 'accepted' for requests from an existing proposals",
+      });
+    }
 
     if(!isEmailInputValid([teacherEmail])) {
       return res.status(400).json({
@@ -321,8 +330,10 @@ export const createStudentProposalRequest = async (req, res) => {
       teacher.id,
       co_supervisors_ids,
       title,
+      type,
       description,
-      notes
+      notes,
+      status
     );
     return res.status(201).json(result);
   } catch (error) {
@@ -372,3 +383,17 @@ export const changeStatusProposalRequest = async (req, res) => {
     }
   }
 };
+
+
+/**
+ * Check if the supervisors_obj is valid.
+ *
+ * @param {object} supervisors_obj - The supervisors object to be validated.
+ * @return {boolean} Returns true if the supervisors_obj is valid, otherwise false.
+ */
+function isSupervisorsObjValid(supervisors_obj) {
+  const array = supervisors_obj.co_supervisors;
+  console.log(supervisors_obj);
+  array.push(supervisors_obj.supervisor_id)
+  return isNumericInputValid(array);
+}
