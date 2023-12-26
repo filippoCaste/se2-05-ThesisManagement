@@ -323,7 +323,7 @@ const postStudentRequest = async (studentRequest) => {
       throw new Error("Network Error: " + error.message);
   }
 };
-const changeStatusProposalRequest = async (proposalRequestId, type) => {
+const changeStatusProposalRequest = async (proposalRequestId, status) => {
   try {
 
     const response = await fetch(`${SERVER_URL}/api/proposals/request/${proposalRequestId}`, {
@@ -332,7 +332,7 @@ const changeStatusProposalRequest = async (proposalRequestId, type) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ type }), // Sending type as an object
+      body: JSON.stringify({ status }), // Sending type as an object
     });
 
     if (response.ok) {

@@ -31,14 +31,13 @@ function SecretaryPage(props) {
     };
 
     const handleProposalRequestClick = (proposalRequest) => {
-      console.log(proposalRequest)
       setSelectedProposalRequest(proposalRequest);
       setOpenDialog(true);
     }
 
-    const changeStatusOfProposalRequest = (proposalRequestId,type) => {
+    const changeStatusOfProposalRequest = (proposalRequestId,status) => {
   
-      proposalAPI.changeStatusProposalRequest(proposalRequestId,type).then(async () => {
+      proposalAPI.changeStatusProposalRequest(proposalRequestId,status).then(async () => {
         handleMessage("Proposal Request successfully updated","success");
         const updatedRequests = await proposalAPI.getProposalRequests();
         setProposalRequests(updatedRequests); // Update the proposalRequests state
@@ -51,7 +50,6 @@ function SecretaryPage(props) {
         const resultProposals = async () => {
           try {
            const resultRequests = await proposalAPI.getProposalRequests();
-            console.log(resultRequests)
            setProposalRequests(resultRequests);
 
         } catch (error){

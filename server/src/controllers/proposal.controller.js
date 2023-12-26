@@ -353,22 +353,28 @@ export const getProposalRequests = async (req, res, next) => {
   }
 };
 
-
+/**
+ * Change the status of a proposal request.
+ *
+ * @param {object} req - The request object.
+ * @param {object} res - The response object.
+ * @return {object} The response object.
+ */
 export const changeStatusProposalRequest = async (req, res) => {
   try {
     const requestid = req.params.requestid;
-    if (!req.body.type) {
+    if (!req.body.status) {
       return res.status(400).json({ error: "Incorrect fields" });
     }
 
-    const type = req.body.type.trim();
-    if (type !== "approved" && type !== "rejected" && type !== "accept" && type !== "submitted") {
+    const status = req.body.status.trim();
+    if (status !== "approved" && status !== "rejected" && status !== "accept" && status !== "submitted") {
       return res.status(400).json({ error: "Incorrect fields" });
     }
 
-    await changeStatusProRequest(requestid, type)
+    await changeStatusProRequest(requestid, status)
       .then(async () => {
-        if (type === "approved") {
+        if (status === "approved") {
           await sendEmailProposalRequestToTeacher(requestid);
         }
         return res.status(204).send();
