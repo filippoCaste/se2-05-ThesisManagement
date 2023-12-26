@@ -825,6 +825,52 @@ describe("createStudentProposalRequest", () => {
       type: "submitted",
     });
   });
+
+  test("should return 400 if the status is not correct", async () => {
+    const mockReq = {
+      body: {
+        teacherEmail: "mario.rossi@polito.it",
+        coSupervisorsEmails: ["example@email.com"],
+        title: "Test",
+        description: "Test",
+        notes: "Test",
+        status: 'uncorrect'
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({ error: "Status should be 'accepted' for requests from an existing proposals" });
+  });
+
+  test("should return 200 if the proposal request starting from an existing application is okay", async () => {
+    const mockReq = {
+      user: { id: 1 },
+      body: {
+        teacherEmail: "mario.rossi@polito.it",
+        coSupervisorsEmails: ["example@email.com"],
+        title: "Test",
+        description: "Test",
+        notes: "Test",
+        status: 'accepted'
+      },
+    };
+    const mockRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    teacherServices.getTeacherByEmail.mockResolvedValue({});
+    await controllers.createStudentProposalRequest(mockReq, mockRes);
+
+    expect(mockRes.status).toHaveBeenCalledWith(201);
+  });
+
 });
 
 
