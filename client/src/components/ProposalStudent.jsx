@@ -6,7 +6,6 @@ import InfoIcon from '@mui/icons-material/Info';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ConfirmationDialog from './ConfirmationDialog';
-import proposalAPI from '../services/proposals.api';
 import studentRequestAPI from '../services/studentRequest.api';
 
 
@@ -24,7 +23,7 @@ function ProposalStudent() {
 	const [teacherEmail, setTeacherEmail] = useState(location.state ? location.state.teacherEmail : '' );
 	const [coSupervisor, setCoSupervisor] = useState('');
 	const [coSupervisors, setCoSupervisors] = useState(location.state ? location.state.coSupervisors : []);
-	const isFilled = location.state ? true : false;
+	const isFilled = location.state && true;
 
 	const handleMessage = useContext(MessageContext);
 
