@@ -719,15 +719,17 @@ export const createProposalRequest = async (
   co_supervisors_ids,
   title,
   description,
-  notes
+  notes,
+  type,
+  status
 ) => {
   return new Promise((resolve, reject) => {
     const sql = `INSERT INTO ProposalRequests 
-        (student_id, teacher_id, title, description, notes, type) 
-        VALUES (?, ?, ?, ?, ?, 'submitted')`;
+        (student_id, teacher_id, title, description, notes, type, status) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)`;
     db.run(
       sql,
-      [student_id, teacher_id, title, description, notes],
+      [student_id, teacher_id, title, description, notes, type, status || 'submitted'],
       function (err) {
         if (err) {
           reject(err);
@@ -751,9 +753,10 @@ export const createProposalRequest = async (
             teacher_id: teacher_id,
             co_supervisors_ids: co_supervisors_ids,
             title: title,
+            type: type,
             description: description,
             notes: notes,
-            type: "submitted",
+            status: "submitted",
         });
       }
     );
@@ -762,7 +765,7 @@ export const createProposalRequest = async (
 
 export const getProposalRequestsFromDB = async () => {
   return new Promise((resolve, reject) => {
-    const sql = `SELECT * FROM ProposalRequests AS PR WHERE type="submitted"`;
+    const sql = `SELECT * FROM ProposalRequests AS PR WHERE status="submitted"`;
     db.all(
       sql, [],
       async function (err, rows) {
@@ -862,15 +865,15 @@ const getExtraInfoFromProposalRequest = (proposal) => {
   });
 };
 
-export const changeStatusProRequest = (requestid, type) => {
+export const changeStatusProRequest = (requestid, status) => {
   return new Promise((resolve, reject) => {
     const countQuery = "SELECT COUNT(*) AS count FROM ProposalRequests WHERE id = ?";
     db.get(countQuery, [requestid], (err, row) => {
       if (err) {
         reject(err);
       } else if (row && row.count> 0) { 
-        const updateSql = "UPDATE ProposalRequests SET type = ? WHERE id = ?";
-          db.run(updateSql, [type, requestid], (updateErr) => {
+        const updateSql = "UPDATE ProposalRequests SET status = ? WHERE id = ?";
+          db.run(updateSql, [status, requestid], (updateErr) => {
             if (updateErr) {
               reject(updateErr);
             } else {

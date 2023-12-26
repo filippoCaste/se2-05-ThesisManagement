@@ -17,6 +17,8 @@ import { visuallyHidden } from '@mui/utils';
 import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
 import Badge from '@mui/material/Badge';
 import PropTypes from 'prop-types';
+import CreateIcon from '@mui/icons-material/Create';
+import { useNavigate } from 'react-router-dom';
 
 export default function StickyHeadTable(props) {
   const [page, setPage] = React.useState(0);
@@ -25,7 +27,8 @@ export default function StickyHeadTable(props) {
   const [order, setOrder] = React.useState('asc');
   const { proposals, isAppliedProposals } = props;
   const theme = useTheme();
-  
+  const navigate = useNavigate();
+
   const columns = [
     { id: 'title', label: 'Title', minWidth: 450, maxWidth: 450 },
     { id: 'supervisor_id', label: 'Supervisor', minWidth: 200, maxWidth: 200 },
@@ -39,7 +42,7 @@ export default function StickyHeadTable(props) {
     { id: 'keyword_names', label: 'Keywords', minWidth: 150, maxWidth: 150 },
     {
       id: 'button',
-      label: 'Apply',
+      label: 'Details',
       minWidth: 200,
       maxWidth: 200,
       format: (value, row) => (
@@ -47,11 +50,8 @@ export default function StickyHeadTable(props) {
           variant="outlined"
           startIcon={<DescriptionOutlinedIcon />}
           style={{
-            fontSize: '12px',
             textTransform: 'none',
             color: '#2196f3',
-            borderRadius: '4px',
-            border: '1px solid #2196f3',
             transition: 'background-color 0.3s',
             '&:hover': {
               backgroundColor: '#2196f3',
@@ -59,9 +59,7 @@ export default function StickyHeadTable(props) {
             },
           }}
           onClick={() => props.onClick(row)}
-        >
-          Details
-        </Button>
+        ></Button>
       ),
     },
   ];
@@ -77,6 +75,45 @@ export default function StickyHeadTable(props) {
         <Badge color={getColorByStatus(value)} badgeContent={value}></Badge>
       ),
     });
+    // add column for creating a student request starting from an approved application
+    columns.push({
+      id: 'request',
+      label: 'Modify request',
+      format: (value, row) => (
+        <Button
+          variant="outlined"
+          startIcon={<CreateIcon />}
+          disabled={row.status!=='accepted'}
+          onClick={() => createNewStudentRequest(row)}
+        >
+        </Button>
+      ),
+
+    })
+  }
+
+  const createNewStudentRequest = (row) => {
+    // go to the page of creation of a student request
+    // with all the informations needed (title, description, ...)
+    const teacherEmail = row.supervisorsInfo.find(
+      (supervisor) => supervisor.id === row.supervisor_id
+    )?.email
+
+    const coSupervisors = row.supervisorsInfo.filter(
+      (s) => s.id !== row.supervisor_id
+    ).map(s => s.email)
+
+    navigate("/student/proposal", {
+      state: {
+        title: row.title,
+        description: row.description,
+        notes: row.notes,
+        teacherEmail,
+        coSupervisors,
+        type: row.type
+      }
+    })
+
   }
 
   const getColorByStatus = (status) => {
@@ -155,7 +192,7 @@ export default function StickyHeadTable(props) {
                   style={{ width: column.maxWidth }}
                   sortDirection={orderBy === column.id ? order : false}
                 >
-                  {column.label !== 'Apply' ? (
+                  {(column.label !== 'Details' && column.label!=='Modify request' && column.label!=='Status') ? (
                     <TableSortLabel
                       active={true}
                       direction={orderBy === column.id ? order : 'desc'}
@@ -173,7 +210,7 @@ export default function StickyHeadTable(props) {
                         </Box>
                       ) : null}
                     </TableSortLabel>
-                  ) : null}
+                  ) : column.label  }
                 </TableCell>
               ))}
             </TableRow>
