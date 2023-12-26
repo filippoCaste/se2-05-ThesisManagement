@@ -290,7 +290,6 @@ const getProposalRequests = async () => {
   }
 };
 
-
 /**
  * 
  * @param {Object} studentRequest 
@@ -300,6 +299,7 @@ const getProposalRequests = async () => {
  * - `notes`
  * - `teacherEmail`
  * - `coSupervisorEmails[]`
+ * - `status`
  * @returns 
  */
 const postStudentRequest = async (studentRequest) => {
@@ -312,7 +312,6 @@ const postStudentRequest = async (studentRequest) => {
           },
           body: JSON.stringify(studentRequest),
       });
-
       if (response.ok) {
           return true;
       } else {
@@ -323,6 +322,7 @@ const postStudentRequest = async (studentRequest) => {
       throw new Error("Network Error: " + error.message);
   }
 };
+
 const changeStatusProposalRequest = async (proposalRequestId, status) => {
   try {
 

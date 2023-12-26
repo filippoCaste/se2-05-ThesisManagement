@@ -6,7 +6,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ConfirmationDialog from './ConfirmationDialog';
-import studentRequestAPI from '../services/studentRequest.api';
+import proposalAPI from '../services/proposals.api';
 
 
 function ProposalStudent() {
@@ -57,7 +57,7 @@ function ProposalStudent() {
 					title, type, description, notes, teacherEmail, coSupervisorEmails: coSupervisors
 				}
 				try {
-					await studentRequestAPI.postStudentRequest(requestProposal);
+					await proposalAPI.postStudentRequest(requestProposal);
 				} catch(err) {
 					console.log(err)
 					setErrorMsg("Emails are not correct.");
@@ -68,7 +68,7 @@ function ProposalStudent() {
 					title, type, description, notes, teacherEmail, status: 'accepted'
 				}
 				try {
-					await studentRequestAPI.postStudentRequest(requestProposal);
+					await proposalAPI.postStudentRequest(requestProposal);
 				} catch(err) {
 					console.log(err)
 					setErrorMsg("Wrong data.");
