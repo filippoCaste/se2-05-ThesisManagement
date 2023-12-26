@@ -422,6 +422,19 @@ In order to run the application you need to open two terminals and run:
   }, ]
 ```
 
+- GET `/proposals`
+  - request body content: none
+  - response: 
+    - 200 OK (success) with teachers or error message
+    - 500 Internal Server Error: Indicates an error during processing.
+```json
+  [ {
+    "proposal_id": 28,
+    "name": "AI"
+  }, ]
+```
+
+
 ### `/api/applications`:
 
 - GET `/proposal/:id`

@@ -20,6 +20,30 @@ export const getAllKeywords = () => {
     });
 }
 
+
+export const getAllKeywordsWithProposalId = () => {
+    return new Promise((resolve, reject) => {
+        const sql = ' SELECT * FROM Keywords k ,ProposalKeywords pk ' + 
+                     "WHERE k.id = pk.keyword_id  ";
+                    
+
+        db.all(sql, (err, rows) => {
+            if (err) {
+                return reject(err);
+            }
+            const keywords = rows.map((e) => {
+                const obj = {
+                    proposal_id: e.proposal_id,
+                    name: e.name,
+                }
+
+                return obj;
+            });
+            resolve(keywords);
+        });
+    });
+}
+
 export const postKeyword = (keywordName) => {
     return new Promise((resolve, reject) => {
         const sql = 'INSERT INTO Keywords(name, type) VALUES (?, "KEYWORD")';

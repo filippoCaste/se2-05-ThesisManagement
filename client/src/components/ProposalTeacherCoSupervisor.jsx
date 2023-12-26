@@ -19,6 +19,9 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import API_Proposal from '../services/proposals.api';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import API_Keywords from '../services/keywords.api'
+import StickyHeadTable from './TableComponent';
+       
 
 function Row(props) {
     const { proposal, isEvenRow, isSM, onClick } = props;
@@ -82,6 +85,8 @@ function Row(props) {
         </TableRow>
     );
   }
+
+
   
   function ProposalTeacherCoSupervisor(props) {
     const navigate = useNavigate();
@@ -94,6 +99,7 @@ function Row(props) {
     const [listProposals, setListProposals] = useState([]);
     const [isModalOpen, setModalOpen] = useState(false);
     const [selectedProposal, setSelectedProposal] = useState(null);
+
   
     const fetchData = async () => {
       if (user) {
@@ -105,10 +111,35 @@ function Row(props) {
           });
         };
   
-        const proposals = await API_Proposal.getProposalsByCoSupervisorId(user.id);
+        
+        let keywords = await  API_Keywords.getAllKeywordsWithProposalId();
+        let proposals = await API_Proposal.getProposalsByCoSupervisorId(user.id);
 
-        updateExpiredStatus(proposals);
-        setListProposals(proposals);
+         // Filter out duplicates based on proposal_id
+        const uniqueProposals = proposals.reduce((unique, p) => {
+          if (!unique.some((existingProposal) => existingProposal.proposal_id === p.proposal_id)) {
+            unique.push(p);
+          }
+          return unique;
+        }, []);
+
+        updateExpiredStatus(uniqueProposals);
+        
+        const processedProposals = uniqueProposals.map(p => {
+          let supervisorsInfo = [{ 'id': p.supervisor_id, 'name': p.name, 'surname': p.surname }];
+          let keywords_proposal = keywords.filter((k) => k.proposal_id == p.proposal_id);
+    
+          let keyword_names = [];
+          if (keywords_proposal) {
+            keyword_names = keywords_proposal.map(k => k.name + " ,");
+          }
+    
+          return { ...p, supervisorsInfo, keyword_names };
+        });
+    
+        setListProposals(processedProposals);
+
+        
       }
     };
   
@@ -116,131 +147,92 @@ function Row(props) {
       fetchData();
     }, [user, currentDataAndTime]);
   
-    const openModal = (proposal) => {
-      setSelectedProposal(proposal);
-      setModalOpen(true);
-    };
   
     const closeModal = () => {
       setSelectedProposal(null);
       setModalOpen(false);
     };
 
-  
-    return (
+    
+    const handleCardClick = (proposal) => {
+      setSelectedProposal(proposal);
+      setModalOpen(true);
+    };
+
+   
+    return ( 
       <Grid container mt="10%">
-        <Grid item xs={12} sx={{ mt: '2vh', mx: '4vh' }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={12} align="center">
-              <Typography variant="h4"> THESIS AS CO-SUPERVISOR </Typography>
-              <br /> <br />
-            </Grid>
-            <br /><br />
-  
-            <Table aria-label="collapsible table" >
-              <TableHead>
-                <TableRow>
-                  <TableCell style={{ width: isSM ? "80%" : "25%" }} >
-                    <b>Title</b>
-                  </TableCell>
-                  {!isSM ?
-                    <>
-                      <TableCell style={{ width: '10%' }} >
-                        <b>Level</b>
-                      </TableCell>
-                      <TableCell style={{ width: '14%' }} >
-                        <b>Title Degree</b>
-                      </TableCell>
-                      <TableCell style={{ width: '11%' }} >
-                        <b>Expiration Date</b>
-                      </TableCell>
-                      <TableCell style={{ width: '6%' }} >
-                        <b>Status</b>
-                      </TableCell>
-                      <TableCell style={{ width: '3.6%' }}><b>See details</b></TableCell>
-                    </>
-                    : <TableCell style={{ width: '15%' }}><b>Actions</b></TableCell> }
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {listProposals.length > 0 ? (
-                  listProposals.map((proposal, index) => (
-                    <Row
-                      key={index}
-                      proposal={proposal}
-                      isEvenRow={index % 2 === 0}
-                      isSM={isSM}
-                      onClick={openModal} 
-                    />
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell />
-                    <TableCell colSpan={9} >
-                      No thesis available
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-  
-            <Dialog open={isModalOpen} onClose={closeModal} maxWidth="md" fullWidth PaperProps={{ sx: {borderRadius: 8,}, }}>
-               
-                <DialogTitle sx={{borderBottom: `1px solid ${theme.palette.secondary.main}`, color: theme.palette.primary.main, }}>
-                {selectedProposal && (
-               
-                    <Typography variant="h6" sx={{ fontWeight: 'bold' }}> {selectedProposal.title}  </Typography>
-                )}
-                </DialogTitle>
-                
-                <DialogContent sx={{padding: '20px', backgroundColor: theme.palette.background.default,}} >
-                    {selectedProposal && (
-                    <>
-                        <p> <b>Description: </b> {selectedProposal.description}</p>
-                        <p> <b>Notes: </b> {selectedProposal.notes}</p>
-                        <p> <b>Expiration Date: </b> { dayjs(selectedProposal.expiration_date).format('DD/MM/YYYY')}</p>
-                        <p> <b>Level: </b> {selectedProposal.level=="MSc"? "Master Of Science" : "Bachelor Of Science"}</p>
-                        <p> <b>Deegre: </b> {selectedProposal.title_degree}</p>
-                        <p> <b>Group: </b> {selectedProposal.title_group}</p>
-                        <p> <b>Required Knowledge: </b> {selectedProposal.required_knowledge}</p>
-                        <p>
-                            <b>Supervisor: </b>{selectedProposal.name + " " + selectedProposal.surname}
-                            <span style={{ marginLeft: '10px', marginRight: '250px' }}></span>
-                            <b>Email: </b>{selectedProposal.email}
-                        </p>
-                    </>
-                    )}
-                </DialogContent>
-
-                <DialogActions sx={{padding: '20px', borderTop: `1px solid ${theme.palette.secondary.main}`, justifyContent: 'space-between',}}>
-                {selectedProposal && (
-                  <Button onClick={closeModal} color="secondary">
-                     <Typography variant="button" sx={{ color: theme.palette.secondary.main }}> Close </Typography>
-                  </Button>
-                   )}
-                </DialogActions>
-
-            </Dialog>
-          
-            <br /> <br />
+          <Grid item xs={12} sx={{ mt: '2vh', mx: '4vh' }}>
             <Grid container spacing={2}>
-                <Grid item xs={12} sm={6} md={2}>
-                <Button variant="contained" color="primary" 
-                 onClick={() => navigate('/teacher')}
-                 style={{
-                    position: 'fixed',
-                    bottom: '20px', 
-                    left: '20px', 
-                    zIndex: 1000, 
-                  }}
-                > 
-                 {' '}  BACK   </Button>
-                </Grid>
+              <Grid item xs={12} sm={6} md={12} align="center">
+                <Typography variant="h4"> THESIS AS CO-SUPERVISOR </Typography>
+              </Grid>
+              <br /><br />
+             </Grid>
+          </Grid>
+
+          <StickyHeadTable proposals={listProposals}  onClick={handleCardClick} />
+
+          <Dialog open={isModalOpen} onClose={closeModal} maxWidth="md" fullWidth PaperProps={{ sx: {borderRadius: 8,}, }}>
+               
+               <DialogTitle sx={{borderBottom: `1px solid ${theme.palette.secondary.main}`, color: theme.palette.primary.main, }}>
+               {selectedProposal && (
+              
+                   <Typography variant="h6" sx={{ fontWeight: 'bold' }}> {selectedProposal.title}  </Typography>
+               )}
+               </DialogTitle>
+               
+               <DialogContent sx={{padding: '20px', backgroundColor: theme.palette.background.default,}} >
+                   {selectedProposal && (
+                   <>
+                       <p> <b>Proposal: </b> {selectedProposal.proposal_id}</p>
+                     
+                       <p> <b>Description: </b> {selectedProposal.description}</p>
+                       <p> <b>Notes: </b> {selectedProposal.notes}</p>
+                       <p> <b>Expiration Date: </b> { dayjs(selectedProposal.expiration_date).format('DD/MM/YYYY')}</p>
+                       <p> <b>Level: </b> {selectedProposal.level=="MSc"? "Master Of Science" : "Bachelor Of Science"}</p>
+                       <p> <b>Deegre: </b> {selectedProposal.title_degree}</p>
+                       <p> <b>Group: </b> {selectedProposal.title_group}</p>
+                       <p> <b>Required Knowledge: </b> {selectedProposal.required_knowledge}</p>
+                       <p>
+                           <b>Supervisor: </b>{selectedProposal.name + " " + selectedProposal.surname}
+                           <span style={{ marginLeft: '10px', marginRight: '250px' }}></span>
+                           <b>Email: </b>{selectedProposal.email}
+                       </p>
+                       <p>  <b>Keywords: </b>{selectedProposal.keyword_names} </p>
+                       
+                   </>
+                   )}
+               </DialogContent>
+
+               <DialogActions sx={{padding: '20px', borderTop: `1px solid ${theme.palette.secondary.main}`, justifyContent: 'space-between',}}>
+               {selectedProposal && (
+                 <Button onClick={closeModal} color="secondary">
+                    <Typography variant="button" sx={{ color: theme.palette.secondary.main }}> Close </Typography>
+                 </Button>
+                  )}
+               </DialogActions>
+
+           </Dialog>
+
+
+         <Grid container spacing={2}>
+            <Grid item xs={12} sm={6} md={2}>
+            <Button variant="contained" color="primary" 
+              onClick={() => navigate('/teacher')}
+              style={{
+                position: 'fixed',
+                bottom: '20px', 
+                left: '20px', 
+                zIndex: 1000, 
+              }}
+            > 
+              {' '}  BACK   </Button>
             </Grid>
         </Grid>
       </Grid>
-    </Grid>
-  );
+    );
+
 }
 
 ProposalTeacherCoSupervisor.propTypes = {
