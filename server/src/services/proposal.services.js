@@ -756,7 +756,7 @@ export const createProposalRequest = async (
             type: type,
             description: description,
             notes: notes,
-            type: "submitted",
+            status: "submitted",
         });
       }
     );
