@@ -728,7 +728,6 @@ export const getProposalsByCoSupervisorId = (teacherId) => {
       } else {
       const proposals = rows.map((e) => {
         const obj = {
-          id: e.id,
           proposal_id: e.proposal_id,
           title: e.title,
           description: e.description,

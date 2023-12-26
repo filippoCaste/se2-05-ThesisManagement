@@ -2,20 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
-import { Button, IconButton, Table, TableBody, TableCell, TableHead, TableRow, 
-    Typography, useMediaQuery,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle} 
-from '@mui/material';
-
+import { Button, Typography, useMediaQuery, Dialog, DialogActions, DialogContent, DialogTitle}  from '@mui/material';
 import { UserContext } from '../Contexts';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import { useTheme } from '@mui/material/styles'; 
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import API_Proposal from '../services/proposals.api';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -23,76 +12,10 @@ import API_Keywords from '../services/keywords.api'
 import StickyHeadTable from './TableComponent';
        
 
-function Row(props) {
-    const { proposal, isEvenRow, isSM, onClick } = props;
-  
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const openActions = Boolean(anchorEl);
-  
-    const handleClick = (event) => {
-      if (anchorEl === event.currentTarget) {
-        setAnchorEl(null);
-      } else {
-        setAnchorEl(event.currentTarget);
-      }
-    };
-  
-    const handleClose = () => {
-      setAnchorEl(null);
-    };
-  
-    return (
-        <TableRow sx={{ '& > *': { borderTop: "3px solid #ddd", backgroundColor: isEvenRow ? '#f5f5f5' : '#ffffff' } }}>
-          <TableCell style={{ width: isSM ? '80%' : '25%' }} component="th" scope="row">{proposal.title}</TableCell>
-          {!isSM ?
-            <>
-              <TableCell style={{ width: '10%' }}>
-                {proposal.level === 'MSc' && "Master of Science"}
-                {proposal.level === 'BSc' && "Bachelor of Science"}
-                {proposal.level !== 'MSc' && proposal.level !== 'BSc' && ""}
-              </TableCell>
-              <TableCell style={{ width: '14%' }}>{proposal.title_degree}</TableCell>
-              <TableCell style={{ width: '11%' }}>{dayjs(proposal.expiration_date).format("DD/MM/YYYY")}</TableCell>
-              <TableCell style={{ width: '6%' }}>{proposal.status}</TableCell>
-              <TableCell style={{ width: '3.6%' }}>
-                <IconButton style={{ color: "#007FFF" }} aria-label="show details" onClick={() => onClick(proposal)}>
-                  <DescriptionOutlinedIcon />
-                </IconButton>
-              </TableCell>
-            </>
-            :
-            <TableCell style={{ width: '15%' }}>
-              <IconButton style={{ color: "#007FFF" }} aria-label="show more"
-                aria-controls={openActions ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={openActions ? 'true' : undefined}
-                onClick={handleClick}>
-                <MoreHorizIcon />
-                <Menu
-                  id="basic-menu"
-                  anchorEl={anchorEl}
-                  open={openActions}
-                  onClose={handleClose}
-                  MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                  }}
-                >
-                  <MenuItem style={{ color: "#007FFF" }} aria-label="show details" onClick={() => { onClick(proposal); handleClose(); }}><DescriptionOutlinedIcon /></MenuItem>
-                </Menu>
-              </IconButton>
-            </TableCell>
-          }
-        </TableRow>
-    );
-  }
-
-
-  
   function ProposalTeacherCoSupervisor(props) {
     const navigate = useNavigate();
     const { currentDataAndTime } = props;
     const theme = useTheme();
-    const isSM = useMediaQuery(theme.breakpoints.down('md'));
     dayjs.extend(customParseFormat);
   
     const { user } = useContext(UserContext);
@@ -185,8 +108,6 @@ function Row(props) {
                <DialogContent sx={{padding: '20px', backgroundColor: theme.palette.background.default,}} >
                    {selectedProposal && (
                    <>
-                       <p> <b>Proposal: </b> {selectedProposal.proposal_id}</p>
-                     
                        <p> <b>Description: </b> {selectedProposal.description}</p>
                        <p> <b>Notes: </b> {selectedProposal.notes}</p>
                        <p> <b>Expiration Date: </b> { dayjs(selectedProposal.expiration_date).format('DD/MM/YYYY')}</p>
@@ -239,19 +160,7 @@ ProposalTeacherCoSupervisor.propTypes = {
   currentDataAndTime: PropTypes.string.isRequired
 };
 
-Row.propTypes = {
-  proposal: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    level: PropTypes.string.isRequired,
-    title_degree: PropTypes.string.isRequired,
-    expiration_date: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
-    // Add other props as needed
-  }).isRequired,
-  isEvenRow: PropTypes.bool.isRequired,
-  isSM: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired,
-};
+
 
 
 export default ProposalTeacherCoSupervisor;
