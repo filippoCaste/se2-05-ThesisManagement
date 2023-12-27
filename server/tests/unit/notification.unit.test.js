@@ -2,7 +2,8 @@ import * as applications from "../../src/services/application.services.js";
 import * as proposals from "../../src/services/proposal.services.js";
 import * as emails from "../../src/emailService/sendEmail.js";
 
-import { sendNotificationApplicationDecision } from "../../src/services/notification.services.js";
+import { sendNotificationApplicationDecision } from "../../src/services/notificationSender.services.js";
+import { saveNotificationToDB } from "../../src/services/notification.services.js";
 
 
 jest.mock("../../src/emailService/sendEmail.js", () => ({
@@ -17,14 +18,18 @@ jest.mock("../../src/services/proposal.services.js", () => ({
   getProposalTitleByApplicationId: jest.fn(),
 }));
 
+jest.mock("../../src/services/notification.services.js", () => ({
+  saveNotificationToDB: jest.fn(),
+}));
 
 describe('sendNotificationApplicationDecision', () => {
   test('should send notification email on valid input', async () => {
 
   
     // Mocking necessary functions
-    applications.getStudentEmailByApplicationId.mockResolvedValue('test@example.com');
+    applications.getStudentEmailByApplicationId.mockResolvedValue({email: 'test@example.com', student_id: 1});
     proposals.getProposalTitleByApplicationId.mockResolvedValue('Test Proposal');
+    saveNotificationToDB.mockResolvedValue({message: "Notification saved to DB"});
     
     const result = await sendNotificationApplicationDecision('applicationId', 'approved');
   

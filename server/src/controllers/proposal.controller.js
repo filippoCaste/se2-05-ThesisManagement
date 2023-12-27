@@ -17,7 +17,7 @@ import { getKeywordByName, postKeyword } from "../services/keyword.services.js";
 
 import { getEmailById } from "../services/user.services.js";
 import {scheduleEmailOneWeekBefore} from "../emailService/planEmail.js";
-import {sendEmailProposalRequestToTeacher} from "../services/notification.services.js"
+import {sendEmailProposalRequestToTeacher} from "../services/notificationSender.services.js"
 
 import validator from "validator";
 

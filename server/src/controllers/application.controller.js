@@ -1,6 +1,6 @@
 "use strict";
 import { changeStatus, createApplicationInDb, getApplicationsByProposalId, getApplicationsByStudentId } from "../services/application.services.js";
-import {sendEmailToTeacher, sendNotificationApplicationDecision, sendNotificationApplicationDecisionSupervisor} from "../services/notification.services.js";
+import {sendEmailToTeacher, sendNotificationApplicationDecision, sendNotificationApplicationDecisionSupervisor} from "../services/notificationSender.services.js";
 import validator from "validator";
 
 export const createApplication = async (req, res) => {

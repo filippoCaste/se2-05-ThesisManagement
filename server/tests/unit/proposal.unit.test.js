@@ -2,7 +2,7 @@ import * as controllers from "../../src/controllers/proposal.controller.js";
 import * as services from "../../src/services/proposal.services.js";
 import * as teacherServices from "../../src/services/teacher.services.js";
 import * as keywords from "../../src/services/keyword.services.js";
-import * as notifications from "../../src/services/notification.services.js";
+import * as notifications from "../../src/services/notificationSender.services.js";
 
  
 jest.mock("../../src/services/notification.services", () => ({
