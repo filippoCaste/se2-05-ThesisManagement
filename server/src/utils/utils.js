@@ -48,3 +48,14 @@ export function isEmailInputValid(values) {
   }
   return true;
 }
+
+export function isDateInputValid(dateString) {
+  // Check if the date string matches the 'YYYY-MM-DD' format using a regular expression
+  const dateRegex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+
+  if (!dateRegex.test(dateString)) {
+    console.log("regex didnt work")
+    return false; // Date format doesn't match 'YYYY-MM-DD'
+  }
+  return true;
+}

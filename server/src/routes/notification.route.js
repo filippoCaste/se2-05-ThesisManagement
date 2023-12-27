@@ -4,12 +4,12 @@ import { changeStatusOfNotifications, deleteNotification, deleteNotificationsFor
 
 const router = Router();
 
-router.get("/", getNotificationsForUser);
+router.get("/", isLoggedIn, getNotificationsForUser);
 
-router.delete("/:notificationId", deleteNotification);
+router.delete("/:notificationId", isLoggedIn, deleteNotification);
 
-router.delete("/", deleteNotificationsForUser);
+router.delete("/", isLoggedIn, deleteNotificationsForUser);
 
-router.put("/:userId", changeStatusOfNotifications);
+router.put("/", isLoggedIn, changeStatusOfNotifications);
 
 export { router };

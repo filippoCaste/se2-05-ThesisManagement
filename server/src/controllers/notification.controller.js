@@ -9,7 +9,7 @@ import { isNumericInputValid } from "../utils/utils.js";
 
 export const getNotificationsForUser = async (req, res) => {
   try {
-    const result = await getAllNotificationsForUser(req.body.id);
+    const result = await getAllNotificationsForUser(req.user.id);
     return res.status(200).json(result);
   } catch (err) {
     return res.status(500).json({ error: err.message });
@@ -22,11 +22,11 @@ export const deleteNotification = async (req, res) => {
     if (!isNumericInputValid([notificationId])) {
         return res.status(400).json({ error: "Notification ID must be a number" });
     }
-    const notification = getNotificationById(notificationId);
+    const notification = await getNotificationById(notificationId);
     if (!notification) {
         return res.status(404).json({ error: "Notification not found" });
     }
-    const result = await deleteNotificationById(notificationId);
+    await deleteNotificationById(notificationId);
     return res.status(200).json({ message: "Notification deleted successfully" });
   } catch (err) {
     return res.status(500).json({ error: err.message });
@@ -35,7 +35,7 @@ export const deleteNotification = async (req, res) => {
 
 export const deleteNotificationsForUser = async (req, res) => {
   try {
-    const result = await deleteAllNotificationsForUser(req.body.id);
+    await deleteAllNotificationsForUser(req.user.id);
     return res.status(200).json({ message: "Notifications deleted successfully" });
   } catch (err) {
     return res.status(500).json({ error: err.message });
@@ -44,8 +44,8 @@ export const deleteNotificationsForUser = async (req, res) => {
 
 export const changeStatusOfNotifications = async (req, res) => {
   try {
-    const result = await setReadNotificationsForUser(req.params.userId);
-    return res.json(result);
+    await setReadNotificationsForUser(req.user.id);
+    return res.status(200).json({ message: "Notifications deleted successfully" });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
