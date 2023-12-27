@@ -21,9 +21,11 @@ router.post("/", isTeacher, postProposal);
 
 router.post('/request', isStudent, createStudentProposalRequest);
 
-router.get("/request", isSecretary, getProposalRequests); 
+router.get("/request", isSecretary, getProposalRequests);
 
 router.put("/request/:requestid", isSecretary, changeStatusProposalRequest);
+
+router.get("/request/teacher/:teacherId", isTeacher, getProposalRequests);
 
 
 router.get('/teachers/:id', isLoggedIn, getProposalTeacherId)

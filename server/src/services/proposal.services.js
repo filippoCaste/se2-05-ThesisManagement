@@ -763,11 +763,22 @@ export const createProposalRequest = async (
   });
 };
 
-export const getProposalRequestsFromDB = async () => {
+export const getProposalRequestsFromDB = async (teacherId = undefined) => {
   return new Promise((resolve, reject) => {
-    const sql = `SELECT * FROM ProposalRequests AS PR WHERE status="submitted"`;
+    let sql = `SELECT * FROM ProposalRequests AS PR WHERE status=?`;
+    const params = [];
+
+    if(teacherId){
+      sql+=' AND teacher_id=?';
+
+      // only retrieve requests for teacher, that approved by secretary.
+      params.push("approved");
+      params.push(teacherId);
+    } else {
+      params.push("submitted");
+    }
     db.all(
-      sql, [],
+      sql, params,
       async function (err, rows) {
         if (err) {
           reject(err);

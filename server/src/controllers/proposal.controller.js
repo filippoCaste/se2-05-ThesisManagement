@@ -344,8 +344,8 @@ export const createStudentProposalRequest = async (req, res) => {
 
 export const getProposalRequests = async (req, res, next) => {
   try {
-
-    const proposalRequests = await getProposalRequestsFromDB();
+    const {teacherId} = req.params;
+    const proposalRequests = await getProposalRequestsFromDB(teacherId);
     
     return res.status(200).json(proposalRequests);
   } catch (err) {
