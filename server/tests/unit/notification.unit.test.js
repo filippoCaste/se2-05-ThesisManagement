@@ -203,7 +203,7 @@ describe("changeStatusOfNotifications", () => {
 
     expect(mockRes.status).toHaveBeenCalledWith(200);
     expect(mockRes.json).toHaveBeenCalledWith({
-      message: "Notifications deleted successfully",
+      message: "Notifications updated successfully",
     });
   });
 
