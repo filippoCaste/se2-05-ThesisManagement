@@ -45,7 +45,7 @@ export const deleteNotificationsForUser = async (req, res) => {
 export const changeStatusOfNotifications = async (req, res) => {
   try {
     await setReadNotificationsForUser(req.user.id);
-    return res.status(200).json({ message: "Notifications deleted successfully" });
+    return res.status(200).json({ message: "Notifications updated successfully" });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
