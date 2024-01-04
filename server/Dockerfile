@@ -3,7 +3,7 @@ FROM node:latest
 WORKDIR /app/server
 
 COPY package*.json ./
-RUN npm install
+RUN npm install --ignore-scripts
 
 COPY . .
 
