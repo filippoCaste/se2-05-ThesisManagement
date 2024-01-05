@@ -47,7 +47,9 @@ export default class Proposal {
     title_group,
     required_knowledge,
     supervisorsInfo, // Array of supervisor information
-    keyword_names
+    keyword_names,
+    thesis_request_status,
+    thesis_request_status_date
   ) {
     this.id = id;
     this.title = title;
@@ -63,6 +65,8 @@ export default class Proposal {
     this.required_knowledge = required_knowledge;
     this.supervisorsInfo = supervisorsInfo.map(Supervisor.fromJson); // Map supervisor info to Supervisor objects
     this.keyword_names = keyword_names;
+    this.thesis_request_status = thesis_request_status;
+    this.thesis_request_status_date = thesis_request_status_date;
   }
 
   serialize = () => {
@@ -72,17 +76,19 @@ export default class Proposal {
       description: this.description,
       expiration_date: this.expiration_date,
       cod_degree: this.cod_degree,
-      title_degree:this.title_group,
+      title_degree: this.title_group,
       level: this.level,
       supervisor_id: this.supervisor_id,
       notes: this.notes,
       cod_group: this.cod_group,
-      title_group:this.title_group,
+      title_group: this.title_group,
       required_knowledge: this.required_knowledge,
       supervisorsInfo: this.supervisorsInfo.map((supervisor) =>
         supervisor.serialize()
       ), // Serialize supervisor info
       keyword_names: this.keyword_names,
+      thesis_request_status: this.thesis_request_status,
+      thesis_request_status_date: this.thesis_request_status_date,
     };
   };
 
@@ -102,7 +108,9 @@ export default class Proposal {
       json.title_group,
       json.required_knowledge,
       json.supervisorsInfo, // Pass array of supervisor info directly
-      json.keyword_names
+      json.keyword_names,
+      json.thesis_request_status,
+      json.thesis_request_status_date
     );
   };
 
@@ -121,7 +129,9 @@ export default class Proposal {
       result.title_group,
       result.required_knowledge,
       result.supervisorsInfo, // Pass array of supervisor info directly
-      result.keyword_names
+      result.keyword_names,
+      result.thesis_request_status,
+      result.thesis_request_status_date
     );
   };
 }
