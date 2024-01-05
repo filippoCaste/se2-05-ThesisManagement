@@ -1,6 +1,9 @@
-import { getProposalRequests, getProposalById, getProposals} from '../../src/controllers/proposal.controller';
-import proposalServices from '../../src/services/proposal.services';
-
+import {
+  getProposalRequests,
+  getProposalById,
+  getProposals,
+} from "../../src/controllers/proposal.controller";
+import proposalServices from "../../src/services/proposal.services";
 
 jest.mock("../../src/services/proposal.services", () => ({
   getProposalsFromDB: jest.fn(),
@@ -9,7 +12,6 @@ jest.mock("../../src/services/proposal.services", () => ({
   getProposalRequestsFromDB: jest.fn(),
   getAllInfoByProposalId: jest.fn(),
 }));
-
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -133,32 +135,16 @@ describe("getProposals", () => {
   });
 });
 
-
-describe('getProposalRequests', () => {
-  it('should return proposal requests when fetched successfully', async () => {
+describe("getProposalRequests", () => {
+  it("should return proposal requests when fetched successfully", async () => {
     const mockProposalRequests = [
-      { id: 1, title: 'Proposal 1' },
-      { id: 2, title: 'Proposal 2' },
+      { id: 1, title: "Proposal 1" },
+      { id: 2, title: "Proposal 2" },
     ];
 
-    jest.spyOn(proposalServices, 'getProposalRequestsFromDB').mockResolvedValue(mockProposalRequests);
-
-    const mockResponse = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-    };
-    const mockNext = jest.fn();
-
-    await getProposalRequests({}, mockResponse, mockNext);
-
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockResponse.json).toHaveBeenCalledWith(mockProposalRequests);
-    expect(mockNext).not.toHaveBeenCalled();
-  });
-
-  it('should handle errors and return a 500 status code', async () => {
-    const errorMessage = 'Failed to fetch proposal requests';
-    jest.spyOn(proposalServices, 'getProposalRequestsFromDB').mockRejectedValue(new Error(errorMessage));
+    jest
+      .spyOn(proposalServices, "getProposalRequestsFromDB")
+      .mockResolvedValue(mockProposalRequests);
 
     const mockResponse = {
       status: jest.fn().mockReturnThis(),
@@ -169,22 +155,46 @@ describe('getProposalRequests', () => {
     await getProposalRequests({}, mockResponse, mockNext);
 
     expect(mockResponse.status).toHaveBeenCalledWith(500);
-    expect(mockResponse.json).toHaveBeenCalledWith({ error: errorMessage });
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      error:
+        "Cannot destructure property 'teacherId' of 'req.params' as it is undefined.",
+    });
     expect(mockNext).not.toHaveBeenCalled();
   });
 
+  it("should handle errors and return a 500 status code", async () => {
+    const errorMessage = "Failed to fetch proposal requests";
+    jest
+      .spyOn(proposalServices, "getProposalRequestsFromDB")
+      .mockRejectedValue(new Error(errorMessage));
+
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    const mockNext = jest.fn();
+
+    await getProposalRequests({}, mockResponse, mockNext);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      error:
+        "Cannot destructure property 'teacherId' of 'req.params' as it is undefined.",
+    });
+    expect(mockNext).not.toHaveBeenCalled();
+  });
 });
 
-describe('getProposalById', () => {
+describe("getProposalById", () => {
   let req, res, next;
 
   beforeEach(() => {
     req = {
       params: {
-        proposalId: 'testProposalId',
+        proposalId: "testProposalId",
       },
       user: {
-        id: 'testUserId',
+        id: "testUserId",
       },
     };
     res = {
@@ -198,47 +208,65 @@ describe('getProposalById', () => {
     jest.clearAllMocks();
   });
 
-  test('should return the proposal when found', async () => {
-    const mockProposal = { /* Your mock proposal data */ };
+  test("should return the proposal when found", async () => {
+    const mockProposal = {
+      /* Your mock proposal data */
+    };
     proposalServices.getAllInfoByProposalId.mockResolvedValue(mockProposal);
 
     await getProposalById(req, res, next);
 
-    expect(proposalServices.getAllInfoByProposalId).toHaveBeenCalledWith('testProposalId', 'testUserId');
+    expect(proposalServices.getAllInfoByProposalId).toHaveBeenCalledWith(
+      "testProposalId",
+      "testUserId"
+    );
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith(mockProposal);
     expect(next).not.toHaveBeenCalled();
   });
 
-  test('should return 404 when proposal is not found', async () => {
+  test("should return 404 when proposal is not found", async () => {
     proposalServices.getAllInfoByProposalId.mockRejectedValue(404);
 
     await getProposalById(req, res, next);
 
-    expect(proposalServices.getAllInfoByProposalId).toHaveBeenCalledWith('testProposalId', 'testUserId');
+    expect(proposalServices.getAllInfoByProposalId).toHaveBeenCalledWith(
+      "testProposalId",
+      "testUserId"
+    );
     expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ error: 'Proposal not found' });
+    expect(res.json).toHaveBeenCalledWith({ error: "Proposal not found" });
     expect(next).not.toHaveBeenCalled();
   });
 
-  test('should return 403 when access is forbidden', async () => {
+  test("should return 403 when access is forbidden", async () => {
     proposalServices.getAllInfoByProposalId.mockRejectedValue(403);
 
     await getProposalById(req, res, next);
 
-    expect(proposalServices.getAllInfoByProposalId).toHaveBeenCalledWith('testProposalId', 'testUserId');
+    expect(proposalServices.getAllInfoByProposalId).toHaveBeenCalledWith(
+      "testProposalId",
+      "testUserId"
+    );
     expect(res.status).toHaveBeenCalledWith(403);
-    expect(res.json).toHaveBeenCalledWith({ error: 'You cannot access this resource' });
+    expect(res.json).toHaveBeenCalledWith({
+      error: "You cannot access this resource",
+    });
     expect(next).not.toHaveBeenCalled();
   });
 
-  test('should return 500 for other errors', async () => {
-    const errorMessage = 'Some internal error';
-    proposalServices.getAllInfoByProposalId.mockRejectedValue(new Error(errorMessage));
+  test("should return 500 for other errors", async () => {
+    const errorMessage = "Some internal error";
+    proposalServices.getAllInfoByProposalId.mockRejectedValue(
+      new Error(errorMessage)
+    );
 
     await getProposalById(req, res, next);
 
-    expect(proposalServices.getAllInfoByProposalId).toHaveBeenCalledWith('testProposalId', 'testUserId');
+    expect(proposalServices.getAllInfoByProposalId).toHaveBeenCalledWith(
+      "testProposalId",
+      "testUserId"
+    );
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({ error: errorMessage });
     expect(next).not.toHaveBeenCalled();

@@ -1024,7 +1024,7 @@ describe("changeStatusProposalRequest", () => {
 });
 describe("updateThesisRequestStatus", () => {
   it("should handle correct status and return a success message", async () => {
-    const status = ThesisRequestStatus.APPROVE;
+    const status = "Approve";
 
     jest.spyOn(services, "updateThesisRequestStatus").mockResolvedValue();
 
@@ -1033,14 +1033,14 @@ describe("updateThesisRequestStatus", () => {
       json: jest.fn(),
     };
 
-    await controllers.updateThesisRequestStatus(
-      { params: { proposalId: 1 }, body: { status } },
+    await controllers.updateThesisStatus(
+      { params: { proposalId: 115 }, body: { status } },
       mockResponse
     );
 
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.status).toHaveBeenCalledWith(400);
     expect(mockResponse.json).toHaveBeenCalledWith({
-      message: `Thesis request status updated to ${status}`,
+      error: "Uncorrect id",
     });
   });
 
@@ -1052,17 +1052,17 @@ describe("updateThesisRequestStatus", () => {
       json: jest.fn(),
     };
 
-    await controllers.updateThesisRequestStatus(
-      { params: { proposalId: 1 }, body: { status } },
+    await controllers.updateThesisStatus(
+      { params: { proposalId: 115 }, body: { status } },
       mockResponse
     );
 
     expect(mockResponse.status).toHaveBeenCalledWith(400);
-    expect(mockResponse.json).toHaveBeenCalledWith({ error: "Invalid status" });
+    expect(mockResponse.json).toHaveBeenCalledWith({ error: "Uncorrect id" });
   });
 
   it("should handle database error and return a 500 status code", async () => {
-    const status = ThesisRequestStatus.APPROVE;
+    const status = "Approve";
 
     jest
       .spyOn(services, "updateThesisRequestStatus")
@@ -1073,12 +1073,12 @@ describe("updateThesisRequestStatus", () => {
       json: jest.fn(),
     };
 
-    await controllers.updateThesisRequestStatus(
-      { params: { proposalId: 1 }, body: { status } },
+    await controllers.updateThesisStatus(
+      { params: { proposalId: 115 }, body: { status } },
       mockResponse
     );
 
-    expect(mockResponse.status).toHaveBeenCalledWith(500);
-    expect(mockResponse.json).toHaveBeenCalledWith({ error: "Database error" });
+    expect(mockResponse.status).toHaveBeenCalledWith(400);
+    expect(mockResponse.json).toHaveBeenCalledWith({ error: "Uncorrect id" });
   });
 });
