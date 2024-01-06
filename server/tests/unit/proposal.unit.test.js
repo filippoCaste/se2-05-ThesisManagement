@@ -1026,7 +1026,7 @@ describe("updateThesisStatus", () => {
   test("should update thesis request status in the database", async () => {
     const mockRequest = {
       params: {
-        requestid: "127",
+        id: "127",
       },
       body: {
         status: "Approve",
@@ -1048,7 +1048,7 @@ describe("updateThesisStatus", () => {
   it("should handle incorrect type and return a 400 status code", async () => {
     const mockRequest = {
       params: {
-        requestid: "127",
+        id: "127",
       },
       body: {
         status: "invalidType",
@@ -1067,7 +1067,7 @@ describe("updateThesisStatus", () => {
   test("should reject with an error for an invalid status", async () => {
     const mockRequest = {
       params: {
-        requestid: "nonExistentId",
+        id: "nonExistentId",
       },
       body: {
         status: "Approve",

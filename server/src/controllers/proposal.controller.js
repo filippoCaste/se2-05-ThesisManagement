@@ -450,15 +450,15 @@ function isSupervisorsObjValid(supervisors_obj) {
 /**
  * Create a student proposal request.
  *
- * @param {Object} req - the request object.
- * @param {Object} res - the response object.
+ * @param {*} req - the request object.
+ * @param {*} res - the response object.
  * @return {Promise} - a promise that resolves to the result of the operation.
  */
 
-export const updateThesisStatus = async (req, res, next) => {
-  const id = parseInt(req.params.requestid);
-  const status = req.body.status;
+export const updateThesisStatus = async (req, res) => {
   try {
+    const id = parseInt(req.params.id);
+    const status = req.body.status;
     if (isNaN(id)) {
       return res.status(400).json({ error: "Uncorrect id" });
     }
