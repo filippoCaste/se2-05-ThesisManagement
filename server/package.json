@@ -54,7 +54,8 @@
     "supertest": "^6.3.3"
   },
   "jest": {
-    "testTimeout": 3000
+    "testTimeout": 3000,
+    "maxWorkers": 10
   },
   "directories": {
     "test": "tests"

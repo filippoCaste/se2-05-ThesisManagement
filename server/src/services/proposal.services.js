@@ -877,7 +877,7 @@ export const createProposalRequest = async (
   });
 };
 
-export const getProposalRequestsFromDB = async (teacherId = undefined) => {
+export const getProposalRequestsFromDB = async () => {
   return new Promise((resolve, reject) => {
     const sql = `SELECT * FROM ProposalRequests AS PR WHERE status="submitted"`;
     db.all(sql, [], async function (err, rows) {

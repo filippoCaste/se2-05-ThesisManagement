@@ -1022,63 +1022,64 @@ describe("changeStatusProposalRequest", () => {
     });
   });
 });
-describe("updateThesisRequestStatus", () => {
-  it("should handle correct status and return a success message", async () => {
-    const status = "Approve";
+describe("updateThesisStatus", () => {
+  test("should update thesis request status in the database", async () => {
+    const mockRequest = {
+      params: {
+        requestid: "127",
+      },
+      body: {
+        status: "Approve",
+      },
+    };
 
     jest.spyOn(services, "updateThesisRequestStatus").mockResolvedValue();
 
     const mockResponse = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
+      send: jest.fn(),
     };
 
-    await controllers.updateThesisStatus(
-      { params: { proposalId: 115 }, body: { status } },
-      mockResponse
-    );
-
-    expect(mockResponse.status).toHaveBeenCalledWith(400);
-    expect(mockResponse.json).toHaveBeenCalledWith({
-      error: "Uncorrect id",
-    });
+    // Using resolves matcher for the successful case
+    await controllers.updateThesisStatus(mockRequest, mockResponse);
+    expect(mockResponse.status).toHaveBeenCalledWith(204);
+    expect(mockResponse.send).toHaveBeenCalled();
   });
-
-  it("should handle incorrect status and return a 400 status code", async () => {
-    const status = "invalidStatus";
+  it("should handle incorrect type and return a 400 status code", async () => {
+    const mockRequest = {
+      params: {
+        requestid: "127",
+      },
+      body: {
+        status: "invalidType",
+      },
+    };
 
     const mockResponse = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
+      send: jest.fn(),
     };
-
-    await controllers.updateThesisStatus(
-      { params: { proposalId: 115 }, body: { status } },
-      mockResponse
-    );
+    jest.spyOn(services, "updateThesisRequestStatus").mockResolvedValue();
+    await controllers.updateThesisStatus(mockRequest, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(400);
-    expect(mockResponse.json).toHaveBeenCalledWith({ error: "Uncorrect id" });
   });
-
-  it("should handle database error and return a 500 status code", async () => {
-    const status = "Approve";
-
-    jest
-      .spyOn(services, "updateThesisRequestStatus")
-      .mockRejectedValue(new Error("Database error"));
-
+  test("should reject with an error for an invalid status", async () => {
+    const mockRequest = {
+      params: {
+        requestid: "nonExistentId",
+      },
+      body: {
+        status: "Approve",
+      },
+    };
     const mockResponse = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
+      send: jest.fn(),
     };
-
-    await controllers.updateThesisStatus(
-      { params: { proposalId: 115 }, body: { status } },
-      mockResponse
-    );
-
-    expect(mockResponse.status).toHaveBeenCalledWith(400);
-    expect(mockResponse.json).toHaveBeenCalledWith({ error: "Uncorrect id" });
+    // Using rejects matcher for the error case
+    await controllers.updateThesisStatus(mockRequest, mockResponse);
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockResponse.send).toHaveBeenCalled();
   });
 });

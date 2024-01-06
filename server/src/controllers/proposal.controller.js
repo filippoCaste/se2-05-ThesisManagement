@@ -455,20 +455,31 @@ function isSupervisorsObjValid(supervisors_obj) {
  * @return {Promise} - a promise that resolves to the result of the operation.
  */
 
-export const updateThesisStatus = async (req, res) => {
+export const updateThesisStatus = async (req, res, next) => {
+  const id = parseInt(req.params.requestid);
+  const status = req.body.status;
   try {
-    const id = parseInt(req.params.id);
-    const status = req.body.status;
     if (isNaN(id)) {
       return res.status(400).json({ error: "Uncorrect id" });
     }
-    const changeStatus = await updateThesisRequestStatus(id, status);
-    if (changeStatus) {
-      return res.json(changeStatus);
-    } else {
-      res.status(404).json({ error: "User not found" });
+    if (
+      status !== "Approve" &&
+      status !== "Reject" &&
+      status !== "Request Change"
+    ) {
+      return res.status(400).json({ error: "Incorrect fields" });
     }
+    await updateThesisRequestStatus(id, status).then(async () => {
+      return res.status(204).send();
+    });
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    if (err.message === "RequestNotFound") {
+      return res.status(404).json({ error: "Proposal Request not found" });
+    } else if (err.message === "ForbiddenAccess") {
+      return res.status(403).json({ error: "You cannot access this resource" });
+    } else {
+      console.log(res.status(500));
+      return res.status(500).send();
+    }
   }
 };
