@@ -2,8 +2,9 @@ import * as controllers from "../../src/controllers/application.controller.js";
 import * as services from "../../src/services/application.services.js";
 import * as proposals from "../../src/services/proposal.services.js";
 import * as teacher from "../../src/services/teacher.services.js";
-import { sendNotificationApplicationDecision, sendNotificationApplicationDecisionSupervisor } from "../../src/services/notification.services.js";
+import { sendNotificationApplicationDecision, sendNotificationApplicationDecisionSupervisor, sendEmailToTeacher } from "../../src/services/notificationSender.services.js";
 import { sendEmail } from "../../src/emailService/sendEmail.js";
+import { saveNotificationToDB } from "../../src/services/notification.services.js";
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -27,10 +28,14 @@ jest.mock('../../src/emailService/sendEmail.js', () => ({
     sendEmail: jest.fn(),
 }));
 
-jest.mock('../../src/services/notification.services.js', () => ({
+jest.mock('../../src/services/notificationSender.services.js', () => ({
     sendNotificationApplicationDecision: jest.fn(),
     sendNotificationApplicationDecisionSupervisor: jest.fn(),
     sendEmailToTeacher: jest.fn()
+}));
+
+jest.mock('../../src/services/notification.services.js', () => ({
+  saveNotificationToDB: jest.fn(),
 }));
 
 describe('createApplication', () => {
@@ -97,6 +102,7 @@ describe('createApplication', () => {
                   email: "email@example.com",
               };
           });
+          saveNotificationToDB.mockImplementation(() => {});
           sendEmail.mockImplementation(() => {});
           services.createApplicationInDb.mockImplementation(() => {
               return {
@@ -238,7 +244,9 @@ describe('createApplication', () => {
     });
 });
 
-test("should return 400 if status is not valid", async () => {
+
+describe("changeStatusOfApplication", () => {
+  test("should return 400 if status is not valid", async () => {
     const req = { body: { status: "other" }, params: { applicationId: 1 } };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
     sendNotificationApplicationDecision.mockImplementation(() => {});
@@ -246,19 +254,21 @@ test("should return 400 if status is not valid", async () => {
 
     await controllers.changeStatusOfApplication(req, res);
 
-
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({ error: "Incorrect fields" });
     expect(sendNotificationApplicationDecision).not.toHaveBeenCalled();
-});
+  });
 
-test("should return 404 if proposal is not found", async () => {
-    const req = { 
-        body: { status: "accepted" }, params: { applicationId: 1 },
-        user: { id: 1 }
+  test("should return 404 if proposal is not found", async () => {
+    const req = {
+      body: { status: "accepted" },
+      params: { applicationId: 1 },
+      user: { id: 1 },
     };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
-    services.changeStatus.mockImplementation(() => {throw new Error("Proposal not found")});
+    services.changeStatus.mockImplementation(() => {
+      throw new Error("Proposal not found");
+    });
     sendNotificationApplicationDecision.mockImplementation(() => {});
     sendNotificationApplicationDecisionSupervisor.mockImplementation(() => {});
 
@@ -267,32 +277,40 @@ test("should return 404 if proposal is not found", async () => {
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.json).toHaveBeenCalledWith({ error: "Proposal not found" });
     expect(sendNotificationApplicationDecision).not.toHaveBeenCalled();
-});
+  });
 
-test("should return 403 if user is not the supervisor of the proposal", async () => {
-    const req = { 
-        body: { status: "accepted" }, params: { applicationId: 1 },
-        user: { id: 1 } 
+  test("should return 403 if user is not the supervisor of the proposal", async () => {
+    const req = {
+      body: { status: "accepted" },
+      params: { applicationId: 1 },
+      user: { id: 1 },
     };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
-    services.changeStatus.mockImplementation(() => {throw new Error("You cannot access this resource")});
+    services.changeStatus.mockImplementation(() => {
+      throw new Error("You cannot access this resource");
+    });
     sendNotificationApplicationDecision.mockImplementation(() => {});
     sendNotificationApplicationDecisionSupervisor.mockImplementation(() => {});
 
     await controllers.changeStatusOfApplication(req, res);
 
     expect(res.status).toHaveBeenCalledWith(403);
-    expect(res.json).toHaveBeenCalledWith({ error: "You cannot access this resource" });
+    expect(res.json).toHaveBeenCalledWith({
+      error: "You cannot access this resource",
+    });
     expect(sendNotificationApplicationDecision).not.toHaveBeenCalled();
-});
+  });
 
-test("should return 500 if an error occurs during database operation", async () => {
-    const req = { 
-        body: { status: "accepted" }, params: { applicationId: 1 },
-        user: { id: 1 }
+  test("should return 500 if an error occurs during database operation", async () => {
+    const req = {
+      body: { status: "accepted" },
+      params: { applicationId: 1 },
+      user: { id: 1 },
     };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
-    services.changeStatus.mockImplementation(() => {throw Error("Database error")});
+    services.changeStatus.mockImplementation(() => {
+      throw Error("Database error");
+    });
     sendNotificationApplicationDecision.mockImplementation(() => {});
     sendNotificationApplicationDecisionSupervisor.mockImplementation(() => {});
 
@@ -301,14 +319,19 @@ test("should return 500 if an error occurs during database operation", async () 
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({ error: "Database error" });
     expect(sendNotificationApplicationDecision).not.toHaveBeenCalled();
-});
+  });
 
-test("should return 204 if everything is OK", async () => {
-    const req = { 
-        body: { status: "accepted" }, params: { applicationId: 1 },
-        user: { id: 1 }
+  test("should return 204 if everything is OK", async () => {
+    const req = {
+      body: { status: "accepted" },
+      params: { applicationId: 1 },
+      user: { id: 1 },
     };
-    const res = { status: jest.fn().mockReturnThis(), json: jest.fn(), send: jest.fn() };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+      send: jest.fn(),
+    };
     services.changeStatus.mockResolvedValue(true);
     sendNotificationApplicationDecision.mockImplementation(() => {});
     sendNotificationApplicationDecisionSupervisor.mockImplementation(() => {});
@@ -318,4 +341,5 @@ test("should return 204 if everything is OK", async () => {
     expect(res.status).toHaveBeenCalledWith(204);
     expect(res.send).toHaveBeenCalled();
     expect(sendNotificationApplicationDecision).toHaveBeenCalled();
+  });
 });

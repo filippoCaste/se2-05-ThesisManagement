@@ -124,3 +124,19 @@ Content-Type: application/json
 
 ###     LEVELS
 GET http://localhost:3001/api/levels HTTP/1.1
+
+
+###     NOTIFICATIONS
+GET http://localhost:3001/api/notifications HTTP/1.1
+
+###
+
+DELETE http://localhost:3001/api/notifications/1 HTTP/1.1
+
+###
+
+DELETE http://localhost:3001/api/notifications HTTP/1.1
+
+###
+
+PUT http://localhost:3001/api/notifications HTTP/1.1

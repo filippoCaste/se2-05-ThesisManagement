@@ -13,6 +13,7 @@ import {
   updateThesisRequestStatus,
 } from "../services/proposal.services.js";
 import {
+  isDateInputValid,
   isEmailInputValid,
   isNumericInputValid,
   isTextInputValid,
@@ -25,7 +26,7 @@ import { getKeywordByName, postKeyword } from "../services/keyword.services.js";
 
 import { getEmailById } from "../services/user.services.js";
 import { scheduleEmailOneWeekBefore } from "../emailService/planEmail.js";
-import { sendEmailProposalRequestToTeacher } from "../services/notification.services.js";
+import { sendEmailProposalRequestToTeacher } from "../services/notificationSender.services.js";
 
 import validator from "validator";
 
@@ -40,18 +41,12 @@ export const getProposals = async (req, res, next) => {
         .status(400)
         .json({ error: "Request should contain a cod_degree" });
     }
-    if (
-      start_expiration_date &&
-      validator.isDate(start_expiration_date) === false
-    ) {
+    if (start_expiration_date && !isDateInputValid(start_expiration_date)) {
       return res.status(400).json({
         message: "Invalid start_expiration_date, format should be YYYY-MM-dd",
       });
     }
-    if (
-      end_expiration_date &&
-      validator.isDate(end_expiration_date) === false
-    ) {
+    if (end_expiration_date && !isDateInputValid(end_expiration_date)) {
       return res.status(400).json({
         message: "Invalid end_expiration_date, format should be YYYY-MM-dd",
       });
@@ -105,7 +100,7 @@ export const postProposal = async (req, res) => {
       !isNumericInputValid(cod_degree) ||
       !isTextInputValid(keywords) ||
       !isTextInputValid([title, type, description, level]) ||
-      !validator.isDate(expiration_date) ||
+      !isDateInputValid(expiration_date) ||
       !isSupervisorsObjValid(supervisors_obj)
     ) {
       return res.status(400).json({ error: "Uncorrect fields" });
@@ -246,7 +241,7 @@ export const updateProposal = async (req, res) => {
       !isNumericInputValid([cod_group, proposalId]) ||
       !isTextInputValid(keywords) ||
       !isTextInputValid([title, type, description, level]) ||
-      !validator.isDate(expiration_date) ||
+      !isDateInputValid(expiration_date) ||
       !isSupervisorsObjValid(supervisors_obj)
     ) {
       return res.status(400).json({ error: "Uncorrect fields" });
