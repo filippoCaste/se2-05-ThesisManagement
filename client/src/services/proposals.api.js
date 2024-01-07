@@ -1,6 +1,6 @@
 "use strict";
 import Proposal from "../models/Proposal";
-import  ProposalRequest from "../models/ProposalRequest";
+import ProposalRequest from "../models/ProposalRequest";
 
 const SERVER_URL = "http://localhost:3001";
 
@@ -34,7 +34,7 @@ const postProposal = async (
 
     const response = await fetch(SERVER_URL + "/api/proposals", {
       method: "POST",
-      credentials: 'include',
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -57,7 +57,7 @@ const postProposalKeywords = async (proposal_id, keyword_id) => {
 
     const response = await fetch(SERVER_URL + "/api/proposal_keyword", {
       method: "POST",
-      credentials: 'include',
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -119,7 +119,7 @@ const getProposals = async (
     }
 
     const response = await fetch(url, {
-      credentials: 'include',
+      credentials: "include",
     });
     if (response.ok) {
       const proposals = await response.json();
@@ -140,10 +140,13 @@ const getProposals = async (
 
 const getProposalsByTeacherId = async (teacherId) => {
   try {
-    const response = await fetch(SERVER_URL + `/api/proposals/teachers/${teacherId}`, {
-      method: "GET",
-      credentials: 'include',
-    });
+    const response = await fetch(
+      SERVER_URL + `/api/proposals/teachers/${teacherId}`,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
     if (response.ok) {
       const proposals = await response.json();
       return proposals;
@@ -154,11 +157,10 @@ const getProposalsByTeacherId = async (teacherId) => {
   } catch (error) {
     throw new Error("Network Error: " + error.message);
   }
-
 };
 
 //  fetch(  SERVER_URL + `/api/proposals/${id}`, {
-  
+
 const updateProposal = async (
   id,
   title,
@@ -190,7 +192,7 @@ const updateProposal = async (
 
     const response = await fetch(SERVER_URL + `/api/proposals/${id}`, {
       method: "PUT",
-      credentials: 'include',
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -207,32 +209,29 @@ const updateProposal = async (
   }
 };
 
-
-
 const getProposalByProposalId = async (proposalId) => {
   try {
-      const response = await fetch(SERVER_URL + `/api/proposals/${proposalId}`, {
-          method: "GET",
-          credentials: 'include',
-      });
-      if (response.ok) {
-          const proposals = await response.json();
-          return proposals;
-      } else {
-          const message = await response.text();
-          throw new Error("Application error: " + message);
-      }
+    const response = await fetch(SERVER_URL + `/api/proposals/${proposalId}`, {
+      method: "GET",
+      credentials: "include",
+    });
+    if (response.ok) {
+      const proposals = await response.json();
+      return proposals;
+    } else {
+      const message = await response.text();
+      throw new Error("Application error: " + message);
+    }
   } catch (error) {
-      throw new Error("Network Error: " + error.message);
+    throw new Error("Network Error: " + error.message);
   }
-
 };
 
 const deleteProposal = async (proposalId) => {
   try {
     const response = await fetch(SERVER_URL + `/api/proposals/${proposalId}`, {
       method: "DELETE",
-      credentials: 'include',
+      credentials: "include",
     });
     if (response.ok) {
       const deleted = await response.json();
@@ -247,10 +246,13 @@ const deleteProposal = async (proposalId) => {
 };
 const archivedProposal = async (proposalId) => {
   try {
-    const response = await fetch(SERVER_URL + `/api/proposals/${proposalId}/archived`, {
-      method: "PUT",
-      credentials: 'include',
-    });
+    const response = await fetch(
+      SERVER_URL + `/api/proposals/${proposalId}/archived`,
+      {
+        method: "PUT",
+        credentials: "include",
+      }
+    );
     if (response.ok) {
       const deleted = await response.json();
       return deleted;
@@ -265,10 +267,9 @@ const archivedProposal = async (proposalId) => {
 
 const getProposalRequests = async () => {
   try {
-
     let url = `${SERVER_URL}/api/proposals/request`;
     const response = await fetch(url, {
-      credentials: 'include',
+      credentials: "include",
     });
 
     if (response.ok) {
@@ -276,14 +277,15 @@ const getProposalRequests = async () => {
       const proposalRequestsList = [];
 
       for (const proposalRequest of proposalRequests) {
-          proposalRequestsList.push(ProposalRequest.fromProposalRequestsResult(proposalRequest));
+        proposalRequestsList.push(
+          ProposalRequest.fromProposalRequestsResult(proposalRequest)
+        );
       }
 
       return proposalRequestsList;
     } else {
       return [];
     }
-
   } catch (error) {
     console.error("An error occurred:", error);
     return [];
@@ -291,8 +293,8 @@ const getProposalRequests = async () => {
 };
 
 /**
- * 
- * @param {Object} studentRequest 
+ *
+ * @param {Object} studentRequest
  * - `title`
  * - `type`
  * - `description`
@@ -300,40 +302,66 @@ const getProposalRequests = async () => {
  * - `teacherEmail`
  * - `coSupervisorEmails[]`
  * - `status`
- * @returns 
+ * @returns
  */
 const postStudentRequest = async (studentRequest) => {
   try {
-      const response = await fetch(SERVER_URL + "/api/proposals/request", {
-          method: "POST",
-          credentials: 'include',
-          headers: {
-              "Content-Type": "application/json",
-          },
-          body: JSON.stringify(studentRequest),
-      });
-      if (response.ok) {
-          return true;
-      } else {
-          const message = await response.text();
-          throw new Error("Application error: " + message);
-      }
+    const response = await fetch(SERVER_URL + "/api/proposals/request", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(studentRequest),
+    });
+    if (response.ok) {
+      return true;
+    } else {
+      const message = await response.text();
+      throw new Error("Application error: " + message);
+    }
   } catch (error) {
-      throw new Error("Network Error: " + error.message);
+    throw new Error("Network Error: " + error.message);
   }
 };
 
 const changeStatusProposalRequest = async (proposalRequestId, status) => {
   try {
+    const response = await fetch(
+      `${SERVER_URL}/api/proposals/request/${proposalRequestId}`,
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status }), // Sending type as an object
+      }
+    );
 
-    const response = await fetch(`${SERVER_URL}/api/proposals/request/${proposalRequestId}`, {
-      method: "PUT",
-      credentials: 'include',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ status }), // Sending type as an object
-    });
+    if (response.ok) {
+      return true;
+    } else {
+      const message = await response.text();
+      throw new Error("Request error: " + message);
+    }
+  } catch (error) {
+    throw new Error("Network Error: " + error.message);
+  }
+};
+export const updateThesisRequestStatusApi = async (proposalId, status) => {
+  try {
+    const response = await fetch(
+      `${SERVER_URL}/api/proposals/${proposalId}/approval`,
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status }),
+      }
+    );
 
     if (response.ok) {
       return true;
@@ -346,8 +374,6 @@ const changeStatusProposalRequest = async (proposalRequestId, status) => {
   }
 };
 
-
-
 const proposalAPI = {
   getProposals,
   postProposal,
@@ -359,7 +385,8 @@ const proposalAPI = {
   archivedProposal,
   getProposalRequests,
   postStudentRequest,
-  changeStatusProposalRequest
+  changeStatusProposalRequest,
+  updateThesisRequestStatusApi,
 };
 
 export default proposalAPI;
