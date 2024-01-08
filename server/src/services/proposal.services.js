@@ -844,25 +844,28 @@ export const createProposalRequest = async (
         type,
         status || "submitted",
       ],
-      function (err) {
+      (err) => {
         if (err) {
           reject(err);
         }
+
+        const lastInsertedId = db.lastID;
 
         if (co_supervisors_ids && co_supervisors_ids.length > 0) {
           const sql2 = `INSERT INTO ProposalRequestCoSupervisors 
                         (proposal_request_id, co_supervisor_id) 
                         VALUES (?, ?)`;
           for (let id of co_supervisors_ids) {
-            db.run(sql2, [this.lastID, id], (err) => {
+            db.run(sql2, [lastInsertedId, id], (err) => {
               if (err) {
                 reject(err);
               }
             });
           }
         }
+
         resolve({
-          id: this.lastID,
+          id: lastInsertedId,
           student_id: student_id,
           teacher_id: teacher_id,
           co_supervisors_ids: co_supervisors_ids,
