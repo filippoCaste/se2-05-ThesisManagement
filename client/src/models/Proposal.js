@@ -49,7 +49,8 @@ export default class Proposal {
     supervisorsInfo, // Array of supervisor information
     keyword_names,
     thesis_request_status,
-    thesis_request_status_date
+    thesis_request_status_date,
+    thesis_request_change_note
   ) {
     this.id = id;
     this.title = title;
@@ -67,6 +68,7 @@ export default class Proposal {
     this.keyword_names = keyword_names;
     this.thesis_request_status = thesis_request_status;
     this.thesis_request_status_date = thesis_request_status_date;
+    this.thesis_request_change_note = thesis_request_change_note;
   }
 
   serialize = () => {
@@ -89,6 +91,7 @@ export default class Proposal {
       keyword_names: this.keyword_names,
       thesis_request_status: this.thesis_request_status,
       thesis_request_status_date: this.thesis_request_status_date,
+      thesis_request_change_note: this.thesis_request_change_note,
     };
   };
 
@@ -110,7 +113,8 @@ export default class Proposal {
       json.supervisorsInfo, // Pass array of supervisor info directly
       json.keyword_names,
       json.thesis_request_status,
-      json.thesis_request_status_date
+      json.thesis_request_status_date,
+      json.thesis_request_change_note
     );
   };
 
@@ -131,7 +135,8 @@ export default class Proposal {
       result.supervisorsInfo, // Pass array of supervisor info directly
       result.keyword_names,
       result.thesis_request_status,
-      result.thesis_request_status_date
+      result.thesis_request_status_date,
+      result.thesis_request_change_note
     );
   };
 }

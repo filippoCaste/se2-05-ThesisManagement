@@ -57,6 +57,7 @@ export const getProposalsFromDB = (
         p.cod_degree,
         p.thesis_request_status,
         p.thesis_request_status_date,
+        p.thesis_request_change_note,
         d.title_degree,
         p.level,
         p.notes,
@@ -1027,7 +1028,7 @@ export const ThesisRequestStatus = {
 };
 
 // Function to update thesis_request_status in Proposal table
-export const updateThesisRequestStatus = (proposalId, status) => {
+export const updateThesisRequestStatus = (proposalId, status, note) => {
   return new Promise((resolve, reject) => {
     // Validate status
     if (!Object.values(ThesisRequestStatus).includes(status)) {
@@ -1051,11 +1052,10 @@ export const updateThesisRequestStatus = (proposalId, status) => {
         reject(new Error("Invalid status"));
         return;
     }
-
     // Update thesis_request_status in Proposal table
     const sql =
-      "UPDATE Proposals SET thesis_request_status = ?, thesis_request_status_date = CURRENT_TIMESTAMP WHERE id = ?";
-    db.run(sql, [newStatus, proposalId], (err) => {
+      "UPDATE Proposals SET thesis_request_status = ?, thesis_request_status_date = CURRENT_TIMESTAMP, thesis_request_change_note = ? WHERE id = ?";
+    db.run(sql, [newStatus, note, proposalId], (err) => {
       if (err) {
         reject(err);
       } else {

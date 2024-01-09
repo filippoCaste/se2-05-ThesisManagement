@@ -15,7 +15,8 @@ export class Proposal {
     keyword_names,
     keyword_types,
     thesis_request_status,
-    thesis_request_status_date
+    thesis_request_status_date,
+    thesis_request_change_note
   ) {
     this.id = id;
     this.title = title;
@@ -33,6 +34,7 @@ export class Proposal {
     this.keyword_types = keyword_types;
     this.thesis_request_status = thesis_request_status;
     this.thesis_request_status_date = thesis_request_status_date;
+    this.thesis_request_change_note = thesis_request_change_note;
   }
 
   // Used to send the Proposals object to the client
@@ -54,6 +56,7 @@ export class Proposal {
       keyword_types: this.keyword_types,
       thesis_request_status: this.thesis_request_status,
       thesis_request_status_date: this.thesis_request_status_date,
+      thesis_request_change_note: this.thesis_request_change_note,
     };
   };
 
@@ -75,7 +78,8 @@ export class Proposal {
       json.keyword_names,
       json.keyword_types,
       json.thesis_request_status,
-      json.thesis_request_status_date
+      json.thesis_request_status_date,
+      json.thesis_request_change_note
     );
   };
 
@@ -96,7 +100,8 @@ export class Proposal {
       result.keyword_names,
       result.keyword_types,
       result.thesis_request_status,
-      result.thesis_request_status_date
+      result.thesis_request_status_date,
+      result.thesis_request_change_note
     );
   };
 }

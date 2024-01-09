@@ -1045,6 +1045,29 @@ describe("updateThesisStatus", () => {
     expect(mockResponse.status).toHaveBeenCalledWith(204);
     expect(mockResponse.send).toHaveBeenCalled();
   });
+  test("should update thesis request status to 'request change' and add note", async () => {
+    const mockRequest = {
+      params: {
+        id: "127",
+      },
+      body: {
+        status: "Request Change",
+        note: "Some note for testing",
+      },
+    };
+
+    jest.spyOn(services, "updateThesisRequestStatus").mockResolvedValue();
+
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
+    };
+
+    // Using resolves matcher for the successful case
+    await controllers.updateThesisStatus(mockRequest, mockResponse);
+    expect(mockResponse.status).toHaveBeenCalledWith(204);
+    expect(mockResponse.send).toHaveBeenCalled();
+  });
   it("should handle incorrect type and return a 400 status code", async () => {
     const mockRequest = {
       params: {
