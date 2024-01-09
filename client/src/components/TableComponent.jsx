@@ -68,6 +68,12 @@ export default function StickyHeadTable(props) {
       minWidth: 200,
       maxWidth: 200,
     },
+    {
+      id: "thesis_request_change_note",
+      label: "Note",
+      minWidth: 200,
+      maxWidth: 200,
+    },
   ];
 
   // push status col if isAppliedProposals is true

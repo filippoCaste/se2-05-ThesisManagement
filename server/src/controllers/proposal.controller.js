@@ -454,6 +454,7 @@ export const updateThesisStatus = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const status = req.body.status;
+    const note = req.body.note;
     if (isNaN(id)) {
       return res.status(400).json({ error: "Uncorrect id" });
     }
@@ -464,7 +465,7 @@ export const updateThesisStatus = async (req, res) => {
     ) {
       return res.status(400).json({ error: "Incorrect fields" });
     }
-    await updateThesisRequestStatus(id, status).then(async () => {
+    await updateThesisRequestStatus(id, status, note).then(async () => {
       return res.status(204).send();
     });
   } catch (err) {

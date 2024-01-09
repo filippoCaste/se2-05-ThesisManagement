@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API_Proposal from "../services/proposals.api";
 import dayjs from "dayjs";
@@ -15,6 +15,11 @@ import {
   Typography,
   Chip,
   useMediaQuery,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -91,7 +96,11 @@ function Row(props) {
     }
   };
   const changeStatusOfProposalRequest = async (id, action) => {
-    await API_Proposal.updateThesisRequestStatusApi(id, action)
+    await API_Proposal.updateThesisRequestStatusApi(
+      id,
+      action,
+      action == "Request Change" ? requestChangeNote : undefined
+    )
       .then(async () => {
         let successMessage = "";
 
@@ -115,8 +124,20 @@ function Row(props) {
       .catch(() =>
         handleMessage("Thesis request status update error", "warning")
       );
+    if (action == "Request Change") {
+      handleCloseDialog();
+    }
   };
+  const [requestChangeDialog, setRequestChangeDialog] = useState(false);
+  const [requestChangeNote, setRequestChangeNote] = useState("");
 
+  const handleRequestChange = (status) => {
+    setRequestChangeDialog(status);
+  };
+  const handleCloseDialog = () => {
+    setRequestChangeNote("");
+    setRequestChangeDialog(false);
+  };
   return (
     <React.Fragment>
       <TableRow
@@ -222,9 +243,7 @@ function Row(props) {
                 <IconButton
                   color="gray"
                   aria-label="request change"
-                  onClick={() =>
-                    changeStatusOfProposalRequest(row.p.id, "Request Change")
-                  }
+                  onClick={() => handleRequestChange(true)}
                   disabled={row.p.status === "assigned"}
                 >
                   <BuildIcon />
@@ -242,6 +261,47 @@ function Row(props) {
                   <CloseIcon />
                 </IconButton>
               </Tooltip>
+              <Dialog
+                open={requestChangeDialog}
+                onClose={() => setRequestChangeDialog(false)}
+              >
+                <DialogTitle id="responsive-dialog-title">
+                  {"Request Change"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText>Note:</DialogContentText>
+                  <textarea
+                    rows="4"
+                    cols="50"
+                    type="text"
+                    list="teacherSuggestions"
+                    placeholder="Teacher Opinion"
+                    value={requestChangeNote}
+                    onChange={(event) =>
+                      setRequestChangeNote(event.target.value)
+                    }
+                    style={{ width: "100%", marginTop: "8px" }}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    onClick={handleCloseDialog}
+                    variant="outlined"
+                    color="secondary"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      changeStatusOfProposalRequest(row.p.id, "Request Change")
+                    }
+                    variant="contained"
+                    color="primary"
+                  >
+                    Confirm
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </TableCell>
           </>
         ) : (

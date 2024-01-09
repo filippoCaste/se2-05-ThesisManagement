@@ -349,7 +349,11 @@ const changeStatusProposalRequest = async (proposalRequestId, status) => {
     throw new Error("Network Error: " + error.message);
   }
 };
-export const updateThesisRequestStatusApi = async (proposalId, status) => {
+export const updateThesisRequestStatusApi = async (
+  proposalId,
+  status,
+  note
+) => {
   try {
     const response = await fetch(
       `${SERVER_URL}/api/proposals/${proposalId}/approval`,
@@ -359,7 +363,7 @@ export const updateThesisRequestStatusApi = async (proposalId, status) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ status }),
+        body: JSON.stringify({ status, note }),
       }
     );
 
