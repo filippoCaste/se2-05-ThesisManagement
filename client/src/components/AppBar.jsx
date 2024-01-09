@@ -1,15 +1,18 @@
 import * as React from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import ClockCustomized from './ClockCustomized';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import headerBackground from "../../public/img/imageedit_3_5228036516.jpg";
 import Logout from '@mui/icons-material/Logout';
 import Image from "mui-image";
-import { AppBar, Toolbar, IconButton, Typography, MenuItem, Menu, ListItemIcon, Box} from '@mui/material';
+import { AppBar, Toolbar, IconButton, Typography, MenuItem, Menu, ListItemIcon, Box, Badge} from '@mui/material';
 import { UserContext } from '../Contexts';
 import theme from '../theme';
 import { PropTypes } from 'prop-types';
+import { useNavigate } from 'react-router-dom';
+import notificationsApi from '../services/notifications.api';
 
 
 export default function PrimarySearchAppBar(props) {
@@ -17,6 +20,8 @@ export default function PrimarySearchAppBar(props) {
   const [openClock, setOpenClock] = React.useState(false);
   const [anchorElA, setAnchorElA] = React.useState(null);
   const { user } = React.useContext(UserContext);
+  const navigate = useNavigate();
+  const [numOfNotifications, setNumOfNotifications] = React.useState(0);
 
   
   const handleClockOpen = () => {
@@ -32,6 +37,24 @@ export default function PrimarySearchAppBar(props) {
      setAnchorElA(event.currentTarget);
     else window.location.href = "http://localhost:3001/api/users/login";
   };
+
+  const openNotificationsPage = () => {
+    navigate('/notifications');
+  }
+
+  React.useEffect(() => {
+    const getNotifications = async () => {
+      try {
+        const newNotifications = await notificationsApi.getNotificationsForUser();
+        const length = newNotifications.filter((notification) => notification.isRead === 0).length;
+        setNumOfNotifications(length);
+      } catch (error) {
+        handleMessage(error.message, "error");
+      }
+    };
+    
+    getNotifications();
+  }, []);
 
 
   const handleMenuClose = () => {
@@ -126,7 +149,18 @@ export default function PrimarySearchAppBar(props) {
                 onOpen={handleClockOpen}
                 onClose={handleClockClose}/>
 
-            
+
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="notifications"
+                onClick={openNotificationsPage}
+                color="inherit"
+              >
+              <Badge color="error" badgeContent={numOfNotifications} ac>
+                <NotificationsIcon color="primary.main"/>
+              </Badge>
+              </IconButton>
               {!user ? (<IconButton
               size="large"
               edge="end"
