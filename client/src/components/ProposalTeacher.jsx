@@ -51,6 +51,8 @@ function ProposalTeacher(props) {
 
   const [confirmation, setConfirmation] = useState(false); // used for the confirmationDialog
 
+  const [isAddCoSupervisorDisable, setIsAddCoSupervisorDisable]= useState(true);
+
   //DEGREE DROPDOWN MENU
   const [selectedDegree, setSelectedDegree] = useState('');
   const [selectedDegreeList, setSelectedDegreeList] = useState([]);
@@ -89,8 +91,8 @@ function ProposalTeacher(props) {
       if (selectedCoSupObject && !isCoSupervisorAlreadySelected) {
         setSelectedCoSupList([...selectedCoSupList, selectedCoSupObject]);
         setSelectedCoSup('');  // Clean the selection
-
       }
+      
     }
   };
 
@@ -180,6 +182,15 @@ function ProposalTeacher(props) {
 
 
   // USE EFFECT /////////////////////////////////////////////
+  useEffect(() => {
+    const isCoSupervisorValid = 
+    selectedCoSup 
+    && teachersList.some( (teacher) => teacher.email === selectedCoSup)
+    && !selectedCoSupList.some((t) => t.email === selectedCoSup);
+
+    setIsAddCoSupervisorDisable(!isCoSupervisorValid);
+  }, [selectedCoSup]);
+  
 
   const [changeLevel,setChangeLevel]= useState(0);
   
@@ -572,6 +583,7 @@ function ProposalTeacher(props) {
                   color="primary"
                   onClick={handleAddClickCoSupervisor}
                   style={{ marginTop: '1rem' }}
+                  disabled= {isAddCoSupervisorDisable}
                 >
                   ADD
                 </Button>
