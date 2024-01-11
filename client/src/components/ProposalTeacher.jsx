@@ -5,7 +5,9 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { MessageContext, UserContext } from '../Contexts';
-import { FormControl, Select, MenuItem, Input, IconButton, Paper, Avatar } from '@mui/material';
+import { FormControl, Select, MenuItem, Input, Container, IconButton, Paper, Avatar } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
+
 
 import proposalAPI from '../services/proposals.api';
 import API_Degrees from '../services/degrees.api';
@@ -49,6 +51,8 @@ function ProposalTeacher(props) {
 
   const [confirmation, setConfirmation] = useState(false); // used for the confirmationDialog
 
+  const [isAddCoSupervisorDisable, setIsAddCoSupervisorDisable]= useState(true);
+
   //DEGREE DROPDOWN MENU
   const [selectedDegree, setSelectedDegree] = useState('');
   const [selectedDegreeList, setSelectedDegreeList] = useState([]);
@@ -87,8 +91,8 @@ function ProposalTeacher(props) {
       if (selectedCoSupObject && !isCoSupervisorAlreadySelected) {
         setSelectedCoSupList([...selectedCoSupList, selectedCoSupObject]);
         setSelectedCoSup('');  // Clean the selection
-
       }
+      
     }
   };
 
@@ -178,6 +182,15 @@ function ProposalTeacher(props) {
 
 
   // USE EFFECT /////////////////////////////////////////////
+  useEffect(() => {
+    const isCoSupervisorValid = 
+    selectedCoSup 
+    && teachersList.some( (teacher) => teacher.email === selectedCoSup)
+    && !selectedCoSupList.some((t) => t.email === selectedCoSup);
+
+    setIsAddCoSupervisorDisable(!isCoSupervisorValid);
+  }, [selectedCoSup]);
+  
 
   const [changeLevel,setChangeLevel]= useState(0);
   
@@ -188,6 +201,7 @@ function ProposalTeacher(props) {
     }
     setChangeLevel((old)=>old+1);
   }, [level])
+
 
 
   useEffect(() => {
@@ -242,7 +256,6 @@ function ProposalTeacher(props) {
   }, [degreesList]);
 
 
-
   useEffect(() => {
     API_Degrees.getAllDegrees()
       .then((d) => { setDegreesList(d); })
@@ -257,6 +270,7 @@ function ProposalTeacher(props) {
       .catch((err) => handleMessage(err, "warning"))
 
   }, [])
+  
 
 
   //VALIDATE INPUT FORM
@@ -363,6 +377,7 @@ function ProposalTeacher(props) {
 
   //SEND FORM ///////////////////////////////////////////////////////////////////////////////////
 
+
   return (
     <Grid container mt="10%">
       <Grid item xs={12} sx={{ mt: '2vh', mx: '4vh' }}>
@@ -390,9 +405,9 @@ function ProposalTeacher(props) {
             </Avatar>
           </Grid>
           <Grid item md={4}>
-            <Typography><em>Name:</em> {user?.name}  {user?.surname} ({user?.id})</Typography>
-            <Typography><em>Deparment:</em> {user?.cod_department}</Typography>
-            <Typography><em>Group:</em> {user?.group_name} </Typography>
+            <Typography>{user?.name}  {user?.surname}  ({user?.id})</Typography>
+            <Typography>Deparment: {user?.cod_department}</Typography>
+            <Typography>Group: {user?.group_name}</Typography>
           </Grid>
         </Grid>
 
@@ -539,7 +554,7 @@ function ProposalTeacher(props) {
           </Grid> <br /> <br /> </>}
 
 
-          <Typography variant="subtitle5" fontWeight="bold"> REQUIRED KNOWLEDGE (optional) </Typography>
+          <Typography variant="subtitle5" fontWeight="bold"> REQUIRED KNOWLEDGE </Typography>
           <TextField name="required_knowledge" variant="filled" fullWidth multiline rows={7}
             value={required_knowledge} onChange={ev => setRequired_knowledge(ev.target.value)} />  <br /> <br />
 
@@ -549,7 +564,7 @@ function ProposalTeacher(props) {
             <Paper elevation={3} style={{ padding: '1rem' }}>
               <FormControl fullWidth>
                 <Typography variant="subtitle1" gutterBottom fontWeight="bold">
-                  ADD CO-SUPERVISORS (optional)
+                  ADD CO-SUPERVISORS
                 </Typography>
 
                 <input
@@ -568,6 +583,7 @@ function ProposalTeacher(props) {
                   color="primary"
                   onClick={handleAddClickCoSupervisor}
                   style={{ marginTop: '1rem' }}
+                  disabled= {isAddCoSupervisorDisable}
                 >
                   ADD
                 </Button>
@@ -669,7 +685,7 @@ function ProposalTeacher(props) {
           <Grid item xs={4}>
             <Paper elevation={3} style={{ padding: '1rem' }}>
               <Typography variant="subtitle1" gutterBottom fontWeight="bold">
-                ADD EXTERNAL CO-SUPERVISORS (optional)
+                ADD EXTERNAL CO-SUPERVISORS
               </Typography>
 
               {/* Input for external co-supervisors contacts */}
@@ -738,7 +754,7 @@ function ProposalTeacher(props) {
 
           {/* NOTES */}
 
-          <Typography variant="subtitle5" fontWeight="bold"> NOTES (optional)  </Typography>
+          <Typography variant="subtitle5" fontWeight="bold"> NOTES </Typography>
           <TextField name="notes" variant="filled" fullWidth multiline rows={5}
             value={notes} onChange={ev => setNotes(ev.target.value)} />  <br /> <br />
 
@@ -765,9 +781,10 @@ function ProposalTeacher(props) {
 
 }
 
+
 ProposalTeacher.propTypes = {
-  currentDataAndTime: PropTypes.string,
   typeOperation: PropTypes.string.isRequired,
+
 };
 
 
