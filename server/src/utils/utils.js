@@ -25,20 +25,37 @@ export function isTextInputValid(values) {
  */
 export function isNumericInputValid(values) {
   for (let number of values) {
-    const value = number && parseInt(number);
-    if (!value || isNaN(value) || number != value.toString()) {
-      console.log("The error is in value: " + number);
+    const value = parseInt(number);
+    if (isNaN(value) || number != value.toString()) {
+      console.log(`The error is in value: ${number}`);
       return false;
     }
-    return true;
   }
+  return true;
 }
 
+/**
+ * Checks if the input values are valid email addresses.
+ *
+ * @param {Array} values - An array of email addresses to be validated.
+ * @return {boolean} Returns true if all email addresses are valid, false otherwise.
+ */
 export function isEmailInputValid(values) {
   for(let email of values) {
     if(!validator.isEmail(email)) {
       return false;
     }
+  }
+  return true;
+}
+
+export function isDateInputValid(dateString) {
+  // Check if the date string matches the 'YYYY-MM-DD' format using a regular expression
+  const dateRegex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+
+  if (!dateRegex.test(dateString)) {
+    console.log("regex didnt work")
+    return false; // Date format doesn't match 'YYYY-MM-DD'
   }
   return true;
 }
