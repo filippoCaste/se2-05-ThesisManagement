@@ -17,20 +17,18 @@ describe('End to end test for SearchArchive', () => {
         await login(driver, 'mario.rossi@polito.it', '10000');
         await driver.wait(until.urlIs(`${clientUrl}/teacher`));
         await driver.findElement(By.id('alert_Teacher successfully logged in'));
-        await driver.sleep(1000);
-
+        
         await driver.findElement(By.id('archive-radio')).click();
-        await driver.sleep(1000);
+        await driver.wait(until.elementLocated(By.id('archive-table')));
 
         const table = await driver.findElement(By.id('archive-table'));
         const rows = await table.findElements(By.className('proposal-row'));
-        for (let i = 1; i < rows.length; i++) {
+        for (let i = 0; i < rows.length; i++) {
             const status = await rows[i].findElement(By.id('status-row')).getText();
             expect(status).toEqual('archived');
         }
 
         console.log("Search in the archive successfully");
-
         await logout(driver);
     });
 });

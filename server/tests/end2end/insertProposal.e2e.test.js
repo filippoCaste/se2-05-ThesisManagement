@@ -24,7 +24,10 @@ describe('professor can insert a new thesis proposal', () => {
     test('professor can insert a new thesis proposal', async () => {
         await login(driver, 'mario.rossi@polito.it', '10000');
         await driver.wait(until.urlIs(`${clientUrl}/teacher`));
-        await driver.findElement(By.id('alert_Teacher successfully logged in'));
+
+        const alertElement = await driver.findElement(By.id('alert_Teacher successfully logged in'));
+        expect(alertElement).toBeTruthy();
+
         await driver.sleep(1000);
 
         await driver.findElement(By.id('addProposal')).click();
@@ -61,6 +64,8 @@ describe('professor can insert a new thesis proposal', () => {
         await driver.findElement(By.id("addDegreeButton")).click();
         await driver.sleep(1000);
 
+        mockProposal.required_knowledge = 'test knowledge';
+
         const required_knowledge = await driver.findElement(By.id('required_knowledge'));
         required_knowledge.clear();
         await driver.sleep(500);
@@ -70,7 +75,7 @@ describe('professor can insert a new thesis proposal', () => {
         await driver.sleep(500);
         await driver.findElement(By.id("AI")).click();
         await driver.sleep(500);
-        await driver.findElement(By.id("addKeywordButton"));
+        await driver.findElement(By.id("addKeywordButton")).click();
         await driver.sleep(1000);
 
         const notes = await driver.findElement(By.id('notes'));
@@ -83,7 +88,9 @@ describe('professor can insert a new thesis proposal', () => {
 
         await driver.wait(until.urlIs(`${clientUrl}/teacher`));
 
-        await driver.findElement(By.id("alert_Added Proposal"));
+        const addedProposalAlert = await driver.findElement(By.id("alert_Added Proposal"));
+        expect(addedProposalAlert).toBeTruthy();
+
         console.log("Proposal added successfully");
 
         await logout(driver);
