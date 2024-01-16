@@ -140,9 +140,8 @@ function Row(props) {
   };
   return (
     <React.Fragment>
-      <TableRow className="proposal-row" sx={{ '& > *': { borderTop: "3px solid #ddd", backgroundColor: isEvenRow ? '#f5f5f5' : '#ffffff' } }}>
-        <TableCell style={{ width: '5%' }}>
       <TableRow
+        className="proposal-row"
         sx={{
           "& > *": {
             borderTop: "3px solid #ddd",
