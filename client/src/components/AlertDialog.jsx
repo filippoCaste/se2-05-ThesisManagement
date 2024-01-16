@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from "react";
 import {
   Button,
   Dialog,
@@ -7,36 +7,36 @@ import {
   DialogTitle,
   Typography,
   CircularProgress,
-} from '@mui/material';
-import dayjs from 'dayjs';
-import theme from '../theme';
-import { MessageContext } from '../Contexts';
-import applicationsAPI from '../services/applications.api';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import PropTypes from 'prop-types';
+} from "@mui/material";
+import dayjs from "dayjs";
+import theme from "../theme";
+import { MessageContext } from "../Contexts";
+import applicationsAPI from "../services/applications.api";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import PropTypes from "prop-types";
 
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
   height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
+  overflow: "hidden",
+  position: "absolute",
   bottom: 0,
   left: 0,
-  whiteSpace: 'nowrap',
+  whiteSpace: "nowrap",
   width: 1,
 });
 
 export function RenderFieldTable({ label, value }) {
   return (
-    <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+    <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
       <TableCell align="center" component="th" scope="row">
         {label}
       </TableCell>
@@ -52,7 +52,7 @@ export default function AlertDialog({
   handleApply,
   loading,
   isAppliedProposals,
-  isSecretary
+  isSecretary,
 }) {
   const {
     supervisorsInfo,
@@ -66,38 +66,44 @@ export default function AlertDialog({
     title_degree,
     title_group,
     required_knowledge,
-    teacher_id
+    teacher_id,
   } = item || {};
   const mainSupervisor = supervisorsInfo?.find(
-    (supervisor) => (supervisor.id === supervisor_id || supervisor.id === teacher_id)
+    (supervisor) =>
+      supervisor.id === supervisor_id || supervisor.id === teacher_id
   );
   const coSupervisors = supervisorsInfo?.filter(
-    (supervisor) => (supervisor.id !== supervisor_id || supervisor.co_supervisor_id )
+    (supervisor) =>
+      supervisor.id !== supervisor_id || supervisor.co_supervisor_id
   );
   const [isAppliedProposal, setIsAppliedProposal] = useState(false);
   const handleMessage = useContext(MessageContext);
   const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
-      if(!isSecretary){
-        applicationsAPI.getStudentApplications().then((response) => {
-          setIsAppliedProposal(response?.filter((o) => o.status !== 'rejected').length > 0);
+    if (!isSecretary) {
+      applicationsAPI
+        .getStudentApplications()
+        .then((response) => {
+          setIsAppliedProposal(
+            response?.filter((o) => o.status !== "rejected").length > 0
+          );
         })
-      .catch(
-        (err) => {console.log(err);}
-      )
-      }
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   });
 
   const handleFileChange = (files) => {
     if (files.length > 0) {
       const selectedFile = files[0];
-      const fileExtension = selectedFile.name.split('.').pop().toLowerCase();
+      const fileExtension = selectedFile.name.split(".").pop().toLowerCase();
 
-      if (fileExtension === 'pdf') {
+      if (fileExtension === "pdf") {
         setSelectedFile(selectedFile);
       } else {
-        handleMessage('Please insert a pdf file!', 'warning');
+        handleMessage("Please insert a pdf file!", "warning");
         files = null;
       }
     }
@@ -121,17 +127,17 @@ export default function AlertDialog({
           color: theme.palette.primary.main,
         }}
       >
-        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
           {title}
         </Typography>
       </DialogTitle>
       <DialogContent
         sx={{
-          padding: '20px',
+          padding: "20px",
           backgroundColor: theme.palette.background.default,
         }}
       >
-        <TableContainer component={Paper} sx={{ mt: '1.5rem', mb: '1rem' }}>
+        <TableContainer component={Paper} sx={{ mt: "1.5rem", mb: "1rem" }}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableBody>
               <RenderFieldTable label="Description" value={description} />
@@ -139,24 +145,28 @@ export default function AlertDialog({
               <RenderFieldTable label="Notes" value={notes} />
               <RenderFieldTable
                 label="Expiration Date"
-                value={dayjs(expiration_date).format('DD/MM/YYYY')} />
+                value={dayjs(expiration_date).format("DD/MM/YYYY")}
+              />
               <RenderFieldTable label="Level" value={level} />
               <RenderFieldTable label="Degree" value={title_degree} />
               {mainSupervisor && (
                 <RenderFieldTable
                   label="Supervisor"
-                  value={`${mainSupervisor.name} ${mainSupervisor.surname} (${mainSupervisor.email})`} />
+                  value={`${mainSupervisor.name} ${mainSupervisor.surname} (${mainSupervisor.email})`}
+                />
               )}
               {coSupervisors?.map((supervisor) => (
                 <RenderFieldTable
                   key={supervisor.id}
                   label="Co-Supervisor"
-                  value={`${supervisor.name} ${supervisor.surname} (${supervisor.email})`} />
+                  value={`${supervisor.name} ${supervisor.surname} (${supervisor.email})`}
+                />
               ))}
               <RenderFieldTable label="Group" value={title_group} />
               <RenderFieldTable
                 label="Required Knowledge"
-                value={required_knowledge} />
+                value={required_knowledge}
+              />
             </TableBody>
           </Table>
         </TableContainer>
@@ -172,7 +182,8 @@ export default function AlertDialog({
             <VisuallyHiddenInput
               type="file"
               accept=".pdf"
-              onChange={(e) => handleFileChange(e.target.files)} />
+              onChange={(e) => handleFileChange(e.target.files)}
+            />
           </Button>
         )}
         {handleApply && !isAppliedProposals && selectedFile && (
@@ -180,14 +191,14 @@ export default function AlertDialog({
             <strong>Selected file:</strong> {selectedFile.name}
           </Typography>
         )}
-      
-    </DialogContent><DialogActions
-      sx={{
-        padding: '20px',
-        borderTop: `1px solid ${theme.palette.secondary.main}`,
-        justifyContent: 'space-between',
-      }}
-    >
+      </DialogContent>
+      <DialogActions
+        sx={{
+          padding: "20px",
+          borderTop: `1px solid ${theme.palette.secondary.main}`,
+          justifyContent: "space-between",
+        }}
+      >
         <Button onClick={handleClose} color="secondary">
           <Typography
             variant="button"
@@ -205,9 +216,9 @@ export default function AlertDialog({
               onClick={() => handleApply(selectedFile)}
               color="primary"
               variant="contained"
-              disabled={isAppliedProposal}
+              disabled={isAppliedProposals}
             >
-              <Typography variant="button" sx={{ color: 'white' }}>
+              <Typography variant="button" sx={{ color: "white" }}>
                 Apply
               </Typography>
             </Button>
@@ -216,7 +227,7 @@ export default function AlertDialog({
       </DialogActions>
     </Dialog>
   );
-};
+}
 
 RenderFieldTable.propTypes = {
   label: PropTypes.string.isRequired,
@@ -230,5 +241,5 @@ AlertDialog.propTypes = {
   handleApply: PropTypes.func,
   loading: PropTypes.bool,
   isAppliedProposals: PropTypes.bool,
-  isSecretary: PropTypes.bool //optional
+  isSecretary: PropTypes.bool, //optional
 };
