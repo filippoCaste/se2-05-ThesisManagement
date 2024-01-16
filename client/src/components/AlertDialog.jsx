@@ -216,7 +216,7 @@ export default function AlertDialog({
               onClick={() => handleApply(selectedFile)}
               color="primary"
               variant="contained"
-              disabled={isAppliedProposals}
+              disabled={isAppliedProposal}
             >
               <Typography variant="button" sx={{ color: "white" }}>
                 Apply
