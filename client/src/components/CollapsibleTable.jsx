@@ -387,7 +387,7 @@ function Row(props) {
             paddingTop: 0,
             backgroundColor: isEvenRow ? "#f5f5f5" : "#ffffff",
           }}
-          colSpan={11}
+          colSpan={12}
         >
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1, height: "auto" }}>

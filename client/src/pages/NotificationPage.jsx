@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, useRef } from "react";
+import { useEffect, useState, useContext } from "react";
 import {
   Button,
   List,
@@ -10,25 +10,27 @@ import {
   IconButton,
   Divider,
   Popover,
-  Container,
   alpha,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CircleIcon from "@mui/icons-material/Circle";
-import { MessageContext } from "../Contexts";
+import { MessageContext, UserContext } from "../Contexts";
 import ConfirmationDialog from "../components/ConfirmationDialog";
 import theme from "../theme";
 import notificationsApi from "../services/notifications.api";
+import { useNavigate } from "react-router-dom";
 
 function NotificationsPage(props) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const { user } = useContext(UserContext);
   const handleMessage = useContext(MessageContext);
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
   const [confirmation, setConfirmation] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [singleToBeDeleted, setSingleToBeDeleted] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setTimeout(() => {
@@ -125,7 +127,7 @@ function NotificationsPage(props) {
       container
       mt="10%"
       sx={{
-        paddingTop: "2%",
+        paddingTop: "0.1%",
         alignItems: "center",
         display: "inline-flex",
         flexDirection: "column",
@@ -142,6 +144,9 @@ function NotificationsPage(props) {
         borderRadius={4}
         bgcolor="#f2f2f2"
       >
+        <Button variant="contained" color="primary" onClick={() => {navigate(`/${user.role}`)}} sx={{ alignSelf: "flex-start", marginLeft: "2%", marginBottom: "1%"}}>
+          Go back
+        </Button>
         <Stack direction={"row"} sx={{ paddingLeft: "1vw" }}>
           <Typography variant="h5">Notifications</Typography>
           <Box sx={{ display: "flex", flexGrow: 1 }}></Box>

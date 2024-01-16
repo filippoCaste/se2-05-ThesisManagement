@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { UserContext } from '../Contexts';
 
 const NotFoundPage = () => {
+  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const redirectTo = () => {
+    if (user && user.role) {
+      navigate(`/${user.role}`);
+    } else {
+      navigate('/');
+    }
+  };
+
   return (
     <Box
       display="flex"
@@ -24,8 +36,7 @@ const NotFoundPage = () => {
       <Button
         variant="contained"
         color="primary"
-        component={Link}
-        to="/"
+        onClick={redirectTo}
         size="large"
       >
         Go back to Home
