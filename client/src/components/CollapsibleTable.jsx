@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import API_Proposal from "../services/proposals.api";
 import dayjs from "dayjs";
 import {
   Box,
@@ -14,27 +13,17 @@ import {
   TableRow,
   Typography,
   Chip,
-  useMediaQuery,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
+  useMediaQuery
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import DoneIcon from "@mui/icons-material/Done";
-import BuildIcon from "@mui/icons-material/Build";
-import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import UnfoldMoreOutlinedIcon from "@mui/icons-material/UnfoldMoreOutlined";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import applicationsAPI from "../services/applications.api";
-import proposalAPI from "../services/proposals.api";
 import { MessageContext } from "../Contexts";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Menu from "@mui/material/Menu";
