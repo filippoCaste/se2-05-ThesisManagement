@@ -1,11 +1,12 @@
 export class Teacher {
-  constructor(id, name, surname, email, cod_department, cod_group) {
+  constructor(id, name, surname, email, cod_department, cod_group, group_name) {
     this.id = id;
     this.name = name;
     this.surname = surname;
     this.email = email;
     this.cod_department = cod_department;
     this.cod_group = cod_group;
+    this.group_name = group_name;
     this.role = "teacher";
   }
 
@@ -18,6 +19,7 @@ export class Teacher {
       email: this.email,
       cod_department: this.cod_department,
       cod_group: this.cod_group,
+      group_name: this.group_name,
       role: this.role,
     };
   };
@@ -41,7 +43,8 @@ export class Teacher {
       result.surname,
       result.email,
       result.cod_department,
-      result.cod_group
+      result.cod_group,
+      result.group_name,
     );
   };
 }

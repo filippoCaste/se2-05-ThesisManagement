@@ -1,37 +1,39 @@
 import React, { useContext, useState } from 'react';
 import { MessageContext, UserContext } from '../Contexts';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Alert, Button, Grid, IconButton, TextField, Tooltip, Typography } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ConfirmationDialog from './ConfirmationDialog';
-import studentRequestAPI from '../services/studentRequest.api';
+import proposalAPI from '../services/proposals.api';
+
 
 function ProposalStudent() {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const { user } = useContext(UserContext);
 	const [errorMsg, setErrorMsg] = useState(null);
 	const [infoMsg, setInfoMsg] = useState(null);
 	const [confirmation, setConfirmation] = useState(false);
-
-	const [title, setTitle] = useState('');
-	const [description, setDescription] = useState('');
-	const [notes, setNotes] = useState('');
-	const [type, setType] = useState('');
-	const [teacherEmail, setTeacherEmail] = useState('');
+	const [title, setTitle] = useState(location.state ? location.state.title : '');
+	const [description, setDescription] = useState(location.state ? location.state.description : '');
+	const [notes, setNotes] = useState(location.state ? location.state.notes : '');
+	const [type, setType] = useState(location.state ? location.state.type : '');
+	const [teacherEmail, setTeacherEmail] = useState(location.state ? location.state.teacherEmail : '' );
 	const [coSupervisor, setCoSupervisor] = useState('');
-	const [coSupervisors, setCoSupervisors] = useState([]);
+	const [coSupervisors, setCoSupervisors] = useState(location.state ? location.state.coSupervisors : []);
+	const isFilled = location.state && true;
 
 	const handleMessage = useContext(MessageContext);
 
 	const handleCancel = () => {
-		navigate('/student');
+		isFilled ? navigate('/student/applications') : navigate('/student');
 	}
 
 	const handleOpenDialog = () => {
 		if (title == '' || type == '' || description == '' || teacherEmail == '') {
-			// the form is not completely filled
+			// if the form is not completely filled
 			setErrorMsg(<><p>Please fill all mandatory fields:</p> <ul>
 							{title === '' ? <li>Title</li> : null}
 							{type === '' ? <li>Type</li>: null}
@@ -50,15 +52,28 @@ function ProposalStudent() {
 		if (result) {
 			// User clicked "Confirm"
 			// call the api
-			const requestProposal = {
-				title, type, description, notes, teacherEmail, coSupervisorEmails: coSupervisors
-			}
-			try {
-				await studentRequestAPI.postStudentRequest(requestProposal);
-			} catch(err) {
-				console.log(err)
-				setErrorMsg("Emails are not correct.");
-				return;
+			if (!isFilled) {
+				const requestProposal = {
+					title, type, description, notes, teacherEmail, coSupervisorEmails: coSupervisors
+				}
+				try {
+					await proposalAPI.postStudentRequest(requestProposal);
+				} catch(err) {
+					console.log(err)
+					setErrorMsg("Emails are not correct.");
+					return;
+				}
+			} else {
+				const requestProposal = {
+					title, type, description, notes, teacherEmail, status: 'accepted'
+				}
+				try {
+					await proposalAPI.postStudentRequest(requestProposal);
+				} catch(err) {
+					console.log(err)
+					setErrorMsg("Wrong data.");
+					return;
+				}
 			}
 			// display info
 			handleMessage("Thesis request sent successfully", "success");
@@ -85,6 +100,7 @@ function ProposalStudent() {
 						title={title} description={description} type={type} notes={notes} teacherEmail={teacherEmail} coSupervisor={coSupervisor} coSupervisors={coSupervisors}
 						setTitle={setTitle} setDescription={setDescription} setType={setType} setNotes={setNotes} setTeacherEmail={setTeacherEmail} setCoSupervisor={setCoSupervisor} setCoSupervisors={setCoSupervisors}
 						errorMsg={errorMsg} setErrorMsg={setErrorMsg}
+						isFilled={isFilled}
 					/> <br/>
 					
 					{infoMsg && <Alert severity='info' variant='outlined' color='info' onClose={() => setInfoMsg(null)}>
@@ -99,7 +115,7 @@ function ProposalStudent() {
 
 function InsertNewProposalStudent(props) {
 	const { user, handleOpenDialog, handleCancel } = props;
-	const { title, description, notes, type, teacherEmail, coSupervisor, coSupervisors, errorMsg } = props;
+	const { title, description, notes, type, teacherEmail, coSupervisor, coSupervisors, errorMsg, isFilled } = props;
 	const { setTitle, setDescription, setNotes, setType, setTeacherEmail, setCoSupervisor, setCoSupervisors, setErrorMsg } = props;
 
 	const [warning, setWarning] = useState(false);
@@ -153,7 +169,7 @@ function InsertNewProposalStudent(props) {
 						</Tooltip>
 
 						<TextField name="type" variant="filled" fullWidth placeholder='ex: Research'
-							value={type} onChange={ev => setType(ev.target.value)} />
+							disabled={isFilled} value={type} onChange={ev => setType(ev.target.value)} />
 					</Grid>
 				</Grid> <br /> <br />
 
@@ -185,7 +201,7 @@ function InsertNewProposalStudent(props) {
 					<Grid item xs={12} md={6}>
 					{/* PROFESSOR CONTACT */}
 					<Typography variant="subtitle5" fontWeight="bold"> TEACHER CONTACT </Typography>
-					<TextField type='email' name="teacherEmail" variant="filled" fullWidth placeholder='ex: john.doe@polito.it'
+					<TextField type='email' disabled={isFilled} name="teacherEmail" variant="filled" fullWidth placeholder='ex: john.doe@polito.it'
 						value={teacherEmail} onChange={ev => setTeacherEmail(ev.target.value)} />  
 					</Grid>
 
@@ -234,6 +250,7 @@ function InsertNewProposalStudent(props) {
 										<IconButton
 											color="primary"
 											aria-label="delete"
+											key={index}
 											onClick={() => handleRemoveCoSupEmail(index)}
 										>
 											<DeleteIcon />

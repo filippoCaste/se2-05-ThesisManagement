@@ -7,9 +7,17 @@ import {
   archiveProposal,
   updateProposal,
   getProposalById,
-  createStudentProposalRequest
+  createStudentProposalRequest,
+  getProposalRequests,
+  changeStatusProposalRequest,
+  updateThesisStatus,
 } from "../controllers/proposal.controller.js";
-import { isLoggedIn, isStudent, isTeacher } from "../config/configs.js";
+import {
+  isLoggedIn,
+  isSecretary,
+  isStudent,
+  isTeacher,
+} from "../config/configs.js";
 
 const router = Router();
 
@@ -17,16 +25,23 @@ router.get("/", isLoggedIn, getProposals);
 
 router.post("/", isTeacher, postProposal);
 
-router.get('/teachers/:id', isLoggedIn, getProposalTeacherId)
+router.post("/request", isStudent, createStudentProposalRequest);
 
-router.delete("/:id",isLoggedIn,isTeacher,deleteProposal);
+router.get("/request", isSecretary, getProposalRequests);
 
-router.put("/:id/archived",isLoggedIn,isTeacher,archiveProposal);
+router.put("/request/:requestid", isSecretary, changeStatusProposalRequest);
 
-router.put('/:proposalId', isTeacher, updateProposal);
+router.get("/request/teacher/:teacherId", isTeacher, getProposalRequests);
+
+router.get("/teachers/:id", isLoggedIn, getProposalTeacherId);
+
+router.delete("/:id", isLoggedIn, isTeacher, deleteProposal);
+
+router.put("/:id/archived", isLoggedIn, isTeacher, archiveProposal);
+router.put("/:id/approval", isLoggedIn, isTeacher, updateThesisStatus);
+
+router.put("/:proposalId", isTeacher, updateProposal);
 
 router.get("/:proposalId", isTeacher, getProposalById);
-
-router.post('/request', isStudent, createStudentProposalRequest)
 
 export { router };

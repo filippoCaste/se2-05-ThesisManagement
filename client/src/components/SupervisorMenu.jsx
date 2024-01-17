@@ -4,8 +4,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-
-
+import PropTypes from 'prop-types';
 
 export default function SimpleListMenu(props) {
   const {supervisorId, setSupervisorid, supervisors} = props;
@@ -44,10 +43,8 @@ export default function SimpleListMenu(props) {
 >
   <ListItemText
     primary={
-      supervisorId
-        ? supervisors.find((supervisor) => supervisor.teacher_id === supervisorId)
-          ? supervisors.find((supervisor) => supervisor.teacher_id === supervisorId).name + " " + supervisors.find((supervisor) => supervisor.teacher_id === supervisorId).surname
-          : "Select a supervisor"
+      supervisorId && supervisors.find((supervisor) => supervisor.teacher_id === supervisorId) ? 
+        supervisors.find((supervisor) => supervisor.teacher_id === supervisorId).name + " " + supervisors.find((supervisor) => supervisor.teacher_id === supervisorId).surname
         : "Select a supervisor"
     }
   />
@@ -75,3 +72,9 @@ export default function SimpleListMenu(props) {
     </>
   );
 }
+
+SimpleListMenu.propTypes = {
+  supervisorId: PropTypes.string.isRequired,
+  setSupervisorid: PropTypes.func.isRequired,
+  supervisors: PropTypes.array.isRequired,
+};

@@ -11,7 +11,8 @@ import { router as keywordRoutes } from "./src/routes/keyword.route.js";
 import { router as levelRoutes } from "./src/routes/level.route.js";
 import { router as applicationRoutes } from "./src/routes/application.route.js";
 import { router as careerRoutes } from "./src/routes/career.route.js";
-import { getUserById } from "./src/services/user.services.js";
+import { router as notificationRoutes } from "./src/routes/notification.route.js";
+import { getUserByEmail } from "./src/services/user.services.js";
 import { getStudentById } from "./src/services/student.services.js";
 import { getTeacherById } from "./src/services/teacher.services.js";
 import passport from "passport";
@@ -21,24 +22,24 @@ import {strategy} from "./src/config/configs.js";
 import { Student } from "./src/models/Student.js";
 import { Teacher } from "./src/models/Teacher.js";
 import { initScheduledJobs } from "./src/cron-jobs.js"
-import { getProposalTitleByApplicationId } from "./src/services/proposal.services.js";
 
 
 passport.use(strategy);
 
 passport.serializeUser(function (user, done) {
-  done(null, user.nickname);
+  done(null, user.email);
 });
 
-passport.deserializeUser(async function (id, done) {
-  let user = await getUserById(id.slice(1));
+passport.deserializeUser(async function (email, done) {
+  let user = await getUserByEmail(email);
+  
   if(user.role == 'student')
     user = Student.fromResult(await getStudentById(user.id));
   else if(user.role == 'teacher')
     user = Teacher.fromTeachersResult(await getTeacherById(user.id));
-  else 
+  else if(user.role !== 'secretary')
     done(err, null);
-
+  
   done(null, user);
 });
 
@@ -79,10 +80,10 @@ app.use("/api/keywords", keywordRoutes);
 app.use("/api/levels", levelRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/careers", careerRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 // initialize cron jobs
 initScheduledJobs();
-
 app.listen(port, () => {
   console.log(`app listening on port ${port}!`);
 });

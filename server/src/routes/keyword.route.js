@@ -1,7 +1,7 @@
 "use strict";
 import { Router } from "express";
 import { getKeywords } from "../controllers/keyword.controller.js";
-import { isLoggedIn, isTeacher } from "../config/configs.js";
+import { isLoggedIn } from "../config/configs.js";
 
 const router = Router();
 

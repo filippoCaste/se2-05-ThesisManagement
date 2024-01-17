@@ -6,23 +6,16 @@ import QueryBuilderOutlinedIcon from '@mui/icons-material/QueryBuilderOutlined';
 import { MobileDatePicker } from '@mui/x-date-pickers';
 import {MessageContext} from "../Contexts";
 import dayjs from 'dayjs';
-
-
-export default function ClockCustomized(props) {
-  const {currentDataAndTime, setCurrentDataAndTime} = props;
-  const [open, setOpen] = React.useState(false);
-  const handleMessage = React.useContext(MessageContext);
+import PropTypes from 'prop-types';
 
 function ButtonField(props) {
   const {
     setOpen,
-    label,
     id,
     disabled,
     InputProps: { ref } = {},
     inputProps: { 'aria-label': ariaLabel } = {},
   } = props;
-
   return (
     <IconButton
       variant="outlined"
@@ -31,22 +24,42 @@ function ButtonField(props) {
       ref={ref}
       aria-label={ariaLabel}
       onClick={() => setOpen?.((prev) => !prev)}
+      sx={{color:{sm: 'black',md: 'white'}}}
     >
-     <QueryBuilderOutlinedIcon fontSize='medium' sx={{fill:"white"}}/>
+     <QueryBuilderOutlinedIcon fontSize='medium'/>
     </IconButton>
   );
 }
+export default function ClockCustomized(props) {
+  const {currentDataAndTime, setCurrentDataAndTime} = props;
+  const [open, setOpen] = React.useState(false);
+  const handleMessage = React.useContext(MessageContext);
 
-    return (
-    <LocalizationProvider dateAdapter={AdapterDayjs} >
-    <MobileDatePicker       
-      value={currentDataAndTime}
-      slots={{ field: ButtonField, ...props.slots }}
-      slotProps={{ field: { setOpen } }}
-      minDate={dayjs()}
-      open={open}
-      onClose={() => {setOpen(false); handleMessage("Time successfully changed: "+ currentDataAndTime.format("YYYY-MM-DD"),"success");}}
-      onOpen={() => setOpen(true)}
-      onChange={(newDateAndTime) => setCurrentDataAndTime(newDateAndTime)} />
-    </LocalizationProvider>
-    )};
+  return (
+  <LocalizationProvider dateAdapter={AdapterDayjs} >
+  <MobileDatePicker       
+    value={currentDataAndTime}
+    slots={{ field: ButtonField, ...props.slots }}
+    slotProps={{ field: { setOpen } }}
+    minDate={dayjs()}
+    open={open}
+    onClose={() => {setOpen(false); handleMessage("Time successfully changed: "+ currentDataAndTime.format("YYYY-MM-DD"),"success");}}
+    onOpen={() => setOpen(true)}
+    onChange={(newDateAndTime) => setCurrentDataAndTime(newDateAndTime)} />
+  </LocalizationProvider>
+  )
+};
+
+ButtonField.propTypes = {
+  setOpen: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  InputProps: PropTypes.object.isRequired,
+  inputProps: PropTypes.object.isRequired
+};
+
+ClockCustomized.propTypes = {
+  currentDataAndTime: PropTypes.object.isRequired,
+  setCurrentDataAndTime: PropTypes.func.isRequired,
+  slots: PropTypes.object.isRequired
+};

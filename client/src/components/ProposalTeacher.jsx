@@ -5,9 +5,7 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { MessageContext, UserContext } from '../Contexts';
-import { FormControl, Select, MenuItem, Input, Container, IconButton, Paper, Avatar } from '@mui/material';
-import Autocomplete from '@mui/material/Autocomplete';
-
+import { FormControl, Select, MenuItem, Input, IconButton, Paper, Avatar } from '@mui/material';
 
 import proposalAPI from '../services/proposals.api';
 import API_Degrees from '../services/degrees.api';
@@ -377,7 +375,6 @@ function ProposalTeacher(props) {
 
   //SEND FORM ///////////////////////////////////////////////////////////////////////////////////
 
-
   return (
     <Grid container mt="10%">
       <Grid item xs={12} sx={{ mt: '2vh', mx: '4vh' }}>
@@ -405,9 +402,9 @@ function ProposalTeacher(props) {
             </Avatar>
           </Grid>
           <Grid item md={4}>
-            <Typography>{user?.name}  {user?.surname}  ({user?.id})</Typography>
-            <Typography>Deparment: {user?.cod_department}</Typography>
-            <Typography>Group: {user?.group_name}</Typography>
+            <Typography><em>Name:</em> {user?.name}  {user?.surname} ({user?.id})</Typography>
+            <Typography><em>Deparment:</em> {user?.cod_department}</Typography>
+            <Typography><em>Group:</em> {user?.group_name} </Typography>
           </Grid>
         </Grid>
 
@@ -781,10 +778,9 @@ function ProposalTeacher(props) {
 
 }
 
-
 ProposalTeacher.propTypes = {
+  currentDataAndTime: PropTypes.string,
   typeOperation: PropTypes.string.isRequired,
-
 };
 
 

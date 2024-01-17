@@ -1,23 +1,4 @@
-export function isValidDateFormat(dateString) {
-    // Check if the date string matches the 'YYYY-MM-DD' format using a regular expression
-    const dateRegex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
-
-    if (!dateRegex.test(dateString)) {
-      console.log("The input date is not correct")
-      return false; // Date format doesn't match 'YYYY-MM-DD'
-    }
-
-    // Check if the date is a valid date using the Date object
-    const date = new Date(dateString);
-    
-    // Check if the parsed date is valid and the year, month, and day values match the input
-    return (
-      !isNaN(date.getTime()) &&
-      date.getFullYear() === parseInt(dateString.substring(0, 4), 10) &&
-      date.getMonth() + 1 === parseInt(dateString.substring(5, 7), 10) &&
-      date.getDate() === parseInt(dateString.substring(8, 10), 10)
-    );
-    }
+import validator from "validator";
 
 /**
  * Check whether the input values are text or contains undefined values
@@ -44,21 +25,37 @@ export function isTextInputValid(values) {
  */
 export function isNumericInputValid(values) {
   for (let number of values) {
-    const value = number && parseInt(number);
-    if (!value || isNaN(value) || number != value.toString()) {
-      console.log("The error is in value: " + number);
+    const value = parseInt(number);
+    if (isNaN(value) || number != value.toString()) {
+      console.log(`The error is in value: ${number}`);
       return false;
     }
-    return true;
   }
+  return true;
 }
 
+/**
+ * Checks if the input values are valid email addresses.
+ *
+ * @param {Array} values - An array of email addresses to be validated.
+ * @return {boolean} Returns true if all email addresses are valid, false otherwise.
+ */
 export function isEmailInputValid(values) {
-  const regex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
   for(let email of values) {
-    if(!regex.test(String(email).toLowerCase())) {
+    if(!validator.isEmail(email)) {
       return false;
     }
+  }
+  return true;
+}
+
+export function isDateInputValid(dateString) {
+  // Check if the date string matches the 'YYYY-MM-DD' format using a regular expression
+  const dateRegex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+
+  if (!dateRegex.test(dateString)) {
+    console.log("regex didnt work")
+    return false; // Date format doesn't match 'YYYY-MM-DD'
   }
   return true;
 }

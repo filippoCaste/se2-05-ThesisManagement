@@ -8,9 +8,9 @@ import TextField from '@mui/material/TextField';
 import teachersAPI from '../services/teachers.api';
 import keywordsAPI from '../services/keywords.api';
 import theme from '../theme';
-import ChipsArray from './ChipsCustomized';
 import SupervisorMenu from './SupervisorMenu';
 import CheckboxesTags from './Autocomplete';
+import PropTypes from 'prop-types';
 
 export default function FilterComponent(props) {
   const {
@@ -91,7 +91,7 @@ export default function FilterComponent(props) {
             />
             <DatePicker
               label="To..."
-              minDate={selectedStartExpirationDate ? selectedStartExpirationDate : currentDataAndTime}
+              minDate={selectedStartExpirationDate || currentDataAndTime}
               format="DD/MM/YYYY"
               value={selectedExpirationDate}
               onChange={(date) => setSelectedExpirationDate(date)}
@@ -126,3 +126,17 @@ export default function FilterComponent(props) {
     </Box>
   );
 }
+
+FilterComponent.propTypes = {
+  selectedExpirationDate: PropTypes.object.isRequired,
+  setSelectedExpirationDate: PropTypes.func.isRequired,
+  selectedStartExpirationDate: PropTypes.object.isRequired,
+  setSelectedStartExpirationDate: PropTypes.func.isRequired,
+  setSelectedKeywords: PropTypes.func.isRequired,
+  setSelectedSupervisorId: PropTypes.func.isRequired,
+  selectedSupervisorId: PropTypes.string.isRequired,
+  selectedKeywords: PropTypes.array.isRequired,
+  currentDataAndTime: PropTypes.object.isRequired,
+  title: PropTypes.string.isRequired,
+  setTitle: PropTypes.func.isRequired,
+};
