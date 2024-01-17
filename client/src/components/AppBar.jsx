@@ -1,23 +1,28 @@
 import * as React from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import ClockCustomized from './ClockCustomized';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import headerBackground from "../../public/img/imageedit_3_5228036516.jpg";
 import Logout from '@mui/icons-material/Logout';
 import Image from "mui-image";
-import { AppBar, Toolbar, IconButton, Typography, MenuItem, Menu, ListItemIcon, Box} from '@mui/material';
+import { AppBar, Toolbar, IconButton, Typography, MenuItem, Menu, ListItemIcon, Box, Badge} from '@mui/material';
 import { UserContext } from '../Contexts';
 import theme from '../theme';
 import { PropTypes } from 'prop-types';
+import { useNavigate } from 'react-router-dom';
+import notificationsApi from '../services/notifications.api';
 
 
 export default function PrimarySearchAppBar(props) {
   const {openSelectionsMobile, setOpenSelectionsMobile,currentDataAndTime, setCurrentDataAndTime} = props;
   const [openClock, setOpenClock] = React.useState(false);
   const [anchorElA, setAnchorElA] = React.useState(null);
-  const mobileMoreAnchorElA = null;
   const { user } = React.useContext(UserContext);
+  const navigate = useNavigate();
+  const [numOfNotifications, setNumOfNotifications] = React.useState(0);
+
   
   const handleClockOpen = () => {
     setOpenClock(true);
@@ -28,8 +33,28 @@ export default function PrimarySearchAppBar(props) {
   };
 
   const handleProfileMenuOpen = (event) => {
-    setAnchorElA(event.currentTarget);
+    if(user)
+     setAnchorElA(event.currentTarget);
+    else window.location.href = "http://localhost:3001/api/users/login";
   };
+
+  const openNotificationsPage = () => {
+    navigate('/notifications');
+  }
+
+  React.useEffect(() => {
+    const getNotifications = async () => {
+      try {
+        const newNotifications = await notificationsApi.getNotificationsForUser();
+        const length = newNotifications.filter((notification) => notification.isRead === 0).length;
+        setNumOfNotifications(length);
+      } catch (error) {
+        handleMessage(error.message, "error");
+      }
+    };
+    
+    getNotifications();
+  }, []);
 
 
   const handleMenuClose = () => {
@@ -55,6 +80,11 @@ export default function PrimarySearchAppBar(props) {
       onClose={handleMenuClose}
       sx={{ elevation: 3, color: theme.palette.primary.main }}
     >
+      <Box sx={{ display:{sm:"flex", md:"none"}, justifyContent: 'center' }}>
+                <ClockCustomized currentDataAndTime={currentDataAndTime} setCurrentDataAndTime={setCurrentDataAndTime} open={openClock}
+                onOpen={handleClockOpen}
+                onClose={handleClockClose}/>
+      </Box>
       <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography mr={"0.5vw"} fontWeight="bold" sx={{ color: theme.palette.main, fontFamily: 'cursive' }}>
           User ID:
@@ -85,26 +115,6 @@ export default function PrimarySearchAppBar(props) {
   );
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorElA}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={Boolean(mobileMoreAnchorElA)}
-      onClose={handleMenuClose}
-    >
-     
-    </Menu>
-  );
-
 
   return (
     <Box position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, overflow:"none", top:0, left:0, height:"15vh"}}>
@@ -139,7 +149,18 @@ export default function PrimarySearchAppBar(props) {
                 onOpen={handleClockOpen}
                 onClose={handleClockClose}/>
 
-            
+
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="notifications"
+                onClick={openNotificationsPage}
+                color="inherit"
+              >
+              <Badge color="error" badgeContent={numOfNotifications} ac>
+                <NotificationsIcon color="primary.main"/>
+              </Badge>
+              </IconButton>
               {!user ? (<IconButton
               size="large"
               edge="end"
@@ -177,7 +198,7 @@ export default function PrimarySearchAppBar(props) {
           </Box>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
+
       {renderMenu}
     </Box>
   );

@@ -11,6 +11,7 @@ import { router as keywordRoutes } from "./src/routes/keyword.route.js";
 import { router as levelRoutes } from "./src/routes/level.route.js";
 import { router as applicationRoutes } from "./src/routes/application.route.js";
 import { router as careerRoutes } from "./src/routes/career.route.js";
+import { router as notificationRoutes } from "./src/routes/notification.route.js";
 import { getUserByEmail } from "./src/services/user.services.js";
 import { getStudentById } from "./src/services/student.services.js";
 import { getTeacherById } from "./src/services/teacher.services.js";
@@ -79,10 +80,10 @@ app.use("/api/keywords", keywordRoutes);
 app.use("/api/levels", levelRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/careers", careerRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 // initialize cron jobs
 initScheduledJobs();
-
 app.listen(port, () => {
   console.log(`app listening on port ${port}!`);
 });

@@ -174,6 +174,7 @@ export const getApplicationsByStudentId = (studentId) => {
     p.level,
     s.supervisor_id,
     p.notes,
+    p.type,
     p.cod_group,
     g.title_group,
     p.required_knowledge,
@@ -214,6 +215,7 @@ export const getApplicationsByStudentId = (studentId) => {
           level: row.level,
           supervisor_id: row.supervisor_id,
           notes: row.notes,
+          type: row.type,
           cod_group: row.cod_group,
           title_group: row.title_group,
           required_knowledge: row.required_knowledge,
@@ -235,7 +237,7 @@ export const getApplicationsByStudentId = (studentId) => {
 export const getStudentEmailByApplicationId = (applicationId) => {
   return new Promise((resolve, reject) => {
     const sql = `
-      SELECT Students.email
+      SELECT Students.email, Students.id
       FROM Applications
       JOIN Students ON Applications.student_id = Students.id
       WHERE Applications.application_id = ?;
@@ -247,10 +249,62 @@ export const getStudentEmailByApplicationId = (applicationId) => {
       }
 
       if (row?.email) {
-        resolve(row.email);
+        resolve({ student_id: row.id, email: row.email });
       } else {
         reject(new Error("No email were found")); // Return null if email not found for the applicationId
       }
     });
   });
+};
+
+
+export const getCosupervisorsIdAndEmail = (applicationid) => {
+  return new Promise((resolve, reject) => {
+    const proposalIdQuery = `
+      SELECT proposal_id FROM Applications WHERE application_id = ?;
+    `;
+  
+    db.get(proposalIdQuery, [applicationid], (err, row) => {
+      if (err) {
+        return reject(err);
+      }
+
+      if (!row || !row.proposal_id) {
+        return reject(
+          new Error("No proposal found for the given application ID")
+        );
+      }
+
+      const { proposal_id } = row;
+
+      const emailQuery = `
+        SELECT email, id FROM ExternalUsers WHERE id IN (
+          SELECT co_supervisor_id FROM Supervisors WHERE proposal_id = ?
+        )
+        UNION
+        SELECT email, id FROM Teachers WHERE id IN (
+          SELECT co_supervisor_id FROM Supervisors WHERE proposal_id = ?
+        );
+      `;
+
+      db.all(emailQuery, [proposal_id, proposal_id], (error, rows) => {
+        if (error) {
+          return reject(error);
+        }
+        if (rows.length > 0) {
+          const obj = rows.map((row) => {
+            return {
+              email: row.email,
+              id: row.id
+            }
+          });
+          resolve(obj);
+        } else {
+          resolve([]);
+        }
+      });
+    });
+  });
+  
+
 };

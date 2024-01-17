@@ -1,3 +1,7 @@
+
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=filippoCaste_se2-05-ThesisManagement&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=filippoCaste_se2-05-ThesisManagement)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=filippoCaste_se2-05-ThesisManagement&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=filippoCaste_se2-05-ThesisManagement)
+
 # Thesis Management 
 
 - [Thesis Management](#thesis-management)
@@ -13,6 +17,7 @@
     - [`/api/applications`:](#apiapplications)
     - [`/api/levels`:](#apilevels)
     - [`/api/career`:](#apicareer)
+    - [`/api/notifications`:](#apinotifications)
     - [Others](#others)
       - [Keywords](#keywords)
   - [Database Tables](#database-tables)
@@ -559,7 +564,6 @@ In order to run the application you need to open two terminals and run:
   - request body content: none
   - response:
     - 200 OK (success) with career informations
-    - 400 Bad Request (error) with an error message
     - 500 Internal Server Error: indicates an error during processing
 ```json
 [
@@ -610,6 +614,61 @@ In order to run the application you need to open two terminals and run:
   }
 ] 
 ```
+
+### `/api/notifications`:
+- GET `/`
+  - request body content: none
+  - response:
+    - 200 OK (success) with career informations
+    - 500 Internal Server Error: indicates an error during processing
+```json
+[
+  {
+    "id": 1,
+    "user_id": 10000,
+    "title": "Supervisor application decision",
+    "message": "Your application for the proposal \"Computer vision techniques for mobile testing\" has been accepted.",
+    "is_read": 0,
+    "created_at": "2021-06-01T00:00:00+01:00"
+  },
+]
+```
+
+- DELETE `/:notificationId`
+  - request body content: none
+  - response:
+    - 200 OK (success) with career informations
+    - 400 Bad Request (error) with an error message
+    - 404 Not Found (error) with an error message
+    - 500 Internal Server Error: indicates an error during processing
+```json
+  {
+    "message": "Notification deleted successfully."
+  },
+```
+
+- DELETE `/`
+  - request body content: none
+  - response:
+    - 200 OK (success) with career informations
+    - 500 Internal Server Error: indicates an error during processing
+```json
+  {
+    "message": "Notifications deleted successfully."
+  },
+```
+
+- DELETE `/`
+  - request body content: none
+  - response:
+    - 200 OK (success) with career informations
+    - 500 Internal Server Error: indicates an error during processing
+```json
+  {
+    "message": "Notifications updated successfully."
+  },
+```
+
 
 ### Others
 #### Keywords
@@ -725,6 +784,14 @@ The database can be found in: `./server/database.db`.
 - name: TEXT (NOT NULL)
 - surname: TEXT (NOT NULL)
 - email: TEXT (NOT NULL)
+
+#### `Notifications`
+- "id"	INTEGER (AI)
+- "user_id"	INTEGER (NOT NULL)
+- "title"	TEXT
+- "message"	TEXT
+- "is_read"	INTEGER (DEFAULT 0)
+- "created_at"	TEXT
 
 ## Client main pages
 Official palette:

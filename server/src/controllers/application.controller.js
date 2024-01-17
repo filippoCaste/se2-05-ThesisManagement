@@ -1,7 +1,8 @@
 "use strict";
 import { changeStatus, createApplicationInDb, getApplicationsByProposalId, getApplicationsByStudentId } from "../services/application.services.js";
-import {sendEmailToTeacher, sendNotificationApplicationDecision} from "../services/notification.services.js";
+import {sendEmailToTeacher, sendNotificationApplicationDecision, sendNotificationApplicationDecisionSupervisor} from "../services/notificationSender.services.js";
 import validator from "validator";
+import { isDateInputValid } from "../utils/utils.js";
 
 export const createApplication = async (req, res) => {
   const { proposal_id, student_id, submission_date } = req.body;
@@ -15,7 +16,7 @@ export const createApplication = async (req, res) => {
       .status(400)
       .json({ error: "Request should contain a student_id" });
   }
-  if (!submission_date || validator.isDate(submission_date) === false) {
+  if (!submission_date || !isDateInputValid(submission_date)) {
     return res.status(400).json({
       error:
         "Request should contain a submission_date and be in the format YYYY-MM-dd",
@@ -69,7 +70,8 @@ export const changeStatusOfApplication = async (req, res) => {
     }
 
     await changeStatus(applicationId, req.user.id, status);
-    await sendNotificationApplicationDecision(applicationId,status);
+    await sendNotificationApplicationDecision(applicationId,status); //to student
+    await sendNotificationApplicationDecisionSupervisor(applicationId,status);
     res.status(204).send();
 
   } catch(err) {

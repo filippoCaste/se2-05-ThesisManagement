@@ -18,11 +18,12 @@ import StudentApplications from './pages/StudentApplications';
 import ProposalStudent from './components/ProposalStudent.jsx';
 import ProposalTeacherCoSupervisor from './components/ProposalTeacherCoSupervisor.jsx';
 import SecretaryPage from './pages/SecretaryPage.jsx';
+import NotificationsPage from './pages/NotificationPage.jsx';
 
 function App() {
   const [message, setMessage] = useState('');
   const [user, setUser] = useState(null);
-  const [openSelectionsMobile, setOpenSelectionsMobile] = useState(true);
+  const [openSelectionsMobile, setOpenSelectionsMobile] = useState(false);
   const [currentDataAndTime, setCurrentDataAndTime] = useState(dayjs());
   const userObject = useMemo(() => ({ user, setUser }), [user, setUser]);
 
@@ -103,6 +104,8 @@ function App() {
                 
               {/******** SECRETARY ROUTES *******/}
               <Route path="/secretary" element={<SecretaryPage currentDataAndTime={currentDataAndTime}/>}></Route>
+
+              <Route path="/notifications" element={<NotificationsPage handleMessage={handleMessage}/>}></Route>
 
             </Routes>
           </MessageContext.Provider>
