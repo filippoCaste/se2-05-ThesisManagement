@@ -76,7 +76,7 @@ export default function StickyHeadTable(props) {
       ),
     });
     // add column for creating a student request starting from an approved application
-    /*columns.push({
+    columns.push({
       id: "request",
       label: "Modify request",
       format: (value, row) => (
@@ -87,7 +87,7 @@ export default function StickyHeadTable(props) {
           onClick={() => createNewStudentRequest(row)}
         ></Button>
       ),
-    });*/
+    });
   }
 
   const createNewStudentRequest = (row) => {
