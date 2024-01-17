@@ -54,7 +54,7 @@ function ProposalStudent() {
 			// call the api
 			if (!isFilled) {
 				const requestProposal = {
-					title, type, description, notes, teacherEmail, coSupervisorEmails: coSupervisors
+					title, description, type, notes, teacherEmail, coSupervisorEmails: coSupervisors
 				}
 				try {
 					await proposalAPI.postStudentRequest(requestProposal);
@@ -65,7 +65,7 @@ function ProposalStudent() {
 				}
 			} else {
 				const requestProposal = {
-					title, type, description, notes, teacherEmail, status: 'accepted'
+					title, description, type, notes, teacherEmail, status: 'approved'
 				}
 				try {
 					await proposalAPI.postStudentRequest(requestProposal);
