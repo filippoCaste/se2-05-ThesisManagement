@@ -176,6 +176,7 @@ export default function StickyHeadTable(props) {
     return null;
   };
 
+
   return (
     <Paper className="paperContainer">
       <TableContainer className="tableContainer">
