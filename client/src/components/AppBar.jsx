@@ -84,6 +84,17 @@ export default function PrimarySearchAppBar(props) {
                 <ClockCustomized currentDataAndTime={currentDataAndTime} setCurrentDataAndTime={setCurrentDataAndTime} open={openClock}
                 onOpen={handleClockOpen}
                 onClose={handleClockClose}/>
+                <IconButton
+                size="large"
+                edge="end"
+                aria-label="notifications"
+                onClick={openNotificationsPage}
+                color="inherit"
+              >
+              <Badge color="error" badgeContent={numOfNotifications} ac>
+                <NotificationsIcon color="primary.main"/>
+              </Badge>
+              </IconButton>
       </Box>
       <Box mx={"1vw"} my={"1vh"} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography mr={"0.5vw"} fontWeight="bold" sx={{ color: theme.palette.main, fontFamily: 'cursive' }}>

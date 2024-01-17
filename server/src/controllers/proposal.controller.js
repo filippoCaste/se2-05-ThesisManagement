@@ -9,6 +9,7 @@ import {
   archiveProposalByProposalId,
   updateProposalByProposalId,
   getProposalRequestsFromDB,
+  getProposalRequestsByTeacherIdFromDB,
   changeStatusProRequest,
   createProposalRequest,
   updateThesisRequestStatus,
@@ -402,8 +403,18 @@ export const createStudentProposalRequest = async (req, res) => {
 
 export const getProposalRequests = async (req, res, next) => {
   try {
-    const { teacherId } = req.params;
-    const proposalRequests = await getProposalRequestsFromDB(teacherId);
+    const proposalRequests = await getProposalRequestsFromDB();
+
+    return res.status(200).json(proposalRequests);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const getProposalRequestsByTeacherId = async (req, res, next) => {
+  try {
+    const teacherId = req.params.teacherId;
+    const proposalRequests = await getProposalRequestsByTeacherIdFromDB(teacherId);
 
     return res.status(200).json(proposalRequests);
   } catch (err) {

@@ -311,6 +311,33 @@ const getProposalRequests = async () => {
   }
 };
 
+const getProposalRequestsByTeacherId = async (teacherId) => {
+  try {
+    let url = `${SERVER_URL}/api/proposals/request/teacher/${teacherId}`;
+    const response = await fetch(url, {
+      credentials: "include",
+    });
+
+    if (response.ok) {
+      const proposalRequests = await response.json();
+      const proposalRequestsList = [];
+
+      for (const proposalRequest of proposalRequests) {
+        proposalRequestsList.push(
+          ProposalRequest.fromProposalRequestsResult(proposalRequest)
+        );
+      }
+
+      return proposalRequestsList;
+    } else {
+      return [];
+    }
+  } catch (error) {
+    console.error("An error occurred:", error);
+    return [];
+  }
+}
+
 /**
  *
  * @param {Object} studentRequest
@@ -374,6 +401,7 @@ export const updateThesisRequestStatusApi = async (
   note
 ) => {
   try {
+    console.log(proposalId, status, note);
     const response = await fetch(
       `${SERVER_URL}/api/proposals/${proposalId}/approval`,
       {
@@ -390,6 +418,7 @@ export const updateThesisRequestStatusApi = async (
       return true;
     } else {
       const message = await response.text();
+      console.log(message);
       throw new Error("Request error: " + message);
     }
   } catch (error) {
@@ -408,6 +437,7 @@ const proposalAPI = {
   deleteProposal,
   archivedProposal,
   getProposalRequests,
+  getProposalRequestsByTeacherId,
   postStudentRequest,
   changeStatusProposalRequest,
   updateThesisRequestStatusApi,

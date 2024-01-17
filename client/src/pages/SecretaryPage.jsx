@@ -22,11 +22,9 @@ function SecretaryPage(props) {
 
     const handleStudentClick = (student) => {
       setSelectedStudent(student);
-      console.log(student)
       careerAPI.getCareerByStudentId(student.student_id).then((res) => {
         setStudentExams(res);
       });
-      console.log(studentExams)
       setOpenDialog(true);
     };
 

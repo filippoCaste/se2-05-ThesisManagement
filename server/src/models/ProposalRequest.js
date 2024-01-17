@@ -1,5 +1,5 @@
 export class ProposalRequest {
-  constructor(id, studentId, teacherId, title, description, notes, type) {
+  constructor(id, studentId, teacherId, title, description, notes, type, status) {
     this.id = id;
     this.studentId = studentId;
     this.teacherId = teacherId;
@@ -7,6 +7,7 @@ export class ProposalRequest {
     this.description = description;
     this.notes = notes;
     this.type = type;
+    this.status = status;
     this.studentInfo = null;
     this.supervisorsInfo = []; // Changed from supervisorsInfo
   }
@@ -19,7 +20,8 @@ export class ProposalRequest {
       result.title,
       result.description,
       result.notes,
-      result.type
+      result.type,
+      result.status
     );
   }
 
@@ -32,6 +34,7 @@ export class ProposalRequest {
       description: this.description,
       notes: this.notes,
       type: this.type,
+      status: this.status,
       studentInfo: this.studentInfo,
       supervisorsInfo: this.supervisorsInfo,
     };

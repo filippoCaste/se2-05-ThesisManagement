@@ -62,18 +62,6 @@ export default function StickyHeadTable(props) {
         ></Button>
       ),
     },
-    {
-      id: "thesis_request_status",
-      label: "approval status",
-      minWidth: 200,
-      maxWidth: 200,
-    },
-    {
-      id: "thesis_request_change_note",
-      label: "Note",
-      minWidth: 200,
-      maxWidth: 200,
-    },
   ];
 
   // push status col if isAppliedProposals is true
@@ -88,7 +76,7 @@ export default function StickyHeadTable(props) {
       ),
     });
     // add column for creating a student request starting from an approved application
-    columns.push({
+    /*columns.push({
       id: "request",
       label: "Modify request",
       format: (value, row) => (
@@ -99,7 +87,7 @@ export default function StickyHeadTable(props) {
           onClick={() => createNewStudentRequest(row)}
         ></Button>
       ),
-    });
+    });*/
   }
 
   const createNewStudentRequest = (row) => {

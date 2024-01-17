@@ -22,6 +22,7 @@ const getNotificationsForUser = async () => {
       return notifications.map(mapNotification);
     } else {
       const message = await response.text();
+      console.log(message);
       throw new Error("Notification error: " + message);
     }
   } catch (error) {

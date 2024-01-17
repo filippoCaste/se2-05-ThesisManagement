@@ -19,6 +19,7 @@ import ProposalStudent from './components/ProposalStudent.jsx';
 import ProposalTeacherCoSupervisor from './components/ProposalTeacherCoSupervisor.jsx';
 import SecretaryPage from './pages/SecretaryPage.jsx';
 import NotificationsPage from './pages/NotificationPage.jsx';
+import ProposalRequests from './components/ProposalRequests.jsx';
 
 function App() {
   const [message, setMessage] = useState('');
@@ -98,6 +99,9 @@ function App() {
 
               <Route path='/teacher/copyProposal/:proposalId'  
                element={<ProposalTeacher typeOperation="copy" />} />
+
+              <Route path='/teacher/proposalRequests'
+                element={<ProposalRequests />} />
 
               <Route path='/teacher/browseCoSupervisor'
                element={<ProposalTeacherCoSupervisor currentDataAndTime={currentDataAndTime}/>} />

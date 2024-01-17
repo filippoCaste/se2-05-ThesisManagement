@@ -21,6 +21,7 @@ export default function MenuButton(props) {
     } else if(userRole === 'teacher') {
         menuList.push("Insert new proposal")
         menuList.push("Browse co-supervised proposals")
+        menuList.push("Browse proposal requests")
     }
 
     const handleClick = (index) => {
@@ -38,6 +39,8 @@ export default function MenuButton(props) {
                 path = '/teacher/addProposal';
             } else if(index === 1) {
                 path = '/teacher/browseCoSupervisor'
+            } else if(index ===2) {
+                path = '/teacher/proposalRequests'
             }
             navigate(path);
         }

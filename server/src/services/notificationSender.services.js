@@ -19,7 +19,7 @@ export const sendNotificationApplicationDecision = async (
   try {
     const subject = "Thesis Management - Professor application decision";
     const title = await getProposalTitleByApplicationId(applicationId);
-    const text = `Application of proposal ${title} has been updated to "${status}`;
+    const text = `Application of proposal ${title} has been updated to "${status}"`;
     const htmlMessage = `
       <html>
         <head>
@@ -166,7 +166,7 @@ export const sendEmailToTeacher = async (application) => {
               <title>New Application Notification</title>
           </head>
           <body>
-              <h1>Proposal Expiration Notification</h1>
+              <h1>Proposal Application Notification</h1>
               <p>Dear ${teacher.name},</p>
               <p>${content}</p>
           </body>

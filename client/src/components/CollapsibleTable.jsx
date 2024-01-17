@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import API_Proposal from "../services/proposals.api";
 import dayjs from "dayjs";
 import {
   Box,
@@ -14,27 +13,17 @@ import {
   TableRow,
   Typography,
   Chip,
-  useMediaQuery,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
+  useMediaQuery
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import DoneIcon from "@mui/icons-material/Done";
-import BuildIcon from "@mui/icons-material/Build";
-import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import UnfoldMoreOutlinedIcon from "@mui/icons-material/UnfoldMoreOutlined";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import applicationsAPI from "../services/applications.api";
-import proposalAPI from "../services/proposals.api";
 import { MessageContext } from "../Contexts";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Menu from "@mui/material/Menu";
@@ -95,49 +84,7 @@ function Row(props) {
       setStatusChangeLoading(false);
     }
   };
-  const changeStatusOfProposalRequest = async (id, action) => {
-    await API_Proposal.updateThesisRequestStatusApi(
-      id,
-      action,
-      action == "Request Change" ? requestChangeNote : undefined
-    )
-      .then(async () => {
-        let successMessage = "";
-
-        // Determine the success message based on the selected action
-        switch (action) {
-          case "Approve":
-            successMessage = "Proposal request approved successfully";
-            break;
-          case "Change Request":
-            successMessage = "Proposal request status changed successfully";
-            break;
-          case "Reject":
-            successMessage = "Proposal request rejected successfully";
-            break;
-          default:
-            successMessage = "Proposal request status updated successfully";
-        }
-
-        handleMessage(successMessage, "success");
-      })
-      .catch(() =>
-        handleMessage("Thesis request status update error", "warning")
-      );
-    if (action == "Request Change") {
-      handleCloseDialog();
-    }
-  };
-  const [requestChangeDialog, setRequestChangeDialog] = useState(false);
-  const [requestChangeNote, setRequestChangeNote] = useState("");
-
-  const handleRequestChange = (status) => {
-    setRequestChangeDialog(status);
-  };
-  const handleCloseDialog = () => {
-    setRequestChangeNote("");
-    setRequestChangeDialog(false);
-  };
+ 
   return (
     <React.Fragment>
       <TableRow
@@ -225,83 +172,6 @@ function Row(props) {
               >
                 <ContentCopyIcon />
               </IconButton>
-            </TableCell>
-            <TableCell style={{ width: "3%" }}>
-              <Tooltip title="Approve" placement="left">
-                <IconButton
-                  color="success"
-                  aria-label="done"
-                  onClick={() =>
-                    changeStatusOfProposalRequest(row.p.id, "Approve")
-                  }
-                  disabled={row.p.status === "assigned"}
-                >
-                  <DoneIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Request Change" placement="left">
-                <IconButton
-                  color="gray"
-                  aria-label="request change"
-                  onClick={() => handleRequestChange(true)}
-                  disabled={row.p.status === "assigned"}
-                >
-                  <BuildIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Reject" placement="left">
-                <IconButton
-                  aria-label="reject"
-                  color="error"
-                  onClick={() =>
-                    changeStatusOfProposalRequest(row.p.id, "Reject")
-                  }
-                  disabled={row.p.status === "assigned"}
-                >
-                  <CloseIcon />
-                </IconButton>
-              </Tooltip>
-              <Dialog
-                open={requestChangeDialog}
-                onClose={() => setRequestChangeDialog(false)}
-              >
-                <DialogTitle id="responsive-dialog-title">
-                  {"Request Change"}
-                </DialogTitle>
-                <DialogContent>
-                  <DialogContentText>Note:</DialogContentText>
-                  <textarea
-                    rows="4"
-                    cols="50"
-                    type="text"
-                    list="teacherSuggestions"
-                    placeholder="Teacher Opinion"
-                    value={requestChangeNote}
-                    onChange={(event) =>
-                      setRequestChangeNote(event.target.value)
-                    }
-                    style={{ width: "100%", marginTop: "8px" }}
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <Button
-                    onClick={handleCloseDialog}
-                    variant="outlined"
-                    color="secondary"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={() =>
-                      changeStatusOfProposalRequest(row.p.id, "Request Change")
-                    }
-                    variant="contained"
-                    color="primary"
-                  >
-                    Confirm
-                  </Button>
-                </DialogActions>
-              </Dialog>
             </TableCell>
           </>
         ) : (
@@ -723,9 +593,6 @@ function CollapsibleTable(props) {
               </TableCell>
               <TableCell style={{ width: "3.6%" }}>
                 <b>Copy</b>
-              </TableCell>
-              <TableCell style={{ width: "3.6%" }}>
-                <b>Approval</b>
               </TableCell>
             </>
           ) : (
