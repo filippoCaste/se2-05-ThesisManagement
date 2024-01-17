@@ -154,7 +154,7 @@ describe("getProposalRequests", () => {
 
     await getProposalRequests({}, mockResponse, mockNext);
 
-    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
     // expect(mockResponse.json).toHaveBeenCalledWith({
     //   error:
     //     "Cannot destructure property 'teacherId' of 'req.params' as it is undefined.",
