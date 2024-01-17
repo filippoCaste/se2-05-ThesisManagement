@@ -136,7 +136,7 @@ function NotificationsPage(props) {
       <Box
         sx={{
           alignItems: "center",
-          width: "50%",
+          width: "90%",
           paddingTop: 2,
         }}
         border={1}
