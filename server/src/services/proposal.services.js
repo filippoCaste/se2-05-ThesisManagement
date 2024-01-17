@@ -820,6 +820,48 @@ export const archiveExpiredProposals = () => {
   });
 };
 
+export const getProposalsByCoSupervisorId = (teacherId) => {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * " +
+                " FROM Proposals p, Groups g, Degrees d, Supervisors s, Teachers t" +
+                " WHERE p.id IN(SELECT proposal_id FROM Supervisors WHERE co_supervisor_id = ?) " +
+                " AND  p.id = s.proposal_id" +
+                " AND s.supervisor_id = t.id" +
+                " AND g.cod_group = p.cod_group AND d.cod_degree = p.cod_degree ";
+
+                
+    db.all(sql, [teacherId], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+      const proposals = rows.map((e) => {
+        const obj = {
+          proposal_id: e.proposal_id,
+          title: e.title,
+          description: e.description,
+          type: e.type,
+          level: e.level,
+          expiration_date: e.expiration_date,
+          notes: e.notes,
+          cod_degree: e.cod_degree,
+          cod_group: e.cod_group,
+          required_knowledge: e.required_knowledge,
+          status: e.status,
+          title_degree: e.title_degree,
+          title_group: e.title_group,
+          name: e.name,
+          surname: e.surname,
+          email: e.email,
+          
+        }
+        return obj;
+      });
+      resolve(proposals);
+    }
+    });
+  });
+}
+
 export const createProposalRequest = async (
   student_id,
   teacher_id,
@@ -1064,3 +1106,4 @@ export const updateThesisRequestStatus = (proposalId, status, note) => {
     });
   });
 };
+

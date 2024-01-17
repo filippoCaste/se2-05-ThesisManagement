@@ -16,6 +16,7 @@ import userAPI from './services/users.api.js';
 import { Student, Professor, Secretary } from './models/User.js';
 import StudentApplications from './pages/StudentApplications';
 import ProposalStudent from './components/ProposalStudent.jsx';
+import ProposalTeacherCoSupervisor from './components/ProposalTeacherCoSupervisor.jsx';
 import SecretaryPage from './pages/SecretaryPage.jsx';
 import NotificationsPage from './pages/NotificationPage.jsx';
 
@@ -97,6 +98,9 @@ function App() {
 
               <Route path='/teacher/copyProposal/:proposalId'  
                element={<ProposalTeacher typeOperation="copy" />} />
+
+              <Route path='/teacher/browseCoSupervisor'
+               element={<ProposalTeacherCoSupervisor currentDataAndTime={currentDataAndTime}/>} />
                 
               {/******** SECRETARY ROUTES *******/}
               <Route path="/secretary" element={<SecretaryPage currentDataAndTime={currentDataAndTime}/>}></Route>

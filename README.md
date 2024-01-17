@@ -187,6 +187,37 @@ In order to run the application you need to open two terminals and run:
 ]
 ```
 
+- GET `/cosupervisors/:id`
+  - request body content: none
+  - response: 
+    - 200 OK (success) with array of thesis proposals object where teacher is a co supervisor 
+    - 400 Bad Request if the id is of unknown teachers
+    - 401 Unauthorized (failure) with error message
+    - 500 Internal Server Error: Indicates an error during processing.
+```json
+[
+  {
+    "id": 10002,
+    "title": "Garantire la qualità dell'applicazione mobile per gli studenti del Politecnico di Torino?",
+    "description": "Affidabilità e stabilità di un'applicazione mobile.",
+    "type": "Sviluppo software",
+    "level": "MSc",
+    "expiration_date": "2024-04-13",
+    "notes": "",
+    "cod_degree": 5,
+    "cod_group": 1,
+    "required_knowledge": "",
+    "status": "posted",
+    "title_degree": "COMPUTER ENGINEERING",
+    "title_group": "Elite",
+    "name": "john",
+    "surname": "doe",
+    "email": "john.doe@polito.it",
+    
+  },
+]
+```
+
 - PUT `/:proposalId`
   - Description: Update the status of an application
   - request body content: 
@@ -395,6 +426,19 @@ In order to run the application you need to open two terminals and run:
     "name": "AI"
   }, ]
 ```
+
+- GET `/proposals`
+  - request body content: none
+  - response: 
+    - 200 OK (success) with teachers or error message
+    - 500 Internal Server Error: Indicates an error during processing.
+```json
+  [ {
+    "proposal_id": 28,
+    "name": "AI"
+  }, ]
+```
+
 
 ### `/api/applications`:
 
@@ -787,3 +831,5 @@ The component returns a JSX structure that renders a list of chips based on the 
 #### Components
 - `ProposalTeacher.jsx`: It is the component through which the teacher can add a new thesis proposal from scratch or starting by an existing one, and it also handles the editing/updating part of an existing proposal (if it has not been assigned to any student).
 - `CollapsibleTable.jsx`: It is the component in which the proposals of the teacher (logged in) are shown. From that list it is possible to access the informations related to that proposal, executing some actions (archive, edit, delete) and see the list of applications made by students to that proposal.
+- `ProposalTeacherCoSupervisor.jsx`: It is the component through which the teacher can see all the proposals where is a co supervisor. And also from that list it is possible to access the informations related to that proposal
+
