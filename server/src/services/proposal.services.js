@@ -55,9 +55,6 @@ export const getProposalsFromDB = (
         p.description,
         p.expiration_date,
         p.cod_degree,
-        p.thesis_request_status,
-        p.thesis_request_status_date,
-        p.thesis_request_change_note,
         d.title_degree,
         p.level,
         p.notes,
@@ -912,6 +909,38 @@ export const getProposalRequestsFromDB = async () => {
   });
 };
 
+export const getProposalRequestsByTeacherIdFromDB = async (teacherId) => {
+  return new Promise((resolve, reject) => {
+    const sql = `SELECT * FROM ProposalRequests AS PR WHERE teacher_id=? AND ( status="approved" || status="Request Change")`;
+    db.all(sql, [teacherId], async function (err, rows) {
+      if (err) {
+        reject(err);
+      }
+      const returnObj = [];
+      for (const row of rows) {
+        const proposalRequest = ProposalRequest.fromProposalRequestsResult(row);
+        const studentInfo = await getExtraInfoFromProposalRequest(row);
+        proposalRequest.setStudentInfo(studentInfo);
+
+        const supervisorInfos = await getSupervisorInfosByProposalRequestId(
+          row.id
+        );
+        proposalRequest.addSupervisorInfo(supervisorInfos);
+
+        const cosupervisorsInfos =
+          await getCoSupervisorInfosByProposalRequestId(row.id);
+        cosupervisorsInfos.forEach((cosupervisorInfo) =>
+          proposalRequest.addSupervisorInfo(cosupervisorInfo)
+        );
+
+        returnObj.push(proposalRequest.serialize());
+      }
+      resolve(returnObj);
+    });
+  }
+  );
+};
+
 export const getSupervisorInfosByProposalRequestId = (proposalRequestId) => {
   return new Promise((resolve, reject) => {
     const sql = `
@@ -975,7 +1004,6 @@ const getExtraInfoFromProposalRequest = (proposal) => {
         student_nationality: row.nationality,
         student_title_degree: row.student_title_degree,
       };
-      console.log(studentInfo);
       resolve(studentInfo);
     });
   });
@@ -1021,45 +1049,23 @@ export const getProposalRequestInfoByID = (requestid) => {
     });
   });
 };
-export const ThesisRequestStatus = {
-  APPROVE: "Approve",
-  REQUEST_CHANGE: "Request Change",
-  REJECT: "Reject",
-};
 
 // Function to update thesis_request_status in Proposal table
 export const updateThesisRequestStatus = (proposalId, status, note) => {
   return new Promise((resolve, reject) => {
     // Validate status
-    if (!Object.values(ThesisRequestStatus).includes(status)) {
+    if (status !== "Approve" && status !== "Reject" || status !== "Request Change") {
       reject(new Error("Invalid status"));
       return;
     }
-
-    // Update proposal status based on status
-    let newStatus;
-    switch (status) {
-      case ThesisRequestStatus.APPROVE:
-        newStatus = ThesisRequestStatus.APPROVE;
-        break;
-      case ThesisRequestStatus.REQUEST_CHANGE:
-        newStatus = ThesisRequestStatus.REQUEST_CHANGE;
-        break;
-      case ThesisRequestStatus.REJECT:
-        newStatus = ThesisRequestStatus.REJECT;
-        break;
-      default:
-        reject(new Error("Invalid status"));
-        return;
-    }
-    // Update thesis_request_status in Proposal table
-    const sql =
-      "UPDATE Proposals SET thesis_request_status = ?, thesis_request_status_date = CURRENT_TIMESTAMP, thesis_request_change_note = ? WHERE id = ?";
-    db.run(sql, [newStatus, note, proposalId], (err) => {
+    
+    const sql = "UPDATE ProposalRequests SET status = ?, change_notes = ? WHERE id = ?";
+    db.run(sql, [status, note, proposalId], (err) => {
       if (err) {
+        console.log(err);
         reject(err);
       } else {
-        resolve({ message: `Thesis request status updated to ${newStatus}` });
+        resolve({ message: `Thesis request status updated to ${status}` });
       }
     });
   });

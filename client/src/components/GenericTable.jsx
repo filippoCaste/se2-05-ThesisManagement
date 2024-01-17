@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import PropTypes from 'prop-types';
+import { Typography } from '@mui/material';
 
 export default function StickyHeadTable(props) {
   const [page, setPage] = React.useState(0);
@@ -131,7 +132,7 @@ export default function StickyHeadTable(props) {
                     {column.id === 'student_id' &&  `${row.student_name}` && `${row.student_surname}`}
                     { column.id !== 'supervisor_id' && (column.format ? 
                       column.format(row[column.id], row)
-                      : row[column.id])
+                      : <Typography>{row[column.id]}</Typography>)
                     }
                   </TableCell>
                 ))}

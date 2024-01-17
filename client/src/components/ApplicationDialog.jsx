@@ -49,16 +49,16 @@ function StudentInformation(student_id, student_email, student_title_degree, stu
 };
 
 export default function ApplicationDialog(props) {
-const {open, handleClose, item, studentExams,isSecretary} = props;
-const isSM = useMediaQuery(theme.breakpoints.down('md'));
-const columns = [
-  { id: 'cod_course', label: 'Course Code', width: '25%' },
-  { id: 'title_course', label: 'Course Title', width: '50%' },
-  { id: 'cfu', label: 'Cfu', width: '5%' },
-  { id: 'grade', label: 'Grade', width: '5%' },
-  { id: 'date', label: 'Date', width: '15%', format: (value) => dayjs(value).format('DD/MM/YYYY') },
-];
-const {
+  const {open, handleClose, item, studentExams,isSecretary} = props;
+  const isSM = useMediaQuery(theme.breakpoints.down('md'));
+  const columns = [
+    { id: 'cod_course', label: 'Course Code', width: '25%' },
+    { id: 'title_course', label: 'Course Title', width: '50%' },
+    { id: 'cfu', label: 'Cfu', width: '5%' },
+    { id: 'grade', label: 'Grade', width: '5%' },
+    { id: 'date', label: 'Date', width: '15%', format: (value) => dayjs(value).format('DD/MM/YYYY') },
+  ];
+  const {
     student_name,
     student_surname,
     student_email,
@@ -69,7 +69,6 @@ const {
     submission_date,
     status,
   } = item || {}; 
-  console.log(studentExams)
   const [isStudentInformation, setIsStudentInformation] = useState(true);
   const [pdf, setPdf] = useState(null);
   const [fileExists, setFileExists] = useState(false);
@@ -77,23 +76,21 @@ const {
 
   useEffect(() => {
     if(!isSecretary){
-    careerAPI.downloadFile(item.application_id, student_id).then((res) => {
-      console.log(res);
-      if(res.fileUrl) {
-        setFileExists(true);
-        setPdf(res.fileUrl);
-      }
-    })
-    .catch((err) => handleMessage(err,"warning"));
-  }
-    }, [item.application_id, student_id]);
+      careerAPI.downloadFile(item.application_id, student_id).then((res) => {
+        if(res.fileUrl) {
+          setFileExists(true);
+          setPdf(res.fileUrl);
+        }
+      })
+      .catch((err) => handleMessage(err,"warning"));
+    }
+  }, [item.application_id, student_id]);
 
   const handleClick = () => {
     setIsStudentInformation(!isStudentInformation);
   };
 
   const handleShowCV = () => {
-    console.log(pdf);
     window.open(pdf, '_blank');
   };
 
@@ -116,31 +113,38 @@ const {
       </DialogTitle>
       <DialogContent sx={{ padding: '20px', backgroundColor: theme.palette.background.default }}>
       {
-        !isSM && (
+        !isSM && !isSecretary && (
           <StickyHeadTable columns={columns} rows={studentExams} noDataMessage={'No exams passed'} />
         ) 
       }
+      { isSecretary && (isStudentInformation ? (
+          StudentInformation(student_id, student_email, student_title_degree, student_enrollment_year, student_nationality, submission_date, status,isSecretary)
+        ) : (
+          <StickyHeadTable columns={columns} rows={studentExams} noDataMessage={'No exams passed'} />
+        )
+      )} 
       { isSM && (isStudentInformation ? (
           StudentInformation(student_id, student_email, student_title_degree, student_enrollment_year, student_nationality, submission_date, status,isSecretary)
         ) : (
           <StickyHeadTable columns={columns} rows={studentExams} noDataMessage={'No exams passed'} />
-        ))
-      } 
+        )
+      )} 
       </DialogContent>
       <DialogActions sx={{ padding: '20px', borderTop: `1px solid ${theme.palette.secondary.main}`, justifyContent: 'space-between' }}>
-        {isSM ? 
-        <Button color="secondary">
-            <Typography onClick={handleClick} variant="button" sx={{ color: theme.palette.secondary.main }}>
-              Student{isStudentInformation ? " Career     " : " Information"}
-            </Typography>
-        </Button>
-        : <></> }
+        {(isSM || isSecretary) ? 
+          <Button color="secondary">
+              <Typography onClick={handleClick} variant="button" sx={{ color: theme.palette.secondary.main }}>
+                Student{isStudentInformation ? " Career     " : " Information"}
+              </Typography>
+          </Button>
+          : <></> 
+        }
         {!isSecretary &&
-        <Button onClick={handleShowCV} variant="contained" disabled={!fileExists}>
-          <Typography variant="button">
-            Show Student CV
-          </Typography>
-        </Button>
+          <Button onClick={handleShowCV} variant="contained" disabled={!fileExists}>
+            <Typography variant="button">
+              Show Student CV
+            </Typography>
+          </Button>
         }
         <Button onClick={handleClose} color="secondary">
           <Typography variant="button" sx={{ color: theme.palette.secondary.main }}>

@@ -9,6 +9,7 @@ import {
   getProposalById,
   createStudentProposalRequest,
   getProposalRequests,
+  getProposalRequestsByTeacherId,
   changeStatusProposalRequest,
   updateThesisStatus,
 } from "../controllers/proposal.controller.js";
@@ -31,13 +32,14 @@ router.get("/request", isSecretary, getProposalRequests);
 
 router.put("/request/:requestid", isSecretary, changeStatusProposalRequest);
 
-router.get("/request/teacher/:teacherId", isTeacher, getProposalRequests);
+router.get("/request/teacher/:teacherId", isTeacher, getProposalRequestsByTeacherId);
 
 router.get("/teachers/:id", isLoggedIn, getProposalTeacherId);
 
 router.delete("/:id", isLoggedIn, isTeacher, deleteProposal);
 
 router.put("/:id/archived", isLoggedIn, isTeacher, archiveProposal);
+
 router.put("/:id/approval", isLoggedIn, isTeacher, updateThesisStatus);
 
 router.put("/:proposalId", isTeacher, updateProposal);
