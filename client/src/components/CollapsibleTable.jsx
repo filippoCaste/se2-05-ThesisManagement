@@ -184,42 +184,6 @@ function Row(props) {
                 <ContentCopyIcon />
               </IconButton>
             </TableCell>
-            <TableCell style={{ width: "3%" }}>
-              <Tooltip title="Approve" placement="left">
-                <IconButton
-                  color="success"
-                  aria-label="done"
-                  onClick={() =>
-                    changeStatusOfProposalRequest(row.p.id, "Approve")
-                  }
-                  disabled={row.p.status === "assigned"}
-                >
-                  <DoneIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Request Change" placement="left">
-                <IconButton
-                  color="gray"
-                  aria-label="request change"
-                  onClick={() => handleRequestChange(true)}
-                  disabled={row.p.status === "assigned"}
-                >
-                  <BuildIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Reject" placement="left">
-                <IconButton
-                  aria-label="reject"
-                  color="error"
-                  onClick={() =>
-                    changeStatusOfProposalRequest(row.p.id, "Reject")
-                  }
-                  disabled={row.p.status === "assigned"}
-                >
-                  <CloseIcon />
-                </IconButton>
-              </Tooltip>
-            </TableCell>
           </>
         ) : (
           <TableCell style={{ width: "15%" }}>
@@ -304,7 +268,7 @@ function Row(props) {
             paddingTop: 0,
             backgroundColor: isEvenRow ? "#f5f5f5" : "#ffffff",
           }}
-          colSpan={12}
+          colSpan={11}
         >
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1, height: "auto" }}>
@@ -640,9 +604,6 @@ function CollapsibleTable(props) {
               </TableCell>
               <TableCell style={{ width: "3.6%" }}>
                 <b>Copy</b>
-              </TableCell>
-              <TableCell style={{ width: "3.6%" }}>
-                <b>Approval</b>
               </TableCell>
             </>
           ) : (

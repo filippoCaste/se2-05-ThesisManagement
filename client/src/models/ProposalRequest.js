@@ -7,6 +7,7 @@ export default class ProposalRequest {
     description,
     notes,
     type,
+    status,
     studentInfo,
     supervisorsInfo 
   ) {
@@ -17,6 +18,7 @@ export default class ProposalRequest {
     this.description = description;
     this.notes = notes;
     this.type = type;
+    this.status = status;
     this.studentInfo = studentInfo; 
     this.supervisorsInfo = supervisorsInfo; 
   }
@@ -30,6 +32,7 @@ export default class ProposalRequest {
       description: this.description,
       notes: this.notes,
       type: this.type,
+      status: this.status,
       studentInfo: this.studentInfo,
       supervisorsInfo: this.supervisorsInfo 
     };
@@ -44,6 +47,7 @@ export default class ProposalRequest {
       json.description,
       json.notes,
       json.type,
+      json.status,
       json.studentInfo,
       json.supervisorsInfo 
     );
@@ -58,6 +62,7 @@ export default class ProposalRequest {
       result.description,
       result.notes,
       result.type,
+      result.status,
       result.studentInfo,
       result.supervisorsInfo 
     );

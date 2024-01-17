@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext} from 'react';
 import StickyHeadTable from './GenericTable';
 import { UserContext, MessageContext } from '../Contexts';
-import { Grid, Button, Typography, IconButton, Dialog, DialogTitle, DialogActions, DialogContentText, DialogContent } from '@mui/material';
+import { Grid, Button, Typography, IconButton, Dialog, DialogTitle, DialogActions, DialogContentText, DialogContent, Chip } from '@mui/material';
 import proposalAPI from '../services/proposals.api';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -93,35 +93,58 @@ export default function ProposalRequests() {
             ),
         },
         {
-            id: 'approve',
-            label: 'Approve',
-            width: "5%",
-            format: (value, row) => (
-                <IconButton
-                  color="success"
-                  aria-label="done"
-                  onClick={() =>
-                    {changeStatusOfProposalRequest(row.id, "Approve")}
-                  }
-                >
-                  <DoneIcon />
-                </IconButton>
-            )
-        },
-        {
-            id: 'request_change',
-            label: 'Request Change',
-            width: "10%",
-            format: (value, row) => (
+          id: 'actions',
+          label: 'Actions',
+          width: "20%",
+          format: (value, row) => {
+            if(row.status === 'approved') {
+              return (
                 <>
-                    <IconButton
-                    color="gray"
-                    aria-label="request change"
+                  <Button
+                    variant="outlined"
+                    onClick={() => changeStatusOfProposalRequest(row.id, 'Approve')}
+                    style={{
+                      fontSize: '12px',
+                      textTransform: 'none',
+                      color: 'white',
+                      borderRadius: '4px',
+                      border: '1px solid #35682D',
+                      backgroundColor: '#35682D',
+                    }}
+                  >
+                    Approve
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => changeStatusOfProposalRequest(row.id, 'Reject')}
+                    style={{
+                      fontSize: '12px',
+                      textTransform: 'none',
+                      color: 'white',
+                      borderRadius: '4px',
+                      border: '1px solid #D32F2F',
+                      backgroundColor: '#D32F2F',
+                      marginLeft: "1%"
+                    }}
+                  >
+                    Reject
+                  </Button>
+                  <Button
+                    variant="outlined"
                     onClick={() => handleRequestChange(true)}
-                    >
-                        <BuildIcon />
-                    </IconButton>
-                    <Dialog
+                    style={{
+                      fontSize: '12px',
+                      textTransform: 'none',
+                      color: 'white',
+                      borderRadius: '4px',
+                      border: '1px solid #5F5F5F',
+                      backgroundColor: '#5F5F5F',
+                      marginLeft: "1%"
+                    }}
+                  >
+                    Request Change
+                  </Button>
+                  <Dialog
                     open={requestChangeDialog}
                     onClose={() => setRequestChangeDialog(false)}
                     >
@@ -163,24 +186,18 @@ export default function ProposalRequests() {
                         </DialogActions>
                     </Dialog>
                 </>
-            )
-        },
-        {
-            id: 'reject',
-            label: 'Reject',
-            width: "5%",
-            format: (value, row) => (
-                <IconButton
-                  aria-label="reject"
-                  color="error"
-                  onClick={() =>
-                    {changeStatusOfProposalRequest(row.id, "Reject")}
-                  }
-                >
-                  <CloseIcon />
-                </IconButton>
-            )
-        },
+              )
+            } else if (row.status === 'Approve' || row.status === 'Reject') {
+              return (
+                <Chip label={row.status === 'Approve' ? 'Approved' : 'Rejected'} color={row.status === 'Approve' ? 'success' : 'error'} />
+              )
+            } else if (row.status === 'Request Change') {
+              return (
+                <Chip label={'Request Change'} color={'default'} />
+              );
+            }
+          }
+        }
       ];
 
     useEffect(() => {

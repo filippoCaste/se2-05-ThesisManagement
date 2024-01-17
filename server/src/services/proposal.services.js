@@ -71,7 +71,7 @@ export const getProposalsFromDB = (
       LEFT JOIN Supervisors AS s ON s.proposal_id = p.id
       LEFT JOIN Degrees AS d ON p.cod_degree = d.cod_degree
       LEFT JOIN Groups AS g ON p.cod_group = g.cod_group
-      WHERE p.expiration_date >= date('now') AND p.status != 'accepted'
+      WHERE p.expiration_date >= date('now') AND p.status != 'assigned'
         ${levels}
         ${keywords}
         ${supervisor}
@@ -911,7 +911,7 @@ export const getProposalRequestsFromDB = async () => {
 
 export const getProposalRequestsByTeacherIdFromDB = async (teacherId) => {
   return new Promise((resolve, reject) => {
-    const sql = `SELECT * FROM ProposalRequests AS PR WHERE teacher_id=? AND ( status="approved" || status="Request Change")`;
+    const sql = `SELECT * FROM ProposalRequests AS PR WHERE teacher_id=? AND status!="submitted"`;
     db.all(sql, [teacherId], async function (err, rows) {
       if (err) {
         reject(err);
@@ -1054,7 +1054,7 @@ export const getProposalRequestInfoByID = (requestid) => {
 export const updateThesisRequestStatus = (proposalId, status, note) => {
   return new Promise((resolve, reject) => {
     // Validate status
-    if (status !== "Approve" && status !== "Reject" || status !== "Request Change") {
+    if (status !== "Approve" && status !== "Reject" && status !== "Request Change") {
       reject(new Error("Invalid status"));
       return;
     }
@@ -1062,7 +1062,6 @@ export const updateThesisRequestStatus = (proposalId, status, note) => {
     const sql = "UPDATE ProposalRequests SET status = ?, change_notes = ? WHERE id = ?";
     db.run(sql, [status, note, proposalId], (err) => {
       if (err) {
-        console.log(err);
         reject(err);
       } else {
         resolve({ message: `Thesis request status updated to ${status}` });
