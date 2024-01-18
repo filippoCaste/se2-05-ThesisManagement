@@ -135,13 +135,17 @@ export default function AlertDialog({
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableBody>
               <RenderFieldTable label="Description" value={description} />
-              <RenderFieldTable label="Keywords" value={keyword_names} />
+              {keyword_names &&
+              <RenderFieldTable label="Keywords" value={keyword_names} />}
               <RenderFieldTable label="Notes" value={notes} />
               <RenderFieldTable
                 label="Expiration Date"
                 value={dayjs(expiration_date).format('DD/MM/YYYY')} />
-              <RenderFieldTable label="Level" value={level} />
+              {level &&
+              <RenderFieldTable label="Level" value={level} />}
+              {title_degree &&
               <RenderFieldTable label="Degree" value={title_degree} />
+              } 
               {mainSupervisor && (
                 <RenderFieldTable
                   label="Supervisor"
@@ -153,10 +157,14 @@ export default function AlertDialog({
                   label="Co-Supervisor"
                   value={`${supervisor.name} ${supervisor.surname} (${supervisor.email})`} />
               ))}
+              {title_group &&
               <RenderFieldTable label="Group" value={title_group} />
+              }
+              {required_knowledge &&
               <RenderFieldTable
                 label="Required Knowledge"
                 value={required_knowledge} />
+              }
             </TableBody>
           </Table>
         </TableContainer>

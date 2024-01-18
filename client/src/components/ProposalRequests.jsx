@@ -65,7 +65,7 @@ export default function ProposalRequests() {
             }}
             onClick={() => handleProposalRequestClick(row)}
           >
-            Proposal Request
+     Proposal Request       
           </Button>
         ),
       },

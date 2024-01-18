@@ -97,7 +97,6 @@ function SecretaryPage(props) {
               }}
               onClick={() => handleProposalRequestClick(row)}
             >
-              Proposal Request
             </Button>
           ),
         },
