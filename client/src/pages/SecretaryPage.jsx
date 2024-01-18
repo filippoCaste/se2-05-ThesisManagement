@@ -10,6 +10,7 @@ import careerAPI from '../services/career.api';
 import proposalAPI from '../services/proposals.api';
 import AlertDialog from '../components/AlertDialog';
 import { MessageContext } from '../Contexts';
+import { Typography } from '@mui/material';
 
 function SecretaryPage(props) {
 
@@ -59,7 +60,11 @@ function SecretaryPage(props) {
 
       const columns = [
         { id: 'title', label: 'Title', minWidth: 450, maxWidth: 450 },
-        { id: 'student_id', label: 'Student', minWidth: 200, maxWidth: 200 },
+        { id: 'student', label: 'Student', minWidth: 200, maxWidth: 200,
+          format: (value, row) => (
+            <Typography>{row.studentInfo.student_name} {row.studentInfo.student_surname}</Typography>
+          )  
+        },
         {
           id: 'expiration_date',
           label: 'Expiration Date',
