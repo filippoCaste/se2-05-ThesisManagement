@@ -922,7 +922,7 @@ export const createProposalRequest = async (
 
 export const getProposalRequestsFromDB = async () => {
   return new Promise((resolve, reject) => {
-    const sql = `SELECT * FROM ProposalRequests AS PR WHERE status="submitted"`;
+    const sql = `SELECT * FROM ProposalRequests AS PR `;
     db.all(sql, [], async function (err, rows) {
       if (err) {
         reject(err);

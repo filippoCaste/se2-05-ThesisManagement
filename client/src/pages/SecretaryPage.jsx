@@ -1,5 +1,5 @@
 
-import { Grid, Button } from '@mui/material';
+import { Grid, Button, Chip } from '@mui/material';
 import { useEffect, useState, useContext } from 'react';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -55,6 +55,7 @@ function SecretaryPage(props) {
           console.log(error);
         }}
         resultProposals();
+        console.log(proposalRequests);
       }, []);
 
       const columns = [
@@ -128,6 +129,7 @@ function SecretaryPage(props) {
             minWidth: 200,
             maxWidth: 200,
             format: (value, row) => (
+              row.status === 'submitted' ?
               <Button
               variant="outlined"
               onClick={() => changeStatusOfProposalRequest(row.id, 'approved')}
@@ -142,6 +144,7 @@ function SecretaryPage(props) {
             >
               Approve
             </Button>
+             : <></>
             ),
           },
           {
@@ -150,6 +153,7 @@ function SecretaryPage(props) {
             minWidth: 200,
             maxWidth: 200,
             format: (value, row) => (
+              row.status === 'submitted' ?
               <Button
               variant="outlined"
               onClick={() => changeStatusOfProposalRequest(row.id, 'rejected')}
@@ -164,6 +168,22 @@ function SecretaryPage(props) {
             >
               Reject
             </Button>
+            : <></>
+            ),
+          },
+          {
+            id: 'chipLabeled',
+
+            minWidth: 200,
+            maxWidth: 200,
+            format: (value, row) => (
+              row.status !== "submitted" ?
+              <Chip
+              label={row?.status}
+              disabled="true"
+              onClick={() => {}}
+              color='success'
+            /> : <></>
             ),
           },
       ];     

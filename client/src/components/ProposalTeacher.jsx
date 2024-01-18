@@ -236,10 +236,12 @@ function ProposalTeacher(props) {
             })
 
           })
+          console.log(p);
           // Using Promise.resolve to ensure setSelectedDegreeList finishes before continuing
           Promise.resolve(setSelectedDegreeList(list))
             .then(() => {
               // Continue with the rest of your code here
+  
               p.coSupervisors.forEach(obj => { obj.teacher_id = obj.id; delete obj.id; });
               setSelectedCoSupList(p.coSupervisors);
               setSelectedKeywordList(p.keywords);
