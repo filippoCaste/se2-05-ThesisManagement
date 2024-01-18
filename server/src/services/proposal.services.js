@@ -864,9 +864,9 @@ export const createProposalRequest = async (
   teacher_id,
   co_supervisors_ids,
   title,
+  type,
   description,
   notes,
-  type,
   status
 ) => {
   return new Promise((resolve, reject) => {
@@ -953,7 +953,7 @@ export const getProposalRequestsFromDB = async () => {
 
 export const getProposalRequestsByTeacherIdFromDB = async (teacherId) => {
   return new Promise((resolve, reject) => {
-    const sql = `SELECT * FROM ProposalRequests AS PR WHERE teacher_id=? AND status!="submitted"`;
+    const sql = `SELECT * FROM ProposalRequests AS PR WHERE teacher_id=? AND status!="submitted" AND status!="rejected"`;
     db.all(sql, [teacherId], async function (err, rows) {
       if (err) {
         reject(err);

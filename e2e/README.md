@@ -78,3 +78,39 @@ Students can search for their desired proposal by title, expiration date, superv
 #### A professor can create a new proposal starting from an existing proposal
 
 ![copyPorposal](./copyProposal.jpg)
+
+### View Notifications
+
+#### All the users can see their notifications
+
+![viewNotification](./viewNotifications.jpg)
+
+### Browse Co-Supervised Proposals
+
+#### A professor can sees all the proposals in which he is the co-supervisor
+
+![browseCoSupervisor](./browseCoSupervisor.jpg)
+
+### Secretary Approve Student Requests
+
+#### A secretary can approve or reject students requests
+
+![secretaryApproveStudentRequests](./secretaryApproveStudentRequests.jpg)
+
+### Professor Approve Student Requests
+
+#### A professor can approve, reject or request change in a student request after it has been approved by the secretary
+
+![professorApproveStudentRequests](./professorApproveStudentRequests.jpg)
+
+### Add academic co-supervisor
+
+#### A professor can add a new co-supervisor to a proposal
+
+![addCoSupervisor](./addCoSupervisor.jpg)
+
+### Student Request from Application
+
+#### A student can do a new request from an approved application
+
+![studentRequest](./studentRequest.jpg)

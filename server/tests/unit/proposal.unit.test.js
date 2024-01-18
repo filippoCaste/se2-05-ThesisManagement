@@ -877,7 +877,7 @@ describe("createStudentProposalRequest", () => {
         title: "Test",
         description: "Test",
         notes: "Test",
-        status: "accepted",
+        status: "approved",
       },
     };
     const mockRes = {

@@ -345,7 +345,7 @@ export const createStudentProposalRequest = async (req, res) => {
 
     // this is for the students who create a proposal request starting from the
     // already existing one --> it doesn't pass through the secretary validation
-    if (status != undefined && status != "accepted") {
+    if (status != undefined && status != "approved") {
       return res.status(400).json({
         error:
           "Status should be 'accepted' for requests from an existing proposals",
