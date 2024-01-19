@@ -38,6 +38,7 @@
       - [`ProposalRequestCoSupervisors`](#proposalrequestcosupervisors)
       - [`Applications`](#applications)
       - [`Secretaries`](#secretaries)
+      - [`Notifications`](#notifications)
   - [Client main pages](#client-main-pages)
     - [General](#general)
       - [Components](#components)
@@ -57,13 +58,14 @@ In order to run the application you need to open two terminals and run:
 |d10000@polito.it | 10000 |
 |d10001@polito.it | 10001 |
 |d10002@polito.it | 10002 |
+|d10008@polito.it (Giulia Saracco) | 10008 |
 |s308692@studenti.polito.it | 308692 |
 |s318082@studenti.polito.it | 318082 |
-|s312121@studenti.polito.it | 312121 |
+|s312121@studenti.polito.it (Bryan Woods) | 312121 |
 |s314948@studenti.polito.it | 314948 |
-|s309164@studenti.polito.it | 309164 |
-|secretaryfrompolito@hotmail.com | secFromPolito.. |
-|teacherfrompolito@gmail.com | teacherFromPolito.. |
+|s309164@studenti.polito.it (Elmo Moss)| 309164 |
+|secretaryfrompolito@hotmail.com (Pam Beesly) | secFromPolito.. |
+|teacherfrompolito@gmail.com (Juan Stefano Pauli)| teacherFromPolito.. |
 |studentfrompolito@gmail.com | studentFromPolito.. |
 
 ## API Server

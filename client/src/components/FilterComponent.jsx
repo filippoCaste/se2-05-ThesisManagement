@@ -58,7 +58,7 @@ export default function FilterComponent(props) {
       }}
     >
       <Box >
-        <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'cursive' }}>
+        <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'helvetica' }}>
           Title:
         </Typography>
         <TextField
@@ -71,7 +71,7 @@ export default function FilterComponent(props) {
         />
       </Box>
       <Box sx={{ mt: "5%" }}>
-        <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'cursive' }}>
+        <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'helvetica' }}>
           Expiration Date:
         </Typography>
         <Box display="flex" sx={{ mt: '5%', flexDirection:'column' }}>
@@ -107,14 +107,14 @@ export default function FilterComponent(props) {
       </Box>
 
       <Box sx={{ mt: "5%" }} >
-        <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'cursive' }}>
+        <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'helvetica' }}>
           Keywords:
         </Typography>
         <CheckboxesTags array={availableKeywords} setSelectedArray={setSelectedKeywords} selectedArray={selectedKeywords}/>
       </Box>
 
       <Box sx={{ mt: "5%" }}>
-        <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'cursive' }}>
+        <Typography variant="h6" fontWeight="bold" sx={{ color: theme.palette.secondary.main, fontFamily: 'helvetica' }}>
           Supervisor:
         </Typography>
         <SupervisorMenu
