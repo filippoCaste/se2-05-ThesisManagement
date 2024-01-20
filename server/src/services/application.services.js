@@ -181,8 +181,7 @@ export const getApplicationsByStudentId = (studentId) => {
     s.supervisor_id,
     s.co_supervisor_id,
     s.external_supervisor,
-    group_concat(k.name) as keyword_names,
-    group_concat(k.type) as keyword_types,
+    group_concat(DISTINCT k.name) as keyword_names,
     a.status AS application_status
       FROM Proposals AS p
       LEFT JOIN ProposalKeywords AS pk ON p.id = pk.proposal_id

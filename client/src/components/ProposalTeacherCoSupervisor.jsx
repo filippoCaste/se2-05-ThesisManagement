@@ -54,7 +54,7 @@ import StickyHeadTable from './TableComponent';
     
           let keyword_names = [];
           if (keywords_proposal) {
-            keyword_names = keywords_proposal.map(k => k.name + " ,");
+            keyword_names = keywords_proposal.map(k => k.name + ", ");
           }
     
           return { ...p, supervisorsInfo, keyword_names };

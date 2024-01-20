@@ -51,6 +51,7 @@ export const getApplicationsStudentId = async (req, res) => {
   try {
       const studentid = req.user.id;
       const result = await getApplicationsByStudentId(studentid);
+      console.log(result)
       return res.json(result);
   } catch (err) {
       return res.status(500).json({ error: err.message });

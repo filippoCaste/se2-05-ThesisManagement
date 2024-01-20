@@ -75,6 +75,7 @@ const getStudentApplications = async () => {
     });
     if (response.ok) {
       const applications = await response.json();
+      console.log(applications)
       return applications;
     } else {
       const message = await response.text();
