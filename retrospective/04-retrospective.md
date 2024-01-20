@@ -22,7 +22,7 @@ sections:
 | Total points      | 22 (**)   | 22(**) |
 | Nr of hours       | 96        | 97h39m |
 
-(*) --> 3 from previous sprint
+(*) --> 3 from previous sprint  
 (**) --> 6 from previous sprint
 
 **Remember**  a story is done ONLY if it fits the Definition of Done:
@@ -55,9 +55,6 @@ sections:
 > \* from FAQ document
 
    
-
-> place technical tasks corresponding to story `#0` and leave out story points (not applicable in this case)
-
 - Hours per task (average, standard deviation): 
 
 | Description            | Estimated | Actual |
